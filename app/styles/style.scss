@@ -1,0 +1,18 @@
+@import "partials/_variables.scss";
+
+@import "modules/helpers/_helpers.scss";
+
+/* =============================================================================
+Main Styles
+========================================================================== */
+body {
+	background: $body-background;
+	font-family: $base-font-family;
+	font-size: $base-font-size;
+	line-height: $base-line-height;
+}
+
+.container {
+	max-width: $container-max-width;
+	margin: 0 auto;
+}
