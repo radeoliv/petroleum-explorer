@@ -1,0 +1,12 @@
+/* =============================================================================
+Map Toolbar
+========================================================================== */
+.mapToolbar {
+	@extend %absolute;
+	right: $margin;
+	z-index: 9;
+	@extend %bordered;
+	@extend %small-padding;
+	@extend %border-box;
+	background: darken($body-background, 5);
+}

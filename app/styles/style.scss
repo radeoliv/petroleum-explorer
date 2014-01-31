@@ -1,6 +1,8 @@
 @import "partials/_variables.scss";
 
 @import "modules/helpers/_helpers.scss";
+@import "modules/mapToolbar/_mapToolbar.scss";
+
 
 /* =============================================================================
 Main Styles
@@ -10,6 +12,7 @@ body {
 	font-family: $base-font-family;
 	font-size: $base-font-size;
 	line-height: $base-line-height;
+	@extend %transition-all;
 }
 
 .container {

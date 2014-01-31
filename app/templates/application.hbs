@@ -1,13 +1,12 @@
 <div class = "container">
 	<aside role = "banner">
-		<strong>Colours</strong>
-		<ul>
-			{{#each item in controller}}
-				<li>{{item}}</li>
-			{{/each}}
-		</ul>
+		{{render "maptoolbar"}}
 	</aside>
 	<main role = "main">
+		<!--This is where map goes-->
+		{{google-map wells=controller.model}}
+		<!--controller is application controller -->
 		{{outlet}}
 	</main>
+	{{outlet users}}
 </div>
