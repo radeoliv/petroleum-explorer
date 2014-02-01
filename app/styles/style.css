@@ -1,4 +1,35 @@
-/* Put your CSS here */
-html, body {
-	margin: 30px 0;
+.mapToolbar {
+	right: 1em;
+	z-index: 9;
+	background: #f2f2f2;
+	position: absolute;
+	border: 1px solid black;
+	box-sizing: border-box;
+	top: 3em;
+	padding: 0.2em 0.5em;
+}
+
+.show-toolbar {
+
+	/*display: block;
+	width: 100%;*/
+}
+button{
+	display: block;
+	padding: 0.5em 0.8em;
+}
+html {
+	height: 100%
+}
+
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0
+}
+
+#map-canvas {
+	height: 100%;
+	right: 8em;
+	position: static !important;
 }
