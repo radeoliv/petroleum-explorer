@@ -11,9 +11,21 @@
 
 <button onclick="myFunction()">Something</button>
 
-<p>This comes last.</p>
+<form action="demo_form.txt">
+    First name: <input type="text" name="FirstName" value="Mickey"><br>
+    Last name: <input type="text" name="LastName" value="Mouse"><br>
+    <input type="submit" value="Submit">
+</form>
+
+<p id = "final par">This comes last.</p>
 
 <script>
+    var c = new Object();
+    c.R = 255;
+    c.G = 0;
+    c.B = 0;
+    document.write(c.R + "," + c.G);
+
     function myFunction()
     {
         document.getElementById("demo").innerHTML = "Ding"; // Alters a previous element.
