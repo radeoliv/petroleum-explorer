@@ -1,9 +1,0 @@
-<form action = "/">
-	<fieldset>
-		<legend>Advanced Options</legend>
-	</fieldset>
-	{{#each constraint}}
-		<label for = "{{this.name}}">{{this.name}}</label>
-		<input type = "checkbox" name = "{{this.name}}" id = "{{this.name}}"/>
-	{{/each}}
-</form>
