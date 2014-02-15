@@ -2,7 +2,7 @@
 
 @import "modules/helpers/_helpers.scss";
 @import "modules/mapToolbar/_mapToolbar.scss";
-
+@import "modules/map-controller/_map-controller.scss";
 
 /* =============================================================================
 Main Styles
@@ -13,6 +13,13 @@ body {
 	font-size: $base-font-size;
 	line-height: $base-line-height;
 	@extend %transition-all;
+	@extend %margin-none;
+	@extend %padding-none;
+	height: 100%;
+}
+
+html {
+	height: 100%;
 }
 
 .container {

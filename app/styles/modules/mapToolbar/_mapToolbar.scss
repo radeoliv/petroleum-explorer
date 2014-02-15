@@ -9,4 +9,10 @@ Map Toolbar
 	@extend %small-padding;
 	@extend %border-box;
 	background: darken($body-background, 5);
+	top: ($margin * 3);
+	padding: ($padding-small / 3) $padding-small;
+	button{
+		display: block;
+		padding: 0.5em 0.8em;
+	}
 }
