@@ -8,8 +8,11 @@
 	//TODO: file description
 -------------------------------------------------------------------------------*/
 
- var search_controller = require("../../app/scripts/my-module.js");
+ //var search_controller = require("../../app/scripts/my-module.js");
 
+ var search_controller = function (sampleNullDataSet, sampleQuery) {
+	 
+ };
  describe("Search controller", function () {
 	 /*beforeEach(function (done) {
 		 var sampleData = {
