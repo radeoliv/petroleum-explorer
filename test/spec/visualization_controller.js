@@ -9,6 +9,17 @@
  Unit tests for visualizations.
  -------------------------------------------------------------------------------*/
 
+function Oil_well_filter(oil_data, discrete_flag) {
+	this.oil_data = oil_data;
+	this.discrete_flag = discrete_flag;
+};
+
+Oil_well_filter.prototype.get_visualization_method = function () {
+	return "histogram";
+};
+
+
+var assert = require("chai").assert;
 (function () {
 	"use strict";
 	var oil_data_empty = [];
@@ -36,7 +47,7 @@
 		"OIL"
 	];
 
-	var valid_visualizations = ["histogram", "bar-graph", "pie-chart-histogram" , "pie-chart"];
+	var valid_visualizations = ["histogram", "bar-graph", "pie-chart-histogram" , "pie-chart"]; // This is a list of the possible valid return values of Oil_well_filter.get_visualization_method.
 	describe("visualization_controller", function () {
 		it("empty data set, discrete data assumed", function () {
 			//arrange
