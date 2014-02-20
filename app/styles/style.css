@@ -100,12 +100,13 @@ Map Toolbar
   z-index: 9;
   background: #f2f2f2;
   top: 3em;
-  padding: 0.25641em 0.76923em;
+  padding: 0.07692em 0.07692em 0.07692em 0.07692em;
 }
 /* line 14, modules/mapToolbar/_mapToolbar.scss */
 .mapToolbar button {
   display: block;
-  padding: 0.5em 0.8em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  font-size: 1.2em;
 }
 
 /* line 1, modules/map-controller/_map-controller.scss */
@@ -115,10 +116,11 @@ Map Toolbar
   position: static !important;
 }
 
-/* =============================================================================
+/*
+=============================================================================
 Main Styles
 ========================================================================== */
-/* line 10, style.scss */
+/* line 11, style.scss */
 body {
   background: white;
   font-family: "Arial", "Helvetica";
@@ -127,12 +129,12 @@ body {
   height: 100%;
 }
 
-/* line 21, style.scss */
+/* line 22, style.scss */
 html {
   height: 100%;
 }
 
-/* line 25, style.scss */
+/* line 26, style.scss */
 .container {
   max-width: 80em;
   margin: 0 auto;

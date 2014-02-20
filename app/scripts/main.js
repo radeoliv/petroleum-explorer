@@ -21,16 +21,32 @@ jQuery(document).ready(function ($) {
 		mapToolbarIcon = toolbarToggle.find("i"),
 		mapToolbarContent = mapToolbar.find(".toolbar-content");
 
+	var searchButton = mapToolbar.find(".show-search");
+
+
 	function initMapToggle() {
 		hideMapContent(mapToolbarContent);
 		toolbarToggle.on("click", function (e) {
 			mapToolbarContent.toggle("slow");
 			// toggle icon
-			mapToolbarIcon.toggleClass("icon-arrow-left icon-arrow-right");
+			mapToolbarIcon.toggleClass("icon-expand icon-contract");
 		});
 	}
+
 	function hideMapContent(mapContent) {
 		mapContent.hide();
 	}
 	initMapToggle();
+
+	function callSearch(){
+		searchButton.on("click", function(e) {
+			
+		});
+
+
+	}
+
+	callSearch();
+
+
 });
