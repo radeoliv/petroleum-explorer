@@ -14,9 +14,15 @@
 	=============================================================================
 	//TODO: file description
 -------------------------------------------------------------------------------*/
-var mySearchController = {};
- mySearchController.findResults = function () {
-	 if (sampleNullDataSet === null) {
-		 return "Could not find data, as it was null";
+ (function(){
+	 function mySearchController(dataSet,searchQuery,resultSet){
+		 this.dataSet = dataSet;
+		 this.searchQuery = searchQuery;
+		 this.resultSet = resultSet;
+
+		 this.findResults=findResults;
+		 function findResults(searchQuery){
+			 return
+		 }
 	 }
- };
+ } )
