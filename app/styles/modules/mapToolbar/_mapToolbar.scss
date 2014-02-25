@@ -1,4 +1,10 @@
 /* =============================================================================
+Variables
+========================================================================== */
+$mapToolbarButtonColour: rgb(220,220,220);
+$mapToolbarButtonTextColour: black;
+
+/* =============================================================================
 Map Toolbar
 ========================================================================== */
 .mapToolbar {
@@ -15,5 +21,9 @@ Map Toolbar
 		display: block;
 		padding: 0.5em 0.5em 0.5em 0.5em;
 		font-size: 1.2em;
+		color: $mapToolbarButtonTextColour;
+		&:active, &.active, &:hover{
+			background: darken($mapToolbarButtonColour, 20);
+		}
 	}
 }
