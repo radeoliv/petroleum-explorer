@@ -11,18 +11,7 @@
  //var search_controller = require("../../app/scripts/my-module.js");
 
  var assert = require("assert");
- var search_controller = function (sampleNullDataSet, sampleQuery) {
-	this.sampleQuery = sampleQuery;
-	this.sampleNullDataSet = sampleNullDataSet;
-	this.findResults = findResults;
-	function findResults(sampleQuery){
-		return "Could not find data, as it was null";
-	}
-	this.countResults = countResults;
-	function countResults(){
-		return 0;
-	}
- };
+
  describe("Search controller", function () {
 	 /*beforeEach(function (done) {
 		 var sampleData = {
