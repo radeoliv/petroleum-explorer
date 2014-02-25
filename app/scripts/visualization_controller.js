@@ -10,6 +10,8 @@
  //TODO: file description
  -------------------------------------------------------------------------------*/
 
+
+
 //TODO: Implement oil_well_filter class.
 function Oil_well_filter(oil_data, discrete_flag) {
 	this.oil_data = oil_data;
