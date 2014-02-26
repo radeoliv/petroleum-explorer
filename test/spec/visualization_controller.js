@@ -9,14 +9,16 @@
  Unit tests for visualizations.
  -------------------------------------------------------------------------------*/
 
-function Oil_well_filter(oil_data, discrete_flag) {
+require("../../app/scripts/visualization_controller.js")
+console.log(exports.myVar);
+/*function Oil_well_filter(oil_data, discrete_flag) {
 	this.oil_data = oil_data;
 	this.discrete_flag = discrete_flag;
 };
 
 Oil_well_filter.prototype.get_visualization_method = function () {
 	return "histogram";
-};
+};*/
 
 
 var assert = require("chai").assert;
@@ -47,7 +49,21 @@ var assert = require("chai").assert;
 		"OIL"
 	];
 
-	var valid_visualizations = ["histogram", "bar-graph", "pie-chart-histogram" , "pie-chart"]; // This is a list of the possible valid return values of Oil_well_filter.get_visualization_method.
+	var oil_data_discrete_small_deviation = [
+		"OIL",
+		"OIL",
+		"SUSPENDED OIL",
+		"SUSPENDED OIL",
+		"OIL",
+		"OIL",
+		"SUSPENDED OIL",
+		"SUSPENDED OIL",
+		"ABANDONED OIL"
+	];
+
+	//var oil_data_continuous = [
+
+	var valid_visualizations = ["histogram", "pie-chart"]; // This is a list of the possible valid return values of Oil_well_filter.get_visualization_method.
 	describe("visualization_controller", function () {
 		it("empty data set, discrete data assumed", function () {
 			//arrange
@@ -69,15 +85,24 @@ var assert = require("chai").assert;
 			assert.include(expected, actual);
 		});
 
-		it("returns a valid visualization type", function () {
+		it("Discrete data with a large deviation in frequencies.", function () {
 			var filter_controller = new Oil_well_filter(oil_data_discrete_large_deviation, true);
 			//act
 			var actual = filter_controller.get_visualization_method();
-			//Test passes if expected is any of the valid visualization types
-			// (string) any one of "histogram", "bar-graph", "pie-chart-histogram", "pie-chart"
-			var expected = valid_visualizations;
+			//Test passes if expected is "pie-chart-histogram".
+			var expected = "pie-chart-histogram";
 			//assert
-			assert.include(expected, actual);
+			assert.equal(actual, expected);
+		});
+
+		it("Discrete data with a small deviation in frequencies.", function () {
+			var filter_controller = new Oil_well_filter(oil_data_discrete_small_deviation, true);
+			//act
+			var actual = filter_controller.get_visualization_method();
+			//Test passes if expected is "histogram".
+			var expected = "histogram";
+			//assert
+			assert.equal(actual, expected);
 		});
 
 	});
