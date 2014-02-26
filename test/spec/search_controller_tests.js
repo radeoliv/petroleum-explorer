@@ -8,7 +8,7 @@
 	//TODO: file description
 -------------------------------------------------------------------------------*/
 
- //var search_controller = require("../../app/scripts/my-module.js");
+ var search_controller = require("../../app/scripts/components/search/search-controller.js");
 
  var assert = require("assert");
 
@@ -23,8 +23,9 @@
 	 it("Returns an error when data set is null", function () {
 		 //arrange
 		 var sampleNullDataSet = null,
-			sampleQuery = "Whatever";
-		 var mySearchController = new search_controller(sampleNullDataSet, sampleQuery);
+			sampleQuery = "Whatever",
+			resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.findResults();
 		 var expected = "Could not find data, as it was null";
@@ -35,7 +36,8 @@
 		 //arrange
 		 var sampleNullDataSet = null,
 			 sampleQuery = "";
-		 var mySearchController = new search_controller(sampleNullDataSet,sampleQuery);
+		 	 resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.sampleQuery;
 		 var expected = "";
@@ -46,7 +48,8 @@
 		 //arrange
 		 var sampleNullDataSet = null,
 		 	 sampleQuery = "";
-		 var mySearchController = new search_controller(sampleNullDataSet, sampleQuery);
+		 	 resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.countResults();
 		 var expected = 0;
@@ -57,7 +60,8 @@
 		 //arrange
 		 var sampleNullDataSet = null,
 			 sampleQuery = null;
-		 var mySearchController = new search_controller(sampleNullDataSet,sampleQuery);
+		 	 resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.sampleQuery;
 		 var expected = null;
