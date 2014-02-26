@@ -268,18 +268,20 @@
 
 	function initialize() {
 		var mapOptions = {
-			// Change center location!
-			center: new google.maps.LatLng(53.132962, -111.055059),
-			zoom:   8
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+			}
 		};
+
 		var map = new google.maps.Map(document.getElementById("map-canvas"),
 				mapOptions);
 
-		plotPoints(map);
+		PlotPoints(map);
+		AutoCenter(map);
 	}
 	google.maps.event.addDomListener(window, 'load', initialize);
 
-	function plotPoints(map) {
+	function PlotPoints(map) {
 		var marker;
 		var infowindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
@@ -303,20 +305,18 @@
 		}
 	}
 
-	/*
-	 function AutoCenter() {
-	 //  Create a new viewpoint bound
-	 var bounds = new google.maps.LatLngBounds();
-	 //  Go through each...
-	 $.each(markers, function (index, marker) {
-	 bounds.extend(marker.position);
-	 });
-	 //  Fit these bounds to the map
-	 map.fitBounds(bounds);
-	 }
+function AutoCenter(map) {
+	//  Create a new viewpoint bound
+	var bounds = new google.maps.LatLngBounds();
 
-	 AutoCenter();
-	 */
+	//  Go through each...
+	for (var i = 0; i < locationArray.length; i++) {
+		bounds.extend(locationArray[i]);
+	};
+
+	//  Fit these bounds to the map
+	map.fitBounds(bounds);
+}
 
 	</script>
 		<main id = "map-canvas"></main>
@@ -325,27 +325,25 @@
 			<div class = "toolbar-content">
 				</br>
 				<button title = "Search" class = "show-search"><a class = "icon-search"></a></button>
+				<div class="search-form">
+					<form action = "/">
+						<fieldset>
+							<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>
+						</fieldset>
+						<fieldset>
+							<legend>Layers</legend>
+							<input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/>
+						</fieldset>
+					</form>
+				</div>
 				<button title = "Filter" class = "show-filter"><a class = "icon-filter"></a></button>
 				<button title = "Layers" class = "show-layers"><a class = "icon-stack"></a></button>
 				<button title = "Report" class = "show-report"><a class = "icon-stats"></a></button>
-
-				<!--
-				<h1>Map Toolbar</h1>
-				<form action = "/">
-					<fieldset>
-						<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>
-					</fieldset>
-					<fieldset>
-						<legend>Layers</legend>
-						<input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/><input checked = "checked" type = "checkbox"/>
-					</fieldset>
-				</form>
-				-->
 			</div>
 		</aside>
 		<footer>
 			<!-- build:js(app) scripts/components.js -->
-				<script src = "bower_components/jquery/dist/jquery.min.js"></script>
+				<script src = "bower_components/jquery/jquery.min.js"></script>
 			<!-- endbuild -->
 
 			<!-- build:js(.tmp) scripts/main.js -->

@@ -8,21 +8,10 @@
 	//TODO: file description
 -------------------------------------------------------------------------------*/
 
- //var search_controller = require("../../app/scripts/my-module.js");
+ var search_controller = require("../../app/scripts/components/search/search-controller.js");
 
  var assert = require("assert");
- var search_controller = function (sampleNullDataSet, sampleQuery) {
-	this.sampleQuery = sampleQuery;
-	this.sampleNullDataSet = sampleNullDataSet;
-	this.findResults = findResults;
-	function findResults(sampleQuery){
-		return "Could not find data, as it was null";
-	}
-	this.countResults = countResults;
-	function countResults(){
-		return 0;
-	}
- };
+
  describe("Search controller", function () {
 	 /*beforeEach(function (done) {
 		 var sampleData = {
@@ -34,8 +23,9 @@
 	 it("Returns an error when data set is null", function () {
 		 //arrange
 		 var sampleNullDataSet = null,
-			sampleQuery = "Whatever";
-		 var mySearchController = new search_controller(sampleNullDataSet, sampleQuery);
+			sampleQuery = "Whatever",
+			resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.findResults();
 		 var expected = "Could not find data, as it was null";
@@ -46,7 +36,8 @@
 		 //arrange
 		 var sampleNullDataSet = null,
 			 sampleQuery = "";
-		 var mySearchController = new search_controller(sampleNullDataSet,sampleQuery);
+		 	 resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.sampleQuery;
 		 var expected = "";
@@ -57,7 +48,8 @@
 		 //arrange
 		 var sampleNullDataSet = null,
 		 	 sampleQuery = "";
-		 var mySearchController = new search_controller(sampleNullDataSet, sampleQuery);
+		 	 resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.countResults();
 		 var expected = 0;
@@ -68,7 +60,8 @@
 		 //arrange
 		 var sampleNullDataSet = null,
 			 sampleQuery = null;
-		 var mySearchController = new search_controller(sampleNullDataSet,sampleQuery);
+		 	 resultSet = null;
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
 		 var actual = mySearchController.sampleQuery;
 		 var expected = null;

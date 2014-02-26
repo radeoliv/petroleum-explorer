@@ -25,10 +25,8 @@ Overflow
 Margins
 ========================================================================== */
 /* Normal margin */
-/* line 96, modules/helpers/_helpers.scss */
 body {
-  margin: 0;
-}
+  margin: 0; }
 
 /* Normal margin combinations */
 /* Large Margin */
@@ -38,17 +36,13 @@ body {
 Padding
 ========================================================================== */
 /* Normal padding */
-/* line 212, modules/helpers/_helpers.scss */
 body {
-  padding: 0;
-}
+  padding: 0; }
 
 /* Large Padding */
 /* Small Padding */
-/* line 264, modules/helpers/_helpers.scss */
 .mapToolbar {
-  padding: 0.76923em;
-}
+  padding: 0.76923em; }
 
 /* =============================================================================
 Border radius
@@ -56,15 +50,11 @@ Border radius
 /* Normal border radii */
 /* Large border radii */
 /* No rounded radii (useful for overriding other elements with radii) */
-/* line 376, modules/helpers/_helpers.scss */
 .mapToolbar {
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
 
-/* line 380, modules/helpers/_helpers.scss */
 body {
-  transition: 0.5s all ease;
-}
+  transition: 0.5s all ease; }
 
 /* =============================================================================
 Opacity/visibility
@@ -72,10 +62,8 @@ Opacity/visibility
 /* =============================================================================
 Borders
 ========================================================================== */
-/* line 403, modules/helpers/_helpers.scss */
 .mapToolbar {
-  border: 1px solid black;
-}
+  border: 1px solid black; }
 
 /* =============================================================================
 Floats
@@ -83,59 +71,51 @@ Floats
 /* =============================================================================
 Positions
 ========================================================================== */
-/* line 440, modules/helpers/_helpers.scss */
 .mapToolbar {
-  position: absolute;
-}
+  position: absolute; }
 
 /* =============================================================================
 Display modes
 ========================================================================== */
 /* =============================================================================
+Variables
+========================================================================== */
+/* =============================================================================
 Map Toolbar
 ========================================================================== */
-/* line 4, modules/mapToolbar/_mapToolbar.scss */
 .mapToolbar {
   right: 1em;
   z-index: 9;
   background: #f2f2f2;
   top: 3em;
-  padding: 0.07692em 0.07692em 0.07692em 0.07692em;
-}
-/* line 14, modules/mapToolbar/_mapToolbar.scss */
-.mapToolbar button {
-  display: block;
-  padding: 0.5em 0.5em 0.5em 0.5em;
-  font-size: 1.2em;
-}
+  padding: 0.07692em 0.07692em 0.07692em 0.07692em; }
+  .mapToolbar button {
+    display: block;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    font-size: 1.2em;
+    color: black; }
+    .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
+      background: darkgrey; }
 
-/* line 1, modules/map-controller/_map-controller.scss */
 #map-canvas {
   height: 100%;
   right: 8em;
-  position: static !important;
-}
+  position: static !important; }
 
 /*
 =============================================================================
 Main Styles
 ========================================================================== */
-/* line 11, style.scss */
 body {
   background: white;
   font-family: "Arial", "Helvetica";
   font-size: 100%;
   line-height: 1.3;
-  height: 100%;
-}
+  height: 100%; }
 
-/* line 22, style.scss */
 html {
-  height: 100%;
-}
+  height: 100%; }
 
-/* line 26, style.scss */
 .container {
   max-width: 80em;
-  margin: 0 auto;
-}
+  margin: 0 auto; }
