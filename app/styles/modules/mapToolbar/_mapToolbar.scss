@@ -20,10 +20,23 @@ Map Toolbar
 	button{
 		display: block;
 		padding: 0.5em 0.5em 0.5em 0.5em;
+		outline: none;
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
-		&:active, &.active, &:hover{
+		&:active, &.active{
 			background: darken($mapToolbarButtonColour, 20);
+			border-width:  0 0.11em 0 0.11em;
+			border-color: transparent;
+		}
+		&:hover{
+			background: darken($mapToolbarButtonColour, 10);
+			border-width:  0 0.11em 0 0.11em;
+			border-color: transparent;
 		}
 	}
+}
+
+.content-column{
+	min-height: 25em;
+	vertical-align: top;
 }

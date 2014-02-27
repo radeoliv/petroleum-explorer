@@ -92,10 +92,21 @@ Map Toolbar
   .mapToolbar button {
     display: block;
     padding: 0.5em 0.5em 0.5em 0.5em;
+    outline: none;
     font-size: 1.2em;
     color: black; }
-    .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
-      background: darkgrey; }
+    .mapToolbar button:active, .mapToolbar button.active {
+      background: darkgrey;
+      border-width: 0 0.11em 0 0.11em;
+      border-color: transparent; }
+    .mapToolbar button:hover {
+      background: #c3c3c3;
+      border-width: 0 0.11em 0 0.11em;
+      border-color: transparent; }
+
+.content-column {
+  min-height: 25em;
+  vertical-align: top; }
 
 #map-canvas {
   height: 100%;
