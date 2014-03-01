@@ -19,18 +19,54 @@
 	 var SearchController;
 
 	 SearchController = (function() {
-		 SearchController.NULL_ERROR_MESSAGE = "Could not find data, as it was null";
-
+		 /**
+		  * constructor for the search controller
+		  * @param dataSet object with two fields, UWID(string) and
+		  * @param searchQuery
+		  * @param resultSet
+		  * @constructor
+		  */
 		 function SearchController(dataSet,searchQuery,resultSet) {
 			 this.dataSet = dataSet;
 			 this.searchQuery = searchQuery;
 			 this.resultSet = resultSet;
+			 if(this.resultSet === null || typeof(this.resultSet) === "undefined"){
+				 this.resultSet = [];
+			 }
+			 this.NULL_ERROR_MESSAGE = "Could not find data, as it was null";
+			 this.UNDEFINED_ERROR_MESSAGE = "undefined search query";
+			 this.EMPTY_RESULTSET_ERROR_MESSAGE = "0 results found";
+			 this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE = "search query is empty";
 		 }
 
-		 SearchController.prototype.findResults = function() {return 0;};
+		 SearchController.prototype.findResults = function() {
+			 if(this.searchQuery === null){
+				 return this.NULL_ERROR_MESSAGE;
+			 }
+			 else if(typeof(this.searchQuery) === "undefined"){
+				 return this.UNDEFINED_ERROR_MESSAGE;
+			 }
+			 else if(this.isEmptyQuery(this.searchQuery)){
+				 return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
+			 }
+			 if(this.resultSet.length<1){
+				 return this.EMPTY_RESULTSET_ERROR_MESSAGE;
+			 }
+			 return 'sample data';
+		 };
 
-		 SearchController.prototype.showTwo = function() {
-			 return 2;
+		 SearchController.prototype.checkResults = function(){
+
+		 };
+		 /**
+		  * Checks search query for excessive spaces or unaccepted formats.  Returns true if any of formats match.
+		  * @param searchQuery
+		  */
+		 SearchController.prototype.isEmptyQuery = function(searchQuery) {
+			var emptyPattern = new RegExp("\s"),
+				contentPattern = new RegExp("\W");
+			 return this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
+
 		 };
 
 		 return SearchController;
