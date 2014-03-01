@@ -324,10 +324,14 @@ function AutoCenter(map) {
 			<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
 
 			<div class = "toolbar-buttons">
-				<button title = "Search" class = "show-search"><a class = "icon-search"></a></button>
-				<button title = "Filter" class = "show-filter"><a class = "icon-filter"></a></button>
-				<button title = "Layers" class = "show-layer"><a class = "icon-stack"></a></button>
-				<button title = "Graphs" class = "show-graph"><a class = "icon-stats"></a></button>
+				<button title = "Search" data-target = "search-form"
+						class = "show-search"><a class = "icon-search"></a></button>
+				<button title = "Filter" data-target = "filter-form"
+						class = "show-filter"><a class = "icon-filter"></a></button>
+				<button title = "Layers" data-target = "layer-form"
+						class = "show-layer"><a class = "icon-stack"></a></button>
+				<button title = "Graphs" data-target = "graph-form"
+						class = "show-graph"><a class = "icon-stats"></a></button>
 			</div>
 
 			<article class="sidebar-content-container">

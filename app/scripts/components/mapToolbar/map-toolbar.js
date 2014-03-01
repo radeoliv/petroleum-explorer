@@ -2,78 +2,57 @@
 (function () {
 	$(function () {
 		var initMapToggle,
-			mapToolbar, mapToolbarContent, mapToolbarIcon,
-			searchButton, searchContent, toggleSearchContent,
-			filterButton, filterContent, toggleFilterContent,
-			layerButton, layerContent, toggleLayerContent,
-			graphButton, graphContent, toggleGraphContent,
-			setToggle, toolbarToggle;
+			mapToolbar, mapToolbarButtons, mapToolbarIcon,
+			setToggle, toolbarToggle,
+			mapToolbarContent;
 
+		/**
+		 * mapToolbarButtons finds all buttons in toolbar-buttons div.
+		 * mapToolbarContent finds all the sections elements in sidebar-content-container
+		 * these section elements will contain the actual implemented parts of selected function
+		 * @type {*|jQuery|HTMLElement}
+		 */
 		mapToolbar = $(".mapToolbar");
-
 		toolbarToggle = mapToolbar.find(".show-toolbar");
 		mapToolbarIcon = toolbarToggle.find("i");
-		mapToolbarContent = mapToolbar.find(".toolbar-buttons");
+		mapToolbarButtons = mapToolbar.find(".toolbar-buttons button");
+		mapToolbarContent = mapToolbar.find(".sidebar-content-container section").hide();
 
-		searchContent = mapToolbar.find(".search-form").hide();
-		searchButton = mapToolbar.find(".show-search");
-
-		filterContent = mapToolbar.find(".filter-form").hide();
-		filterButton = mapToolbar.find(".show-filter");
-
-		layerContent = mapToolbar.find(".layer-form").hide();
-		layerButton = mapToolbar.find(".show-layer");
-
-		graphContent = mapToolbar.find(".graph-form").hide();
-		graphButton = mapToolbar.find(".show-graph");
-
+		/**
+		 * This function initializes mapToolbarButtons to hidden, and toggles
+		 * the contents of the sidebar when called.
+		 * @returns {*}
+		 */
 		initMapToggle = function () {
-			mapToolbarContent.hide();
+			mapToolbarButtons.hide();
 			return toolbarToggle.on("click", function () {
-				mapToolbarContent.toggle("slow");
+				mapToolbarButtons.toggle("slow");
+				mapToolbarContent.hide();
+				mapToolbarButtons.removeClass("active");
 				return mapToolbarIcon.toggleClass("icon-expand icon-contract");
 			});
 		};
 
+		/**
+		 * This function is called to toggle content for a single toolbar button.
+		 * It first hides any active content, and then uses the data-target attribute
+		 * of selected button to find and show its corresponding content.
+		 * @returns {*}
+		 */
 		setToggle = function () {
-			return mapToolbar.find("button").on("click", function () {
+			return mapToolbarButtons.on("click", function () {
 
-				//add code to hide content belonging to other options
+				mapToolbarContent.hide();
+				mapToolbarButtons.removeClass("active");
 
-				return $(this).toggleClass("active");
-			});
-		};
-
-		toggleSearchContent = function () {
-			return searchButton.on("click", function () {
-				return searchContent.toggle("slow");
-			});
-		};
-
-		toggleFilterContent = function () {
-			return filterButton.on("click", function () {
-				return filterContent.toggle("slow");
-			});
-		};
-
-		toggleLayerContent = function () {
-			return layerButton.on("click", function () {
-				return layerContent.toggle("slow");
-			});
-		};
-
-		toggleGraphContent = function () {
-			return graphButton.on("click", function () {
-				return graphContent.toggle("slow");
+				var targetSelector = $(this).attr("data-target");
+				var target = $("."+targetSelector).show("slow");
+				$(this).toggleClass("active");
 			});
 		};
 
 		initMapToggle();
 		setToggle();
-		toggleSearchContent();
-		toggleFilterContent();
-		toggleLayerContent();
-		return toggleGraphContent();
 
 	});
 

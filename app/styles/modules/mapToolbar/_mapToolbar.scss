@@ -29,9 +29,8 @@ Map Toolbar
 			border-color: transparent;
 		}
 		&.show-toolbar {
-			@extend %inline;
 			&.active {
-				display: block;
+				display: inline;
 			}
 		}
 		&:hover{
@@ -47,6 +46,7 @@ Map Toolbar
 
 	.sidebar-content-container{
 		@extend %inline;
+		float: right;
 	}
 }
 
