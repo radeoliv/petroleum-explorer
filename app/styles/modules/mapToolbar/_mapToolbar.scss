@@ -28,15 +28,25 @@ Map Toolbar
 			border-width:  0 0.11em 0 0.11em;
 			border-color: transparent;
 		}
+		&.show-toolbar {
+			@extend %inline;
+			&.active {
+				display: block;
+			}
+		}
 		&:hover{
 			background: darken($mapToolbarButtonColour, 10);
 			border-width:  0 0.11em 0 0.11em;
 			border-color: transparent;
 		}
 	}
+
+	.toolbar-buttons{
+		float: left;
+	}
+
+	.sidebar-content-container{
+		@extend %inline;
+	}
 }
 
-.content-column{
-	min-height: 25em;
-	vertical-align: top;
-}

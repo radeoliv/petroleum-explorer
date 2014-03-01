@@ -323,64 +323,56 @@ function AutoCenter(map) {
 		<aside class = "mapToolbar">
 			<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
 
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-				<td>
-				<div class = "toolbar-content">
-					<button title = "Search" class = "show-search"><a class = "icon-search"></a></button>
-					<button title = "Filter" class = "show-filter"><a class = "icon-filter"></a></button>
-					<button title = "Layers" class = "show-layer"><a class = "icon-stack"></a></button>
-					<button title = "Graphs" class = "show-graph"><a class = "icon-stats"></a></button>
-				</div>
-				</td>
+			<div class = "toolbar-buttons">
+				<button title = "Search" class = "show-search"><a class = "icon-search"></a></button>
+				<button title = "Filter" class = "show-filter"><a class = "icon-filter"></a></button>
+				<button title = "Layers" class = "show-layer"><a class = "icon-stack"></a></button>
+				<button title = "Graphs" class = "show-graph"><a class = "icon-stats"></a></button>
+			</div>
 
-				<td class="content-column">
-					<div class="search-form">
-						<form action = "/search">
-							<fieldset>
-								<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>
-							</fieldset>
-						</form>
-					</div>
+			<article class="sidebar-content-container">
+				<section class="search-form">
+					<form action = "/search">
+						<fieldset>
+							<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>
+						</fieldset>
+					</form>
+				</section>
 
-					<div class="filter-form">
-						<form action = "/filter">
-							<fieldset>
-								<input type = "search" name = "seng-515-filter" placeholder = "Filter..." required x-webkit-speech results = "10" autosave = "seng-515-filter"/>
-							</fieldset>
-						</form>
-					</div>
+				<section class="filter-form">
+					<form action = "/filter">
+						<fieldset>
+							<input type = "search" name = "seng-515-filter" placeholder = "Filter..." required x-webkit-speech results = "10" autosave = "seng-515-filter"/>
+						</fieldset>
+					</form>
+				</section>
 
-					<div class="layer-form">
-						<form action = "/layer">
-							<fieldset>
-								<legend>Layers</legend>
-								<input checked = "unchecked" type = "checkbox"/></br>
-								<input checked = "unchecked" type = "checkbox"/></br>
-								<input checked = "unchecked" type = "checkbox"/></br>
-								<input checked = "unchecked" type = "checkbox"/></br>
-								<input checked = "unchecked" type = "checkbox"/>
-							</fieldset>
-						</form>
-					</div>
+				<section class="layer-form">
+					<form action = "/layer">
+						<fieldset>
+							<legend>Layers</legend>
+							<input checked = "unchecked" type = "checkbox"/></br>
+							<input checked = "unchecked" type = "checkbox"/></br>
+							<input checked = "unchecked" type = "checkbox"/></br>
+							<input checked = "unchecked" type = "checkbox"/></br>
+							<input checked = "unchecked" type = "checkbox"/>
+						</fieldset>
+					</form>
+				</section>
 
-					<div class="graph-form">
-						<form action = "/graph">
-							<fieldset>
-								<legend>Graphs</legend>
-								Graphs nd Stuff...
-							</fieldset>
-						</form>
-					</div>
-
-				</td>
-				</tr>
-			</table>
-
+				<section class="graph-form">
+					<form action = "/graph">
+						<fieldset>
+							<legend>Graphs</legend>
+							Graphs nd Stuff...
+						</fieldset>
+					</form>
+				</section>
+			</article>
 		</aside>
 		<footer>
 			<!-- build:js(app) scripts/components.js -->
-				<script src="bower_components/jquery/jquery.min.js"></script>
+				<script src="bower_components/jquery/dist/jquery.min.js"></script>
 			<!-- endbuild -->
 
 			<!-- build:js(.tmp) scripts/main.js -->

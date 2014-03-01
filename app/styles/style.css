@@ -77,6 +77,9 @@ Positions
 /* =============================================================================
 Display modes
 ========================================================================== */
+.mapToolbar button.show-toolbar, .mapToolbar .sidebar-content-container {
+  display: inline-block; }
+
 /* =============================================================================
 Variables
 ========================================================================== */
@@ -99,14 +102,14 @@ Map Toolbar
       background: darkgrey;
       border-width: 0 0.11em 0 0.11em;
       border-color: transparent; }
+    .mapToolbar button.show-toolbar.active {
+      display: block; }
     .mapToolbar button:hover {
       background: #c3c3c3;
       border-width: 0 0.11em 0 0.11em;
       border-color: transparent; }
-
-.content-column {
-  min-height: 25em;
-  vertical-align: top; }
+  .mapToolbar .toolbar-buttons {
+    float: left; }
 
 #map-canvas {
   height: 100%;
