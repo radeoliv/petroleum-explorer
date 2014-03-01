@@ -9,7 +9,7 @@
  Unit tests for visualizations.
  -------------------------------------------------------------------------------*/
 
-//import Oil_well_filter.*;
+//visualization_controller = require("../../app/scripts/visualization_controller.js");
 
 function Oil_well_filter(oil_data, discrete_flag) {
 	this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized.
@@ -148,8 +148,7 @@ var assert = require("chai").assert;
 			var filter_controller = new Oil_well_filter(oil_data_discrete_large_deviation, true);
 			//act
 			var actual = filter_controller.get_visualization_method();
-			//Test passes if expected is "pie-chart-histogram".
-			var expected = "pie-chart";
+			var expected = "pie-chart"; // For data with large relative differences in frequency, the visualization method will be a pie chart.
 			//assert
 			assert.equal(actual, expected);
 		});
@@ -158,7 +157,7 @@ var assert = require("chai").assert;
 			var filter_controller = new Oil_well_filter(oil_data_discrete_small_deviation, true);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
-			var expected_1 = "histogram"; // For data will small relative differences in frequency, the visualization method will be a histogram.
+			var expected_1 = "histogram"; // For data with small relative differences in frequency, the visualization method will be a histogram.
 			//assert
 			assert.equal(actual_1, expected_1);
 		});
@@ -167,12 +166,9 @@ var assert = require("chai").assert;
 			var filter_controller = new Oil_well_filter(oil_data_continuous, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
-			/*var actual_2 = filter_controller.start;
-			var expected_1 = "histogram"; // For data will small relative differences in frequency, the visualization method will be a histogram.
-			var expected_2 = 0; //TODO determine a suitable start for the y-axis.
-			//assert*/
-			//assert.equal(actual_1, expected_1);
-			//assert.equal(actual_2, expected_2);
+			var expected_1 = "histogram"
+			//assert
+			assert.equal(actual_1, expected_1);
 		});
 
 	});
