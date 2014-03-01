@@ -159,11 +159,25 @@ var assert = require("chai").assert;
 		it("Discrete data with a small deviation in frequencies.", function () {
 			var filter_controller = new Oil_well_filter(oil_data_discrete_small_deviation, true);
 			//act
-			var actual = filter_controller.get_visualization_method();
-			//Test passes if expected is "histogram".
-			var expected = "histogram";
+			var actual_1 = filter_controller.get_visualization_method();
+			var actual_2 = filter_controller.start;
+			var expected_1 = "histogram"; // For data will small relative differences in frequency, the visualization method will be a histogram.
+			var expected_2 = 0; //TODO determine a suitable start for the y-axis.
 			//assert
-			assert.equal(actual, expected);
+			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
+		});
+
+		it("Continuous data", function () {
+			var filter_controller = new Oil_well_filter(oil_data_continuous, false);
+			//act
+			var actual_1 = filter_controller.get_visualization_method();
+			/*var actual_2 = filter_controller.start;
+			var expected_1 = "histogram"; // For data will small relative differences in frequency, the visualization method will be a histogram.
+			var expected_2 = 0; //TODO determine a suitable start for the y-axis.
+			//assert*/
+			//assert.equal(actual_1, expected_1);
+			//assert.equal(actual_2, expected_2);
 		});
 
 	});
