@@ -18,7 +18,8 @@ function Oil_well_filter(oil_data, discrete_flag) {
 	this.discrete_flag = discrete_flag; //discrete_flag is a boolean variable that is true if the data consists of discrete quantities and is false if otherwise.
 
 	this.visualization_method = ""; //visualization method is a string from {"histogram", "pie-chart"} that denotes the method of visualization that is to be used.
-	this.category_widths = 0; //For continuous data, category_widths denotes the width of each interval within which all quantities are given the same classification.
+	this.start = 0; //For bar histograms, start will indicate the beginning point of the vertical axis. This will better emphasize absolute differences in quantity.
+	this.category_widths = 0.0; //For continuous data, category_widths denotes the width of each interval within which all quantities are given the same classification.
 };
 
 Oil_well_filter.prototype.get_visualization_method = function () {
