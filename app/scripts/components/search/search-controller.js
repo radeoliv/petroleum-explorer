@@ -63,9 +63,9 @@
 		  * @param searchQuery
 		  */
 		 SearchController.prototype.isEmptyQuery = function(searchQuery) {
-			var emptyPattern = new RegExp("\s"),
-				contentPattern = new RegExp("\W");
-			 return this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
+			//var emptyPattern = new RegExp("\s"),
+				//contentPattern = new RegExp("\W");
+			 return (this.searchQuery).trim() === ""; //this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
 
 		 };
 

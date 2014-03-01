@@ -68,7 +68,7 @@
 	 it("Returns a warning when search resultset is empty", function () {
 		 //arrange
 		 var sampleNullDataSet = null,
-		 	 sampleQuery = "";
+		 	 sampleQuery = "whatever";
 		 	 resultSet = [];
 		 var mySearchController = new search_controller.SearchController(sampleNullDataSet, sampleQuery,resultSet);
 		 //act
