@@ -11,7 +11,6 @@
  -------------------------------------------------------------------------------*/
 
 
-
 //TODO: Implement oil_well_filter class.
 function Oil_well_filter(oil_data, discrete_flag) {
 	this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized.
@@ -29,6 +28,6 @@ Oil_well_filter.prototype.get_visualization_method = function () {
 };
 
 // Export to the global scope.
-(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
+/*(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
 //class = {}
-exports.myVar = true;
+exports.myVar = true;*/
