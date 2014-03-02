@@ -26,9 +26,11 @@
 		  * @param resultSet
 		  * @constructor
 		  */
-		 function SearchController(dataSet,searchQuery,resultSet) {
-			 this.dataSet = dataSet;
-			 this.searchQuery = searchQuery;
+		 function SearchController(dataSet,resultSet) {
+			 this.dataSet = dataSet;//$.getJSON("../../../../test/mocks/uniqueWellIdentifierData.json", function() {
+				 //alert("success");
+			 //});
+
 			 this.resultSet = resultSet;
 			 if(this.resultSet === null || typeof(this.resultSet) === "undefined"){
 				 this.resultSet = [];
@@ -37,18 +39,32 @@
 			 this.UNDEFINED_ERROR_MESSAGE = "undefined search query";
 			 this.EMPTY_RESULTSET_ERROR_MESSAGE = "0 results found";
 			 this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE = "search query is empty";
+			 this.NULL_QUERY_ERROR_MESSAGE = "search query is null";
 		 }
 
-		 SearchController.prototype.findResults = function() {
-			 if(this.searchQuery === null){
+		 /**
+		  * find the UWID matching the search criteria
+		  * @param query the search query we will use to search through UWID
+		  * @returns {string}
+		  */
+		 SearchController.prototype.findResults = function(query) {
+			 if(this.dataSet === null){
 				 return this.NULL_ERROR_MESSAGE;
 			 }
-			 else if(typeof(this.searchQuery) === "undefined"){
+			 if(query === null){
+				 return this.NULL_QUERY_ERROR_MESSAGE;
+			 }
+			 else if(typeof(query) === "undefined"){
 				 return this.UNDEFINED_ERROR_MESSAGE;
 			 }
-			 else if(this.isEmptyQuery(this.searchQuery)){
+			 else if(this.isEmptyQuery(query)){
 				 return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
 			 }
+			/*for(var well in this.dataSet){
+				if ((well.UNIQUEWELLID).search(query)){
+					resultSet.push(well);
+				}
+			}*/
 			 if(this.resultSet.length<1){
 				 return this.EMPTY_RESULTSET_ERROR_MESSAGE;
 			 }
@@ -58,6 +74,16 @@
 		 SearchController.prototype.checkResults = function(){
 
 		 };
+
+		 /**
+		  * function retrieving the json file containing the data and sending the result to the attribute dataset of the searchController
+		  * @returns {exports|*}
+		  */
+		 SearchController.prototype.getMockData = function(){
+			 this.dataSet = require("../../../../test/mocks/uniqueWellIdentifierDataTest.json");
+			 return this.dataSet;
+		 };
+
 		 /**
 		  * Checks search query for excessive spaces or unaccepted formats.  Returns true if any of formats match.
 		  * @param searchQuery
@@ -65,7 +91,7 @@
 		 SearchController.prototype.isEmptyQuery = function(searchQuery) {
 			//var emptyPattern = new RegExp("\s"),
 				//contentPattern = new RegExp("\W");
-			 return (this.searchQuery).trim() === ""; //this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
+			 return (searchQuery).trim() === ""; //this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
 
 		 };
 

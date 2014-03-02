@@ -21,7 +21,6 @@ SearchView = function (searchController){
 };
 
 
-
  /**
   * listen to key down events
   * send query to the searchController
@@ -33,7 +32,6 @@ SearchView.prototype.listenKeyboard = function($searchInputSelector,$searchInput
 		//retrieving the value in the input and saving it as a string variable
 		var query = $(this).text();
 		//pass the search query to the search controller
-		this.searchController.
+		this.searchController.findResults(query);
 	});
-
 }
