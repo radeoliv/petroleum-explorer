@@ -25,8 +25,6 @@ Map Toolbar
 		color: $mapToolbarButtonTextColour;
 		&:active, &.active{
 			background: darken($mapToolbarButtonColour, 20);
-			border-width:  0 0.11em 0 0.11em;
-			border-color: transparent;
 		}
 		&.show-toolbar {
 			&.active {
@@ -35,8 +33,6 @@ Map Toolbar
 		}
 		&:hover{
 			background: darken($mapToolbarButtonColour, 10);
-			border-width:  0 0.11em 0 0.11em;
-			border-color: transparent;
 		}
 	}
 

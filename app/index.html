@@ -285,21 +285,24 @@
 		var marker;
 		var infowindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
-		for (var i = 0;
-				i < locationArray.length;
-				i++) {
+		for (var i = 0; i < locationArray.length; i++) {
 			marker = new google.maps.Marker({
 				position: locationArray[i],
-				map:      map,
-				title:    locationNameArray[i]
+				map: map,
+				title: locationNameArray[i],
+				draggable: false,
+				animation: google.maps.Animation.DROP
 			});
 
 			markers.push(marker);
 
 			google.maps.event.addListener(marker, 'click', (function (marker, i) {
 				return function () {
-					infowindow.setContent("Unique Well Identifier: " + marker.title);
+					var content = "<b>Unique Well Identifier</b><br>" + marker.title;
+					infowindow.setContent("<p>" + content + "</p>");
+					//infowindow.setContent("Unique Well Identifier: " + marker.title);
 					infowindow.open(map, marker);
+					//marker.setAnimation(google.maps.Animation.BOUNCE);
 				}
 			})(marker, i));
 		}
@@ -376,7 +379,7 @@ function AutoCenter(map) {
 		</aside>
 		<footer>
 			<!-- build:js(app) scripts/components.js -->
-				<script src="bower_components/jquery/dist/jquery.min.js"></script>
+				<script src="bower_components/jquery/jquery.min.js"></script>
 			<!-- endbuild -->
 
 			<!-- build:js(.tmp) scripts/main.js -->

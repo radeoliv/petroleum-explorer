@@ -99,15 +99,11 @@ Map Toolbar
     font-size: 1.2em;
     color: black; }
     .mapToolbar button:active, .mapToolbar button.active {
-      background: darkgrey;
-      border-width: 0 0.11em 0 0.11em;
-      border-color: transparent; }
+      background: darkgrey; }
     .mapToolbar button.show-toolbar.active {
       display: inline; }
     .mapToolbar button:hover {
-      background: #c3c3c3;
-      border-width: 0 0.11em 0 0.11em;
-      border-color: transparent; }
+      background: #c3c3c3; }
   .mapToolbar .toolbar-buttons {
     float: left; }
   .mapToolbar .sidebar-content-container {
