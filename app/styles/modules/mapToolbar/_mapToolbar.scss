@@ -24,9 +24,7 @@ Map Toolbar
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
 		&:active, &.active, &:hover{
-			background: darken($mapToolbarButtonColour, 20);
-			border-width:  0 0.11em 0 0.11em;
-			border-color: transparent;
+			background: darken($mapToolbarButtonColour, 20);;
 		}
 		&.show-toolbar {
 			&.active {

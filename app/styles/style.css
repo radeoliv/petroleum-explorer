@@ -99,9 +99,7 @@ Map Toolbar
     font-size: 1.2em;
     color: black; }
     .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
-      background: darkgrey;
-      border-width: 0 0.11em 0 0.11em;
-      border-color: transparent; }
+      background: darkgrey; }
     .mapToolbar button.show-toolbar.active {
       display: inline; }
   .mapToolbar .toolbar-buttons {
