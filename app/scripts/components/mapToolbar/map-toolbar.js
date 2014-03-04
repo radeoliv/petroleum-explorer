@@ -27,7 +27,7 @@
 			mapToolbarButtons.hide();
 			return toolbarToggle.on("click", function () {
 				mapToolbarButtons.toggle("slow");
-				mapToolbarContent.hide();
+				mapToolbarContent.hide("slow");
 				mapToolbarButtons.removeClass("active");
 				return mapToolbarIcon.toggleClass("icon-expand icon-contract");
 			});
@@ -42,7 +42,7 @@
 		setToggle = function () {
 			return mapToolbarButtons.on("click", function () {
 
-				mapToolbarContent.hide();
+				mapToolbarContent.hide("slow");
 				mapToolbarButtons.removeClass("active");
 
 				var targetSelector = $(this).attr("data-target");

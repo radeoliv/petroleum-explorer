@@ -23,16 +23,15 @@ Map Toolbar
 		outline: none;
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
-		&:active, &.active{
+		&:active, &.active, &:hover{
 			background: darken($mapToolbarButtonColour, 20);
+			border-width:  0 0.11em 0 0.11em;
+			border-color: transparent;
 		}
 		&.show-toolbar {
 			&.active {
 				display: inline;
 			}
-		}
-		&:hover{
-			background: darken($mapToolbarButtonColour, 10);
 		}
 	}
 
@@ -43,6 +42,22 @@ Map Toolbar
 	.sidebar-content-container{
 		@extend %inline;
 		float: right;
+	}
+
+	.search-form{
+		min-width: 10em;
+	}
+
+	.filter-form{
+		min-width: 10em;
+	}
+
+	.layer-form{
+		min-width: 10em;
+	}
+
+	.graph-form{
+		min-width: 10em;
 	}
 }
 

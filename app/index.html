@@ -308,18 +308,18 @@
 		}
 	}
 
-function AutoCenter(map) {
-	//  Create a new viewpoint bound
-	var bounds = new google.maps.LatLngBounds();
+	function AutoCenter(map) {
+		//  Create a new viewpoint bound
+		var bounds = new google.maps.LatLngBounds();
 
-	//  Go through each...
-	for (var i = 0; i < locationArray.length; i++) {
-		bounds.extend(locationArray[i]);
-	};
+		//  Go through each...
+		for (var i = 0; i < locationArray.length; i++) {
+			bounds.extend(locationArray[i]);
+		};
 
-	//  Fit these bounds to the map
-	map.fitBounds(bounds);
-}
+		//  Fit these bounds to the map
+		map.fitBounds(bounds);
+	}
 
 	</script>
 		<main id = "map-canvas"></main>
@@ -358,11 +358,11 @@ function AutoCenter(map) {
 					<form action = "/layer">
 						<fieldset>
 							<legend>Layers</legend>
-							<input checked = "unchecked" type = "checkbox"/></br>
-							<input checked = "unchecked" type = "checkbox"/></br>
-							<input checked = "unchecked" type = "checkbox"/></br>
-							<input checked = "unchecked" type = "checkbox"/></br>
-							<input checked = "unchecked" type = "checkbox"/>
+							<input checked = "unchecked" type = "checkbox"/>Layer 1</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 2</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 3</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 4</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 5</br>
 						</fieldset>
 					</form>
 				</section>
@@ -371,7 +371,10 @@ function AutoCenter(map) {
 					<form action = "/graph">
 						<fieldset>
 							<legend>Graphs</legend>
-							Graphs nd Stuff...
+							<button><a class = "icon-pie"></a></button>
+							<button><a class = "icon-bars2"></a></button>
+							<button><a class = "icon-pie"></a></button>
+							<button><a class = "icon-bars2"></a></button>
 						</fieldset>
 					</form>
 				</section>

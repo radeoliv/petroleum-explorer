@@ -98,16 +98,24 @@ Map Toolbar
     outline: none;
     font-size: 1.2em;
     color: black; }
-    .mapToolbar button:active, .mapToolbar button.active {
-      background: darkgrey; }
+    .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
+      background: darkgrey;
+      border-width: 0 0.11em 0 0.11em;
+      border-color: transparent; }
     .mapToolbar button.show-toolbar.active {
       display: inline; }
-    .mapToolbar button:hover {
-      background: #c3c3c3; }
   .mapToolbar .toolbar-buttons {
     float: left; }
   .mapToolbar .sidebar-content-container {
     float: right; }
+  .mapToolbar .search-form {
+    min-width: 10em; }
+  .mapToolbar .filter-form {
+    min-width: 10em; }
+  .mapToolbar .layer-form {
+    min-width: 10em; }
+  .mapToolbar .graph-form {
+    min-width: 10em; }
 
 #map-canvas {
   height: 100%;
