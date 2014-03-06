@@ -37,6 +37,7 @@
 		 * This function is called to toggle content for a single toolbar button.
 		 * It first hides any active content, and then uses the data-target attribute
 		 * of selected button to find and show its corresponding content.
+		 * TODO: use jQuery map with an array of jQuery objects for better selector speed
 		 * @returns {*}
 		 */
 		setToggle = function () {
