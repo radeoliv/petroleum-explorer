@@ -27,6 +27,7 @@ Oil_well_filter.prototype.get_visualization_method = function () {
 	return this.visualization_method;
 };
 
+(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
 // Export to the global scope.
 /*(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
 //class = {}

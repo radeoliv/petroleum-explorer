@@ -9,7 +9,7 @@
  Unit tests for visualizations.
  -------------------------------------------------------------------------------*/
 
-//visualization_controller = require("../../app/scripts/visualization_controller.js");
+//var Oil_well_filter = require("../../app/scripts/visualization_controller.js");
 
 function Oil_well_filter(oil_data, discrete_flag) {
 	this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized.
@@ -64,6 +64,30 @@ var assert = require("chai").assert;
 		"SUSPENDED OIL",
 		"SUSPENDED OIL",
 		"ABANDONED OIL"
+	];
+
+	var oil_well_data_discrete_pure = [
+		"OIL",
+		"OIL",
+		"OIL",
+		"OIL",
+		"OIL",
+		"OIL",
+		"OIL",
+		"OIL",
+		"OIL"
+	];
+
+	var oil_well_data_continuous_pure = [
+		5.0,
+		5.0,
+		5.0,
+		5.0,
+		5.0,
+		5.0,
+		5.0,
+		5.0,
+		5.0
 	];
 
 	var oil_data_continuous = [
@@ -126,6 +150,7 @@ var assert = require("chai").assert;
 			var expected_2 = 0.0; // The default starting point.
 			//assert
 			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
 		});
 
 		it("empty data set, continuous data assumed", function () {
@@ -162,11 +187,38 @@ var assert = require("chai").assert;
 			assert.equal(actual_1, expected_1);
 		});
 
+		it("Single Category Discrete Data", function () {
+			var filter_controller = new Oil_well_filter(oil_well_data_discrete_pure, true);
+			//act
+			var actual_1 = filter_controller.get_visualization_method();
+			var actual_2 = filter_controller.start;
+			var expected_1 = "histogram";
+			var expected_2 = 9;
+			//assert
+			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
+		})
+
+		it("Single Category Continuous Data", function () {
+			var filter_controller = new Oil_well_filter(oil_well_data_continuous_pure, true);
+			//act
+			var actual_1 = filter_controller.get_visualization_method();
+			var actual_2 = filter_controller.start;
+			var actual_3 = filter_controller.category_widths;
+			var expected_1 = "histogram";
+			var expected_2 = 0.0;
+			var expected_3 = 1.0;
+			//assert
+			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
+			assert.equal(actual_3, expected_3);
+		})
+
 		it("Continuous data", function () {
 			var filter_controller = new Oil_well_filter(oil_data_continuous, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
-			var expected_1 = "histogram"
+			var expected_1 = "histogram";
 			//assert
 			assert.equal(actual_1, expected_1);
 		});
