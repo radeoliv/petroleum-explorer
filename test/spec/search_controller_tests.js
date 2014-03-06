@@ -56,7 +56,7 @@
 	 it("Returns an error when search query is empty", function () {
 		 //arrange
 		 var sampleNullDataSet = [],
-			 sampleQuery1 = "  ",
+			 sampleQuery1 = "     ",
 			 sampleQuery2 = "",
 		 	 resultSet = null;
 		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
@@ -123,7 +123,7 @@
 		 var actual = mySearchController.getMockData();
 		 var expected = malFormedJson;
 		 //assert
-		 assert.equal(actual, expected);
+		 assert.deepEqual(actual, expected);
 	 });
 
 
