@@ -4,9 +4,9 @@
  seng515-petroleum-explorer
 
  =============================================================================
- Filename: visualization_controller.js
+ Filename: visualization_controller_tests.js
  =============================================================================
- Unit tests for visualizations.
+ Unit tests for Oil_well_filter.
  -------------------------------------------------------------------------------*/
 
 //var Oil_well_filter = require("../../app/scripts/visualization_controller.js");
@@ -15,9 +15,13 @@ function Oil_well_filter(oil_data, discrete_flag) {
 	this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized.
 	this.discrete_flag = discrete_flag; //discrete_flag is a boolean variable that is true if the data consists of discrete quantities and is false if otherwise.
 
+	this.categories = []; //An array that holds the categories of the histogram/pie-chart.
+	this.frequency_counts = []; //An array that holds the corresponding frequency for each category.
+
 	this.visualization_method = ""; //visualization method is a string from {"histogram", "pie-chart"} that denotes the method of visualization that is to be used.
 	this.start = 0; //For bar histograms, start will indicate the beginning point of the vertical axis. This will better emphasize absolute differences in quantity.
 	this.category_widths = 0.0; //For continuous data, category_widths denotes the width of each interval within which all quantities are given the same classification.
+
 };
 
 Oil_well_filter.prototype.get_visualization_method = function () {
@@ -145,12 +149,18 @@ var assert = require("chai").assert;
 			var filter_controller = new Oil_well_filter(oil_data_empty, true);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
-			var actual_2 = filter_controller.start;
+			var actual_2 = filter_controller.categories;
+			var actual_3 = filter_controller.frequency_counts;
+			var actual_4 = filter_controller.start;
 			var expected_1 = "histogram"; // The default visualization method.
-			var expected_2 = 0.0; // The default starting point.
+			var expected_2 = [];
+			var expected_3 = [];
+			var expected_4 = 0; // The default starting point.
 			//assert
 			assert.equal(actual_1, expected_1);
-			assert.equal(actual_2, expected_2);
+			assert.deepEqual(actual_2, expected_2);
+			assert.deepEqual(actual_3, expected_3);
+			assert.equal(actual_4, expected_4);
 		});
 
 		it("empty data set, continuous data assumed", function () {
@@ -158,15 +168,21 @@ var assert = require("chai").assert;
 			var filter_controller = new Oil_well_filter(oil_data_empty, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
-			var actual_2 = filter_controller.start;
-			var actual_3 = filter_controller.category_widths;
+			var actual_2 = filter_controller.categories;
+			var actual_3 = filter_controller.frequency_counts;
+			var actual_4 = filter_controller.start;
+			var actual_5 = filter_controller.category_widths;
 			var expected_1 = "histogram"; // The default visualization method.
-			var expected_2 = 0.0; // The default starting point.
-			var expected_3 = 0.0; // The default category width.
+			var expected_2 = [];
+			var expected_3 = [];
+			var expected_4 = 0; // The default starting point.
+			var expected_5 = 0.0; // The default category width.
 			//assert
 			assert.equal(actual_1, expected_1);
-			assert.equal(actual_2, expected_2);
-			assert.equal(actual_3, expected_3);
+			assert.deepEqual(actual_2, expected_2);
+			assert.deepEqual(actual_3, expected_3);
+			assert.equal(actual_4, expected_4);
+			assert.equal(actual_5, expected_5);
 		});
 
 		it("Discrete data with a large deviation in frequencies.", function () {
@@ -206,8 +222,8 @@ var assert = require("chai").assert;
 			var actual_2 = filter_controller.start;
 			var actual_3 = filter_controller.category_widths;
 			var expected_1 = "histogram";
-			var expected_2 = 0.0;
-			var expected_3 = 1.0;
+			var expected_2 = 9;
+			var expected_3 = 0.001;
 			//assert
 			assert.equal(actual_1, expected_1);
 			assert.equal(actual_2, expected_2);
