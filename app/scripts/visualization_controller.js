@@ -17,7 +17,7 @@ function Oil_well_filter(oil_data, discrete_flag) {
 	this.discrete_flag = discrete_flag; //discrete_flag is a boolean variable that is true if the data consists of discrete quantities and is false if otherwise.
 
 	this.categories = []; //An array that holds the categories of the histogram/pie-chart.
-	this.frequency_counts = []; //An array that holds the corresponding frequency for each category.
+	this.category_counts = []; //An array that holds the number of occurrences of each category.
 
 	this.visualization_method = ""; //visualization method is a string from {"histogram", "pie-chart"} that denotes the method of visualization that is to be used.
 	this.start = 0; //For bar histograms, start will indicate the beginning point of the vertical axis. This will better emphasize absolute differences in quantity.
@@ -26,6 +26,52 @@ function Oil_well_filter(oil_data, discrete_flag) {
 };
 
 Oil_well_filter.prototype.get_visualization_method = function () {
+	this.categories = [];
+	this.category_counts = [];
+
+	if (this.discrete_flag) {
+		//If the data is discrete, determine the categories and frequencies.
+		var N = this.oil_data.length;
+		for (var i = 0; i < N; i++) {
+			//Determine if element already exists in "categories".
+			var category_index = -1;
+			var j = 0;
+			while (category_index == -1 && j < this.categories.length) {
+				if (this.oil_data[i] == this.categories[j]) {
+					category_index = j;
+				}
+				j++;
+			}
+			if (category_index != -1) {
+				//If the category is found, increment the count.
+				this.category_counts[category_index]++;
+			}
+			else {
+				//Else add a new category.
+				this.categories.push(this.oil_data[i]);
+				this.category_counts.push(1);
+			}
+		}
+		//Find the maximum and minimum counts. If the data set is empty, these quantities default to 0.
+		var max_count = 0;
+		var min_count = 0;
+		if (this.category_counts.length > 0) {
+			max_count = this.category_counts[0];
+			min_count = this.category_counts[0];
+			for (var i = 1; i < this.category_counts.length; i++) {
+				if (this.category_counts[i] > max_count) {
+					max_count = this.category_counts[i];
+				}
+				if (this.category_counts[i] < min_count) {
+					min_count = this.category_counts[i];
+				}
+			}
+		}
+	}
+	else {
+		//If the data is continuous:
+	}
+
 	this.visualization_method = "histogram";
 
 	return this.visualization_method;

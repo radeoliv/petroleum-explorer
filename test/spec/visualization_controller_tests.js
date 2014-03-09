@@ -16,7 +16,7 @@ function Oil_well_filter(oil_data, discrete_flag) {
 	this.discrete_flag = discrete_flag; //discrete_flag is a boolean variable that is true if the data consists of discrete quantities and is false if otherwise.
 
 	this.categories = []; //An array that holds the categories of the histogram/pie-chart.
-	this.frequency_counts = []; //An array that holds the corresponding frequency for each category.
+	this.category_counts = []; //An array that holds the number of occurrences of each category.
 
 	this.visualization_method = ""; //visualization method is a string from {"histogram", "pie-chart"} that denotes the method of visualization that is to be used.
 	this.start = 0; //For bar histograms, start will indicate the beginning point of the vertical axis. This will better emphasize absolute differences in quantity.
@@ -150,7 +150,7 @@ var assert = require("chai").assert;
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.categories;
-			var actual_3 = filter_controller.frequency_counts;
+			var actual_3 = filter_controller.category_counts;
 			var actual_4 = filter_controller.start;
 			var expected_1 = "histogram"; // The default visualization method.
 			var expected_2 = [];
@@ -169,7 +169,7 @@ var assert = require("chai").assert;
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.categories;
-			var actual_3 = filter_controller.frequency_counts;
+			var actual_3 = filter_controller.category_counts;
 			var actual_4 = filter_controller.start;
 			var actual_5 = filter_controller.category_widths;
 			var expected_1 = "histogram"; // The default visualization method.
@@ -216,7 +216,7 @@ var assert = require("chai").assert;
 		})
 
 		it("Single Category Continuous Data", function () {
-			var filter_controller = new Oil_well_filter(oil_well_data_continuous_pure, true);
+			var filter_controller = new Oil_well_filter(oil_well_data_continuous_pure, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.start;
