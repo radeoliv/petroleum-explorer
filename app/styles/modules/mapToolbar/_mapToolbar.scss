@@ -60,5 +60,12 @@ Map Toolbar
 	.graph-form{
 		@extend %wide;
 	}
+	.grouped-search {
+		input {
+			@extend %inline;
+			max-width: 5em;
+			// TODO: Remove search icon with appearance
+		}
+	}
 }
 
