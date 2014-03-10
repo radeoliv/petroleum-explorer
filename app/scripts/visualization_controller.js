@@ -67,6 +67,20 @@ Oil_well_filter.prototype.get_visualization_method = function () {
 				}
 			}
 		}
+		var threshold = 1.0 //The the threshold of (max_count-min_count)/min_count above which the pie-chart will be used. Large values of (max_count-min_count)/min_count indicate great relative differences between the counts which the pie-chart a good choice.
+		if ((max_count-min_count)/min_count >= threshold)
+		{
+			//Use the pie-chart
+			this.visualization_method = "pie-chart";
+			return this.visualization_method;
+		}
+		else
+		{
+			//Use the histogram
+			this.visualization_method = "histogram";
+			//Find a useful starting point
+
+		}
 	}
 	else {
 		//If the data is continuous:
