@@ -28,7 +28,7 @@ Map Toolbar
 		}
 		&.show-toolbar {
 			&.active {
-				display: inline;
+				@extend %inline;
 			}
 		}
 	}
@@ -42,20 +42,23 @@ Map Toolbar
 		float: right;
 	}
 
-	.search-form{
+	%wide {
 		min-width: 10em;
+	}
+	.search-form {
+		@extend %wide;
 	}
 
 	.filter-form{
-		min-width: 10em;
+		@extend %wide;
 	}
 
 	.layer-form{
-		min-width: 10em;
+		@extend %wide;
 	}
 
 	.graph-form{
-		min-width: 10em;
+		@extend %wide;
 	}
 }
 
