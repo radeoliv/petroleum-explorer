@@ -27,7 +27,8 @@
 		  * @constructor
 		  */
 		 function SearchController(dataSet,resultSet) {
-			 this.dataSet = dataSet;//$.getJSON("../../../../test/mocks/uniqueWellIdentifierData.json", function() {
+			 this.dataSet = dataSet;
+			 console.dir(dataSet);//$.getJSON("../../../../test/mocks/uniqueWellIdentifierData.json", function() {
 				 //alert("success");
 			 //});
 
@@ -47,28 +48,47 @@
 		  * @param query the search query we will use to search through UWID
 		  * @returns {string}
 		  */
-		 SearchController.prototype.findResults = function(query) {
+		 SearchController.prototype.findResults = function(lsdQuery,sectionQuery,townshipQuery,rangeQuery) {
+			 //TODO: parse JSON file (wells.json)
+			 var queryArray=[lsdQuery,sectionQuery,townshipQuery,rangeQuery];
+			 for(query in queryArray){
+				 if(query === null){
+					 return this.NULL_QUERY_ERROR_MESSAGE;
+				 }
+				 else if(typeof(query) === "undefined"){
+					 return this.UNDEFINED_ERROR_MESSAGE;
+				 }
+				 else if(this.isEmptyQuery(query)){
+					 queryArray.pop(query);
+					 //return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
+				 }
+			 }
+			 for(var i=0; i<this.dataSet.length;i++){
+				// Iterate through queryArray, using && for each member
+				if(!this.isEmptyQuery(lsdQuery)){
+					if ((this.dataSet[i]['UWI'].substr(3,2)) === lsdQuery){
+						this.resultSet.push(this.dataSet[i]['UWI']);
+					//TODO: Add other search criteria
+					}
+				}
+			 }
+			 // check if any values are empty
+			 // for each search input with a valid entry, check contents of coresponding JSON data in this.dataset using && for each
+			 // return objects that match
 			 if(this.dataSet === null){
 				 return this.NULL_ERROR_MESSAGE;
 			 }
-			 if(query === null){
-				 return this.NULL_QUERY_ERROR_MESSAGE;
-			 }
-			 else if(typeof(query) === "undefined"){
-				 return this.UNDEFINED_ERROR_MESSAGE;
-			 }
-			 else if(this.isEmptyQuery(query)){
-				 return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
-			 }
+
 			/*for(var well in this.dataSet){
 				if ((well.UNIQUEWELLID).search(query)){
 					resultSet.push(well);
 				}
 			}*/
+
 			 if(this.resultSet.length<1){
 				 return this.EMPTY_RESULTSET_ERROR_MESSAGE;
 			 }
-			 return 'sample data';
+			 return this.resultSet;
 		 };
 
 		 SearchController.prototype.checkResults = function(){

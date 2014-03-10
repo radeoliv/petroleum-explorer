@@ -27,14 +27,29 @@ SearchView = function (searchController) {
  */
 SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInputForm) {
 	var $resultsArea = $('<ul class="results"></ul>').appendTo($searchInputForm); //append the results container if javascript enabled
-	$searchInputSelector.on("keyup", function (e) { //retrieving the value in the input and saving it as a string variable
-		var query = $(this).text(); //pass the search query to the search controller
-		var results = this.searchController.findResults(query); // return json object back
-		for (var result in results) {
-			$resultsArea.html('<li class="result">' + result.UUID + '</li>'); // append results with uuids to the results container
+	var lsdSearchInput = $searchInputForm.find("input[name='lsd']"),
+		sectionSearchInput = $searchInputForm.find("input[name='section']"),
+		townshipSearchInput = $searchInputForm.find("input[name='township']"),
+		rangeSearchInput = $searchInputForm.find("input[name='range']");
+	var self = this;
+	$searchInputSelector.on("keyup", function (e) { //retrieving the value in the input and saving it as a string variable.  Whenever a search input has typed in it, performs the search
+		var lsdQuery=lsdSearchInput[0].value;
+		var sectionQuery=sectionSearchInput[0].value;
+		var townshipQuery=townshipSearchInput[0].value;
+		var rangeQuery=rangeSearchInput[0].value;
+		var results = self.searchController.findResults(lsdQuery,sectionQuery,townshipQuery,rangeQuery); // return json object back
+		console.log(results);
+		var searchOutputHtml = '';
+		for (var i=0;i<results.length;i++) {
+			console.log(results[i]);
+			searchOutputHtml += '<li class="result">' + results[i] + '</li>';
+			//$resultsArea.html.('<li class="result">' + results[i] + '</li>'); // append results with uuids to the results container
 			//TODO: show these corresponding pins
 		}
+		$resultsArea.html(searchOutputHtml);
 	});
+
+
 };
 
 (typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
