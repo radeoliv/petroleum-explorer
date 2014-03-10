@@ -77,7 +77,7 @@ Positions
 /* =============================================================================
 Display modes
 ========================================================================== */
-.mapToolbar .sidebar-content-container {
+.mapToolbar button.show-toolbar.active, .mapToolbar .sidebar-content-container, .mapToolbar .grouped-search input {
   display: inline-block; }
 
 /* =============================================================================
@@ -100,20 +100,14 @@ Map Toolbar
     color: black; }
     .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
       background: darkgrey; }
-    .mapToolbar button.show-toolbar.active {
-      display: inline; }
   .mapToolbar .toolbar-buttons {
     float: left; }
   .mapToolbar .sidebar-content-container {
     float: right; }
-  .mapToolbar .search-form {
+  .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .layer-form, .mapToolbar .graph-form {
     min-width: 10em; }
-  .mapToolbar .filter-form {
-    min-width: 10em; }
-  .mapToolbar .layer-form {
-    min-width: 10em; }
-  .mapToolbar .graph-form {
-    min-width: 10em; }
+  .mapToolbar .grouped-search input {
+    max-width: 5em; }
 
 #map-canvas {
   height: 100%;

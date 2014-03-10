@@ -348,7 +348,14 @@ function AutoCenter(map) {
 		<section class = "search-form">
 			<form action = "/search">
 				<fieldset>
-					<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>
+					<legend>Search</legend>
+					<!--<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>-->
+					<div class="grouped-search">
+						<input type = "search" name = "lsd" placeholder = "lsd" results = "10" maxlength="2" pattern="{d}2" autosave = "lsd"/>
+						<input type = "search" name = "section" placeholder = "section" results = "10" maxlength="2" pattern="{d}2" autosave = "section"/>
+						<input type = "search" name = "township" placeholder = "township" results = "10" maxlength="3" pattern="{d}3" autosave = "township"/>
+						<input type = "search" name = "range" placeholder = "range" results = "10" maxlength="2" pattern="{d}2" autosave = "range"/>
+					</div>
 				</fieldset>
 			</form>
 		</section>
@@ -389,7 +396,7 @@ function AutoCenter(map) {
 </aside>
 <footer>
 	<!-- build:js(app) scripts/components.js -->
-	<script src="bower_components/jquery/jquery.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:js(.tmp) scripts/main.js -->
