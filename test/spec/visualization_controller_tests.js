@@ -9,26 +9,7 @@
  Unit tests for Oil_well_filter.
  -------------------------------------------------------------------------------*/
 
-//var Oil_well_filter = require("../../app/scripts/visualization_controller.js");
-
-function Oil_well_filter(oil_data, discrete_flag) {
-	this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized.
-	this.discrete_flag = discrete_flag; //discrete_flag is a boolean variable that is true if the data consists of discrete quantities and is false if otherwise.
-
-	this.categories = []; //An array that holds the categories of the histogram/pie-chart.
-	this.category_counts = []; //An array that holds the number of occurrences of each category.
-
-	this.visualization_method = ""; //visualization method is a string from {"histogram", "pie-chart"} that denotes the method of visualization that is to be used.
-	this.start = 0; //For bar histograms, start will indicate the beginning point of the vertical axis. This will better emphasize absolute differences in quantity.
-	this.category_widths = 0.0; //For continuous data, category_widths denotes the width of each interval within which all quantities are given the same classification.
-
-};
-
-Oil_well_filter.prototype.get_visualization_method = function () {
-	this.visualization_method = "histogram";
-
-	return this.visualization_method;
-};
+var Oil_well_filter = require("../../app/scripts/visualization_controller.js");
 
 var assert = require("chai").assert;
 (function () {
@@ -146,7 +127,7 @@ var assert = require("chai").assert;
 	describe("visualization_controller", function () {
 		it("empty data set, discrete data assumed", function () {
 			//arrange
-			var filter_controller = new Oil_well_filter(oil_data_empty, true);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_empty, true);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.categories;
@@ -165,7 +146,7 @@ var assert = require("chai").assert;
 
 		it("empty data set, continuous data assumed", function () {
 			//arrange
-			var filter_controller = new Oil_well_filter(oil_data_empty, false);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_empty, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.categories;
@@ -186,7 +167,7 @@ var assert = require("chai").assert;
 		});
 
 		it("Discrete data with a large deviation in frequencies.", function () {
-			var filter_controller = new Oil_well_filter(oil_data_discrete_large_deviation, true);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_discrete_large_deviation, true);
 			//act
 			var actual = filter_controller.get_visualization_method();
 			var expected = "pie-chart"; // For data with large relative differences in frequency, the visualization method will be a pie chart.
@@ -195,7 +176,7 @@ var assert = require("chai").assert;
 		});
 
 		it("Discrete data with a small deviation in frequencies.", function () {
-			var filter_controller = new Oil_well_filter(oil_data_discrete_small_deviation, true);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_discrete_small_deviation, true);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var expected_1 = "histogram"; // For data with small relative differences in frequency, the visualization method will be a histogram.
@@ -204,7 +185,7 @@ var assert = require("chai").assert;
 		});
 
 		it("Single Category Discrete Data", function () {
-			var filter_controller = new Oil_well_filter(oil_well_data_discrete_pure, true);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_well_data_discrete_pure, true);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.start;
@@ -216,7 +197,7 @@ var assert = require("chai").assert;
 		})
 
 		it("Single Category Continuous Data", function () {
-			var filter_controller = new Oil_well_filter(oil_well_data_continuous_pure, false);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_well_data_continuous_pure, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.start;
@@ -231,7 +212,7 @@ var assert = require("chai").assert;
 		})
 
 		it("Continuous data", function () {
-			var filter_controller = new Oil_well_filter(oil_data_continuous, false);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_continuous, false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var expected_1 = "histogram";
