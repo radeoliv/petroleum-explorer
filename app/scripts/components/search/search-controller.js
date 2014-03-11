@@ -50,6 +50,7 @@
 		  */
 		 SearchController.prototype.findResults = function(lsdQuery,sectionQuery,townshipQuery,rangeQuery) {
 			 //TODO: parse JSON file (wells.json)
+			 this.resultSet = [];
 			 var queryArray=[lsdQuery,sectionQuery,townshipQuery,rangeQuery];
 			 for(query in queryArray){
 				 if(query === null){
@@ -67,7 +68,7 @@
 				// Iterate through queryArray, using && for each member
 				if(!this.isEmptyQuery(lsdQuery)){
 					if ((this.dataSet[i]['UWI'].substr(3,2)) === lsdQuery){
-						this.resultSet.push(this.dataSet[i]['UWI']);
+						this.resultSet.push(this.dataSet[i]);
 					//TODO: Add other search criteria
 					}
 				}

@@ -42,7 +42,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		var searchOutputHtml = '';
 		for (var i=0;i<results.length;i++) {
 			console.log(results[i]);
-			searchOutputHtml += '<li class="result">' + results[i] + '</li>';
+			searchOutputHtml += '<li class="result">' + "<span class='UWI'>" + results[i]['UWI'] + "</span>" + '</li>';
 			//$resultsArea.html.('<li class="result">' + results[i] + '</li>'); // append results with uuids to the results container
 			//TODO: show these corresponding pins
 		}
