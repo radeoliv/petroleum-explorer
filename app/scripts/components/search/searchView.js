@@ -38,7 +38,6 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		var townshipQuery=townshipSearchInput[0].value;
 		var rangeQuery=rangeSearchInput[0].value;
 		var results = self.searchController.findResults(lsdQuery,sectionQuery,townshipQuery,rangeQuery); // return json object back
-		console.log(results);
 		var searchOutputHtml = '';
 		for (var i=0;i<results.length;i++) {
 			console.log(results[i]);

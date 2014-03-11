@@ -44,7 +44,7 @@
 		 }
 
 		 /**
-		  * find the UWID matching the search criteria
+		  * find the UWID matching the search criteria (LSD, range, township, section)
 		  * @param query the search query we will use to search through UWID
 		  * @returns {string}
 		  */
