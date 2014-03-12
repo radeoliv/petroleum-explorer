@@ -66,12 +66,36 @@
 			 }
 			 for(var i=0; i<this.dataSet.length;i++){
 				// Iterate through queryArray, using && for each member
-				if(!this.isEmptyQuery(lsdQuery)){
+				/*if(!this.isEmptyQuery(lsdQuery)){
 					if ((this.dataSet[i]['UWI'].substr(3,2)) === lsdQuery){
 						this.resultSet.push(this.dataSet[i]);
 					//TODO: Add other search criteria
 					}
-				}
+				}*/
+				 if(townshipQuery === this.dataSet[i]['UWI'].substr(7,3) && rangeQuery === this.dataSet[i]['UWI'].substr(10,2)){
+					 if(this.isEmptyQuery(lsdQuery) && this.isEmptyQuery(sectionQuery)){
+						 this.resultSet.push(this.dataSet[i]);
+
+					 }else if(this.isEmptyQuery(lsdQuery)) {
+						 if(this.dataSet[i]['UWI'].substr(5,2)=== sectionQuery){
+							 this.resultSet.push(this.dataSet[i]);
+						 }
+
+					 }
+					 else if(this.isEmptyQuery(sectionQuery)){
+						 if(this.dataSet[i]['UWI'].substr(3,2)=== lsdQuery){
+							 this.resultSet.push(this.dataSet[i]);
+						 }
+
+					 }
+					 else{
+						 if(this.dataSet[i]['UWI'].substr(3,2) === lsdQuery && this.dataSet[i]['UWI'].substr(5,2) === sectionQuery){
+							 this.resultSet.push(this.dataSet[i]);
+					 	}
+					}
+				 }
+
+
 			 }
 			 // check if any values are empty
 			 // for each search input with a valid entry, check contents of coresponding JSON data in this.dataset using && for each

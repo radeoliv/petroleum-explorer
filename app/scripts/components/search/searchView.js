@@ -37,15 +37,18 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		var sectionQuery=sectionSearchInput[0].value;
 		var townshipQuery=townshipSearchInput[0].value;
 		var rangeQuery=rangeSearchInput[0].value;
-		var results = self.searchController.findResults(lsdQuery,sectionQuery,townshipQuery,rangeQuery); // return json object back
-		var searchOutputHtml = '';
-		for (var i=0;i<results.length;i++) {
-			console.log(results[i]);
-			searchOutputHtml += '<li class="result">' + "<span class='UWI'>" + results[i]['UWI'] + "</span>" + '</li>';
-			//$resultsArea.html.('<li class="result">' + results[i] + '</li>'); // append results with uuids to the results container
-			//TODO: show these corresponding pins
+		if(townshipQuery.length ===3 && rangeQuery.length === 2){
+			var results = self.searchController.findResults(lsdQuery,sectionQuery,townshipQuery,rangeQuery); // return json object back
+			var searchOutputHtml = '';
+			for (var i=0;i<results.length;i++) {
+				console.log(results[i]);
+				searchOutputHtml += '<li class="result">' + "<span class='UWI'>" + results[i]['UWI'] + "</span>" + '</li>';
+				//$resultsArea.html.('<li class="result">' + results[i] + '</li>'); // append results with uuids to the results container
+				//TODO: show these corresponding pins
+			}
+			$resultsArea.html(searchOutputHtml);
 		}
-		$resultsArea.html(searchOutputHtml);
+
 	});
 
 
