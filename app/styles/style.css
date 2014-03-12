@@ -77,7 +77,7 @@ Positions
 /* =============================================================================
 Display modes
 ========================================================================== */
-.mapToolbar button.show-toolbar.active, .mapToolbar .sidebar-content-container, .mapToolbar .grouped-search input {
+.mapToolbar button.show-toolbar.active, .mapToolbar .grouped-search input {
   display: inline-block; }
 
 /* =============================================================================
@@ -91,9 +91,9 @@ Map Toolbar
   z-index: 9;
   background: #f2f2f2;
   top: 3em;
+  display: inline;
   padding: 0.07692em 0.07692em 0.07692em 0.07692em; }
   .mapToolbar button {
-    display: block;
     padding: 0.5em 0.5em 0.5em 0.5em;
     outline: none;
     font-size: 1.2em;
@@ -101,11 +101,11 @@ Map Toolbar
     .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
       background: darkgrey; }
   .mapToolbar .toolbar-buttons {
-    float: left; }
+    display: inline; }
   .mapToolbar .sidebar-content-container {
-    float: right; }
+    display: inline; }
   .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .layer-form, .mapToolbar .graph-form {
-    min-width: 10em; }
+    min-width: 20em; }
   .mapToolbar .grouped-search input {
     max-width: 5em; }
 

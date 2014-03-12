@@ -16,15 +16,15 @@ Map Toolbar
 	@extend %border-box;
 	background: darken($body-background, 5);
 	top: ($margin * 3);
+	display: inline;
 	padding: ($padding-small / 10) ($padding-small / 10) ($padding-small / 10) ($padding-small / 10);
 	button{
-		display: block;
 		padding: 0.5em 0.5em 0.5em 0.5em;
 		outline: none;
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
 		&:active, &.active, &:hover{
-			background: darken($mapToolbarButtonColour, 20);;
+			background: darken($mapToolbarButtonColour, 20);
 		}
 		&.show-toolbar {
 			&.active {
@@ -34,16 +34,15 @@ Map Toolbar
 	}
 
 	.toolbar-buttons{
-		float: left;
+		display: inline;
 	}
 
 	.sidebar-content-container{
-		@extend %inline;
-		float: right;
+		display: inline;
 	}
 
 	%wide {
-		min-width: 10em;
+		min-width: 20em;
 	}
 	.search-form {
 		@extend %wide;
