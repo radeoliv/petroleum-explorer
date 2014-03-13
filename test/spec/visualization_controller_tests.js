@@ -125,17 +125,17 @@ var assert = require("chai").assert;
 
 	var valid_visualizations = ["histogram", "pie-chart"]; // This is a list of the possible valid return values of Oil_well_filter.get_visualization_method.
 	describe("visualization_controller", function () {
-		it("empty data set, discrete data assumed", function () {
+		it("single element data set, discrete data assumed", function () {
 			//arrange
-			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_empty, true);
+			var filter_controller = new Oil_well_filter.Oil_well_filter(["A"], true);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.categories;
 			var actual_3 = filter_controller.category_counts;
 			var actual_4 = filter_controller.start;
 			var expected_1 = "histogram"; // The default visualization method.
-			var expected_2 = [];
-			var expected_3 = [];
+			var expected_2 = ["A"];
+			var expected_3 = [1];
 			var expected_4 = 0; // The default starting point.
 			//assert
 			assert.equal(actual_1, expected_1);
@@ -144,9 +144,9 @@ var assert = require("chai").assert;
 			assert.equal(actual_4, expected_4);
 		});
 
-		it("empty data set, continuous data assumed", function () {
+		it("single element data set, continuous data assumed", function () {
 			//arrange
-			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_empty, false);
+			var filter_controller = new Oil_well_filter.Oil_well_filter([5.0], false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
 			var actual_2 = filter_controller.categories;
@@ -220,6 +220,11 @@ var assert = require("chai").assert;
 			assert.equal(actual_1, expected_1);
 		});
 
+		//Test bed:
+		/*it("test bed", function () {
+			assert.equal(2.5, 5/2);
+
+		});*/
 	});
 
 })();

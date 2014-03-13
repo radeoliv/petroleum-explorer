@@ -16,7 +16,7 @@
 	Oil_well_filter = (function () {
 
 		function Oil_well_filter(oil_data, discrete_flag) {
-			this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized.
+			this.oil_data = oil_data; //oil_data is an array that stores the data that needs to be visualized. The data set should never be empty.
 			this.discrete_flag = discrete_flag; //discrete_flag is a boolean variable that is true if the data consists of discrete quantities and is false if otherwise.
 
 			this.categories = []; //An array that holds the categories of the histogram/pie-chart.
@@ -25,6 +25,9 @@
 			this.visualization_method = ""; //visualization method is a string from {"histogram", "pie-chart"} that denotes the method of visualization that is to be used.
 			this.start = 0; //For bar histograms, start will indicate the beginning point of the vertical axis. This will better emphasize absolute differences in quantity.
 			this.end = 0; //For bar histograms, end will indicate the ending point of the vertical axis.
+
+			this.beginning = 0.0; //For continuous data, beginning denotes the value where the categories should begin.
+			this.end = 0.0; //For continuous data, end denotes the value where the categories should end.
 			this.category_widths = 0.0; //For continuous data, category_widths denotes the width of each interval within which all quantities are given the same classification.
 
 		}
@@ -65,38 +68,38 @@
 				//We will find the minimum and maximum data points: If the data set is empty, these quantities default to 0.
 				var data_min = 0;
 				var data_max = 0;
-				if (N > 0) {
-					data_min = this.oil_data[0];
-					data_max = this.oil_data[0];
-					for (var i = 1; i < N; i++) {
-						if (this.oil_data[i] > data_max) {
-							data_max = this.oil_data[i];
-						}
-						if (this.oil_data[i] < data_min) {
-							data_min = this.oil_data[i];
-						}
+				data_min = this.oil_data[0];
+				data_max = this.oil_data[0];
+				for (var i = 1; i < N; i++) {
+					if (this.oil_data[i] > data_max) {
+						data_max = this.oil_data[i];
+					}
+					if (this.oil_data[i] < data_min) {
+						data_min = this.oil_data[i];
 					}
 				}
-			}
-			//Find the maximum and minimum counts. If the data set is empty, these quantities default to 0.
-			var max_count = 0;
-			var min_count = 0;
-			if (this.category_counts.length > 0) {
-				max_count = this.category_counts[0];
-				min_count = this.category_counts[0];
-				for (var i = 1;
-					i < this.category_counts.length;
-					i++) {
-					if (this.category_counts[i] > max_count) {
-						max_count = this.category_counts[i];
-					}
-					if (this.category_counts[i] < min_count) {
-						min_count = this.category_counts[i];
-					}
-				}
-			}
-			var threshold = 1.0 //The the threshold of (max_count-min_count)/min_count above which the pie-chart will be used. Large values of (max_count-min_count)/min_count indicate great relative differences between the counts which makes the pie-chart a good choice.
 
+				var data_interval = data_max - data_min;
+				//The category width will be the average distance between the data points sorted in increasing order. This defaults to 0.0 for the empty data set.
+				this.category_widths = data_interval/N;
+				//Now create the categories and classify the data points accordingly.
+			}
+
+			//Find the maximum and minimum counts. If the data set is empty, these quantities default to 0.
+			max_count = this.category_counts[0];
+			min_count = this.category_counts[0];
+			for (var i = 1;
+				i < this.category_counts.length;
+				i++) {
+				if (this.category_counts[i] > max_count) {
+					max_count = this.category_counts[i];
+				}
+				if (this.category_counts[i] < min_count) {
+					min_count = this.category_counts[i];
+				}
+			}
+
+			var threshold = 1.0 //The the threshold of (max_count-min_count)/min_count above which the pie-chart will be used. Large values of (max_count-min_count)/min_count indicate great relative differences between the counts which makes the pie-chart a good choice.
 			if (min_count > 0 ? ((max_count - min_count) / min_count >= threshold) : true) {
 				//Use the pie-chart
 				this.visualization_method = "pie-chart";
