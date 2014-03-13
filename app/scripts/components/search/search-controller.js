@@ -28,7 +28,7 @@
 		  */
 		 function SearchController(dataSet,resultSet) {
 			 this.dataSet = dataSet;
-			 console.dir(dataSet);//$.getJSON("../../../../test/mocks/uniqueWellIdentifierData.json", function() {
+			 console.dir(this.dataSet);//$.getJSON("../../../../test/mocks/uniqueWellIdentifierData.json", function() {
 				 //alert("success");
 			 //});
 
@@ -66,84 +66,72 @@
 			 }
 			 for(var i=0; i<this.dataSet.length;i++){
 				// Iterate through queryArray, using && for each member
-				/*if(!this.isEmptyQuery(lsdQuery)){
-					if ((this.dataSet[i]['UWI'].substr(3,2)) === lsdQuery){
+				if(townshipQuery === this.dataSet[i]['UWI'].substr(7,3) && rangeQuery === this.dataSet[i]['UWI'].substr(10,2)){
+					if(this.isEmptyQuery(lsdQuery) && this.isEmptyQuery(sectionQuery)){
 						this.resultSet.push(this.dataSet[i]);
-					//TODO: Add other search criteria
+
+					}else if(this.isEmptyQuery(lsdQuery)) {
+						if(this.dataSet[i]['UWI'].substr(5,2) === sectionQuery){
+							this.resultSet.push(this.dataSet[i]);
+						}
+
 					}
-				}*/
-				 if(townshipQuery === this.dataSet[i]['UWI'].substr(7,3) && rangeQuery === this.dataSet[i]['UWI'].substr(10,2)){
-					 if(this.isEmptyQuery(lsdQuery) && this.isEmptyQuery(sectionQuery)){
-						 this.resultSet.push(this.dataSet[i]);
+					else if(this.isEmptyQuery(sectionQuery)){
+						if(this.dataSet[i]['UWI'].substr(3,2) === lsdQuery){
+							this.resultSet.push(this.dataSet[i]);
+						}
 
-					 }else if(this.isEmptyQuery(lsdQuery)) {
-						 if(this.dataSet[i]['UWI'].substr(5,2)=== sectionQuery){
-							 this.resultSet.push(this.dataSet[i]);
-						 }
-
-					 }
-					 else if(this.isEmptyQuery(sectionQuery)){
-						 if(this.dataSet[i]['UWI'].substr(3,2)=== lsdQuery){
-							 this.resultSet.push(this.dataSet[i]);
-						 }
-
-					 }
-					 else{
-						 if(this.dataSet[i]['UWI'].substr(3,2) === lsdQuery && this.dataSet[i]['UWI'].substr(5,2) === sectionQuery){
-							 this.resultSet.push(this.dataSet[i]);
+					}
+					else{
+						if(this.dataSet[i]['UWI'].substr(3,2) === lsdQuery && this.dataSet[i]['UWI'].substr(5,2) === sectionQuery){
+							this.resultSet.push(this.dataSet[i]);
 					 	}
 					}
-				 }
-
-
-			 }
-			 // check if any values are empty
-			 // for each search input with a valid entry, check contents of coresponding JSON data in this.dataset using && for each
-			 // return objects that match
-			 if(this.dataSet === null){
-				 return this.NULL_ERROR_MESSAGE;
-			 }
-
-			/*for(var well in this.dataSet){
-				if ((well.UNIQUEWELLID).search(query)){
-					resultSet.push(well);
 				}
+			}
+			// check if any values are empty
+			// for each search input with a valid entry, check contents of coresponding JSON data in this.dataset using && for each
+			// return objects that match
+			if(this.dataSet === null){
+				return this.NULL_ERROR_MESSAGE;
+			}
+
+			// TODO: If the result set is empty -> search did not find anything. Is that supposed to be an error?!
+			/*if(this.resultSet.length<1){
+				return this.EMPTY_RESULTSET_ERROR_MESSAGE;
 			}*/
 
-			 if(this.resultSet.length<1){
-				 return this.EMPTY_RESULTSET_ERROR_MESSAGE;
-			 }
-			 return this.resultSet;
-		 };
+			return this.resultSet;
+		};
 
-		 SearchController.prototype.checkResults = function(){
+		SearchController.prototype.checkResults = function(){
 
-		 };
+		};
 
 		 /**
 		  * function retrieving the json file containing the data and sending the result to the attribute dataset of the searchController
 		  * @returns {exports|*}
 		  */
-		 SearchController.prototype.getMockData = function(){
-			 this.dataSet = require("../../../../test/mocks/uniqueWellIdentifierDataTest.json");
-			 return this.dataSet;
-		 };
+		SearchController.prototype.getMockData = function(){
+			this.dataSet = require("../../../../test/mocks/uniqueWellIdentifierDataTest.json");
+			return this.dataSet;
+		};
 
-		 /**
-		  * Checks search query for excessive spaces or unaccepted formats.  Returns true if any of formats match.
-		  * @param searchQuery
-		  */
-		 SearchController.prototype.isEmptyQuery = function(searchQuery) {
+		/**
+		 * Checks search query for excessive spaces or unaccepted formats.  Returns true if any of formats match.
+		 * @param searchQuery
+		 */
+		SearchController.prototype.isEmptyQuery = function(searchQuery) {
 			//var emptyPattern = new RegExp("\s"),
 				//contentPattern = new RegExp("\W");
-			 return (searchQuery).trim() === ""; //this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
+			return (searchQuery).trim() === ""; //this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
 
-		 };
+		};
 
-		 return SearchController;
+		return SearchController;
 
-	 })();
+	})();
 
-	 (typeof exports !== "undefined" && exports !== null ? exports : window).SearchController = SearchController;
+	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchController = SearchController;
 
  }).call(this);
