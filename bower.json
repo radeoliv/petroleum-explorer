@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "d3": "~3.4.1",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "datatables": "1.10"
   }
 }

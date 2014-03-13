@@ -100,7 +100,6 @@
 			/*if(this.resultSet.length<1){
 				return this.EMPTY_RESULTSET_ERROR_MESSAGE;
 			}*/
-
 			return this.resultSet;
 		};
 

@@ -58,6 +58,10 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				colHeaders: true,
 				contextMenu: true
 			});
+			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
+			$("body").trigger("ResultsUpdated");
+			console.log("Results updated.  Results:");
+			console.dir(this.resultSet);
 		} else {
 			// Cleaning the results area
 			// TODO: REMEMBER TO REFRESH THE TABLE!!!!!!!!!!!!
