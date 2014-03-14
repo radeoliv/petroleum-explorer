@@ -109,6 +109,9 @@ Map Toolbar
   .mapToolbar .grouped-search input {
     max-width: 5em; }
 
+table {
+  width: 100%; }
+
 #map-canvas {
   height: 100%;
   right: 8em;
@@ -127,6 +130,9 @@ body {
 
 html {
   height: 100%; }
+
+button {
+  cursor: pointer; }
 
 .container {
   max-width: 80em;

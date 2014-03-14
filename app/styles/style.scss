@@ -23,6 +23,9 @@ html {
 	height: 100%;
 }
 
+button {
+	cursor: pointer;
+}
 .container {
 	max-width: $container-max-width;
 	margin: 0 auto;

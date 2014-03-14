@@ -2976,7 +2976,7 @@ jQuery(document).ready(function ($) {
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
 	// load in datatable
-	var $fullTableContainer = $(".search-results-table"),
+	var $fullTableContainer = $(".full-results-table"),
 		myTableController = new FullTable(mySearchController, $fullTableContainer);
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
 });
