@@ -100,6 +100,13 @@ Map Toolbar
     color: black; }
     .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
       background: darkgrey; }
+  .mapToolbar label {
+    font-size: .85em; }
+  .mapToolbar table, .mapToolbar td, .mapToolbar tr, .mapToolbar tbody {
+    border-spacing: 0px; }
+  .mapToolbar .error-msg {
+    color: red;
+    padding-left: 1em; }
   .mapToolbar .toolbar-buttons {
     display: inline; }
   .mapToolbar .sidebar-content-container {
@@ -107,7 +114,7 @@ Map Toolbar
   .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .layer-form, .mapToolbar .graph-form {
     min-width: 20em; }
   .mapToolbar .grouped-search input {
-    max-width: 5em; }
+    width: 2em; }
 
 #map-canvas {
   height: 100%;
