@@ -65,34 +65,43 @@
 				 }
 			 }
 			 for(var i=0; i<this.dataSet.length;i++){
-				// Iterate through queryArray, using && for each member
-				if(townshipQuery === this.dataSet[i]['UWI'].substr(7,3) && rangeQuery === this.dataSet[i]['UWI'].substr(10,2)){
+
+				/*
+				 * Search by UWI values
+				 */
+				var uwi = this.dataSet[i]['UWI'];
+				if(townshipQuery === getTownship(uwi) && rangeQuery === getRange(uwi)){
 					if(this.isEmptyQuery(lsdQuery) && this.isEmptyQuery(sectionQuery)){
 						this.resultSet.push(this.dataSet[i]);
 
 					}else if(this.isEmptyQuery(lsdQuery)) {
-						if(this.dataSet[i]['UWI'].substr(5,2) === sectionQuery){
+						if(getSection(uwi) === sectionQuery){
 							this.resultSet.push(this.dataSet[i]);
 						}
 
 					}
 					else if(this.isEmptyQuery(sectionQuery)){
-						if(this.dataSet[i]['UWI'].substr(3,2) === lsdQuery){
+						if(getLSD(uwi) === lsdQuery){
 							this.resultSet.push(this.dataSet[i]);
 						}
 
 					}
 					else{
-						if(this.dataSet[i]['UWI'].substr(3,2) === lsdQuery && this.dataSet[i]['UWI'].substr(5,2) === sectionQuery){
+						if(getLSD(uwi) === lsdQuery && getSection(uwi) === sectionQuery){
 							this.resultSet.push(this.dataSet[i]);
 					 	}
 					}
 				}
 
-				//var cMatch = this.dataSet[i]['Well_Opera'].search.toUpperCase(companyQuery);
+				/*
+				 * Search by company name
+				 */
+				if(!this.isEmptyQuery(companyQuery)) {
+					var cMatch = this.dataSet[i]['Well_Opera'].toUpperCase().search(companyQuery.toUpperCase());
 
-				//if(cMatch >= 0)
-					//this.resultSet.push(this.dataSet[i]);
+					if(cMatch >= 0)
+						this.resultSet.push(this.dataSet[i]);
+			 	}
 
 			}
 			// check if any values are empty
@@ -140,3 +149,23 @@
 	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchController = SearchController;
 
  }).call(this);
+
+function getLSD(uwi) {
+	return uwi.substr(3,2);
+}
+
+function getSection(uwi) {
+	return uwi.substr(5,2);
+}
+
+function getTownship(uwi) {
+	return uwi.substr(7,3);
+}
+
+function getRange(uwi) {
+	return uwi.substr(10,2);
+}
+
+function getMeridian(uwi) {
+	return uwi.substr(13,1);
+}
