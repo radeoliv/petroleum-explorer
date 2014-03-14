@@ -40,55 +40,55 @@
 					<legend>Search</legend>
 					<!--<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>-->
 					<div class="uwi-search">
-						<label>UWI</label></br>
-						<input type = "text" name = "uwi" maxlength="16" results = 10" autosave = "uwi">
+						<label for="uwi">UWI</label></br>
+						<input type = "search" name = "uwi" id="uwi" placeholder="UWI Code" maxlength="16" results = 10" autosave = "uwi">
 					</div>
 					<hr>
 					<div class="grouped-search">
 						<table>
 							<tr>
 								<td></td>
-								<td> <label>LSD</label> </td>
+								<td> <label for="lsd">LSD</label> </td>
 								<td></td>
-								<td> <label>SEC</label> </td>
+								<td> <label for="section">SEC</label> </td>
 								<td></td>
-								<td> <label>TWP</label> </td>
+								<td> <label for="township">TWP</label> </td>
 								<td></td>
-								<td> <label>RNG</label> </td>
+								<td> <label for="range">RNG</label> </td>
 								<td></td>
-								<td> <label>MER</label> </td>
+								<td> <label for="meridian">MER</label> </td>
 								<td></td>
 							</tr>
 
 							<tr>
-								<td> <label>00 /</label> </td>
+								<td> <label for="lsd">00 /</label> </td>
 								<td>
-									<input type = "text" name = "lsd" results = "10" maxlength="2" pattern="{d}2" autosave = "lsd">
+									<input type = "search" name = "lsd" id="lsd" results = "10" maxlength="2" pattern="{d}2" autosave = "lsd">
 								</td>
-								<td> <label>-</label> </td>
+								<td> <span>-</span> </td>
 								<td>
-									<input type = "text" name = "section" results = "10" maxlength="2" pattern="{d}2" autosave = "section">
+									<input type = "search" name = "section" id="section" results = "10" maxlength="2" pattern="{d}2" autosave = "section">
 								</td>
-								<td> <label>-</label> </td>
+								<td> <span>-</span> </td>
 								<td>
-									<input type = "text" name = "township" results = "10" maxlength="3" pattern="{d}3" autosave = "township">
+									<input type = "search" name = "township" id="township" results = "10" maxlength="3" pattern="{d}3" autosave = "township">
 								</td>
-								<td> <label>-</label> </td>
+								<td> <span>-</span> </td>
 								<td>
-									<input type = "text" name = "range" results = "10" maxlength="2" pattern="{d}2" autosave = "range">
+									<input type = "search" name = "range" id="range" results = "10" maxlength="2" pattern="{d}2" autosave = "range">
 								</td>
-								<td> <label>W</label> </td>
+								<td> <label for="meridian">W</label> </td>
 								<td>
-									<input type = "text" name = "meridian" results = "10" maxlength="1" pattern="{d}1" autosave = "meridian">
+									<input type = "search" id="meridian" name = "meridian" results = "10" maxlength="1" pattern="{d}1" autosave = "meridian">
 								</td>
-								<td> <label>/ 0</label> </td>
+								<td> <span>/ 0</span> </td>
 							</tr>
 						</table>
 					</div>
 					<hr>
 					<div class="company-search">
-						<label>Company</label></br>
-						<input type = "text" name = "company" results = "10" autosave	= "company">
+						<label for="company">Company</label></br>
+						<input type = "search" id="company" placeholder="Company" name = "company" results = "10" autosave = "company">
 					</div>
 				</fieldset>
 			</form>
