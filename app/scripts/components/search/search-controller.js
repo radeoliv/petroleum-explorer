@@ -48,10 +48,10 @@
 		  * @param query the search query we will use to search through UWID
 		  * @returns {string}
 		  */
-		 SearchController.prototype.findResults = function(lsdQuery,sectionQuery,townshipQuery,rangeQuery) {
+		 SearchController.prototype.findResults = function(lsdQuery,sectionQuery,townshipQuery,rangeQuery,meridianQuery, companyQuery) {
 			 //TODO: parse JSON file (wells.json)
 			 this.resultSet = [];
-			 var queryArray=[lsdQuery,sectionQuery,townshipQuery,rangeQuery];
+			 var queryArray=[lsdQuery,sectionQuery,townshipQuery,rangeQuery, meridianQuery, companyQuery];
 			 for(query in queryArray){
 				 if(query === null){
 					 return this.NULL_QUERY_ERROR_MESSAGE;
@@ -88,9 +88,15 @@
 					 	}
 					}
 				}
+
+				//var cMatch = this.dataSet[i]['Well_Opera'].search.toUpperCase(companyQuery);
+
+				//if(cMatch >= 0)
+					//this.resultSet.push(this.dataSet[i]);
+
 			}
 			// check if any values are empty
-			// for each search input with a valid entry, check contents of coresponding JSON data in this.dataset using && for each
+			// for each search input with a valid entry, check contents of corresponding JSON data in this.dataset using && for each
 			// return objects that match
 			if(this.dataSet === null){
 				return this.NULL_ERROR_MESSAGE;

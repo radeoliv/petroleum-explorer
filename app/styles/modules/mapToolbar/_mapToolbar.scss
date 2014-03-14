@@ -33,6 +33,19 @@ Map Toolbar
 		}
 	}
 
+	label {
+		font-size: .85em;
+	}
+
+	table, td, tr, tbody {
+		border-spacing: 0px;
+	}
+
+	.error-msg{
+		color: red;
+		padding-left: 1em;
+	}
+
 	.toolbar-buttons{
 		display: inline;
 	}
@@ -62,7 +75,7 @@ Map Toolbar
 	.grouped-search {
 		input {
 			@extend %inline;
-			max-width: 5em;
+			width: 2em;
 			// TODO: Remove search icon with appearance
 		}
 	}
