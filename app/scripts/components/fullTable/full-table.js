@@ -34,73 +34,97 @@
 					data:    data,
 					columns: [
 						{
-							data: "H"
+							data: "H",
+							title: "Thickness"
 						},
 						{
-							data: "InstanceId"
+							data: "InstanceId",
+							title: "Instance ID"
 						},
 						{
-							data: "KRav"
+							data: "KRav",
+							title: "Average Hydrocarbon Movability"
 						},
 						{
-							data: "KRc"
+							data: "KRc",
+							title: "Cumulative Hydrocarbon Movability"
 						},
 						{
-							data: "OID_"
+							data: "OID_",
+							title: "Object ID"
+							// TODO: Not relevant to user.  Consider removing
 						},
 						{
-							data: "PHIR"
+							data: "PHIR",
+							title: "Cumulative Pore Volume"
 						},
 						{
-							data: "PHIc"
+							data: "PHIc",
+							title: "Cumulative Porosity"
 						},
 						{
-							data: "PLOT_SYMBO"
+							data: "PLOT_SYMBO",
+							title: "Plot Symbol" //TODO: Remove displaying
 						},
 						{
-							data: "Pc"
+							data: "Pc",
+							title: "Effective Yield"
 						},
 						{
-							data: "Pp"
+							data: "Pp",
+							title: "Peak Value"
 						},
 						{
-							data: "Pt"
+							data: "Pt",
+							title: "Effective Life Cycle"
 						},
 						{
-							data: "Soc"
+							data: "Soc",
+							title: "Oil Saturation"
 						},
 						{
-							data: "UWI"
+							data: "UWI",
+							title: "UWI"
 						},
 						{
-							data: "Vshc"
+							data: "Vshc",
+							title: "Cumulative Shale Content"
 						},
 						{
-							data: "Well_Class"
+							data: "Well_Class",
+							title: "Well Class"
 						},
 						{
-							data: "Well_Drill"
+							data: "Well_Drill",
+							title: "Well Drill"
 						},
 						{
-							data: "Well_Opera"
+							data: "Well_Opera",
+							title: "Company"
 						},
 						{
-							data: "Well_PoolN"
+							data: "Well_PoolN",
+							title: "Well Pool Name"
 						},
 						{
-							data: "Well_Prima"
+							data: "Well_Prima",
+							title: "Primary Formation"
 						},
 						{
-							data: "Well_Provi"
+							data: "Well_Provi",
+							title: "Province"
 						},
 						{
-							data: "Well_Statu"
+							data: "Well_Statu",
+							title: "Status"
 						},
 						{
-							data: "Well_Uniqu"
+							data: "Well_Uniqu",
+							title: "Full UWI"
 						},
 						{
-							data: "Well_WellN"
+							data: "Well_WellN",
+							title: "Name"
 						}
 					]
 				});
