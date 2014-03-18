@@ -1,155 +1,182 @@
 <!doctype html>
 <html>
-<head>
-	<meta charset = "utf-8">
-	<meta name = "viewport" content = "width=device-width, initial-scale=1">
-	<title>SENG 515 Petroleum Explorer</title>
+	<head>
+		<meta charset = "utf-8">
+		<meta name = "viewport" content = "width=device-width, initial-scale=1">
+		<title>SENG 515 Petroleum Explorer</title>
 
-	<!-- build:css styles/main.css -->
-	<link rel = "stylesheet" href = "styles/style.css">
-	<link rel = "stylesheet" href = "styles/icomoon/style.css"/>
-	<link rel = "stylesheet" type = "text/css" href = "bower_components/datatables/media/css/jquery.dataTables.css" media = "all"/>
-	<!-- endbuild -->
+		<!-- build:css styles/main.css -->
+		<link rel = "stylesheet" href = "styles/style.css">
+		<link rel = "stylesheet" href = "styles/icomoon/style.css"/>
+		<link rel = "stylesheet" type = "text/css" href = "bower_components/datatables/media/css/jquery.dataTables.css" media = "all"/>
+		<!-- endbuild -->
 
-	<!-- Code below required here for headsontable sheet to work -->
-	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<!-- Code below required here for headsontable sheet to work -->
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+		<script>
+			$(function() {
+				$( "#accordion" ).accordion({
+					collapsible: true,
+					heightStyle: "content"
+				});
+			});
+		</script>
 
-</head>
-<body>
-<main id = "map-canvas"></main>
-<aside class = "mapToolbar">
-	<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
+	</head>
+	<body>
+		<main id = "map-canvas"></main>
 
-	<div class = "toolbar-buttons">
-		<button title = "Search" data-target = "search-form" class = "show-search">
-			<i class = "icon-search"></i>
-		</button>
-		<button title = "Filter" data-target = "filter-form" class = "show-filter">
-			<i class = "icon-filter"></i></button>
-		<button title = "Layers" data-target = "layer-form" class = "show-layer">
-			<i class = "icon-stack"></i></button>
-		<button title = "Graphs" data-target = "graph-form" class = "show-graph">
-			<i class = "icon-stats"></i>
-		</button>
-	</div>
+		<aside class = "mapToolbar">
+			<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
 
-	<article class = "sidebar-content-container">
-			<section class = "search-form">
-			<form action = "/search">
-				<fieldset>
-					<legend>Search</legend>
-					<!--<input type = "search" name = "seng-515-search" placeholder = "Search..." required x-webkit-speech results = "10" autosave = "seng-515-search"/>-->
-					<div class="uwi-search">
-						<label for="uwi">UWI</label></br>
-						<input type = "search" name = "uwi" id="uwi" placeholder="UWI Code" maxlength="16" results = 10" autosave = "uwi">
-					</div>
-					<hr>
-					<div class="grouped-search">
-						<table>
-							<tr>
-								<td></td>
-								<td> <label for="lsd">LSD</label> </td>
-								<td></td>
-								<td> <label for="section">SEC</label> </td>
-								<td></td>
-								<td> <label for="township">TWP</label> </td>
-								<td></td>
-								<td> <label for="range">RNG</label> </td>
-								<td></td>
-								<td> <label for="meridian">MER</label> </td>
-								<td></td>
-							</tr>
+			<div class = "toolbar-buttons">
+				<button title = "Search" data-target = "search-form" class = "show-search">
+					<i class = "icon-search"></i>
+				</button>
+				<button title = "Filter" data-target = "filter-form" class = "show-filter">
+					<i class = "icon-filter"></i></button>
+				<button title = "Layers" data-target = "layer-form" class = "show-layer">
+					<i class = "icon-stack"></i></button>
+				<button title = "Graphs" data-target = "graph-form" class = "show-graph">
+					<i class = "icon-stats"></i>
+				</button>
+			</div>
 
-							<tr>
-								<td> <label for="lsd">00 /</label> </td>
-								<td>
-									<input type = "search" name = "lsd" id="lsd" results = "10" maxlength="2" pattern="{d}2" autosave = "lsd">
-								</td>
-								<td> <span>-</span> </td>
-								<td>
-									<input type = "search" name = "section" id="section" results = "10" maxlength="2" pattern="{d}2" autosave = "section">
-								</td>
-								<td> <span>-</span> </td>
-								<td>
-									<input type = "search" name = "township" id="township" results = "10" maxlength="3" pattern="{d}3" autosave = "township">
-								</td>
-								<td> <span>-</span> </td>
-								<td>
-									<input type = "search" name = "range" id="range" results = "10" maxlength="2" pattern="{d}2" autosave = "range">
-								</td>
-								<td> <label for="meridian">W</label> </td>
-								<td>
-									<input type = "search" id="meridian" name = "meridian" results = "10" maxlength="1" pattern="{d}1" autosave = "meridian">
-								</td>
-								<td> <span>/ 0</span> </td>
-							</tr>
-						</table>
-					</div>
-					<hr>
-					<div class="company-search">
-						<label for="company">Company</label></br>
-						<input type = "search" id="company" placeholder="Company" name = "company" results = "10" autosave = "company">
-					</div>
-				</fieldset>
-			</form>
-		</section>
+			<article class = "sidebar-content-container">
+				<section class = "search-form">
+					<form action = "/search">
+						<fieldset>
+							<hr>
+							<h4>Search</h4>
 
-		<section class = "filter-form">
-			<form action = "/filter">
-				<fieldset>
-					<input type = "search" name = "seng-515-filter" placeholder = "Filter..." required x-webkit-speech results = "10" autosave = "seng-515-filter"/>
-				</fieldset>
-			</form>
-		</section>
+							<div id="accordion">
+								<h5>UWI</h5>
+								<div class="uwi-search accordianContent">
+									<input type = "search" name = "uwi" id="uwi" placeholder="UWI Code" maxlength="16" results = 10" autosave = "uwi">
+								</div>
+								<h5>UWI Fields</h5>
+								<div class="grouped-search accordianContent">
+									<table>
+										<tr>
+											<td></td>
+											<td> <label for="lsd">LSD</label> </td>
+											<td></td>
+											<td> <label for="section">SEC</label> </td>
+											<td></td>
+											<td> <label for="township">TWP</label> </td>
+											<td></td>
+											<td> <label for="range">RNG</label> </td>
+											<td></td>
+											<td> <label for="meridian">MER</label> </td>
+											<td></td>
+										</tr>
 
-		<section class = "layer-form">
-			<form action = "/layer">
-				<fieldset>
-					<legend>Layers</legend>
-					<input checked = "unchecked" type = "checkbox"/>Layer 1</br>
-					<input checked = "unchecked" type = "checkbox"/>Layer 2</br>
-					<input checked = "unchecked" type = "checkbox"/>Layer 3</br>
-					<input checked = "unchecked" type = "checkbox"/>Layer 4</br>
-					<input checked = "unchecked" type = "checkbox"/>Layer 5</br>
-				</fieldset>
-			</form>
-		</section>
+										<tr>
+											<td> <label for="lsd">00 /</label> </td>
+											<td>
+												<input type = "search" name = "lsd" id="lsd" results = "10" maxlength="2" pattern="{d}2" autosave = "lsd">
+											</td>
+											<td> <span>-</span> </td>
+											<td>
+												<input type = "search" name = "section" id="section" results = "10" maxlength="2" pattern="{d}2" autosave = "section">
+											</td>
+											<td> <span>-</span> </td>
+											<td>
+												<input type = "search" name = "township" id="township" results = "10" maxlength="3" pattern="{d}3" autosave = "township">
+											</td>
+											<td> <span>-</span> </td>
+											<td>
+												<input type = "search" name = "range" id="range" results = "10" maxlength="2" pattern="{d}2" autosave = "range">
+											</td>
+											<td> <label for="meridian">W</label> </td>
+											<td>
+												<input type = "search" id="meridian" name = "meridian" results = "10" maxlength="1" pattern="{d}1" autosave = "meridian">
+											</td>
+											<td> <span>/ 0</span> </td>
+										</tr>
+									</table>
+								</div>
 
-		<section class = "graph-form">
-			<form action = "/graph">
-				<fieldset>
-					<legend>Graphs</legend>
-					<button><a class = "icon-pie"></a></button>
-					<button><a class = "icon-bars2"></a></button>
-					<button><a class = "icon-pie"></a></button>
-					<button><a class = "icon-bars2"></a></button>
-				</fieldset>
-			</form>
-		</section>
-	</article>
-</aside>
-<footer>
-	<aside class="search-results-table">
-		<button disabled title="Perform a Search to View Results" class="toggle-table"><i class="icon-table"></i></button>
-		<table class="full-results-table" aria-hidden="true">
+								<h5>Company</h5>
+								<div class="company-search accordianContent">
+									<input type = "search" id="company" placeholder="Company" name = "company" results = "10" autosave = "company">
+								</div>
 
-		</table>
-	</aside>
+								<h5>Status</h5>
+								<div class="status-search accordianContent">
+									<select id="status" placeholder="Status" name = "status" results = "10" autosave = "status">
+										<option value="none"></option>
+										<option value="Pumping Crude Oil">Pumping Crude Oil</option>
+										<option value="Suspended Crude Oil">Suspended Crude Oil</option>
+										<option value="Abandoned Zone Crude Oil">Abandoned Zone Crude Oil</option>
+									</select>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</section>
 
-	<!-- build:js(.tmp) scripts/main.js -->
+				<section class = "filter-form">
+					<form action = "/filter">
+						<fieldset>
+							<hr>
+							<h4>Filter</h4>
+							<input type = "search" name = "seng-515-filter" placeholder = "Filter..." required x-webkit-speech results = "10" autosave = "seng-515-filter"/>
+						</fieldset>
+					</form>
+				</section>
 
-	<script src="scripts/components/mapToolbar/map-toolbar.js"></script>
-	<script src="scripts/components/search/search-controller.js"></script>
-	<script src="scripts/components/search/searchView.js"></script>
-	<script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
-	<script src="scripts/components/fullTable/full-table.js"></script>
-	<script src="scripts/main.js"></script>
-	<script src="scripts/components/mapSection/map-canvas.js"></script>
-	<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	<!-- Hands on table -->
-	<script src="http://handsontable.com/dist/jquery.handsontable.full.js"></script>
-	<link rel="stylesheet" media="screen" href="http://handsontable.com/dist/jquery.handsontable.full.css">
-	<!-- endbuild -->
-</footer>
-</body>
+				<section class = "layer-form">
+					<form action = "/layer">
+						<fieldset>
+							<hr>
+							<h4>Layers</h4>
+							<input checked = "unchecked" type = "checkbox"/>Layer 1</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 2</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 3</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 4</br>
+							<input checked = "unchecked" type = "checkbox"/>Layer 5</br>
+						</fieldset>
+					</form>
+				</section>
+
+				<section class = "graph-form">
+					<form action = "/graph">
+						<fieldset>
+							<hr>
+							<h4>Graphs</h4>
+							<button><a class = "icon-pie"></a></button>
+							<button><a class = "icon-bars2"></a></button>
+							<button><a class = "icon-pie"></a></button>
+							<button><a class = "icon-bars2"></a></button>
+						</fieldset>
+					</form>
+				</section>
+			</article>
+		</aside>
+		<footer>
+			<aside class="search-results-table">
+				<button disabled title="Perform a Search to View Results" class="toggle-table"><i class="icon-table"></i></button>
+				<table class="full-results-table" aria-hidden="true">
+
+				</table>
+			</aside>
+
+			<!-- build:js(.tmp) scripts/main.js -->
+
+			<script src="scripts/components/mapToolbar/map-toolbar.js"></script>
+			<script src="scripts/components/search/search-controller.js"></script>
+			<script src="scripts/components/search/searchView.js"></script>
+			<script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
+			<script src="scripts/components/fullTable/full-table.js"></script>
+			<script src="scripts/main.js"></script>
+			<script src="scripts/components/mapSection/map-canvas.js"></script>
+			<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+			<!-- Hands on table -->
+			<script src="http://handsontable.com/dist/jquery.handsontable.full.js"></script>
+			<link rel="stylesheet" media="screen" href="http://handsontable.com/dist/jquery.handsontable.full.css">
+			<!-- endbuild -->
+		</footer>
+	</body>
 </html>

@@ -25,6 +25,10 @@ Map Toolbar
 		color: $mapToolbarButtonTextColour;
 		&:active, &.active, &:hover{
 			background: darken($mapToolbarButtonColour, 20);
+			border-top: none;
+			border-bottom: none;
+			border-color: transparent;
+
 		}
 		&.show-toolbar {
 			&.active {
@@ -72,16 +76,63 @@ Map Toolbar
 	.graph-form{
 		@extend %wide;
 	}
+
 	.grouped-search {
+		align-content: center;
+		text-align: center;
 		input {
 			@extend %inline;
-			width: 2em;
+			width: 3em;
+			align-content: center;
+			text-align: center;
 			&[type="search"] {
 				&::-webkit-search-decoration, &::-webkit-search-cancel-button, &::-webkit-search-results-button, &::-webkit-search-results-decoration {
 					display: none;
 				}
 			}
 		}
+	}
+
+	input {
+		border: 1px solid black;
+		width: 80%;
+		&[type="search"] {
+			&::-webkit-search-decoration, &::-webkit-search-cancel-button {
+				display: none;
+			}
+		}
+	}
+
+	h5{
+		margin: 0em;
+	}
+
+	.accordianContent{
+		text-align: center;
+	}
+
+	.ui-accordion .ui-accordion-header {
+		display: block;
+		cursor: pointer;
+		position: relative;
+		padding: .15em .15em .15em 1em;
+		margin-top: .5em;
+		min-height: 0; /* support: IE7 */
+		background: darken($mapToolbarButtonColour, 10);
+		border: 1px solid black;
+		outline: none;
+	}
+
+	.ui-accordion .ui-accordion-content {
+		padding: .5em .5em .5em .5em;
+		border: 1px solid black;
+		border-top: none;
+		overflow: auto;
+		outline: none;
+	}
+
+	fieldset{
+		border: none;
 	}
 }
 
