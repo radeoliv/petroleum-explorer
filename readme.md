@@ -9,3 +9,6 @@ professor Xin of the University of Calgary.
 * Geolocation for mobile devices *in progress*
 * Mobile-friendly *in progress*
 * Export reports with analytics *in progress*
+
+# Testing
+To see some search results try ``045`` and ``01`` respectively
