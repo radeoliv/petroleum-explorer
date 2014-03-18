@@ -4,6 +4,7 @@
   "dependencies": {
     "d3": "~3.4.1",
     "jquery": "~2.1.0",
-    "datatables": "1.10"
+    "datatables": "1.10",
+    "jquery-ui": "~1.10.4"
   }
 }
