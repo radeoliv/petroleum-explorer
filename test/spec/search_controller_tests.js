@@ -26,11 +26,14 @@
 	  */
 	 it("Returns an error if search query is undefined", function () {
 		 //arrange
-		 var sampleQuery;
+		 var lsdQuery = "";
+		 var sectionQuery; //Undefined
+		 var townshipQuery = "AAA";
+		 var rangeQuery = "BB";
 		 var resultSet = sampleDataSet = [];
 		 var mySearchController = new search_controller.SearchController(sampleDataSet,resultSet);
 		 //act
-		 var actual = mySearchController.findResults(sampleQuery);
+		 var actual = mySearchController.findResults(lsdQuery, sectionQuery, townshipQuery, rangeQuery);
 		 var expected = mySearchController.UNDEFINED_ERROR_MESSAGE;
 		 //assert
 		 assert.equal(actual, expected);
