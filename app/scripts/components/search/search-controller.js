@@ -110,9 +110,10 @@
 			 }
 
 			// TODO: If the result set is empty -> search did not find anything. Is that supposed to be an error?!
-			/*if(this.resultSet.length<1){
+			if(this.resultSet.length<1){
 				return this.EMPTY_RESULTSET_ERROR_MESSAGE;
-			}*/
+			}
+
 			return this.resultSet;
 		};
 

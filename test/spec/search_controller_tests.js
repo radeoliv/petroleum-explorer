@@ -22,6 +22,25 @@
 		 };
 	 });*/
 	 /**
+	  * search controller does not accept when search query is null
+	  */
+	 it("Returns an error when search query is null", function () {
+		 //arrange
+		 var lsdQuery = "AA";
+		 var sectionQuery = null;
+		 var townshipQuery = "AAA";
+		 var rangeQuery = "BB";
+		 var meridian_query = "C";
+		 var sampleEmptyDataSet = [],
+		 resultSet = [];
+		 var mySearchController = new search_controller.SearchController(sampleEmptyDataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
+		 var expected = mySearchController.NULL_QUERY_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+	 /**
 	  * search controller does not accept when the search query is undefined
 	  */
 	 it("Returns an error if search query is undefined", function () {
@@ -57,55 +76,27 @@
 		 //assert
 		 assert.equal(actual, expected);
 	 });
-	 /**
-	  * search controller does not accept strings with only spaces
-	  *
-	  */
-	 it("Returns an error when search query is empty", function () {
-		 //arrange
-		 var sampleNullDataSet = [],
-			 sampleQuery1 = "     ",
-			 sampleQuery2 = "",
-		 	 resultSet = null;
-		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
-		 //act
-		 var actualMultiSpaceQuery = mySearchController.findResults(sampleQuery1);
-		 var actualEmptyQuery = mySearchController.findResults(sampleQuery2);
-		 var expected = mySearchController.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
-		 //assert
-		 assert.equal(actualMultiSpaceQuery,expected);
-		 assert.equal(actualEmptyQuery,expected);
-	 });
+
 	 /**
 	  * checks for our result set having a length less than 1
 	  */
 	 it("Returns a warning when search resultset is empty", function () {
 		 //arrange
-		 var sampleNullDataSet = [],
-		 	 sampleQuery = "whatever";
+		 var lsdQuery = "AA";
+		 var sectionQuery = "AA";
+		 var townshipQuery = "AAA";
+		 var rangeQuery = "BB";
+		 var meridian_query = "C";
+		 var sampleEmptyDataSet = [],
 		 	 resultSet = [];
-		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
+		 var mySearchController = new search_controller.SearchController(sampleEmptyDataSet,resultSet);
 		 //act
-		 var actual = mySearchController.findResults(sampleQuery);
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
 		 var expected = mySearchController.EMPTY_RESULTSET_ERROR_MESSAGE;
 		 //assert
 		 assert.equal(actual,expected);
 	 });
-	 /**
-	  * search controller does not accept when search query is null
-	  */
-	 it("Returns an error when search query is null", function () {
-		 //arrange
-		 var sampleNullDataSet = [],
-			 sampleQuery = null;
-		 	 resultSet = null;
-		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
-		 //act
-		 var actual = mySearchController.findResults(sampleQuery);
-		 var expected = mySearchController.NULL_QUERY_ERROR_MESSAGE;
-		 //assert
-		 assert.equal(actual,expected);
-	 });
+
 	 it("parses json correctly", function () {
 		 //arrange
 		 var malFormedJson = [
