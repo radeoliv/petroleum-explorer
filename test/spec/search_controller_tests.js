@@ -26,14 +26,15 @@
 	  */
 	 it("Returns an error if search query is undefined", function () {
 		 //arrange
-		 var lsdQuery = "";
+		 var lsdQuery = "AA";
 		 var sectionQuery; //Undefined
 		 var townshipQuery = "AAA";
 		 var rangeQuery = "BB";
+		 var meridian_query = "C";
 		 var resultSet = sampleDataSet = [];
 		 var mySearchController = new search_controller.SearchController(sampleDataSet,resultSet);
 		 //act
-		 var actual = mySearchController.findResults(lsdQuery, sectionQuery, townshipQuery, rangeQuery);
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
 		 var expected = mySearchController.UNDEFINED_ERROR_MESSAGE;
 		 //assert
 		 assert.equal(actual, expected);
@@ -43,12 +44,16 @@
 	  */
 	 it("Returns an error when data set is null", function () {
 		 //arrange
+		 var lsdQuery = "AA";
+		 var sectionQuery = "AA";
+		 var townshipQuery = "AAA";
+		 var rangeQuery = "BB";
+		 var meridian_query = "C";
 		 var sampleNullDataSet = resultSet = null;
-		 var query = "whatever";
 		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
 		 //act
-		 var actual = mySearchController.findResults(query);
-		 var expected = "Could not find data, as it was null";
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
+		 var expected = mySearchController.NULL_ERROR_MESSAGE;
 		 //assert
 		 assert.equal(actual, expected);
 	 });

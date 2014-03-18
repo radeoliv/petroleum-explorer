@@ -59,6 +59,7 @@
 		  * @returns {string}
 		  */
 		 SearchController.prototype.findResultsUWIValues = function(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery) {
+
 			 //TODO: parse JSON file (wells.json)
 			 // check if any values are empty
 			 // for each search input with a valid entry, check contents of corresponding JSON data in this.dataset using && for each
@@ -71,17 +72,17 @@
 
 			 var queryArray=[lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery];
 
-			 for(query in queryArray){
-				 if(query === null){
+			 for(var i = 0; i < queryArray.length; i++) {
+				 if(queryArray[i] === null){
 					 return this.NULL_QUERY_ERROR_MESSAGE;
 				 }
-				 else if(typeof(query) === "undefined"){
+				 else if(typeof(queryArray[i]) === "undefined"){
 					 return this.UNDEFINED_ERROR_MESSAGE;
 				 }
-				 else if(this.isEmptyQuery(query)){
+				 /*else if(this.isEmptyQuery(query)){
 					 queryArray.pop(query);
 					 //return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
-				 }
+				 }*/
 			 }
 
 			 for(var i=0; i<this.dataSet.length;i++) {
