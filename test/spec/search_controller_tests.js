@@ -21,6 +21,28 @@
 			 }
 		 };
 	 });*/
+
+
+	 /**
+	  * search controller does not accept when the dataset we are searching into is null
+	  */
+	 it("Returns an error when data set is null", function () {
+		 //arrange
+		 var lsdQuery = "AA";
+		 var sectionQuery = "AA";
+		 var townshipQuery = "AAA";
+		 var rangeQuery = "BB";
+		 var meridian_query = "C";
+		 var sampleNullDataSet = null;
+		 var resultSet = [];
+		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
+		 var expected = mySearchController.NULL_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual, expected);
+	 });
+
 	 /**
 	  * search controller does not accept when search query is null
 	  */
@@ -58,24 +80,7 @@
 		 //assert
 		 assert.equal(actual, expected);
 	 });
-	 /**
-	  * search controller does not accept when the dataset we are searching into is null
-	  */
-	 it("Returns an error when data set is null", function () {
-		 //arrange
-		 var lsdQuery = "AA";
-		 var sectionQuery = "AA";
-		 var townshipQuery = "AAA";
-		 var rangeQuery = "BB";
-		 var meridian_query = "C";
-		 var sampleNullDataSet = resultSet = null;
-		 var mySearchController = new search_controller.SearchController(sampleNullDataSet,resultSet);
-		 //act
-		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
-		 var expected = mySearchController.NULL_ERROR_MESSAGE;
-		 //assert
-		 assert.equal(actual, expected);
-	 });
+
 
 	 /**
 	  * checks for our result set having a length less than 1
@@ -96,6 +101,137 @@
 		 //assert
 		 assert.equal(actual,expected);
 	 });
+
+	 //Cover the edge case of a one entry data set.
+	 it("Find correct UWID in a one entry data set", function () {
+		 //arrange
+		 var oneEntryDataSet = [
+			 {
+				 "location": {
+					 "latitude":  0.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102141204501W400"
+			 }
+		 ];
+		 var lsdQuery = "14";
+		 var sectionQuery = "12";
+		 var townshipQuery = "045";
+		 var rangeQuery = "01";
+		 var meridian_query = "4";
+		 var resultSet = [];
+		 var mySearchController = new search_controller.SearchController(oneEntryDataSet, resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
+		 var expected = oneEntryDataSet;
+		 //assert
+		 assert.deepEqual(actual, expected);
+	 });
+
+
+	 //Small data set
+	 it("Find correct UWIDs in a small data set", function () {
+		 //arrange
+		 var SmallDataSet = [
+			 {
+				 "location": {
+					 "latitude":  0.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102050704807W400"
+			 },
+			 {
+				 "location": {
+					 "latitude":  45.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102141204501W400"
+			 },
+			 {
+				 "location": {
+					 "latitude":  90.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "100140405102W400"
+			 }
+		 ];
+		 var lsdQuery = "14";
+		 var sectionQuery = "12";
+		 var townshipQuery = "045";
+		 var rangeQuery = "01";
+		 var meridian_query = "4";
+		 var resultSet = [];
+		 var mySearchController = new search_controller.SearchController(SmallDataSet, resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
+		 var expected = [
+			 {
+				 "location": {
+					 "latitude":  45.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102141204501W400"
+			 }
+		 ];
+		 //assert
+		 assert.deepEqual(actual, expected);
+	 });
+
+	 //Small data set, query fields not all specified.
+	 it("Find correct UWIDs in a small data set", function () {
+		 //arrange
+		 var SmallDataSet = [
+			 {
+				 "location": {
+					 "latitude":  0.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102050704807W400"
+			 },
+			 {
+				 "location": {
+					 "latitude":  90.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102141204501W400"
+			 },
+			 {
+				 "location": {
+					 "latitude":  -90.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "100141205101W400"
+			 }
+		 ];
+		 var lsdQuery = "14";
+		 var sectionQuery = "12";
+		 var townshipQuery = "";
+		 var rangeQuery = "01";
+		 var meridian_query = "4";
+		 var resultSet = [];
+		 var mySearchController = new search_controller.SearchController(SmallDataSet, resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
+		 var expected = [
+			 {
+				 "location": {
+					 "latitude":  90.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "102141204501W400"
+			 },
+			 {
+				 "location": {
+					 "latitude":  -90.0,
+					 "longitude": 0.0
+				 },
+				 "UWI":      "100141205101W400"
+			 }
+		 ];
+		 //assert
+		 assert.deepEqual(actual, expected);
+	 });
+
 
 	 it("parses json correctly", function () {
 		 //arrange
