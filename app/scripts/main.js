@@ -1,20 +1,13 @@
 /*--------------------------------------------------------------------------------
  Author: robinbesson
- www: http://seangoresht.com/
- github: https://github.com/srsgores
-
- twitter: http://twitter.com/S.Goresht
 
  seng515-petroleum-explorer
- Do What the Fuck You Want License
 
  =============================================================================
- Filename:
+ Filename: Main.js
  =============================================================================
  //TODO: file description
  -------------------------------------------------------------------------------*/
-
-
 
 jQuery(document).ready(function ($) {
 	function loadSearchController() {

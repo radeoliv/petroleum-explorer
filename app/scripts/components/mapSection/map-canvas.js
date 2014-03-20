@@ -1,11 +1,28 @@
+/*--------------------------------------------------------------------------------
+ Author: Rodrigo Silva
+
+ seng515-petroleum-explorer
+
+ =============================================================================
+ Filename: map-canvas.js
+ =============================================================================
+ Contains all the logic to create, display and add wells' information on the map.
+ -------------------------------------------------------------------------------*/
+
 $(document).ready(function () {
 
+	// Full dataSet - all wells
 	var dataSet = initializeDataSet();
-	var markers = new Array();
+	// Wells that are being currently displayed - all wells in the beginning
 	var currentWells;
+	// Markers (pins) shown on the map
+	var markers = [];
 
+	/*
+	 * Initialize the dataSet with the values in the JSON file
+	 */
 	function initializeDataSet() {
-		//parse JSON file with all informations about wells
+		// Get JSON file with all information about wells
 		var temp;
 		$.ajax({
 			url: './wells.json',
@@ -22,40 +39,46 @@ $(document).ready(function () {
 		return temp;
 	}
 
+	/*
+	 * Define the current wells that are going to be shown on the map
+	 */
 	function setCurrentWells(wells) {
 		currentWells = wells;
 	}
 
-	function getLocations(wells) {
-		//"Longitude Decimal Degrees"
-		//"Latitude Decimal Degrees"
-		var tempArray = [];
-		wells.forEach(function(well){
-			tempArray.push(new google.maps.LatLng(well["Latitude Decimal Degrees"], well["Longitude Decimal Degrees"]));
-		});
-		return tempArray;
-	}
-
+	/*
+	 * Initialize the map with the defined options
+	 * Plot the wells' locations
+	 * Center the map based on the markers present on the map
+	 */
 	function initializeMap() {
+		// Create options for the map
 		var mapOptions = {
 			mapTypeControlOptions: {
 				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
 			}
 		};
 
+		// Define the map itself
 		var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
+		// Plot the wells' locations
 		PlotPoints(map);
+		// Center the map based on markers
 		AutoCenter(map);
 	}
 	initializeMap();
 
+	/*
+	 * Plot points on the map (adding markers/pins)
+	 */
 	function PlotPoints(map) {
-		var marker;
 		var infowindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
+		// Go through all wells and create markers for them
 		for (var i = 0; i < currentWells.length; i++) {
-			marker = new google.maps.Marker({
+			// Create a marker
+			var marker = new google.maps.Marker({
 				position:  new google.maps.LatLng(currentWells[i]["Latitude Decimal Degrees"], currentWells[i]["Longitude Decimal Degrees"]),
 				map:       map,
 				title:     currentWells[i]["Well_Name"],
@@ -63,8 +86,11 @@ $(document).ready(function () {
 				animation: google.maps.Animation.DROP
 			});
 
+			// Adding the new marker on the array of markers
 			markers.push(marker);
 
+			// Define an event to execute every time a marker/pin is clicked
+			// It will show the UWI, Company and Status of a well
 			google.maps.event.addListener(marker, 'click', (function (marker, i) {
 				return function () {
 					//var content = "<b>Unique Well Identifier</b><br>" + marker.title;
@@ -80,16 +106,19 @@ $(document).ready(function () {
 		}
 	}
 
+	/*
+	 * Fit all markers/pins on the map (defining new center for the map)
+	 */
 	function AutoCenter(map) {
-		//  Create a new viewpoint bound
+		// Create a new viewpoint bound
 		var bounds = new google.maps.LatLngBounds();
 
-		//  Go through each...
+		// Expand the visualization bound considering each marker/pin
 		for (var i = 0; i < markers.length; i++) {
 			bounds.extend(markers[i]["position"]);
 		}
 
-		//  Fit these bounds to the map
+		// Fit these bounds to the map
 		map.fitBounds(bounds);
 	}
 });
