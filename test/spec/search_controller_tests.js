@@ -114,8 +114,8 @@
 		 assert.deepEqual(actual1, expected1);
 
 		 var actual2 = mySearchController.findResultsUWIValues(lsdQuery2,sectionQuery2, townshipQuery2, rangeQuery2, meridian_query2);
-		 var expected2 = mySearchController.EMPTY_RESULTSET_ERROR_MESSAGE;
-		 assert.equal(actual2, expected2);
+		 var expected2 = [];
+		 assert.deepEqual(actual2, expected2);
 	 });
 
 
