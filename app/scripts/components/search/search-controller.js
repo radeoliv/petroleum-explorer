@@ -38,10 +38,6 @@
 		  */
 		 function SearchController(dataSet,resultSet) {
 			 this.dataSet = dataSet;
-			 console.dir(this.dataSet);//$.getJSON("../../../../test/mocks/uniqueWellIdentifierData.json", function() {
-				 //alert("success");
-			 //});
-
 			 this.resultSet = resultSet;
 			 if(this.resultSet === null || typeof(this.resultSet) === "undefined"){
 				 this.resultSet = [];
@@ -89,7 +85,7 @@
 				/*
 				 * Search by UWI values
 				 */
-				var uwi = this.dataSet[i]['UWI'];
+				var uwi = this.dataSet[i]['Well_Unique_Identifier_Simplified_Format'];
 
 				if(!this.isEmptyQuery(townshipQuery) && townshipQuery != getTownship(uwi))
 					continue;
@@ -108,11 +104,6 @@
 
 				this.resultSet.push(this.dataSet[i]);
 			 }
-
-			// TODO: If the result set is empty -> search did not find anything. Is that supposed to be an error?!
-			if(this.resultSet.length<1){
-				return this.EMPTY_RESULTSET_ERROR_MESSAGE;
-			}
 
 			return this.resultSet;
 		};
@@ -149,7 +140,7 @@
 				  */
 				 if(!this.isEmptyQuery(uwiQuery)) {
 					 // TODO: Change the JSON attribute when the new json file is created
-					 var cMatch = this.dataSet[i]['UWI'].toUpperCase().search(uwiQuery.toUpperCase());
+					 var cMatch = this.dataSet[i]['Well_Unique_Identifier_Simplified_Format'].toUpperCase().search(uwiQuery.toUpperCase());
 
 					 if(cMatch >= 0)
 						 this.resultSet.push(this.dataSet[i]);
@@ -191,7 +182,7 @@
 				 */
 				if(!this.isEmptyQuery(companyQuery)) {
 					// TODO: Change the JSON attribute when the new json file is created
-					var cMatch = this.dataSet[i]['Well_Opera'].toUpperCase().search(companyQuery.toUpperCase());
+					var cMatch = this.dataSet[i]['Well_Operator'].toUpperCase().search(companyQuery.toUpperCase());
 
 					if(cMatch >= 0)
 						this.resultSet.push(this.dataSet[i]);
@@ -201,23 +192,6 @@
 			return this.resultSet;
 		};
 
-//
-//		 /*
-//		  * Search by well status
-//		  */
-//		 if(!this.isEmptyQuery(statusQuery)) {
-//			 var cMatch = this.dataSet[i]['Well_Statu'].toUpperCase().search(statusQuery.toUpperCase());
-//
-//			 if(cMatch >= 0)
-//				 this.resultSet.push(this.dataSet[i]);
-//		 }
-
-
-
-
-		 SearchController.prototype.checkResults = function(){
-
-		};
 
 		 /**
 		  * function retrieving the json file containing the data and sending the result to the attribute dataset of the searchController
@@ -233,10 +207,7 @@
 		 * @param searchQuery
 		 */
 		SearchController.prototype.isEmptyQuery = function(searchQuery) {
-			//var emptyPattern = new RegExp("\s"),
-				//contentPattern = new RegExp("\W");
-			return (searchQuery).trim() === ""; //this.searchQuery.search(emptyPattern) && !(this.searchQuery.search(contentPattern));
-
+			return (searchQuery).trim() === "";
 		};
 
 		return SearchController;
