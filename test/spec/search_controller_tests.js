@@ -15,7 +15,7 @@
 
  describe("Search controller, findResultsUWIValues function", function () {
 
-	 /**
+	 /*
 	  * search controller does not accept when the dataset we are searching into is null
 	  */
 	 it("Returns an error when data set is null", function () {
@@ -242,8 +242,6 @@
 		 //assert
 		 assert.deepEqual(actual, expected);
 	 });
-
-
  });
 
  describe("Search controller, findResultsUWI function", function () {
@@ -379,7 +377,133 @@
 		 assert.deepEqual(actual10, expected10);
 		 assert.deepEqual(actual10205, expected10205);
 	 });
-
-
  });
 
+ describe("Search controller, findResultsCompany function", function () {
+	 /**
+	  * The test passes if, as expected the function findResultsCompany returns an error message for null query when a null query is passed to the function
+	  */
+	 it("Passes if returns the error for null search query", function () {
+		 //arrange
+		 var dataSet = [],
+			 resultSet = [],
+			 companyQuery = null;
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsCompany(companyQuery);
+		 var expected = mySearchController.NULL_QUERY_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+
+	 /**
+	  * The test passes if, as expected the function findResultsCompany returns an error message for an undefined query when an undefined query is passed to the function
+	  */
+	 it("Passes if returns the error for undefined search query", function () {
+		 //arrange
+		 var dataSet = [],
+			 resultSet = [],
+			 companyQuery; //Undefined
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsCompany(companyQuery);
+		 var expected = mySearchController.UNDEFINED_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+
+	 /**
+	  * The test passes if, as expected the function findResultsCompany returns an error message for an empty query when an empty query is passed to the function
+	  */
+	 it("Passes if returns the error for empty search query", function () {
+		 //arrange
+		 var dataSet = [],
+			 resultSet = [],
+			 companyQueryEmpty = "", //empty query
+			 companyQuerySpaces = "  "; //query supposed to be considered as empty
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actualEmpty = mySearchController.findResultsCompany(companyQueryEmpty);
+		 var actualSpaces = mySearchController.findResultsCompany(companyQuerySpaces);
+		 var expected = mySearchController.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actualEmpty,expected);
+		 assert.equal(actualSpaces,expected);
+	 });
+
+	 /**
+	  * The test passes if, as expected, an error message stating that a null dataset is passed, when a null dataset is passed as a parameter to the function
+	  */
+	 it("Passes if returns the error for null dataset", function () {
+		 //arrange
+		 var dataSet = null, //null dataSet
+			 resultSet = [],
+			 companyQuery = 'Whatever';
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsCompany(companyQuery);
+		 var expected = mySearchController.NULL_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+
+	 it("Passes if the string for the company matches the actual company in a one entry dataset", function () {
+		 //arrange
+		 var expected = [
+			 {
+				 "Well_Operator": "CANADIAN NATURAL RESOURCES LIMITED"
+			 }
+		 ];
+		 var resultSet = [];
+		 // Queries to search for
+		 var companyQueryValidIncomplete = "CAN"; //few characters from the company name
+		 var companyQueryValidMixedCase = "CaNaDiAn" //not complete but with mixed case
+		 var companyQueryInvalid = "123456"; //query that will not return any results
+		 var companyQueryValid = "CANADIAN NATURAL RESOURCES LIMITED"; //the whole content of the company name
+
+		 var mySearchController = new search_controller.SearchController(expected, resultSet);
+		 //act
+		 var actualValidIncomplete = mySearchController.findResultsCompany(companyQueryValidIncomplete);
+		 var actualValidMixedCase = mySearchController.findResultsCompany(companyQueryValidMixedCase);
+		 var actualInvalid = mySearchController.findResultsCompany(companyQueryInvalid);
+		 var actualValid = mySearchController.findResultsCompany(companyQueryValid);
+
+		 var expectedEmpty = [];
+		 //assert
+		 assert.deepEqual(actualValidIncomplete, expected);
+		 assert.deepEqual(actualValidMixedCase, expected);
+		 assert.deepEqual(actualInvalid, expectedEmpty);
+		 assert.deepEqual(actualValid, expected);
+	 });
+
+	 it("Passes if returns the correct data in a small dataset", function () {
+		 //arrange
+		 var smallDataSet = [
+			 {
+				 "Well_Operator": "CANADIAN OTHER"
+			 },
+			 {
+				 "Well_Operator": "CANADIAN ARTIFICIAL"
+			 },
+			 {
+				 "Well_Operator": "CANADIAN NATURAL RESOURCES LIMITED"
+			 }
+		 ];
+		 var companyQueryPartial = "CANADIAN";
+		 var companyQuerySpecific = "CANADIAN NATURAL RESOURCES LIMITED";
+
+		 var mySearchController = new search_controller.SearchController(smallDataSet, []);
+		 //act
+		 var actualPartial = mySearchController.findResultsCompany(companyQueryPartial);
+		 var actualSpecific = mySearchController.findResultsCompany(companyQuerySpecific);
+		 var expectedSpecific = [
+			 {
+				 "Well_Operator": "CANADIAN NATURAL RESOURCES LIMITED"
+			 }
+		 ];
+
+		 //assert
+		 assert.deepEqual(actualPartial, smallDataSet);
+		 assert.deepEqual(actualSpecific, expectedSpecific);
+	 });
+ });
