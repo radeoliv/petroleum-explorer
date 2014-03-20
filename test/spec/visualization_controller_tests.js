@@ -136,6 +136,7 @@ var assert = require("chai").assert;
 			assert.equal(actual, expected);
 		});
 
+		//For a single element data set, there is just one category, a histogram is used and the bar is completely suppressed as there is no deviation in counts.
 		it("single element data set, discrete data assumed", function () {
 			//arrange
 			var filter_controller = new Oil_well_filter.Oil_well_filter(["A"], true);
@@ -166,21 +167,27 @@ var assert = require("chai").assert;
 			var filter_controller = new Oil_well_filter.Oil_well_filter([5.0], false);
 			//act
 			var actual_1 = filter_controller.get_visualization_method();
-			var actual_2 = filter_controller.categories;
-			var actual_3 = filter_controller.category_counts;
-			var actual_4 = filter_controller.start;
-			var actual_5 = filter_controller.category_widths;
+			var actual_2 = filter_controller.numofCategories;
+			var actual_3 = filter_controller.categories;
+			var actual_4 = filter_controller.category_counts;
+			var actual_5 = filter_controller.start;
+			var actual_6 = filter_controller.end;
+			var actual_7 = filter_controller.category_widths;
 			var expected_1 = "histogram"; // The default visualization method.
-			var expected_2 = [];
-			var expected_3 = [];
-			var expected_4 = 0; // The default starting point.
-			var expected_5 = 0.0; // The default category width.
+			var expected_2 = 1;
+			var expected_3 = ["[4.995,5.005)"];
+			var expected_4 = [1];
+			var expected_5 = 1;
+			var expected_6 = 2;
+			var expected_7 = 0.01;
 			//assert
 			assert.equal(actual_1, expected_1);
-			assert.deepEqual(actual_2, expected_2);
+			assert.equal(actual_2, expected_2);
 			assert.deepEqual(actual_3, expected_3);
-			assert.equal(actual_4, expected_4);
+			assert.deepEqual(actual_4, expected_4);
 			assert.equal(actual_5, expected_5);
+			assert.equal(actual_6, expected_6);
+			assert.equal(actual_7, expected_7);
 		});
 
 		it("Discrete data with a large deviation in frequencies.", function () {

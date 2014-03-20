@@ -93,7 +93,7 @@
 				var data_interval = data_max - data_min;
 				//The number of categories will be the square root of the number of data points:
 				this.numofCategories = Math.sqrt(N);
-				this.category_widths = data_interval / (this.numofCategories - 1);
+				this.category_widths = data_interval > 0 ? data_interval / (this.numofCategories - 1) : 0.01; //0.01 is the default width for a single category.
 				//Now create the categories:
 				this.startpoint = data_min - this.category_widths / 2; //The lowest category is centered on the lowest data point.
 				this.endpoint = data_max + this.category_widths / 2; //The highest category is centered on the highest data point.
@@ -103,6 +103,7 @@
 					var curr_lowerbound = this.startpoint + i*this.category_widths;
 					var curr_upperbound = this.startpoint + (i+1)*this.category_widths;
 					this.categories[i] = "[" + curr_lowerbound + "," + curr_upperbound + ")";
+					this.category_counts[i] = 0;
 				}
 
 				//We now classify the data.
