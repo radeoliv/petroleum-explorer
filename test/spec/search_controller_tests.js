@@ -103,7 +103,7 @@
 	 });
 
 	 //Cover the edge case of a one entry data set.
-	 it("Find correct UWID in a one entry data set", function () {
+	 it("One entry data set", function () {
 		 //arrange
 		 var oneEntryDataSet = [
 			 {
@@ -114,18 +114,28 @@
 				 "UWI":      "102141204501W400"
 			 }
 		 ];
-		 var lsdQuery = "14";
-		 var sectionQuery = "12";
-		 var townshipQuery = "045";
-		 var rangeQuery = "01";
-		 var meridian_query = "4";
+		 //Will find this query.
+		 var lsdQuery1 = "14";
+		 var sectionQuery1 = "12";
+		 var townshipQuery1 = "045";
+		 var rangeQuery1 = "01";
+		 var meridian_query1 = "4";
+		 //Will not find this query.
+		 var lsdQuery2 = "14";
+		 var sectionQuery2 = "12";
+		 var townshipQuery2 = "051";
+		 var rangeQuery2 = "01";
+		 var meridian_query2 = "4";
 		 var resultSet = [];
 		 var mySearchController = new search_controller.SearchController(oneEntryDataSet, resultSet);
-		 //act
-		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
-		 var expected = oneEntryDataSet;
 		 //assert
-		 assert.deepEqual(actual, expected);
+		 var actual1 = mySearchController.findResultsUWIValues(lsdQuery1, sectionQuery1, townshipQuery1, rangeQuery1, meridian_query1);
+		 var expected1 = oneEntryDataSet;
+		 assert.deepEqual(actual1, expected1);
+
+		 var actual2 = mySearchController.findResultsUWIValues(lsdQuery2,sectionQuery2, townshipQuery2, rangeQuery2, meridian_query2);
+		 var expected2 = mySearchController.EMPTY_RESULTSET_ERROR_MESSAGE;
+		 assert.equal(actual2, expected2);
 	 });
 
 
