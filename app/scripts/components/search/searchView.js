@@ -118,16 +118,24 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			$('#results-table').handsontable({
 				data: data,
 				colHeaders: ["UWI", "Company", "Status"],
-				maxRows: 10,
 				overflow: scroll,
 				readOnly: true,
-				maxHeight: 600
+				columnSorting: true,
+				currentRowClassName: 'currentRow',
+				height: function(){
+					if (results.length < 10){
+						return (parseInt($("body").css('font-size')) * (results.length+1.25) * 1.75);
+					}
+					else
+						return 250;
+				}
 			});
 
 			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
 			$("body").trigger("ResultsUpdated");
 			//console.log("Results updated.  Results:");
 			//console.dir(this.resultSet);
+
 		} else {
 			// Cleaning the results area
 			if($('#results-table') != undefined) {

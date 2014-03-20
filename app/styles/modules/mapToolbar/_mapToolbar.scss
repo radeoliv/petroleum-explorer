@@ -82,13 +82,16 @@ Map Toolbar
 		text-align: center;
 		input {
 			@extend %inline;
-			width: 3em;
+			width: 2.5em;
 			align-content: center;
 			text-align: center;
 			&[type="search"] {
 				&::-webkit-search-decoration, &::-webkit-search-cancel-button, &::-webkit-search-results-button, &::-webkit-search-results-decoration {
 					display: none;
 				}
+			}
+			&#township{
+				width: 3.5em;
 			}
 		}
 	}
@@ -105,6 +108,10 @@ Map Toolbar
 
 	h5{
 		margin: 0em;
+	}
+
+	h4{
+		margin-top: 0em;
 	}
 
 	.accordianContent{
@@ -133,6 +140,39 @@ Map Toolbar
 
 	fieldset{
 		border: none;
+	}
+
+	#results-table{
+		font-size: .9em;
+	}
+
+	.handsontable .htDimmed{
+		color: black;
+	}
+
+	.handsontable th{
+		background: $mapToolbarButtonColour;
+		color: black;
+	}
+
+	.handsontable .wtHider{
+		padding-bottom: .75em;
+	}
+
+	.handsontable .dragdealer{
+		right: 0;
+		background: lighten($mapToolbarButtonColour, 15);
+		&.handle{
+			background: darken($mapToolbarButtonColour, 50);
+		}
+	}
+
+	.handsontable .currentRow{
+		background: $mapToolbarButtonColour;
+	}
+
+	.handsontable .current{
+		background: $mapToolbarButtonColour;
 	}
 }
 

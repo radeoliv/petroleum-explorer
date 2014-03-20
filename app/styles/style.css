@@ -120,11 +120,13 @@ Map Toolbar
     align-content: center;
     text-align: center; }
     .mapToolbar .grouped-search input {
-      width: 3em;
+      width: 2.5em;
       align-content: center;
       text-align: center; }
       .mapToolbar .grouped-search input[type="search"]::-webkit-search-decoration, .mapToolbar .grouped-search input[type="search"]::-webkit-search-cancel-button, .mapToolbar .grouped-search input[type="search"]::-webkit-search-results-button, .mapToolbar .grouped-search input[type="search"]::-webkit-search-results-decoration {
         display: none; }
+      .mapToolbar .grouped-search input#township {
+        width: 3.5em; }
   .mapToolbar input {
     border: 1px solid black;
     width: 80%; }
@@ -132,6 +134,8 @@ Map Toolbar
       display: none; }
   .mapToolbar h5 {
     margin: 0em; }
+  .mapToolbar h4 {
+    margin-top: 0em; }
   .mapToolbar .accordianContent {
     text-align: center; }
   .mapToolbar .ui-accordion .ui-accordion-header {
@@ -153,6 +157,24 @@ Map Toolbar
     outline: none; }
   .mapToolbar fieldset {
     border: none; }
+  .mapToolbar #results-table {
+    font-size: .9em; }
+  .mapToolbar .handsontable .htDimmed {
+    color: black; }
+  .mapToolbar .handsontable th {
+    background: gainsboro;
+    color: black; }
+  .mapToolbar .handsontable .wtHider {
+    padding-bottom: .75em; }
+  .mapToolbar .handsontable .dragdealer {
+    right: 0;
+    background: white; }
+    .mapToolbar .handsontable .dragdealer.handle {
+      background: #5d5d5d; }
+  .mapToolbar .handsontable .currentRow {
+    background: gainsboro; }
+  .mapToolbar .handsontable .current {
+    background: gainsboro; }
 
 table {
   width: 100%; }
