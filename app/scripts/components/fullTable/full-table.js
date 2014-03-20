@@ -12,7 +12,7 @@
 			this.$tableContainer = $tableContainer;
 			this.displayTable();
 			this.listenChanges();
-			this.toggleButton = $tableContainer.parent().find("toggle-table").removeAttr("diabled");
+			this.toggleButton = $tableContainer.parent().find("toggle-table").removeAttr("disabled");
 			this.listenToggle();
 		}
 
@@ -22,114 +22,118 @@
 		 */
 		FullTable.prototype.displayTable = function () {
 			var data;
-			console.log("Call to display table");
-			console.dir(this.SearchController.resultSet);
+			//console.log("Call to display table");
+			//console.dir(this.SearchController.resultSet);
 			// Check if datatable has already been initialized.  If it is, then exit to avoid error
 			if (this.$tableContainer.hasClass(".dataTable") === true) {
 				return;
 			}
-			if (this.SearchController.resultSet.length > 0) {
-				data = this.SearchController.resultSet;
-				this.$tableContainer.dataTable({
-					data:    data,
-					columns: [
-						{
-							data: "H",
-							title: "Thickness"
-						},
-						{
-							data: "InstanceId",
-							title: "Instance ID"
-						},
-						{
-							data: "KRav",
-							title: "Average Hydrocarbon Movability"
-						},
-						{
-							data: "KRc",
-							title: "Cumulative Hydrocarbon Movability"
-						},
-						{
-							data: "OID_",
-							title: "Object ID"
-							// TODO: Not relevant to user.  Consider removing
-						},
-						{
-							data: "PHIR",
-							title: "Cumulative Pore Volume"
-						},
-						{
-							data: "PHIc",
-							title: "Cumulative Porosity"
-						},
-						{
-							data: "PLOT_SYMBO",
-							title: "Plot Symbol" //TODO: Remove displaying
-						},
-						{
-							data: "Pc",
-							title: "Effective Yield"
-						},
-						{
-							data: "Pp",
-							title: "Peak Value"
-						},
-						{
-							data: "Pt",
-							title: "Effective Life Cycle"
-						},
-						{
-							data: "Soc",
-							title: "Oil Saturation"
-						},
-						{
-							data: "UWI",
-							title: "UWI"
-						},
-						{
-							data: "Vshc",
-							title: "Cumulative Shale Content"
-						},
-						{
-							data: "Well_Class",
-							title: "Well Class"
-						},
-						{
-							data: "Well_Drill",
-							title: "Well Drill"
-						},
-						{
-							data: "Well_Opera",
-							title: "Company"
-						},
-						{
-							data: "Well_PoolN",
-							title: "Well Pool Name"
-						},
-						{
-							data: "Well_Prima",
-							title: "Primary Formation"
-						},
-						{
-							data: "Well_Provi",
-							title: "Province"
-						},
-						{
-							data: "Well_Statu",
-							title: "Status"
-						},
-						{
-							data: "Well_Uniqu",
-							title: "Full UWI"
-						},
-						{
-							data: "Well_WellN",
-							title: "Name"
-						}
-					]
-				});
-				// For debugging
-				return console.log("Attempting to create datatable with data" + this.SearchController.resultSet);
+			if(typeof(this.SearchController) != 'undefined'){
+				if (this.SearchController.resultSet.length > 0) {
+					data = this.SearchController.resultSet;
+					this.$tableContainer.dataTable({
+						data:    data,
+						//bRetrieve for the popup window showing an error doesn't always appear (not sure how it solves the problem though)
+						bRetrieve: true,
+						columns: [
+							{
+								data: "H",
+								title: "Thickness"
+							},
+							/*{
+								data: "InstanceId",
+								title: "Instance ID"
+							},*/
+							{
+								data: "KRav",
+								title: "Average Hydrocarbon Movability"
+							},
+							{
+								data: "KRc",
+								title: "Cumulative Hydrocarbon Movability"
+							},
+							/*{
+								data: "OID_",
+								title: "Object ID"
+								// TODO: Not relevant to user.  Consider removing
+							},*/
+							{
+								data: "PHIR",
+								title: "Cumulative Pore Volume"
+							},
+							{
+								data: "PHIc",
+								title: "Cumulative Porosity"
+							},
+							{
+								data: "Plot_Symbol",
+								title: "Plot Symbol" //TODO: Remove displaying
+							},
+							{
+								data: "Pc",
+								title: "Effective Yield"
+							},
+							{
+								data: "Pp",
+								title: "Peak Value"
+							},
+							{
+								data: "Pt",
+								title: "Effective Life Cycle"
+							},
+							{
+								data: "Soc",
+								title: "Oil Saturation"
+							},
+							{
+								data: "Well_Unique_Identifier_Simplified_Format",
+								title: "UWI"
+							},
+							{
+								data: "Vshc",
+								title: "Cumulative Shale Content"
+							},
+							{
+								data: "Well_Class",
+								title: "Well Class"
+							},
+							{
+								data: "Well_Drillers_Total_Depth",
+								title: "Well Drillers Total Depth"
+							},
+							{
+								data: "Well_Operator",
+								title: "Company"
+							},
+							{
+								data: "Well_Pool_Name",
+								title: "Well Pool Name"
+							},
+							{
+								data: "Well_Primary_Producing_Formation",
+								title: "Primary Formation"
+							},
+							{
+								data: "Well_Province",
+								title: "Province"
+							},
+							{
+								data: "Well_Status",
+								title: "Status"
+							},
+							{
+								data: "Well_Unique_Identifier",
+								title: "Full UWI"
+							},
+							{
+								data: "Well_Name",
+								title: "Name"
+							}
+						]
+					});
+					// For debugging
+					return ;//console.log("Attempting to create datatable with data" + this.SearchController.resultSet);
+				}
 			}
 		};
 

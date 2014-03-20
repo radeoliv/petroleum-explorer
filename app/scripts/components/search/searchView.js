@@ -67,8 +67,6 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			companyQuery=companySearchInput[0].value,
 			statusQuery=statusSearchInput[0].value;
 
-			console.log(statusQuery);
-
 		var results;
 		var error = false;
 
@@ -116,7 +114,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				data.push(["UWI","Company","Status"]);
 
 			for (var i=0;i<results.length;i++) {
-				data.push([results[i]["UWI"], results[i]["Well_Opera"], results[i]["Well_Statu"]]);
+				data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
 				//TODO: show these corresponding pins
 			}
 
@@ -128,8 +126,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
 			$("body").trigger("ResultsUpdated");
-			console.log("Results updated.  Results:");
-			console.dir(this.resultSet);
+			//console.log("Results updated.  Results:");
+			//console.dir(this.resultSet);
 		} else {
 			// Cleaning the results area
 			if($('#results-table') != undefined) {
