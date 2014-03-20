@@ -323,18 +323,19 @@
 		 ];
 		 var resultSet = [];
 		 var uwiQueryLength2 = "10"; //only 2 caracters in the UWI
-		 var uwiQueryLength5 = "21412"; //only 5 caracters in the UWI
+		 var uwiQueryNoResult = "123456"; //query that will not return any results
 		 var uwiQueryWhole = "102141204501W400"; //the whole content of the UWI
 		 var mySearchController = new search_controller.SearchController(oneEntryDataSet, resultSet);
 		 //act
 		 var actualLength2 = mySearchController.findResultsUWI(uwiQueryLength2);
-		 var actualLength5 = mySearchController.findResultsUWI(uwiQueryLength5);
 		 var actualWhole = mySearchController.findResultsUWI(uwiQueryWhole);
+		 var actualNoResult = mySearchController.findResultsUWI(uwiQueryNoResult);
 		 var expected = oneEntryDataSet;
+		 var expectedEmpty = [];
 		 //assert
 		 assert.deepEqual(actualLength2, expected);
-		 assert.deepEqual(actualLength5, expected);
 		 assert.deepEqual(actualWhole, expected);
+		 assert.deepEqual(actualNoResult,expectedEmpty);
 	 });
 
 	 it("Passes if returns the correct UWIDs in a small dataset", function () {
