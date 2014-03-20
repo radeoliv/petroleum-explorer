@@ -13,15 +13,7 @@
 
  var assert = require("assert");
 
- describe("Search controller", function () {
-	 /*beforeEach(function (done) {
-		 var sampleData = {
-			 "locationData": {
-					"data":[0, 3, 4, 5]
-			 }
-		 };
-	 });*/
-
+ describe("Search controller, findResultsUWIValues function", function () {
 
 	 /**
 	  * search controller does not accept when the dataset we are searching into is null
@@ -253,3 +245,140 @@
 
 
  });
+
+ describe("Search controller, findResultsUWI function", function () {
+	 /**
+	  * The test passes if, as expected the function findResultsUWI returns an error message for null query when a null query is passed to the function
+	  */
+	 it("Passes if returns the error for null search query", function () {
+		 //arrange
+		 var dataSet = [],
+			 resultSet = [],
+			 uwiQuery = null;
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWI(uwiQuery);
+		 var expected = mySearchController.NULL_QUERY_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+
+	 /**
+	  * The test passes if, as expected the function findResultsUWI returns an error message for an undefined query when an undefined query is passed to the function
+	  */
+	 it("Passes if returns the error for undefined search query", function () {
+		 //arrange
+		 var dataSet = [],
+			 resultSet = [],
+			 uwiQuery; //Undefined
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWI(uwiQuery);
+		 var expected = mySearchController.UNDEFINED_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+
+	 /**
+	  * The test passes if, as expected the function findResultsUWI returns an error message for an empty query when an empty query is passed to the function
+	  */
+	 it("Passes if returns the error for empty search query", function () {
+		 //arrange
+		 var dataSet = [],
+			 resultSet = [],
+			 uwiQueryEmpty = "", //empty query
+			 uwiQuerySpaces = "  "; //query supposed to be considered as empty
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actualEmpty = mySearchController.findResultsUWI(uwiQueryEmpty);
+		 var actualSpaces = mySearchController.findResultsUWI(uwiQuerySpaces);
+		 var expected = mySearchController.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actualEmpty,expected);
+		 assert.equal(actualSpaces,expected);
+	 });
+
+	 /**
+	  * The test passes if, as expected, an error message stating that a null dataset is passed, when a null dataset is passed as a parameter to the function
+	  */
+	 it("Passes if returns the error for null dataset", function () {
+		 //arrange
+		 var dataSet = null, //null dataSet
+			 resultSet = [],
+			 uwiQuery = 'Whatever';
+		 var mySearchController = new search_controller.SearchController(dataSet,resultSet);
+		 //act
+		 var actual = mySearchController.findResultsUWI(uwiQuery);
+		 var expected = mySearchController.NULL_ERROR_MESSAGE;
+		 //assert
+		 assert.equal(actual,expected);
+	 });
+
+	 it("Passes if returns the correct UWID in a one entry dataset", function () {
+		 //arrange
+		 var oneEntryDataSet = [
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
+			 }
+		 ];
+		 var resultSet = [];
+		 var uwiQueryLength2 = "10"; //only 2 caracters in the UWI
+		 var uwiQueryLength5 = "21412"; //only 5 caracters in the UWI
+		 var uwiQueryWhole = "102141204501W400"; //the whole content of the UWI
+		 var mySearchController = new search_controller.SearchController(oneEntryDataSet, resultSet);
+		 //act
+		 var actualLength2 = mySearchController.findResultsUWI(uwiQueryLength2);
+		 var actualLength5 = mySearchController.findResultsUWI(uwiQueryLength5);
+		 var actualWhole = mySearchController.findResultsUWI(uwiQueryWhole);
+		 var expected = oneEntryDataSet;
+		 //assert
+		 assert.deepEqual(actualLength2, expected);
+		 assert.deepEqual(actualLength5, expected);
+		 assert.deepEqual(actualWhole, expected);
+	 });
+
+	 it("Passes if returns the correct UWIDs in a small dataset", function () {
+		 //arrange
+		 var SmallDataSet = [
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "102050704807W400"
+			 },
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
+			 },
+			 {
+		 		 "Well_Unique_Identifier_Simplified_Format":      "100140405102W400"
+			 }
+		 ];
+		 var uwiQuery10 = "10";
+		 var uwiQuery10205 = "10205";
+		 var resultSet = [];
+		 var mySearchController = new search_controller.SearchController(SmallDataSet, resultSet);
+		 //act
+		 var actual10 = mySearchController.findResultsUWI(uwiQuery10);
+		 var expected10 = [
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "102050704807W400"
+			 },
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
+			 },
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "100140405102W400"
+			 }
+		 ];
+
+		 var actual10205 = mySearchController.findResultsUWI(uwiQuery10205);
+		 var expected10205 = [
+			 {
+				 "Well_Unique_Identifier_Simplified_Format":      "102050704807W400"
+			 }
+		 ];
+		 //assert
+		 assert.deepEqual(actual10, expected10);
+		 assert.deepEqual(actual10205, expected10205);
+	 });
+
+
+ });
+
