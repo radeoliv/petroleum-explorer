@@ -82,26 +82,6 @@
 	 });
 
 
-	 /**
-	  * checks for our result set having a length less than 1
-	  */
-	 it("Returns a warning when search resultset is empty", function () {
-		 //arrange
-		 var lsdQuery = "AA";
-		 var sectionQuery = "AA";
-		 var townshipQuery = "AAA";
-		 var rangeQuery = "BB";
-		 var meridian_query = "C";
-		 var sampleEmptyDataSet = [],
-		 	 resultSet = [];
-		 var mySearchController = new search_controller.SearchController(sampleEmptyDataSet,resultSet);
-		 //act
-		 var actual = mySearchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridian_query);
-		 var expected = mySearchController.EMPTY_RESULTSET_ERROR_MESSAGE;
-		 //assert
-		 assert.equal(actual,expected);
-	 });
-
 	 //Cover the edge case of a one entry data set.
 	 it("Find correct UWID in a one entry data set", function () {
 		 //arrange
@@ -111,7 +91,7 @@
 					 "latitude":  0.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102141204501W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
 			 }
 		 ];
 		 var lsdQuery = "14";
@@ -138,21 +118,21 @@
 					 "latitude":  0.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102050704807W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102050704807W400"
 			 },
 			 {
 				 "location": {
 					 "latitude":  45.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102141204501W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
 			 },
 			 {
 				 "location": {
 					 "latitude":  90.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "100140405102W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "100140405102W400"
 			 }
 		 ];
 		 var lsdQuery = "14";
@@ -170,7 +150,7 @@
 					 "latitude":  45.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102141204501W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
 			 }
 		 ];
 		 //assert
@@ -178,7 +158,7 @@
 	 });
 
 	 //Small data set, query fields not all specified.
-	 it("Find correct UWIDs in a small data set", function () {
+	 it("Find correct UWIDs in a small data set when not all the queries are specified", function () {
 		 //arrange
 		 var SmallDataSet = [
 			 {
@@ -186,21 +166,21 @@
 					 "latitude":  0.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102050704807W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102050704807W400"
 			 },
 			 {
 				 "location": {
 					 "latitude":  90.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102141204501W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
 			 },
 			 {
 				 "location": {
 					 "latitude":  -90.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "100141205101W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "100141205101W400"
 			 }
 		 ];
 		 var lsdQuery = "14";
@@ -218,14 +198,14 @@
 					 "latitude":  90.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "102141204501W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "102141204501W400"
 			 },
 			 {
 				 "location": {
 					 "latitude":  -90.0,
 					 "longitude": 0.0
 				 },
-				 "UWI":      "100141205101W400"
+				 "Well_Unique_Identifier_Simplified_Format":      "100141205101W400"
 			 }
 		 ];
 		 //assert
