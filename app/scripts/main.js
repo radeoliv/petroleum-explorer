@@ -20,8 +20,9 @@ jQuery(document).ready(function ($) {
 	function loadSearchController() {
 		window.search_controller === null || window.search_controller === 'undefined' ? alert('search controller has not been loaded') : console.log('search controller loaded');
 		var dataSet;
+		//parse JSON file with all informations about wells
 		$.ajax({
-			url: '../app/wells.json',
+			url: './wells.json',
 			dataType:'json',
 			async: false,
 			success: function(data){
@@ -29,13 +30,6 @@ jQuery(document).ready(function ($) {
 			}
 		});
 		return new SearchController(dataSet, []);
-		//parse JSON file with all informations about wells
-		/*$.getJSON("../app/wells.json", function(json){
-			//console.log(json);
-			return new SearchController(json, []);
-		});*/
-		//var jsonContent = $.parseJSON("../app/wells.json");
-		//console.log(jsonContent);
 	}
 	var mySearchController = loadSearchController();
 	var mySearchView = new SearchView(mySearchController);

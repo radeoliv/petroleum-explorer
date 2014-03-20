@@ -110,9 +110,6 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			var $resultsArea = $('<div id="results-table" class="handsontable"></div>').appendTo($searchInputForm); //append the results container if javascript enabled
 
 			var data = [];
-			if(results.length > 0)
-				data.push(["UWI","Company","Status"]);
-
 			for (var i=0;i<results.length;i++) {
 				data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
 				//TODO: show these corresponding pins
@@ -120,8 +117,11 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 			$('#results-table').handsontable({
 				data: data,
-				colHeaders: true,
-				contextMenu: true
+				colHeaders: ["UWI", "Company", "Status"],
+				maxRows: 10,
+				overflow: scroll,
+				readOnly: true,
+				maxHeight: 600
 			});
 
 			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
