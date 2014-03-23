@@ -4,7 +4,7 @@
 		var initMapToggle,
 			mapToolbar, mapToolbarButtons, mapToolbarIcon,
 			setToggle, toolbarToggle,
-			mapToolbarContent;
+			mapToolbarContent, mainAccordion;
 
 		/**
 		 * mapToolbarButtons finds all buttons in toolbar-buttons div.
@@ -17,7 +17,7 @@
 		mapToolbarIcon = toolbarToggle.find("i");
 		mapToolbarButtons = mapToolbar.find(".toolbar-buttons button");
 		mapToolbarContent = mapToolbar.find(".sidebar-content-container section").hide();
-
+		mapToolbarAccordion = mapToolbar.find("#accordion");
 		/**
 		 * This function initializes mapToolbarButtons to hidden, and toggles
 		 * the contents of the sidebar when called.
@@ -51,7 +51,10 @@
 				$(this).toggleClass("active");
 			});
 		};
-
+		mapToolbarAccordion.accordion({
+			collapsible: true,
+			heightStyle: "content"
+		});
 		initMapToggle();
 		setToggle();
 

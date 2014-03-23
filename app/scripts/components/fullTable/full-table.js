@@ -31,7 +31,7 @@
 			if(typeof(this.SearchController) != 'undefined'){
 				if (this.SearchController.resultSet.length > 0) {
 					data = this.SearchController.resultSet;
-					this.$tableContainer.dataTable({
+					var table = this.$tableContainer.dataTable({
 						data:    data,
 						//bRetrieve for the popup window showing an error doesn't always appear (not sure how it solves the problem though)
 						bRetrieve: true,
@@ -40,10 +40,6 @@
 								data: "H",
 								title: "Thickness"
 							},
-							/*{
-								data: "InstanceId",
-								title: "Instance ID"
-							},*/
 							{
 								data: "KRav",
 								title: "Average Hydrocarbon Movability"
@@ -52,11 +48,6 @@
 								data: "KRc",
 								title: "Cumulative Hydrocarbon Movability"
 							},
-							/*{
-								data: "OID_",
-								title: "Object ID"
-								// TODO: Not relevant to user.  Consider removing
-							},*/
 							{
 								data: "PHIR",
 								title: "Cumulative Pore Volume"
@@ -64,10 +55,6 @@
 							{
 								data: "PHIc",
 								title: "Cumulative Porosity"
-							},
-							{
-								data: "Plot_Symbol",
-								title: "Plot Symbol" //TODO: Remove displaying
 							},
 							{
 								data: "Pc",
@@ -131,8 +118,10 @@
 							}
 						]
 					});
+					table.draw(true);
 					// For debugging
-					return ;//console.log("Attempting to create datatable with data" + this.SearchController.resultSet);
+					console.log("Attempting to create datatable with data" + this.SearchController.resultSet);
+					console.dir(this.SearchController.resultSet);
 				}
 			}
 		};
