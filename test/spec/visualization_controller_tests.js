@@ -53,17 +53,7 @@ var assert = require("chai").assert;
 
 
 
-	var oil_well_data_continuous_pure = [
-		5.0,
-		5.0,
-		5.0,
-		5.0,
-		5.0,
-		5.0,
-		5.0,
-		5.0,
-		5.0
-	];
+
 
 	var oil_data_continuous = [
 		11.14489737410,
@@ -215,6 +205,42 @@ var assert = require("chai").assert;
 			assert.equal(actual_6, expected_6);
 		});
 
+		var oil_well_data_continuous_pure = [
+			5.0,
+			5.0,
+			5.0,
+			5.0,
+			5.0,
+			5.0,
+			5.0,
+			5.0,
+			5.0
+		];
+		it("Single Category Continuous Data", function () {
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_well_data_continuous_pure, false);
+			//act
+			var actual_1 = filter_controller.get_visualization_method();
+			var actual_2 = filter_controller.numofCategories;
+			var actual_3 = filter_controller.categories;
+			var actual_4 = filter_controller.category_counts;
+			var actual_5 = filter_controller.start;
+			var actual_6 = filter_controller.end;
+			var expected_1 = "histogram";
+			var expected_2 = 1;
+			var expected_3 = ["[4.995,5.005)"];
+			var expected_4 = [9];
+			var expected_5 = 9;
+			var expected_6 = 10;
+			//assert
+			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
+			assert.deepEqual(actual_3, expected_3);
+			assert.deepEqual(actual_4, expected_4);
+			assert.equal(actual_5, expected_5);
+			assert.equal(actual_6, expected_6);
+		})
+
+
 		it("Discrete data with a large deviation in frequencies.", function () {
 			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_discrete_large_deviation, true);
 			//act
@@ -235,20 +261,7 @@ var assert = require("chai").assert;
 
 
 
-		it("Single Category Continuous Data", function () {
-			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_well_data_continuous_pure, false);
-			//act
-			var actual_1 = filter_controller.get_visualization_method();
-			var actual_2 = filter_controller.start;
-			var actual_3 = filter_controller.category_widths;
-			var expected_1 = "histogram";
-			var expected_2 = 9;
-			var expected_3 = 0.001;
-			//assert
-			assert.equal(actual_1, expected_1);
-			assert.equal(actual_2, expected_2);
-			assert.equal(actual_3, expected_3);
-		})
+
 
 		it("Continuous data", function () {
 			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_continuous, false);

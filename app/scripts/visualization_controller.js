@@ -75,10 +75,8 @@
 			else {
 				//If the data is continuous, we need to first find a useful category width:
 				//We will find the minimum and maximum data points:
-				var data_min = 0;
-				var data_max = 0;
-				data_min = this.oil_data[0];
-				data_max = this.oil_data[0];
+				var data_min = this.oil_data[0];
+				var data_max = this.oil_data[0];
 				for (var i = 1;
 					i < N;
 					i++) {
@@ -92,8 +90,8 @@
 
 				var data_interval = data_max - data_min;
 				//The number of categories will be the square root of the number of data points:
-				this.numofCategories = Math.sqrt(N);
-				this.category_widths = data_interval > 0 ? data_interval / (this.numofCategories - 1) : 0.01; //0.01 is the default width for a single category.
+				this.numofCategories = (data_interval > 0) ? Math.ceil(Math.sqrt(N)) : 1;
+				this.category_widths = (this.numofCategories > 1) ? data_interval / (this.numofCategories - 1) : 0.01; //0.01 is the default width for a single category.
 				//Now create the categories:
 				this.startpoint = data_min - this.category_widths / 2; //The lowest category is centered on the lowest data point.
 				this.endpoint = data_max + this.category_widths / 2; //The highest category is centered on the highest data point.
