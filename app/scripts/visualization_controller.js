@@ -89,7 +89,7 @@
 				}
 
 				var data_interval = data_max - data_min;
-				//The number of categories will be the square root of the number of data points:
+				//The number of categories will be the square root of the number of data points (except when the interval is a single point):
 				this.numofCategories = (data_interval > 0) ? Math.ceil(Math.sqrt(N)) : 1;
 				this.category_widths = (this.numofCategories > 1) ? data_interval / (this.numofCategories - 1) : 0.01; //0.01 is the default width for a single category.
 				//Now create the categories:
@@ -127,7 +127,7 @@
 			}
 
 			var threshold = 1.0 //The the threshold of (max_count-min_count)/min_count above which the pie-chart will be used. Large values of (max_count-min_count)/min_count indicate great relative differences between the counts which makes the pie-chart a good choice.
-			if ((max_count - min_count) / min_count >= threshold) {
+			if (((max_count - min_count) / min_count >= threshold) || (min_count == 0)) {
 				//Use the pie-chart
 				this.visualization_method = "pie-chart";
 			}

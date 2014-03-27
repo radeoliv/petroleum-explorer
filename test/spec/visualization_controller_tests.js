@@ -14,30 +14,8 @@ var Oil_well_filter = require("../../app/scripts/visualization_controller.js");
 var assert = require("chai").assert;
 (function () {
 	"use strict";
-	var oil_data_empty = [];
-	var oil_data_discrete_large_deviation = [
-		"SUSPENDED OIL",
-		"OIL",
-		"SUSPENDED OIL",
-		"OIL",
-		"OIL",
-		"SUSPENDED OIL",
-		"SUSPENDED OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"SUSPENDED OIL",
-		"OIL",
-		"OIL",
-		"OIL",
-		"ABANDONED OIL",
-		"OIL"
-	];
+
+
 
 	var oil_data_discrete_small_deviation = [
 		"OIL",
@@ -152,14 +130,18 @@ var assert = require("chai").assert;
 			var actual_4 = filter_controller.category_counts;
 			var actual_5 = filter_controller.start;
 			var actual_6 = filter_controller.end;
-			var actual_7 = filter_controller.category_widths;
+			var actual_7 = filter_controller.startpoint;
+			var actual_8 = filter_controller.endpoint;
+			var actual_9 = filter_controller.category_widths;
 			var expected_1 = "histogram"; // The default visualization method.
 			var expected_2 = 1;
 			var expected_3 = ["[4.995,5.005)"];
 			var expected_4 = [1];
 			var expected_5 = 1;
 			var expected_6 = 2;
-			var expected_7 = 0.01;
+			var expected_7 = 4.995;
+			var expected_8 = 5.005;
+			var expected_9 = 0.01;
 			//assert
 			assert.equal(actual_1, expected_1);
 			assert.equal(actual_2, expected_2);
@@ -168,6 +150,8 @@ var assert = require("chai").assert;
 			assert.equal(actual_5, expected_5);
 			assert.equal(actual_6, expected_6);
 			assert.equal(actual_7, expected_7);
+			assert.equal(actual_8, expected_8);
+			assert.equal(actual_9, expected_9);
 		});
 
 		var oil_well_data_discrete_pure = [
@@ -225,12 +209,18 @@ var assert = require("chai").assert;
 			var actual_4 = filter_controller.category_counts;
 			var actual_5 = filter_controller.start;
 			var actual_6 = filter_controller.end;
+			var actual_7 = filter_controller.startpoint;
+			var actual_8 = filter_controller.endpoint;
+			var actual_9 = filter_controller.category_widths;
 			var expected_1 = "histogram";
 			var expected_2 = 1;
 			var expected_3 = ["[4.995,5.005)"];
 			var expected_4 = [9];
 			var expected_5 = 9;
 			var expected_6 = 10;
+			var expected_7 = 4.995;
+			var expected_8 = 5.005;
+			var expected_9 = 0.01;
 			//assert
 			assert.equal(actual_1, expected_1);
 			assert.equal(actual_2, expected_2);
@@ -238,16 +228,47 @@ var assert = require("chai").assert;
 			assert.deepEqual(actual_4, expected_4);
 			assert.equal(actual_5, expected_5);
 			assert.equal(actual_6, expected_6);
-		})
+			assert.equal(actual_7, expected_7);
+			assert.equal(actual_8, expected_8);
+			assert.equal(actual_9, expected_9);
+		});
 
-
-		it("Discrete data with a large deviation in frequencies.", function () {
+		var oil_data_discrete_large_deviation = [
+			"SUSPENDED OIL",
+			"OIL",
+			"SUSPENDED OIL",
+			"OIL",
+			"OIL",
+			"SUSPENDED OIL",
+			"SUSPENDED OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"SUSPENDED OIL",
+			"OIL",
+			"OIL",
+			"OIL",
+			"ABANDONED OIL",
+			"OIL"
+		]; //#"OIL" = 15; #"SUSPENDED OIL" = 5; #"ABANDONED OIL" = 1;
+		it("Discrete data with a large deviation in counts.", function () {
 			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_discrete_large_deviation, true);
 			//act
-			var actual = filter_controller.get_visualization_method();
-			var expected = "pie-chart"; // For data with large relative differences in frequency, the visualization method will be a pie chart.
+			var actual_1 = filter_controller.get_visualization_method();
+			var actual_2 = filter_controller.numofCategories;
+			var actual_3 = filter_controller.categories;
+			var actual_4 = filter_controller.category_counts;
+			var expected_1 = "pie-chart"; // For data with large relative differences in frequency, the visualization method will be a pie chart.
+			var expected_2 = 3;
+			var expected_3 = ["SUSPENDED OIL", "OIL", "ABANDONED OIL"];
+			var expected_4 = [5,15,1];
 			//assert
-			assert.equal(actual, expected);
+			assert.equal(actual_1, expected_1);
 		});
 
 		it("Discrete data with a small deviation in frequencies.", function () {
