@@ -12,7 +12,10 @@
 			this.$tableContainer = $tableContainer;
 			this.displayTable();
 			this.listenChanges();
-			this.toggleButton = $tableContainer.parent().find("toggle-table").removeAttr("disabled");
+			this.toggleButton = $tableContainer.parent().find(".toggle-table").attr({
+				"disabled": "disabled",
+				"title": "Please specify coordinates to view data"
+			});
 			this.listenToggle();
 		}
 
@@ -118,9 +121,10 @@
 							}
 						]
 					});
-					table.draw(true);
+					table.fnDraw(true);
+					this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View");
 					// For debugging
-					console.log("Attempting to create datatable with data" + this.SearchController.resultSet);
+					console.log("Attempting to create datatable with data");
 					console.dir(this.SearchController.resultSet);
 				}
 			}
@@ -145,7 +149,7 @@
 		FullTable.prototype.listenToggle = function () {
 			return this.toggleButton.on("click", (function (_this) {
 				return function () {
-					return _this.$tableContainer.toggle("slow");
+					return _this.$tableContainer.parent().toggle("slow"); // go up one level for datatables wrapper
 				};
 			})(this));
 		};

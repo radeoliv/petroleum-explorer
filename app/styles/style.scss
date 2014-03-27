@@ -25,7 +25,12 @@ html {
 
 button {
 	cursor: pointer;
+	&[disabled] {
+		cursor: not-allowed;
+		@extend %opacity-05;
+	}
 }
+
 .container {
 	max-width: $container-max-width;
 	margin: 0 auto;
