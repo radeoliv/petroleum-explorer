@@ -1,0 +1,26 @@
+// Button placement
+.search-results-table {
+	// Table toggle button at bottom
+	.toggle-table {
+		@extend %absolute;
+		left: 50%;
+		bottom: 0;
+		z-index: 9999; // it's over 9000!
+		padding: $padding-small $padding;
+		transition: $transition-time opacity $transition-function;
+		font-size: 1em;
+		@extend %bordered;
+		&.active {
+			bottom: 94%;
+		}
+	}
+	&.floating, .dataTables_wrapper {
+		@extend %absolute;
+		bottom: 0;
+		width: 100%;
+		max-height: 85%;
+		background: $body-background;
+		overflow-x: scroll;
+		z-index: 999; // it's over 9000!
+	}
+}

@@ -65,7 +65,7 @@ button[disabled] {
 /* =============================================================================
 Borders
 ========================================================================== */
-.mapToolbar {
+.mapToolbar, .search-results-table .toggle-table {
   border: 1px solid black; }
 
 /* =============================================================================
@@ -74,7 +74,7 @@ Floats
 /* =============================================================================
 Positions
 ========================================================================== */
-.mapToolbar {
+.mapToolbar, .search-results-table .toggle-table, .search-results-table.floating, .search-results-table .dataTables_wrapper {
   position: absolute; }
 
 /* =============================================================================
@@ -186,6 +186,23 @@ table {
   height: 100%;
   right: 8em;
   position: static !important; }
+
+.search-results-table .toggle-table {
+  left: 50%;
+  bottom: 0;
+  z-index: 9999;
+  padding: 0.76923em 1em;
+  transition: 0.5s opacity ease;
+  font-size: 1em; }
+  .search-results-table .toggle-table.active {
+    bottom: 94%; }
+.search-results-table.floating, .search-results-table .dataTables_wrapper {
+  bottom: 0;
+  width: 100%;
+  max-height: 85%;
+  background: white;
+  overflow-x: scroll;
+  z-index: 999; }
 
 /*
 =============================================================================
