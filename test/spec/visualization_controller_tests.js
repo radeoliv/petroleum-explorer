@@ -259,10 +259,66 @@ var assert = require("chai").assert;
 			var actual_2 = filter_controller.numofCategories;
 			var actual_3 = filter_controller.categories;
 			var actual_4 = filter_controller.category_counts;
-			var expected_1 = "histogram";
-			var expected_2 = 2;
+			var actual_5 = filter_controller.startpoint;
+			var actual_6 = filter_controller.endpoint;
+			var actual_7 = filter_controller.category_widths;
+			var expected_1 = "pie-chart";
+			var expected_2 = 3;
+			var expected_3 = ["[3.5,4.5)","[4.5,5.5)","[5.5,6.5)"];
+			var expected_4 = [1,5,1];
+			var expected_5 = 3.5;
+			var expected_6 = 6.5;
+			var expected_7 = 1.0;
 			//assert
 			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
+			assert.deepEqual(actual_3, expected_3);
+			assert.deepEqual(actual_4, expected_4);
+			assert.equal(actual_5, expected_5);
+			assert.equal(actual_6, expected_6);
+			assert.equal(actual_7, expected_7);
+		});
+
+		var oil_data_continuous_2 = [
+			4.0,
+			4.0,
+			5.0,
+			5.0,
+			5.0,
+			6.0,
+			6.0
+		];
+		it("Continuous data 2", function () {
+			var filter_controller = new Oil_well_filter.Oil_well_filter(oil_data_continuous_2, false);
+			//act
+			var actual_1 = filter_controller.get_visualization_method();
+			var actual_2 = filter_controller.numofCategories;
+			var actual_3 = filter_controller.categories;
+			var actual_4 = filter_controller.category_counts;
+			var actual_5 = filter_controller.start;
+			var actual_6 = filter_controller.end;
+			var actual_7 = filter_controller.startpoint;
+			var actual_8 = filter_controller.endpoint;
+			var actual_9 = filter_controller.category_widths;
+			var expected_1 = "histogram";
+			var expected_2 = 3;
+			var expected_3 = ["[3.5,4.5)","[4.5,5.5)","[5.5,6.5)"];
+			var expected_4 = [2,3,2];
+			var expected_5 = 0;
+			var expected_6 = 4;
+			var expected_7 = 3.5;
+			var expected_8 = 6.5;
+			var expected_9 = 1.0;
+			//assert
+			assert.equal(actual_1, expected_1);
+			assert.equal(actual_2, expected_2);
+			assert.deepEqual(actual_3, expected_3);
+			assert.deepEqual(actual_4, expected_4);
+			assert.equal(actual_5, expected_5);
+			assert.equal(actual_6, expected_6);
+			assert.equal(actual_7, expected_7);
+			assert.equal(actual_8, expected_8);
+			assert.equal(actual_9, expected_9);
 		});
 
 		//Test bed:
