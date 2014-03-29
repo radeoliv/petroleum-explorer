@@ -1,5 +1,8 @@
 // Button placement
 .search-results-table {
+
+	font-size: 0.85em;
+
 	// Table toggle button at bottom
 	.toggle-table {
 		@extend %absolute;
@@ -14,6 +17,7 @@
 			bottom: 94%;
 		}
 	}
+
 	&.floating, .dataTables_wrapper {
 		@extend %absolute;
 		bottom: 0;
@@ -21,6 +25,17 @@
 		max-height: 85%;
 		background: $body-background;
 		overflow-x: scroll;
+		overflow-y: hidden;
 		z-index: 999; // it's over 9000!
+		border-top: solid 1px black;
 	}
+
+	table.dataTable tbody th, table.dataTable tbody td,table.dataTable thead th, table.dataTable thead td  {
+		padding: 0px 0.5em 0px 0.5em;
+	}
+
+	.dataTables_length, .dataTables_filter, .dataTables_info{
+		padding: 0.5em;
+	}
+
 }

@@ -150,7 +150,7 @@
 			return this.toggleButton.on("click", (function (_this) {
 				return function () {
 					$(this).toggleClass("active");
-					return _this.$tableContainer.parent().toggle("slow"); // go up one level for datatables wrapper
+					return _this.$tableContainer.parent().slideToggle("slow"); // go up one level for datatables wrapper
 				};
 			})(this));
 		};
