@@ -20,18 +20,33 @@ SearchView = function (searchController) {
 };
 
 var optionAccordion;	//global var for handling accordion option for search select
+var optionStatus;	//global var for handling accordion option for search select
 
 (function () {
 	$(function () {
 		var active;
 		active = function () {
-			return $( "#accordion" ).on("click", function () {
-				optionAccordion = $( "#accordion" ).accordion( "option", "active" );
+			return $("#accordion").on("click", function () {
+				optionAccordion = $("#accordion").accordion( "option", "active" );
 			});
 		}
 		active();
 	});
 }).call(this);
+
+(function () {
+	$(function () {
+		var active;
+		active = function () {
+			return $("#status").on("change", function () {
+				optionStatus = $("#status").val();
+				//console.log(optionStatus);
+			});
+		}
+		active();
+	});
+}).call(this);
+
 
 
 /**
@@ -64,8 +79,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			townshipQuery=townshipSearchInput[0].value,
 			rangeQuery=rangeSearchInput[0].value,
 			meridianQuery=meridianSearchInput[0].value,
-			companyQuery=companySearchInput[0].value,
-			statusQuery=statusSearchInput[0].value;
+			companyQuery=companySearchInput[0].value;
 
 		var results;
 		var error = false;
@@ -92,12 +106,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				else
 					error = true;
 				break;
-			// Search by the status
-			case 3:
-				// What now? hahahaha
-				break;
 			default:
-				console.log("Accordeon error!");
+				console.log("Accordion error!");
 				break;
 		}
 
@@ -143,24 +153,91 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			}
 		}
 	});
-};
 
-(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
+	statusSearchInput.change( function (e) {
 
-function forceNumeric(fields) {
-	// Replacing non numeric characters with empty string for UWI value search
-	for(var i=0; i<fields.length; i++) {
-		fields[i].val(fields[i][0].value.replace(/\D/g, ''));
+		var statusQuery=statusSearchInput[0].value;
+
+		var results;
+		var error = false;
+		switch(optionAccordion) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				if(optionStatus != "none")
+					results = self.searchController.findResultsStatus(statusQuery);
+				else
+					error = true;
+				break;
+			default:
+				console.log("Accordion error!");
+				break;
+		}
+
+		if(!error) {
+			// Cleaning the results area
+			if($('#results-table') != undefined) {
+				$('#results-table').remove();
+			}
+
+			var $resultsArea = $('<div id="results-table" class="handsontable"></div>').appendTo($searchInputForm); //append the results container if javascript enabled
+
+			var data = [];
+			for (var i=0;i<results.length;i++) {
+				data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
+				//TODO: show these corresponding pins
+			}
+
+			$('#results-table').handsontable({
+				data: data,
+				colHeaders: ["UWI", "Company", "Status"],
+				overflow: scroll,
+				readOnly: true,
+				columnSorting: true,
+				currentRowClassName: 'currentRow',
+				height: function(){
+					if (results.length < 10){
+						return (parseInt($("body").css('font-size')) * (results.length+1.25) * 1.75);
+					}
+					else
+						return 250;
+				}
+			});
+
+			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
+			$("body").trigger("ResultsUpdated");
+			//console.log("Results updated.  Results:");
+			//console.dir(this.resultSet);
+
+		} else {
+			// Cleaning the results area
+			if($('#results-table') != undefined) {
+				$('#results-table').remove();
+			}
+		}
+});
+
+	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
+
+	function forceNumeric(fields) {
+		// Replacing non numeric characters with empty string for UWI value search
+		for(var i=0; i<fields.length; i++) {
+			fields[i].val(fields[i][0].value.replace(/\D/g, ''));
+		}
 	}
-}
 
-function clearFields() {
-	$searchInputForm.find("input[name='uwi']").val(''),
-	$searchInputForm.find("input[name='lsd']").val(''),
-	$searchInputForm.find("input[name='section']").val(''),
-	$searchInputForm.find("input[name='township']").val(''),
-	$searchInputForm.find("input[name='range']").val(''),
-	$searchInputForm.find("input[name='meridian']").val(''),
-	$searchInputForm.find("input[name='company']").val(''),
-	$searchInputForm.find("select[name='status']").val('');
+	function clearFields() {
+		$searchInputForm.find("input[name='uwi']").val(''),
+		$searchInputForm.find("input[name='lsd']").val(''),
+		$searchInputForm.find("input[name='section']").val(''),
+		$searchInputForm.find("input[name='township']").val(''),
+		$searchInputForm.find("input[name='range']").val(''),
+		$searchInputForm.find("input[name='meridian']").val(''),
+		$searchInputForm.find("input[name='company']").val(''),
+		$searchInputForm.find("select[name='status']").val('');
+	}
 }

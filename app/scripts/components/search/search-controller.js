@@ -192,6 +192,49 @@
 			return this.resultSet;
 		};
 
+		 /**
+		  * find the wells matching the search criteria (status)
+		  * @param query the search query we will use to search through UWID
+		  * @returns {string}
+		  */
+		 SearchController.prototype.findResultsStatus = function(statusQuery) {
+			 // check if any values are empty
+			 // for each search input with a valid entry, check contents of corresponding JSON data in this.dataset using && for each
+			 // return objects that match
+			 if(this.dataSet === null){
+				 return this.NULL_ERROR_MESSAGE;
+			 }
+
+			 this.resultSet = [];
+
+			 if(statusQuery === null){
+				 return this.NULL_QUERY_ERROR_MESSAGE;
+			 }
+			 else if(typeof(statusQuery) === "undefined"){
+				 return this.UNDEFINED_ERROR_MESSAGE;
+			 }
+			 else if(this.isEmptyQuery(statusQuery)){
+				 return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
+			 }
+
+			 for(var i=0; i<this.dataSet.length;i++) {
+				 /*
+				  * Search by status name
+				  */
+				 if(!this.isEmptyQuery(statusQuery)) {
+					 // TODO: Change the JSON attribute when the new json file is created
+					 var cMatch = this.dataSet[i]['Well_Status'].toUpperCase().search(statusQuery.toUpperCase());
+
+					 if(cMatch >= 0)
+						 this.resultSet.push(this.dataSet[i]);
+				 }
+			 }
+
+			 return this.resultSet;
+		 };
+
+
+
 
 		 /**
 		  * function retrieving the json file containing the data and sending the result to the attribute dataset of the searchController
