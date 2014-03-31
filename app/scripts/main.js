@@ -24,8 +24,16 @@ jQuery(document).ready(function ($) {
 		});
 		return new SearchController(dataSet, []);
 	}
+
+	function loadMapCanvasController() {
+		window.mapCanvas_controller === null || window.mapCanvas_controller === 'undefined' ? alert('map canvas controller has not been loaded') : console.log('map canvas controller loaded');
+
+		return new MapCanvasController();
+	}
+
 	var mySearchController = loadSearchController();
-	var mySearchView = new SearchView(mySearchController);
+	var myMapCanvasController = loadMapCanvasController()
+	var mySearchView = new SearchView(mySearchController, myMapCanvasController)
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
 	// load in datatable

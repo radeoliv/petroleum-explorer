@@ -193,11 +193,14 @@ table {
     left: 50%;
     bottom: 0;
     z-index: 9999;
-    padding: 0.76923em 1em;
+    padding: 0.76923em;
+    margin: 0;
     transition: 0.5s opacity ease;
-    font-size: 1em; }
-    .search-results-table .toggle-table.active {
-      bottom: 94%; }
+    outline: none;
+    font-size: 1.2em;
+    color: black; }
+    .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
+      background: darkgrey; }
   .search-results-table.floating, .search-results-table .dataTables_wrapper {
     bottom: 0;
     width: 100%;
@@ -208,8 +211,7 @@ table {
     z-index: 999;
     border-top: solid 1px black; }
   .search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
-    padding: 0px 0.5em 0px 0.5em;
-    margin: -50px -50px -50px -50px; }
+    padding: 0px 0.5em 0px 0.5em; }
   .search-results-table .dataTables_length, .search-results-table .dataTables_filter, .search-results-table .dataTables_info {
     padding: 0.5em; }
 

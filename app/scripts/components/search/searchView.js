@@ -14,9 +14,10 @@
  //TODO: file description
  -------------------------------------------------------------------------------*/
 var SearchView;
-SearchView = function (searchController) {
+SearchView = function (searchController, mapCanvasController) {
 	//TODO: create constructor for searchview
-	this.searchController = searchController
+	this.searchController = searchController;
+	this.mapCanvasController = mapCanvasController;
 };
 
 var optionAccordion;	//global var for handling accordion option for search select
@@ -46,8 +47,6 @@ var optionStatus;	//global var for handling accordion option for search select
 		active();
 	});
 }).call(this);
-
-
 
 /**
  * listen to key down events
@@ -125,6 +124,9 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				//TODO: show these corresponding pins
 			}
 
+			//plot results on google maps
+			self.mapCanvasController = new MapCanvasController().plotResults(results);
+
 			$('#results-table').handsontable({
 				data: data,
 				colHeaders: ["UWI", "Company", "Status"],
@@ -134,7 +136,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				currentRowClassName: 'currentRow',
 				height: function(){
 					if (results.length < 10){
-						return (parseInt($("body").css('font-size')) * (results.length+1.25) * 1.75);
+						return ($("htCore").height());
 					}
 					else
 						return 250;
@@ -192,6 +194,9 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				//TODO: show these corresponding pins
 			}
 
+			//plot results on google maps
+			self.mapCanvasController = new MapCanvasController().plotResults(results);
+
 			$('#results-table').handsontable({
 				data: data,
 				colHeaders: ["UWI", "Company", "Status"],
@@ -201,7 +206,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				currentRowClassName: 'currentRow',
 				height: function(){
 					if (results.length < 10){
-						return (parseInt($("body").css('font-size')) * (results.length+1.25) * 1.75);
+						return ($("htCore").height());
 					}
 					else
 						return 250;

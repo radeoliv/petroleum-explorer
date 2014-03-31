@@ -6,15 +6,18 @@
 	// Table toggle button at bottom
 	.toggle-table {
 		@extend %absolute;
+		@extend %bordered;
 		left: 50%;
 		bottom: 0;
 		z-index: 9999; // it's over 9000!
-		padding: $padding-small $padding;
+		padding: $padding-small;
+		margin: 0;
 		transition: $transition-time opacity $transition-function;
-		font-size: 1em;
-		@extend %bordered;
-		&.active {
-			bottom: 94%;
+		outline: none;
+		font-size: 1.2em;
+		color: $mapToolbarButtonTextColour;
+		&:active, &.active, &:hover{
+			background: darken($mapToolbarButtonColour, 20);
 		}
 	}
 

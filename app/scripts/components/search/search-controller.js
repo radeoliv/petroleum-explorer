@@ -259,7 +259,7 @@
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchController = SearchController;
 
- }).call(this);
+}).call(this);
 
 function getLSD(uwi) {
 	return uwi.substr(3,2);

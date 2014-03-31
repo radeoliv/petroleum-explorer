@@ -123,6 +123,7 @@
 					});
 					table.fnDraw(true);
 					this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").toggleClass("active");
+
 					// For debugging
 					console.log("Attempting to create datatable with data");
 					console.dir(this.SearchController.resultSet);
@@ -150,7 +151,19 @@
 			return this.toggleButton.on("click", (function (_this) {
 				return function () {
 					$(this).toggleClass("active");
-					return _this.$tableContainer.parent().slideToggle("slow"); // go up one level for datatables wrapper
+
+					//set the height of the toggle button dynamically
+					var btnHeight = parseInt($('.dataTables_wrapper').height());
+					if ($('.toggle-table').hasClass('active'))
+						$('.toggle-table').animate({
+							bottom: btnHeight
+						});
+					else
+						$('.toggle-table').animate({
+							bottom: 0
+						});
+
+					return _this.$tableContainer.parent().slideToggle(); // go up one level for datatables wrapper
 				};
 			})(this));
 		};

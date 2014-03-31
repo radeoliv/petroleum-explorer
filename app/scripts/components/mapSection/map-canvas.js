@@ -9,7 +9,7 @@
  Contains all the logic to create, display and add wells' information on the map.
  -------------------------------------------------------------------------------*/
 
-$(document).ready(function () {
+(function () {
 
 	// Full dataSet - all wells
 	var dataSet = initializeDataSet();
@@ -17,6 +17,34 @@ $(document).ready(function () {
 	var currentWells;
 	// Markers (pins) shown on the map
 	var markers = [];
+
+	// Create options for the map
+	var mapOptions = {
+		mapTypeControlOptions: {
+			style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+		}
+	};
+
+	// Define the map itself
+	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+	var MapCanvasController;
+
+	MapCanvasController = (function(){
+
+		function MapCanvasController(wells){
+			setCurrentWells(wells);
+		}
+	});
+
+	MapCanvasController.prototype.plotResults = function(wells){
+		for (var i = 0; i < markers.length; i++) {
+			markers[i].setMap(null);
+		}
+		markers = [];
+		setCurrentWells(wells);
+		initializeMap();
+	}
 
 	/*
 	 * Initialize the dataSet with the values in the JSON file
@@ -32,7 +60,6 @@ $(document).ready(function () {
 				temp = data;
 			}
 		});
-
 		// Set as current wells
 		setCurrentWells(temp);
 
@@ -52,27 +79,19 @@ $(document).ready(function () {
 	 * Center the map based on the markers present on the map
 	 */
 	function initializeMap() {
-		// Create options for the map
-		var mapOptions = {
-			mapTypeControlOptions: {
-				style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
-			}
-		};
-
-		// Define the map itself
-		var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
 		// Plot the wells' locations
-		PlotPoints(map);
+		PlotPoints();
 		// Center the map based on markers
-		AutoCenter(map);
+		AutoCenter();
 	}
 	initializeMap();
+
+
 
 	/*
 	 * Plot points on the map (adding markers/pins)
 	 */
-	function PlotPoints(map) {
+	function PlotPoints() {
 		var infowindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
 		// Go through all wells and create markers for them
@@ -109,7 +128,7 @@ $(document).ready(function () {
 	/*
 	 * Fit all markers/pins on the map (defining new center for the map)
 	 */
-	function AutoCenter(map) {
+	function AutoCenter() {
 		// Create a new viewpoint bound
 		var bounds = new google.maps.LatLngBounds();
 
@@ -121,4 +140,6 @@ $(document).ready(function () {
 		// Fit these bounds to the map
 		map.fitBounds(bounds);
 	}
-});
+
+	(typeof exports !== "undefined" && exports !== null ? exports : window).MapCanvasController = MapCanvasController;
+}).call(this);
