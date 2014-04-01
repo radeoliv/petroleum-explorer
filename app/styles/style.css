@@ -25,7 +25,7 @@ Overflow
 Margins
 ========================================================================== */
 /* Normal margin */
-body {
+.search-results-table .toggle-table, body {
   margin: 0; }
 
 /* Normal margin combinations */
@@ -74,8 +74,11 @@ Floats
 /* =============================================================================
 Positions
 ========================================================================== */
-.mapToolbar, .search-results-table .toggle-table, .search-results-table.floating, .search-results-table .dataTables_wrapper {
+.mapToolbar, .search-results-table, .search-results-table .toggle-table {
   position: absolute; }
+
+.search-results-table section {
+  position: fixed; }
 
 /* =============================================================================
 Display modes
@@ -188,33 +191,73 @@ table {
   position: static !important; }
 
 .search-results-table {
-  font-size: 0.85em; }
+  font-size: 0.85em;
+  bottom: 0;
+  width: 100%;
+  max-height: 85%;
+  background: white;
+  overflow-x: scroll;
+  z-index: 999;
+  /*.dataTables_wrapper {
+  	@extend %absolute;
+  	bottom: 0;
+  	width: 100%;
+  	max-height: 85%;
+  	background: $body-background;
+  	overflow-x: scroll;
+  	z-index: 999; // it's over 9000!
+  	border-top: solid 1px black;
+  	margin-left: 11em;
+  }
+  section {
+  	@extend %fixed;
+  	height: 100%;
+  	background: $body-background;
+  }*/ }
   .search-results-table .toggle-table {
     left: 50%;
     bottom: 0;
     z-index: 9999;
     padding: 0.76923em;
-    margin: 0;
     transition: 0.5s opacity ease;
     outline: none;
     font-size: 1.2em;
     color: black; }
     .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
       background: darkgrey; }
-  .search-results-table.floating, .search-results-table .dataTables_wrapper {
+  .search-results-table section {
+    height: 100%;
+    background: white; }
+  .search-results-table .dataTables_wrapper {
     bottom: 0;
     width: 100%;
     max-height: 85%;
     background: white;
     overflow-x: scroll;
-    overflow-y: hidden;
     z-index: 999;
-    border-top: solid 1px black; }
-  .search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
-    padding: 0px 0.5em 0px 0.5em; }
+    border-top: solid 1px black;
+    margin-left: 11em; }
   .search-results-table .dataTables_length, .search-results-table .dataTables_filter, .search-results-table .dataTables_info {
     padding: 0.5em; }
+  .search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
+    padding: 0px 0.5em 0px 0.5em; }
 
+/*
+table {
+	&.dataTable {
+		tbody {
+			th, td {
+				padding: 0 0.5em;
+			}
+		}
+		thead {
+			th, td {
+				padding: 0 0.5em;
+			}
+		}
+	}
+}
+*/
 /*
 =============================================================================
 Main Styles

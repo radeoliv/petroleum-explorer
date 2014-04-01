@@ -1,10 +1,6 @@
 // Button placement
 .search-results-table {
-<<<<<<< Updated upstream
-
 	font-size: 0.85em;
-
-=======
 	@extend %absolute;
 	bottom: 0;
 	width: 100%;
@@ -12,8 +8,7 @@
 	background: $body-background;
 	overflow-x: scroll;
 	z-index: 999; // it's over 9000!
->>>>>>> Stashed changes
-	// Table toggle button at bottom
+
 	.toggle-table {
 		@extend %absolute;
 		@extend %bordered;
@@ -21,44 +16,67 @@
 		bottom: 0;
 		z-index: 9999; // it's over 9000!
 		padding: $padding-small;
-		margin: 0;
+		@extend %margin-none;
 		transition: $transition-time opacity $transition-function;
 		outline: none;
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
-		&:active, &.active, &:hover{
+		&:active, &.active, &:hover {
 			background: darken($mapToolbarButtonColour, 20);
 		}
 	}
-<<<<<<< Updated upstream
-
-	&.floating, .dataTables_wrapper {
+	/*.dataTables_wrapper {
 		@extend %absolute;
 		bottom: 0;
 		width: 100%;
 		max-height: 85%;
 		background: $body-background;
 		overflow-x: scroll;
-		overflow-y: hidden;
 		z-index: 999; // it's over 9000!
 		border-top: solid 1px black;
+		margin-left: 11em;
 	}
-
-	table.dataTable tbody th, table.dataTable tbody td,table.dataTable thead th, table.dataTable thead td  {
-		padding: 0px 0.5em 0px 0.5em;
-	}
-
-	.dataTables_length, .dataTables_filter, .dataTables_info{
-		padding: 0.5em;
-=======
+	section {
+		@extend %fixed;
+		height: 100%;
+		background: $body-background;
+	}*/
 	section{
 		@extend %fixed;
 		height:100%;
 		background: $body-background;
 	}
 	.dataTables_wrapper {
-		margin-left:11em;
->>>>>>> Stashed changes
+		bottom: 0;
+		width: 100%;
+		max-height: 85%;
+		background: $body-background;
+		overflow-x: scroll;
+		z-index: 999; // it's over 9000!
+		border-top: solid 1px black;
+		margin-left: 11em;
+	}
+	.dataTables_length, .dataTables_filter, .dataTables_info {
+		padding: 0.5em;
 	}
 
+	table.dataTable tbody th, table.dataTable tbody td,table.dataTable thead th, table.dataTable thead td  {
+		padding: 0px 0.5em 0px 0.5em;
+	}
 }
+/*
+table {
+	&.dataTable {
+		tbody {
+			th, td {
+				padding: 0 0.5em;
+			}
+		}
+		thead {
+			th, td {
+				padding: 0 0.5em;
+			}
+		}
+	}
+}
+*/

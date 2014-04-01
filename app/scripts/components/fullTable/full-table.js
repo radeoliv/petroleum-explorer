@@ -17,6 +17,7 @@
 				"title": "Please specify coordinates to view data"
 			});
 			this.listenToggle();
+
 		}
 
 		/**

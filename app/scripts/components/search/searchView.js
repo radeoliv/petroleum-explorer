@@ -183,7 +183,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 					currentRowClassName: 'currentRow',
 					height: function(){
 						if (results.length < 10){
-							return ($("htCore").height());
+							console.log($("#htCore").height());
+							return ($("#htCore").height());
 						}
 						else
 							return 250;
