@@ -31,19 +31,45 @@
 	var MapCanvasController;
 
 	MapCanvasController = (function(){
-
 		function MapCanvasController(wells){
 			setCurrentWells(wells);
 		}
 	});
 
+	/*
+	 * Plot the pins of the wells in parameter
+	 */
 	MapCanvasController.prototype.plotResults = function(wells){
+		// The comparison with 'stringify' can only be used because the order of the elements does not change!!!
+		// Be careful when using it around to compare JSONs...
+		var clearAndInitializeMap = false;
+
+		/*
+		 * If wells is null, all the markers/pins should be shown - ONLY if they are not already being shown.
+		 * Otherwise, update the map if the wells are different from the ones being shown.
+		 */
+		if(wells === null && JSON.stringify(this.dataSet) != JSON.stringify(currentWells)) {
+			setCurrentWells(dataSet);
+			clearAndInitializeMap = true;
+		} else if(JSON.stringify(wells) != JSON.stringify(currentWells)) {
+			setCurrentWells(wells);
+			clearAndInitializeMap = true;
+		}
+
+		if(clearAndInitializeMap) {
+			clearAllMarkers();
+			initializeMap();
+		}
+	}
+
+	/*
+	 * Clear all the markers (pins) on the map
+	 */
+	function clearAllMarkers() {
 		for (var i = 0; i < markers.length; i++) {
 			markers[i].setMap(null);
 		}
 		markers = [];
-		setCurrentWells(wells);
-		initializeMap();
 	}
 
 	/*
@@ -79,20 +105,25 @@
 	 * Center the map based on the markers present on the map
 	 */
 	function initializeMap() {
-		// Plot the wells' locations
-		PlotPoints();
-		// Center the map based on markers
-		AutoCenter();
+		/* The points should only be plotted if there's something to be plotted.
+		 * This avoids the error of moving the map to a random position (probably the origin) and just makes
+		 * the markers disappear, keeping the same location as before.
+		 */
+		if(currentWells != undefined && currentWells.length > 0) {
+			// Plot the wells' locations
+			plotPoints();
+			// Center the map based on markers
+			autoCenter();
+		}
 	}
 	initializeMap();
-
 
 
 	/*
 	 * Plot points on the map (adding markers/pins)
 	 */
-	function PlotPoints() {
-		var infowindow = new google.maps.InfoWindow({ maxwidth: 200 });
+	function plotPoints() {
+		var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
 		// Go through all wells and create markers for them
 		for (var i = 0; i < currentWells.length; i++) {
@@ -117,18 +148,41 @@
 						+ "<b>Well Operator</b><br>" + currentWells[i]["Well_Operator"] + "<br><br>"
 						+ "<b>Well Status</b><br>" + currentWells[i]["Well_Status"] + "<br><br>";
 
-					infowindow.setContent("<p>" + content + "</p>");
-					infowindow.open(map, marker);
+					infoWindow.setContent("<p>" + content + "</p>");
+
+					// Defining new property to the info window to know when it's opened or closed
+					google.maps.InfoWindow.prototype.opened = false;
+					toggleInfoWindow(infoWindow, map, marker);
+
 					//marker.setAnimation(google.maps.Animation.BOUNCE);
 				}
 			})(marker, i));
+
+			// Used to change the opened property when the user closes the info window by pressing the top right x.
+			google.maps.event.addListener(infoWindow,'closeclick',function(){
+				infoWindow.opened = false;
+			});
+		}
+	}
+
+	/*
+	 * Allow the infoWindow to be opened and closed by clicking on the pin
+	 */
+	function toggleInfoWindow(infoWindow, map, marker) {
+		if(infoWindow.opened) {
+			infoWindow.opened = false;
+			infoWindow.close();
+		}
+		else {
+			infoWindow.opened = true;
+			infoWindow.open(map, marker);
 		}
 	}
 
 	/*
 	 * Fit all markers/pins on the map (defining new center for the map)
 	 */
-	function AutoCenter() {
+	function autoCenter() {
 		// Create a new viewpoint bound
 		var bounds = new google.maps.LatLngBounds();
 

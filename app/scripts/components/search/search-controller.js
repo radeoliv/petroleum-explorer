@@ -233,7 +233,13 @@
 			 return this.resultSet;
 		 };
 
-
+		 /**
+		  * return all wells present in the system
+		  * @returns {string}
+		  */
+		 SearchController.prototype.getAllWells = function() {
+			 return this.dataSet;
+		 };
 
 
 		 /**

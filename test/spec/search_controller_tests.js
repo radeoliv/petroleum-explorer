@@ -381,7 +381,8 @@
 
  describe("Search controller, findResultsCompany function", function () {
 	 /**
-	  * The test passes if, as expected the function findResultsCompany returns an error message for null query when a null query is passed to the function
+	  * The test passes if, as expected the function findResultsCompany returns an error message
+      * for null query when a null query is passed to the function
 	  */
 	 it("Passes if returns the error for null search query", function () {
 		 //arrange
@@ -397,7 +398,8 @@
 	 });
 
 	 /**
-	  * The test passes if, as expected the function findResultsCompany returns an error message for an undefined query when an undefined query is passed to the function
+	  * The test passes if, as expected the function findResultsCompany returns an error message
+      * for an undefined query when an undefined query is passed to the function
 	  */
 	 it("Passes if returns the error for undefined search query", function () {
 		 //arrange
@@ -413,7 +415,8 @@
 	 });
 
 	 /**
-	  * The test passes if, as expected the function findResultsCompany returns an error message for an empty query when an empty query is passed to the function
+	  * The test passes if, as expected the function findResultsCompany returns an error message
+      * for an empty query when an empty query is passed to the function
 	  */
 	 it("Passes if returns the error for empty search query", function () {
 		 //arrange
@@ -432,9 +435,10 @@
 	 });
 
 	 /**
-	  * The test passes if, as expected, an error message stating that a null dataset is passed, when a null dataset is passed as a parameter to the function
+	  * The test passes if, as expected, an error message stating that a null dataset is passed,
+      * when a null dataset is passed as a parameter to the function
 	  */
-	 it("Passes if returns the error for null dataset", function () {
+	 it("Passes if returns the error for null data set", function () {
 		 //arrange
 		 var dataSet = null, //null dataSet
 			 resultSet = [],
@@ -447,7 +451,7 @@
 		 assert.equal(actual,expected);
 	 });
 
-	 it("Passes if the string for the company matches the actual company in a one entry dataset", function () {
+	 it("Passes if the string for the company matches the actual company in a one entry data set", function () {
 		 //arrange
 		 var expected = [
 			 {
@@ -476,7 +480,7 @@
 		 assert.deepEqual(actualValid, expected);
 	 });
 
-	 it("Passes if returns the correct data in a small dataset", function () {
+	 it("Passes if returns the correct data in a small data set", function () {
 		 //arrange
 		 var smallDataSet = [
 			 {

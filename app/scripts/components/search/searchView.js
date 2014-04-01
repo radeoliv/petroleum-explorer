@@ -88,72 +88,44 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			case 0:
 				if(checkUWIInput(uwiQuery))
 					results = self.searchController.findResultsUWI(uwiQuery);
-				else
-					error = true;
+				else {
+					if(uwiQuery.length == 0)
+						// If the query is empty, there is nothing to be searched.
+						results = null;
+					else
+						error = true;
+				}
 				break;
 			// Search by the UWI values
 			case 1:
 				if(checkUWIValueInputs([lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery]))
 					results = self.searchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery);
-				else
-					error = true;
+				else {
+					if(lsdQuery.length == 0 && sectionQuery.length == 0 && townshipQuery.length == 0 && rangeQuery.length == 0 && meridianQuery.length == 0)
+						// If the query is empty, there is nothing to be searched.
+						results = null;
+					else
+						error = true;
+				}
 				break;
 			// Search by the company name
 			case 2:
 				if(checkCompanyInput(companyQuery))
 					results = self.searchController.findResultsCompany(companyQuery);
-				else
-					error = true;
+				else {
+					if(companyQuery.length == 0)
+						// If the query is empty, there is nothing to be searched.
+						results = null;
+					else
+						error = true;
+				}
 				break;
 			default:
 				console.log("Accordion error!");
 				break;
 		}
 
-		if(!error) {
-			// Cleaning the results area
-			if($('#results-table') != undefined) {
-				$('#results-table').remove();
-			}
-
-			var $resultsArea = $('<div id="results-table" class="handsontable"></div>').appendTo($searchInputForm); //append the results container if javascript enabled
-
-			var data = [];
-			for (var i=0;i<results.length;i++) {
-				data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
-				//TODO: show these corresponding pins
-			}
-
-			//plot results on google maps
-			self.mapCanvasController = new MapCanvasController().plotResults(results);
-
-			$('#results-table').handsontable({
-				data: data,
-				colHeaders: ["UWI", "Company", "Status"],
-				overflow: scroll,
-				readOnly: true,
-				columnSorting: true,
-				currentRowClassName: 'currentRow',
-				height: function(){
-					if (results.length < 10){
-						return ($("htCore").height());
-					}
-					else
-						return 250;
-				}
-			});
-
-			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
-			$("body").trigger("ResultsUpdated");
-			//console.log("Results updated.  Results:");
-			//console.dir(this.resultSet);
-
-		} else {
-			// Cleaning the results area
-			if($('#results-table') != undefined) {
-				$('#results-table').remove();
-			}
-		}
+		displayResults(error, results);
 	});
 
 	statusSearchInput.change( function (e) {
@@ -164,67 +136,72 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		var error = false;
 		switch(optionAccordion) {
 			case 0:
-				break;
 			case 1:
-				break;
 			case 2:
 				break;
 			case 3:
 				if(optionStatus != "none")
 					results = self.searchController.findResultsStatus(statusQuery);
 				else
-					error = true;
+					// If the selection is none, there is nothing to be searched.
+					results = null;
 				break;
 			default:
 				console.log("Accordion error!");
 				break;
 		}
 
-		if(!error) {
+		displayResults(error, results);
+	});
+
+	function displayResults(errorOccurred, results) {
+		if(!errorOccurred) {
 			// Cleaning the results area
 			if($('#results-table') != undefined) {
 				$('#results-table').remove();
 			}
 
-			var $resultsArea = $('<div id="results-table" class="handsontable"></div>').appendTo($searchInputForm); //append the results container if javascript enabled
-
-			var data = [];
-			for (var i=0;i<results.length;i++) {
-				data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
-				//TODO: show these corresponding pins
-			}
-
 			//plot results on google maps
 			self.mapCanvasController = new MapCanvasController().plotResults(results);
 
-			$('#results-table').handsontable({
-				data: data,
-				colHeaders: ["UWI", "Company", "Status"],
-				overflow: scroll,
-				readOnly: true,
-				columnSorting: true,
-				currentRowClassName: 'currentRow',
-				height: function(){
-					if (results.length < 10){
-						return ($("htCore").height());
-					}
-					else
-						return 250;
+			if(results != null) {
+				//append the results container if javascript enabled
+				var $resultsArea = $('<div id="results-table" class="handsontable"></div>').appendTo($searchInputForm);
+				var data = [];
+
+				for (var i=0;i<results.length;i++) {
+					data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
+					//TODO: show these corresponding pins
 				}
-			});
 
-			// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
-			$("body").trigger("ResultsUpdated");
-			//console.log("Results updated.  Results:");
-			//console.dir(this.resultSet);
+				$('#results-table').handsontable({
+					data: data,
+					colHeaders: ["UWI", "Company", "Status"],
+					overflow: scroll,
+					readOnly: true,
+					columnSorting: true,
+					currentRowClassName: 'currentRow',
+					height: function(){
+						if (results.length < 10){
+							return ($("htCore").height());
+						}
+						else
+							return 250;
+					}
+				});
 
+				// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
+				$("body").trigger("ResultsUpdated");
+				//console.log("Results updated.  Results:");
+				//console.dir(this.resultSet);
+			}
 		} else {
 			// Cleaning the results area
 			if($('#results-table') != undefined) {
 				$('#results-table').remove();
 			}
 		}
-});
+	}
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
 
