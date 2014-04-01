@@ -191,29 +191,16 @@ table {
   position: static !important; }
 
 .search-results-table {
+  line-height: 1em;
   font-size: 0.85em;
   bottom: 0;
   width: 100%;
   max-height: 85%;
   background: white;
-  overflow-x: scroll;
+  overflow-x: initial;
+  overflow-y: scroll;
   z-index: 999;
-  /*.dataTables_wrapper {
-  	@extend %absolute;
-  	bottom: 0;
-  	width: 100%;
-  	max-height: 85%;
-  	background: $body-background;
-  	overflow-x: scroll;
-  	z-index: 999; // it's over 9000!
-  	border-top: solid 1px black;
-  	margin-left: 11em;
-  }
-  section {
-  	@extend %fixed;
-  	height: 100%;
-  	background: $body-background;
-  }*/ }
+  border-top: solid 1px black; }
   .search-results-table .toggle-table {
     left: 50%;
     bottom: 0;
@@ -225,39 +212,23 @@ table {
     color: black; }
     .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
       background: darkgrey; }
+  .search-results-table .filter-form {
+    border-right: solid 1px black; }
   .search-results-table section {
     height: 100%;
     background: white; }
   .search-results-table .dataTables_wrapper {
-    bottom: 0;
-    width: 100%;
+    width: em(100%)-11em;
     max-height: 85%;
     background: white;
     overflow-x: scroll;
-    z-index: 999;
-    border-top: solid 1px black;
+    z-index: 99;
     margin-left: 11em; }
   .search-results-table .dataTables_length, .search-results-table .dataTables_filter, .search-results-table .dataTables_info {
     padding: 0.5em; }
   .search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
     padding: 0px 0.5em 0px 0.5em; }
 
-/*
-table {
-	&.dataTable {
-		tbody {
-			th, td {
-				padding: 0 0.5em;
-			}
-		}
-		thead {
-			th, td {
-				padding: 0 0.5em;
-			}
-		}
-	}
-}
-*/
 /*
 =============================================================================
 Main Styles
