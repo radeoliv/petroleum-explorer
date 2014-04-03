@@ -321,14 +321,85 @@ var assert = require("chai").assert;
 			assert.equal(actual_9, expected_9);
 		});
 
-		/*it("Testing \"normalize_data\", empty data set case", function () {
-			var empty_data = [];
+
+
+
+		// Testing normalize_data, discrete data is provided: should return an error message.
+		it("Testing normalize_data, discrete data is provided", function() {
+			var discrete_data = ["OIL", "SUSPENDED OIL"];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(discrete_data, true);
 			//act
-			var actual = normalize_data.normalize_data(empty_data, 1.0, 3.0);
+			var actual = filter_controller.normalize_data(6.4, 17.9);
+			var expected = "normalize_data: data cannot be discrete";
+			//assert
+			assert.equal(actual, expected);
+		});
+
+		// Returns an error message as the lower value is greater than the higher value
+		it("Testing normalize_data, low_val exceeds high_val", function() {
+			var data = [6.7, 8.1, -4.5, 5.5];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(data, false);
+			//act
+			var actual = filter_controller.normalize_data(17.9, 6.4);
+			var expected = "normalize_data: low_val cannot exceed high_val";
+			//assert
+			assert.equal(actual, expected);
+		});
+
+		// Base case test on the empty set with a normal range
+		it("Testing normalize_data, empty data set", function () {
+			var empty_data = [];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(empty_data, false);
+			//act
+			var actual = filter_controller.normalize_data(1.0, 3.0);
 			var expected = [];
 			//assert
 			assert.deepEqual(actual, expected);
-		});*/
+		});
+
+		// Base case test on a single element data set with a normal range
+		it("Testing normalize_data, single element data set", function () {
+			var single_data = [6.5];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(single_data, false);
+			//act
+			var actual = filter_controller.normalize_data(1.0, 3.0);
+			var expected = [2.0];
+			//assert
+			assert.deepEqual(actual, expected);
+		});
+
+		//This tests for a data set consisting of a single value and the range is normal
+		it("Testing normalize_data, single value data set", function () {
+			var single_val_data = [6.5, 6.5, 6.5, 6.5, 6.5];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(single_val_data, false);
+			//act
+			var actual = filter_controller.normalize_data(1.0, 3.0);
+			var expected = [2.0, 2.0, 2.0, 2.0, 2.0];
+			//assert
+			assert.deepEqual(actual, expected);
+		});
+
+		//This tests for normal data but with a range of zero
+		it("Testing normalize_data, zero length interval", function () {
+			var data = [-3.5, 4.9, 0.1, -8.0, 19.0];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(data, false);
+			//act
+			var actual = filter_controller.normalize_data(7.1, 7.1);
+			var expected = [7.1, 7.1, 7.1, 7.1, 7.1];
+			//assert
+			assert.deepEqual(actual, expected);
+		});
+
+		//This test is for ordinary data with a normal range
+		it("Testing normalize_data, ordinary data", function () {
+			var data = [-15.0, 4.9, 0.1, -8.0, 5.0];
+			var filter_controller = new Oil_well_filter.Oil_well_filter(data, false);
+			//act
+			var actual = filter_controller.normalize_data(2.0, 7.0);
+			var expected = [2.0, 6.975, 5.775, 3.75, 7.0];
+			//assert
+			assert.deepEqual(actual, expected);
+		});
 
 		//Test bed:
 		/*it("test bed", function () {
