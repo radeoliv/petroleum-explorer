@@ -13,19 +13,22 @@
 	border-top: solid 1px black;
 
 	.toggle-table {
-		@extend %absolute;
+		@extend %fixed;
 		@extend %bordered;
 		left: 50%;
 		bottom: 0;
 		z-index: 9999; // it's over 9000!
 		padding: $padding-small;
 		@extend %margin-none;
-		transition: $transition-time opacity $transition-function;
+		transition: $transition-time $transition-function all;
 		outline: none;
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
 		&:active, &.active, &:hover {
 			background: darken($mapToolbarButtonColour, 20);
+		}
+		&.active {
+			bottom: 85%;
 		}
 	}
 
@@ -39,19 +42,19 @@
 		background: $body-background;
 	}
 	.dataTables_wrapper {
-		width: em($bodyWidth) - 11em;
 		max-height: 85%;
 		background: $body-background;
 		overflow-x: scroll;
 		z-index: 99; // it's over 9000!
 		margin-left: 11em;
+		position: static;
 	}
 	.dataTables_length, .dataTables_filter, .dataTables_info {
 		padding: 0.5em;
 	}
 
 	table.dataTable tbody th, table.dataTable tbody td,table.dataTable thead th, table.dataTable thead td  {
-		padding: 0px 0.5em 0px 0.5em;
+		padding: 0 0.5em;
 	}
 
 }

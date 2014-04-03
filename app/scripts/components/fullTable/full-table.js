@@ -7,12 +7,14 @@
 	 * @param $tableContainer {*|jQuery} object for placeholder for table data
 	 */
 	FullTable = (function () {
-		function FullTable(SearchController, $tableContainer) {
+		function FullTable(SearchController, $fullTableResultsContainer) {
 			this.SearchController = SearchController;
-			this.$tableContainer = $tableContainer;
+			this.$fullTableResultsContainer = $fullTableResultsContainer;
+			this.$tableContainer = $fullTableResultsContainer.find(".full-results-table");
+			this.$contentContainer = $fullTableResultsContainer.find(".full-table-content");
 			this.displayTable();
 			this.listenChanges();
-			this.toggleButton = $tableContainer.parent().find(".toggle-table").attr({
+			this.toggleButton = $fullTableResultsContainer.find(".toggle-table").attr({
 				"disabled": "disabled",
 				"title": "Please specify coordinates to view data"
 			});
@@ -32,12 +34,12 @@
 			if (this.$tableContainer.hasClass(".dataTable") === true) {
 				return;
 			}
-			if(typeof(this.SearchController) != 'undefined'){
+			if(typeof(this.SearchController) != "undefined"){
 				if (this.SearchController.resultSet.length > 0) {
 					data = this.SearchController.resultSet;
 					var table = this.$tableContainer.dataTable({
 						data:    data,
-						//bRetrieve for the popup window showing an error doesn't always appear (not sure how it solves the problem though)
+						//bRetrieve for the popup window showing an error doesn"t always appear (not sure how it solves the problem though)
 						bRetrieve: true,
 						columns: [
 							{
@@ -122,8 +124,8 @@
 							}
 						]
 					});
-					table.fnDraw(true);
-					this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").toggleClass("active");
+					table.fnDraw(true); // TODO: Fix table not updating
+					this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").addClass("active");
 
 					// For debugging
 					console.log("Attempting to create datatable with data");
@@ -153,18 +155,7 @@
 				return function () {
 					$(this).toggleClass("active");
 
-					//set the height of the toggle button dynamically
-					var btnHeight = parseInt($('.dataTables_wrapper').height());
-					if ($('.toggle-table').hasClass('active'))
-						$('.toggle-table').animate({
-							bottom: btnHeight
-						});
-					else
-						$('.toggle-table').animate({
-							bottom: 0
-						});
-
-					return _this.$tableContainer.parent().slideToggle(); // go up one level for datatables wrapper
+					return _this.$contentContainer.slideToggle(); // go up one level for datatables wrapper
 				};
 			})(this));
 		};
