@@ -36,3 +36,31 @@ button {
 	max-width: $container-max-width;
 	margin: 0 auto;
 }
+
+.ui-dialog{
+	@extend %bordered;
+	@extend %normal-padding;
+	background: fade-out($body-background, 0.05);
+	&.ui-draggable{
+		cursor: move;
+	}
+	.ui-dialog-titlebar{
+		@extend %small-padding;
+		@extend header;
+		@extend %small-margin-bottom;
+		@extend %bordered-bottom;
+
+	}
+	.ui-button{
+		.ui-dialog-titlebar-close{
+			float: right;
+
+		}
+	}
+	.ui-resizable-handle{
+		cursor: n-resize;
+	}
+}
+
+
+

@@ -31,17 +31,23 @@ Margins
 /* Normal margin combinations */
 /* Large Margin */
 /* Small Margin */
+.ui-dialog .ui-dialog-titlebar {
+  margin-bottom: 0.76923em; }
+
 /* Mini Margin */
 /* =============================================================================
 Padding
 ========================================================================== */
 /* Normal padding */
+.ui-dialog {
+  padding: 1em; }
+
 body {
   padding: 0; }
 
 /* Large Padding */
 /* Small Padding */
-.mapToolbar {
+.mapToolbar, .ui-dialog .ui-dialog-titlebar {
   padding: 0.76923em; }
 
 /* =============================================================================
@@ -65,8 +71,11 @@ button[disabled] {
 /* =============================================================================
 Borders
 ========================================================================== */
-.mapToolbar, .search-results-table .toggle-table {
+.mapToolbar, .search-results-table .toggle-table, .ui-dialog {
   border: 1px solid black; }
+
+.ui-dialog .ui-dialog-titlebar {
+  border-bottom: 1px solid black; }
 
 /* =============================================================================
 Floats
@@ -74,10 +83,10 @@ Floats
 /* =============================================================================
 Positions
 ========================================================================== */
-.mapToolbar, .search-results-table {
+.mapToolbar {
   position: absolute; }
 
-.search-results-table .toggle-table, .search-results-table section {
+.search-results-table .toggle-table {
   position: fixed; }
 
 /* =============================================================================
@@ -190,45 +199,37 @@ table {
   right: 8em;
   position: static !important; }
 
-.search-results-table {
-  font-size: 0.85em;
+.search-results-table .toggle-table {
+  left: 50%;
   bottom: 0;
-  width: 100%;
-  max-height: 85%;
+  z-index: 9999;
+  padding: 0.76923em;
+  transition: 0.5s ease all;
+  outline: none;
+  font-size: 1.2em;
+  color: black; }
+  .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
+    background: darkgrey; }
+  .search-results-table .toggle-table.active {
+    bottom: 85%; }
+.search-results-table .filter-form {
+  border-right: solid 1px black; }
+.search-results-table section {
+  background: white; }
+.search-results-table .dataTables_wrapper {
   background: white;
+  overflow-x: scroll;
+  z-index: 99;
+  margin-left: 11em; }
+.search-results-table .dataTables_length, .search-results-table .dataTables_filter, .search-results-table .dataTables_info {
+  padding: 0.5em; }
+.search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
+  padding: 0 0.5em; }
+
+.full-table-content {
+  font-size: 0.85em;
   overflow-x: initial;
-  overflow-y: scroll;
-  z-index: 999;
-  border-top: solid 1px black; }
-  .search-results-table .toggle-table {
-    left: 50%;
-    bottom: 0;
-    z-index: 9999;
-    padding: 0.76923em;
-    transition: 0.5s ease all;
-    outline: none;
-    font-size: 1.2em;
-    color: black; }
-    .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
-      background: darkgrey; }
-    .search-results-table .toggle-table.active {
-      bottom: 85%; }
-  .search-results-table .filter-form {
-    border-right: solid 1px black; }
-  .search-results-table section {
-    height: 100%;
-    background: white; }
-  .search-results-table .dataTables_wrapper {
-    max-height: 85%;
-    background: white;
-    overflow-x: scroll;
-    z-index: 99;
-    margin-left: 11em;
-    position: static; }
-  .search-results-table .dataTables_length, .search-results-table .dataTables_filter, .search-results-table .dataTables_info {
-    padding: 0.5em; }
-  .search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
-    padding: 0 0.5em; }
+  overflow-y: scroll; }
 
 /*
 =============================================================================
@@ -252,3 +253,12 @@ button {
 .container {
   max-width: 80em;
   margin: 0 auto; }
+
+.ui-dialog {
+  background: rgba(255, 255, 255, 0.95); }
+  .ui-dialog.ui-draggable {
+    cursor: move; }
+  .ui-dialog .ui-button .ui-dialog-titlebar-close {
+    float: right; }
+  .ui-dialog .ui-resizable-handle {
+    cursor: n-resize; }

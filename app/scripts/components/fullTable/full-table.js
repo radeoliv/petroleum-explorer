@@ -20,6 +20,7 @@
 			});
 			this.listenToggle();
 
+
 		}
 
 		/**
@@ -41,6 +42,10 @@
 						data:    data,
 						//bRetrieve for the popup window showing an error doesn"t always appear (not sure how it solves the problem though)
 						bRetrieve: true,
+						"dom": 'C<"clear">lfrtip',
+						"oColVis": {
+								   "activate": "mouseover"
+						},
 						columns: [
 							{
 								data: "H",
@@ -124,9 +129,16 @@
 							}
 						]
 					});
+					var columns = table.api().settings().aoColumns;
+					console.dir(columns);
+
 					table.fnDraw(true); // TODO: Fix table not updating
 					this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").addClass("active");
-
+					this.$contentContainer.dialog({
+						title: 'Show results',
+						draggable: true,
+						resizable: true
+					});
 					// For debugging
 					console.log("Attempting to create datatable with data");
 					console.dir(this.SearchController.resultSet);
