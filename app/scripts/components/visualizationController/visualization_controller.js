@@ -8,6 +8,10 @@
  Filename: visualization_controller.js
  =============================================================================
  Implementation of Oil_well_filter
+
+ Oil_well_filter is provided upon construction with a data set (array) and a flag that indicates if the data is or isn't discrete.
+
+ The method "get_visualization_method" will populate the internal fields of "Oil_well_filter" with the data necessary to construct an effective visual representation such as a histogram or a pie chart. The visualization method type which is "pie-chart" or "histogram" is the return value of "get_visualization_method".
  -------------------------------------------------------------------------------*/
 
 (function () {
@@ -154,9 +158,51 @@
 
 	})();
 
+	// Export to the global scope.
 	(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
-// Export to the global scope.
-	/*(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
-	 //class = {}
-	 exports.myVar = true;*/
+
+}).call(this);
+
+
+
+(function () {
+	var normalize_data;
+//This function takes a real valued array of data and returns anew array with the values adjusted to fit flush within the given range.
+normalize_data = (function()
+{
+	function normalize_data(data_in, low_val, high_val)
+	{
+	var N = data_in.length;
+	if (N == 0) {
+		return []; //Return a new empty array if the data set is empty.
+	}
+	//Find the minimum and maximum values:
+	var min = data_in[0];
+	var max = data_in[0];
+	for (var i = 1; i < N; i++) {
+		if (data_in[i] < min) {
+			min = data_in[i];
+		}
+		if (data_in[i] > max) {
+			max = data_in[i];
+		}
+	}
+	var data_out;
+	//If min=max then return an array with all values set to (low_val + high_val)/2
+	if (min == max) {
+		for (var i = 0; i < N; i++) {
+			data_out[i] = (low_val + high_val)/2;
+		}
+	}
+	else {
+		for (var i = 0; i < N; i++) {
+			data_out[i] = low_val + (high_val - low_val)*(data_in[i] - min)/(max - min);
+		}
+	}
+	return data_out;
+	}
+
+	return normalize_data;
+})();
+	(typeof exports !== "undefined" && exports !== null ? exports : window).normalize_data = normalize_data;
 }).call(this);

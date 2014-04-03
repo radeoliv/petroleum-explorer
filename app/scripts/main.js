@@ -40,4 +40,5 @@ jQuery(document).ready(function ($) {
 	var $fullTableContainer = $(".full-results-table"),
 		myTableController = new FullTable(mySearchController, $fullTableContainer);
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
+	//var $visualization_view = new Visualization_View($fullTableContainer)
 });

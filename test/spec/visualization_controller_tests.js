@@ -9,7 +9,7 @@
  Unit tests for Oil_well_filter.
  -------------------------------------------------------------------------------*/
 
-var Oil_well_filter = require("../../app/scripts/visualization_controller.js");
+var Oil_well_filter = require("../../app/scripts/components/visualizationController/visualization_controller.js");
 
 var assert = require("chai").assert;
 (function () {
@@ -320,6 +320,15 @@ var assert = require("chai").assert;
 			assert.equal(actual_8, expected_8);
 			assert.equal(actual_9, expected_9);
 		});
+
+		/*it("Testing \"normalize_data\", empty data set case", function () {
+			var empty_data = [];
+			//act
+			var actual = normalize_data.normalize_data(empty_data, 1.0, 3.0);
+			var expected = [];
+			//assert
+			assert.deepEqual(actual, expected);
+		});*/
 
 		//Test bed:
 		/*it("test bed", function () {
