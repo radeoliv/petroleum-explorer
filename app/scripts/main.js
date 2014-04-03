@@ -37,7 +37,7 @@ jQuery(document).ready(function ($) {
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
 	// load in datatable
-	var $fullTableContainer = $(".full-results-table"),
+	var $fullTableContainer = $(".search-results-table"),
 		myTableController = new FullTable(mySearchController, $fullTableContainer);
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
 	//var $visualization_view = new Visualization_View($fullTableContainer)

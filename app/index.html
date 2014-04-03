@@ -139,21 +139,20 @@
 		<footer>
 			<aside class="search-results-table">
 				<button disabled title="Perform a Search to View Results" class="toggle-table"><i class="icon-table2"></i></button>
-				<section class = "filter-form">
-					<form action = "/filter">
-						<fieldset>
-							<legend>Filter</legend>
-							<select name = "tableColumnFilter" id = "tableColumnFilter">
-								<option value = "0">Select a column</option></select>
-							<br/>
-							<button disabled title="Please select a constraint above"><i class="icon-plus"></i></button>
-						</fieldset>
-					</form>
-				</section>
-
-				<table class="full-results-table" aria-hidden="true">
-
-				</table>
+				<article class="full-table-content">
+					<section class = "filter-form">
+						<form action = "/filter">
+							<fieldset>
+								<legend>Filter</legend>
+								<select name = "tableColumnFilter" id = "tableColumnFilter">
+									<option value = "0">Select a column</option></select>
+								<br/>
+								<button disabled title="Please select a constraint above"><i class="icon-plus"></i></button>
+							</fieldset>
+						</form>
+					</section>
+					<table class="full-results-table" aria-hidden="true"></table>
+				</article>
 			</aside>
 
 			<!-- build:js(.tmp) scripts/main.js -->
