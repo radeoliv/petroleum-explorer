@@ -100,18 +100,21 @@
 				this.startpoint = data_min - this.category_widths / 2; //The lowest category is centered on the lowest data point.
 				this.endpoint = data_max + this.category_widths / 2; //The highest category is centered on the highest data point.
 				//this.categories = new Array(this.numofCategories);
-				for (var i = 0; i < this.numofCategories; i++)
-				{
-					var curr_lowerbound = this.startpoint + i*this.category_widths;
-					var curr_upperbound = this.startpoint + (i+1)*this.category_widths;
+				for (var i = 0;
+					i < this.numofCategories;
+					i++) {
+					var curr_lowerbound = this.startpoint + i * this.category_widths;
+					var curr_upperbound = this.startpoint + (i + 1) * this.category_widths;
 					this.categories[i] = "[" + curr_lowerbound + "," + curr_upperbound + ")";
 					this.category_counts[i] = 0;
 				}
 
 				//We now classify the data.
-				for (var i = 0; i < N; i++) {
+				for (var i = 0;
+					i < N;
+					i++) {
 					var element = this.oil_data[i];
-					var category_index = Math.floor((element - this.startpoint)/this.category_widths);
+					var category_index = Math.floor((element - this.startpoint) / this.category_widths);
 					this.category_counts[category_index]++;
 				}
 			}
@@ -154,6 +157,52 @@
 			return this.visualization_method;
 		};
 
+		Oil_well_filter.prototype.normalize_data = function(low_val, high_val) {
+			// Return an error if the data is discrete.
+			if (this.discrete_flag) {
+				return "normalize_data: data cannot be discrete";
+			}
+			// Return an error if low_val exceeds high_val.
+			if (low_val > high_val) {
+				return "normalize_data: low_val cannot exceed high_val";
+			}
+
+			var N = this.oil_data.length;
+			if (N == 0) {
+				return []; //Return a new empty array if the data set is empty.
+			}
+			//Find the minimum and maximum values:
+			var min = this.oil_data[0];
+			var max = this.oil_data[0];
+			for (var i = 1;
+				i < N;
+				i++) {
+				if (this.oil_data[i] < min) {
+					min = this.oil_data[i];
+				}
+				if (this.oil_data[i] > max) {
+					max = this.oil_data[i];
+				}
+			}
+			var data_out = [];
+			//If min=max, then return an array with all values set to (low_val + high_val)/2
+			if (min == max) {
+				for (var i = 0;
+					i < N;
+					i++) {
+					data_out[i] = (low_val + high_val) / 2;
+				}
+			}
+			else { //If min != max, then the data can be scaled by the factor (high_val-low_val)/(max-min) without dividing by 0.
+				for (var i = 0;
+					i < N;
+					i++) {
+					data_out[i] = low_val + (high_val - low_val) * (this.oil_data[i] - min) / (max - min);
+				}
+			}
+			return data_out;
+		}
+
 		return Oil_well_filter;
 
 	})();
@@ -164,45 +213,3 @@
 }).call(this);
 
 
-
-(function () {
-	var normalize_data;
-//This function takes a real valued array of data and returns anew array with the values adjusted to fit flush within the given range.
-normalize_data = (function()
-{
-	function normalize_data(data_in, low_val, high_val)
-	{
-	var N = data_in.length;
-	if (N == 0) {
-		return []; //Return a new empty array if the data set is empty.
-	}
-	//Find the minimum and maximum values:
-	var min = data_in[0];
-	var max = data_in[0];
-	for (var i = 1; i < N; i++) {
-		if (data_in[i] < min) {
-			min = data_in[i];
-		}
-		if (data_in[i] > max) {
-			max = data_in[i];
-		}
-	}
-	var data_out;
-	//If min=max then return an array with all values set to (low_val + high_val)/2
-	if (min == max) {
-		for (var i = 0; i < N; i++) {
-			data_out[i] = (low_val + high_val)/2;
-		}
-	}
-	else {
-		for (var i = 0; i < N; i++) {
-			data_out[i] = low_val + (high_val - low_val)*(data_in[i] - min)/(max - min);
-		}
-	}
-	return data_out;
-	}
-
-	return normalize_data;
-})();
-	(typeof exports !== "undefined" && exports !== null ? exports : window).normalize_data = normalize_data;
-}).call(this);
