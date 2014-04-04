@@ -44,7 +44,7 @@
 						bRetrieve: true,
 						"dom": 'C<"clear">lfrtip',
 						"oColVis": {
-								   "activate": "mouseover"
+							"activate": "mouseover"
 						},
 						columns: [
 							{
@@ -137,7 +137,9 @@
 					this.$contentContainer.dialog({
 						title: 'Show results',
 						draggable: true,
-						resizable: true
+						resizable: true,
+						height: 600,
+						width: 750
 					});
 					// For debugging
 					console.log("Attempting to create datatable with data");
@@ -166,8 +168,13 @@
 			return this.toggleButton.on("click", (function (_this) {
 				return function () {
 					$(this).toggleClass("active");
-
-					return _this.$contentContainer.slideToggle(); // go up one level for datatables wrapper
+					if ($(this).hasClass("active")) {
+						console.log("button was active" + $(this)[0].className)
+						return _this.$contentContainer.dialog("close");
+					}
+					else {
+						return _this.$contentContainer.dialog("open");
+					}
 				};
 			})(this));
 		};

@@ -1,5 +1,4 @@
 @import "partials/_variables.scss";
-
 @import "modules/helpers/_helpers.scss";
 @import "modules/mapToolbar/_mapToolbar.scss";
 @import "modules/map-controller/_map-controller.scss";
@@ -37,30 +36,98 @@ button {
 	margin: 0 auto;
 }
 
-.ui-dialog{
+.ui-dialog {
 	@extend %bordered;
 	@extend %normal-padding;
 	background: fade-out($body-background, 0.05);
-	&.ui-draggable{
-		cursor: move;
+	&.ui-draggable {
+		.ui-widget-header {
+			cursor: move;
+		}
 	}
-	.ui-dialog-titlebar{
+	.ui-dialog-titlebar {
 		@extend %small-padding;
 		@extend header;
 		@extend %small-margin-bottom;
 		@extend %bordered-bottom;
-
 	}
-	.ui-button{
-		.ui-dialog-titlebar-close{
+	.ui-button {
+		&.ui-dialog-titlebar-close {
 			float: right;
-
 		}
-	}
-	.ui-resizable-handle{
-		cursor: n-resize;
 	}
 }
 
+.ui-resizable {
+	@extend %relative;
+}
+
+.ui-resizable-handle {
+	@extend %absolute;
+	font-size: 0.1em;
+	display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+	@extend %hidden;
+}
+
+.ui-resizable-n {
+	cursor: n-resize;
+	height: 0.5em;
+	width: 100%;
+	top: -0.3em;
+	left: 0;
+}
+.ui-resizable-s {
+	cursor: s-resize;
+	height: 0.5em;
+	width: 100%;
+	bottom: -0.3em;
+	left: 0;
+}
+.ui-resizable-e {
+	cursor: e-resize;
+	width: 0.5em;
+	right: -0.3em;
+	top: 0;
+	height: 100%;
+}
+.ui-resizable-w {
+	cursor: w-resize;
+	width: 0.5em;
+	left: -0.3em;
+	top: 0;
+	height: 100%;
+}
+.ui-resizable-se {
+	cursor: se-resize;
+	width: 12px;
+	height: 12px;
+	right: 1px;
+	bottom: 1px;
+}
+.ui-resizable-sw {
+	cursor: sw-resize;
+	width: 0.6em;
+	height: 0.6em;
+	left: -0.3em;
+	bottom: -0.3em;
+}
+.ui-resizable-nw {
+	cursor: nw-resize;
+	width: 0.6em;
+	height: 0.6em;
+	left: -0.3em;
+	top: -0.3em;
+}
+.ui-resizable-ne {
+	cursor: ne-resize;
+	width: 0.6em;
+	height: 0.6em;
+	right: -0.3em;
+	top: -0.3em;
+}
 
 

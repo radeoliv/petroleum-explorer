@@ -16,9 +16,9 @@
 		&:active, &.active, &:hover {
 			background: darken($mapToolbarButtonColour, 20);
 		}
-		&.active {
+		/*&.active {
 			bottom: 85%;
-		}
+		}*/
 	}
 
 	.filter-form{
@@ -50,5 +50,26 @@
 	font-size: 0.85em;
 	overflow-x: initial;
 	overflow-y: scroll;
+	.filter-form {
+		fieldset {
+			@extend %fixed;
+			background: $body-background;
+			z-index: 99;
+		}
+	}
+	.dataTables_wrapper {
+		margin-left: 13em;
+	}
 }
 
+.ColVis_collection {
+	@extend %normal-padding;
+	@extend %margin-none;
+	background: $body-background;
+	@extend %bordered;
+	list-style: none;
+	label {
+		@extend %block;
+		cursor: pointer;
+	}
+}

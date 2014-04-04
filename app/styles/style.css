@@ -13,6 +13,10 @@ Visibility Helpers
 /* For image replacement */
 /* Hide for both screenreaders and browsers:
    css-discuss.incutio.com/wiki/Screenreader_Visibility */
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+  display: none; }
+
 /* Hide only visually, but have it available for screenreaders: by Jon Neal.
   www.webaim.org/techniques/css/invisiblecontent/  &  j.mp/visuallyhidden */
 /* Hide visually and from screenreaders, but maintain layout */
@@ -25,7 +29,7 @@ Overflow
 Margins
 ========================================================================== */
 /* Normal margin */
-.search-results-table .toggle-table, body {
+.search-results-table .toggle-table, .ColVis_collection, body {
   margin: 0; }
 
 /* Normal margin combinations */
@@ -39,7 +43,7 @@ Margins
 Padding
 ========================================================================== */
 /* Normal padding */
-.ui-dialog {
+.ColVis_collection, .ui-dialog {
   padding: 1em; }
 
 body {
@@ -71,7 +75,7 @@ button[disabled] {
 /* =============================================================================
 Borders
 ========================================================================== */
-.mapToolbar, .search-results-table .toggle-table, .ui-dialog {
+.mapToolbar, .search-results-table .toggle-table, .ColVis_collection, .ui-dialog {
   border: 1px solid black; }
 
 .ui-dialog .ui-dialog-titlebar {
@@ -83,15 +87,21 @@ Floats
 /* =============================================================================
 Positions
 ========================================================================== */
-.mapToolbar {
+.mapToolbar, .ui-resizable-handle {
   position: absolute; }
 
-.search-results-table .toggle-table {
+.search-results-table .toggle-table, .full-table-content .filter-form fieldset {
   position: fixed; }
+
+.ui-resizable {
+  position: relative; }
 
 /* =============================================================================
 Display modes
 ========================================================================== */
+.ColVis_collection label {
+  display: block; }
+
 .mapToolbar button.show-toolbar.active, .mapToolbar .grouped-search input {
   display: inline-block; }
 
@@ -207,11 +217,12 @@ table {
   transition: 0.5s ease all;
   outline: none;
   font-size: 1.2em;
-  color: black; }
+  color: black;
+  /*&.active {
+  	bottom: 85%;
+  }*/ }
   .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
     background: darkgrey; }
-  .search-results-table .toggle-table.active {
-    bottom: 85%; }
 .search-results-table .filter-form {
   border-right: solid 1px black; }
 .search-results-table section {
@@ -230,6 +241,17 @@ table {
   font-size: 0.85em;
   overflow-x: initial;
   overflow-y: scroll; }
+  .full-table-content .filter-form fieldset {
+    background: white;
+    z-index: 99; }
+  .full-table-content .dataTables_wrapper {
+    margin-left: 13em; }
+
+.ColVis_collection {
+  background: white;
+  list-style: none; }
+  .ColVis_collection label {
+    cursor: pointer; }
 
 /*
 =============================================================================
@@ -256,9 +278,67 @@ button {
 
 .ui-dialog {
   background: rgba(255, 255, 255, 0.95); }
-  .ui-dialog.ui-draggable {
+  .ui-dialog.ui-draggable .ui-widget-header {
     cursor: move; }
-  .ui-dialog .ui-button .ui-dialog-titlebar-close {
+  .ui-dialog .ui-button.ui-dialog-titlebar-close {
     float: right; }
-  .ui-dialog .ui-resizable-handle {
-    cursor: n-resize; }
+
+.ui-resizable-handle {
+  font-size: 0.1em;
+  display: block; }
+
+.ui-resizable-n {
+  cursor: n-resize;
+  height: 0.5em;
+  width: 100%;
+  top: -0.3em;
+  left: 0; }
+
+.ui-resizable-s {
+  cursor: s-resize;
+  height: 0.5em;
+  width: 100%;
+  bottom: -0.3em;
+  left: 0; }
+
+.ui-resizable-e {
+  cursor: e-resize;
+  width: 0.5em;
+  right: -0.3em;
+  top: 0;
+  height: 100%; }
+
+.ui-resizable-w {
+  cursor: w-resize;
+  width: 0.5em;
+  left: -0.3em;
+  top: 0;
+  height: 100%; }
+
+.ui-resizable-se {
+  cursor: se-resize;
+  width: 12px;
+  height: 12px;
+  right: 1px;
+  bottom: 1px; }
+
+.ui-resizable-sw {
+  cursor: sw-resize;
+  width: 0.6em;
+  height: 0.6em;
+  left: -0.3em;
+  bottom: -0.3em; }
+
+.ui-resizable-nw {
+  cursor: nw-resize;
+  width: 0.6em;
+  height: 0.6em;
+  left: -0.3em;
+  top: -0.3em; }
+
+.ui-resizable-ne {
+  cursor: ne-resize;
+  width: 0.6em;
+  height: 0.6em;
+  right: -0.3em;
+  top: -0.3em; }
