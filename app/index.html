@@ -127,14 +127,20 @@
 						<fieldset>
 							<hr>
 							<h5>Select Graphs</h5>
-
-							<ul class = "Graphs">
-								<li><a href ="#">Item 1</a></li>
-								<ul>
-									<li><a href ="#">Item 1.1</a></li>
-								</ul>
-							</ul>
-
+							<div class="graph">
+								<select id="graph" placeholder="graph" name = "graph">
+									<option value="none"></option>
+									<option value="bar chart">Bar Chart</option>
+									<option value="pie chart">Pie Chart</option>
+								</select>
+								<br>
+								<select id="prop" placeholder="prop" name = "prop">
+									<option value="none"></option>
+									<option value="company">Company</option>
+									<option value="status">Status</option>
+									<option value="oilprod">Oil Production</option>
+								</select>
+							</div>
 
 						</fieldset>
 					</form>
