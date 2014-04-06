@@ -211,5 +211,3 @@
 	(typeof exports !== "undefined" && exports !== null ? exports : window).Oil_well_filter = Oil_well_filter;
 
 }).call(this);
-
-
