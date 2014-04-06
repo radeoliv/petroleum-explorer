@@ -32,13 +32,14 @@ jQuery(document).ready(function ($) {
 	}
 
 	var mySearchController = loadSearchController();
-	var myMapCanvasController = loadMapCanvasController()
-	var mySearchView = new SearchView(mySearchController, myMapCanvasController)
+	var myMapCanvasController = loadMapCanvasController();
+
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
 	// load in datatable
 	var $fullTableContainer = $(".search-results-table"),
 		myTableController = new FullTable(mySearchController, $fullTableContainer);
+	var mySearchView = new SearchView(mySearchController, myMapCanvasController);//,myTableController);
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
 	//var $visualization_view = new Visualization_View($fullTableContainer)
 });

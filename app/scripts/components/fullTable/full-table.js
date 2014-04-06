@@ -31,19 +31,21 @@
 	FullTable = (function () {
 		function FullTable(SearchController, $fullTableResultsContainer) {
 			this.SearchController = SearchController;
+			console.log(this.SearchController);
 			this.$fullTableResultsContainer = $fullTableResultsContainer;
 			this.$tableContainer = $fullTableResultsContainer.find(".full-results-table");
 			this.$contentContainer = $fullTableResultsContainer.find(".full-table-content");
 			this.$columnFilter = this.$contentContainer.find(".filter-form");
+			this.toggleButton = $fullTableResultsContainer.find(".toggle-table");
+				/*.attr({
+				//"disabled": "disabled"
+				"title": "Toggle Full Table View"
+			});*/
 			this.displayTable();
 			this.listenChanges();
-			this.toggleButton = $fullTableResultsContainer.find(".toggle-table").attr({
-				"disabled": "disabled",
-				"title": "Please specify coordinates to view data"
-			});
+
 			this.listenToggle();
-
-
+			this.$contentContainer.dialog("close");
 		}
 
 		/**
@@ -153,7 +155,8 @@
 						]
 					});
 					table.fnDraw(true); // TODO: Fix table not updating
-					this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").addClass("active");
+					//this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").addClass("active");
+					this.toggleButton.addClass("active");
 					this.$contentContainer.dialog({
 						title: 'Show results',
 						draggable: true,
@@ -184,6 +187,7 @@
 				$columnSelectFilter.on("change", function() {
 					switch($(this).val()) { // the current selected <option>
 						case "0":
+							console.log('hello');
 							break;
 						case "Well_Operator":
 						case "Well_Pool_Name":
@@ -196,7 +200,7 @@
 							addStringConstraint.call(this);
 							// Enable button
 							$addConstraintButton.attr({
-								title: "Add New String Constraint",
+								title: "Add New String Constraint"
 							}).removeAttr("disabled").on("click", function() {
 								addStringConstraint.call(this);
 								return false;
@@ -207,7 +211,7 @@
 							cloneAndAppend.call(this);
 							addNumberConstraint.call(this);
 							$addConstraintButton.attr({
-								title: "Add New Number Constraint",
+								title: "Add New Number Constraint"
 							}).removeAttr("disabled").on("click", function() {
 								addNumberConstraint.call(this);
 								return false;
@@ -222,6 +226,7 @@
 		 * @returns {*|jQuery}
 		 */
 		FullTable.prototype.listenChanges = function () {
+			console.log('change occured');
 			return $("body").on("ResultsUpdated", (function (_this) {
 				return function () {
 					return _this.displayTable();

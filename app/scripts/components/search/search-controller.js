@@ -38,7 +38,7 @@
 		  */
 		 function SearchController(dataSet,resultSet) {
 			 this.dataSet = dataSet;
-			 this.resultSet = resultSet;
+			 this.resultSet = dataSet;
 			 if(this.resultSet === null || typeof(this.resultSet) === "undefined"){
 				 this.resultSet = [];
 			 }

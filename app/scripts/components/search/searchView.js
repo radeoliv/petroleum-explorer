@@ -14,10 +14,11 @@
  //TODO: file description
  -------------------------------------------------------------------------------*/
 var SearchView;
-SearchView = function (searchController, mapCanvasController) {
+SearchView = function (searchController, mapCanvasController){//, tableController) {
 	//TODO: create constructor for searchview
 	this.searchController = searchController;
 	this.mapCanvasController = mapCanvasController;
+	//this.tableController = tableController;
 };
 
 var optionAccordion;	//global var for handling accordion option for search select
@@ -126,6 +127,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		}
 
 		displayResults(error, results);
+		this.tableController.displayTable();
 	});
 
 	statusSearchInput.change( function (e) {
