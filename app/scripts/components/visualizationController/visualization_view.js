@@ -1,12 +1,11 @@
 
  /*--------------------------------------------------------------------------------
-	Author: Shawn Eastwood
+	Author: Mandy Wong
 
 	seng515-petroleum-explorer
 
 	=============================================================================
 	Filename: visualization_view.js
 	=============================================================================
-	//Creates a visualization in a provided container using data from "Oil_well_filter".
+	//Creates a visualization based on user selection.
 -------------------------------------------------------------------------------*/
-

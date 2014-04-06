@@ -1,6 +1,73 @@
 <!doctype html>
 <html>
 	<head>
+		<script type="text/javascript">
+			var created = 0;
+
+			function displayAccordingly() {
+
+				if (created == 1) {
+					removeDrop();
+				}
+
+				//Call mainMenu the main dropdown menu
+				var mainMenu = document.getElementById('mainMenu');
+
+				//Create the new dropdown menu
+				var whereToPut = document.getElementById('myDiv');
+				var newDropdown = document.createElement('select');
+				newDropdown.setAttribute('id',"newDropdownMenu");
+				whereToPut.appendChild(newDropdown);
+
+				if (mainMenu.value == "barGraph") { //The person chose fruit
+
+					//Add an option called "Company"
+					var optionCompany=document.createElement("option");
+					optionCompany.text="Company";
+					newDropdown.add(optionCompany,newDropdown.options[null]);
+
+					//Add an option called "Status"
+					var optionStatus=document.createElement("option");
+					optionStatus.text="Status";
+					newDropdown.add(optionStatus,newDropdown.options[null]);
+
+					//Add an option called "Oil production"
+					var optionProduction=document.createElement("option");
+					optionProduction.text="Oil Production";
+					newDropdown.add(optionProduction,newDropdown.options[null]);
+
+				} else if (mainMenu.value == "pieChart") { //User chooses pie chart
+
+					//Add an option called "Company"
+					var optionCompany=document.createElement("option");
+					optionCompany.text="Company";
+					newDropdown.add(optionCompany,newDropdown.options[null]);
+
+					//Add an option called "Status"
+					var optionStatus=document.createElement("option");
+					optionStatus.text="Status";
+					newDropdown.add(optionStatus,newDropdown.options[null]);
+
+					//Add an option called "Oil production"
+					var optionProduction=document.createElement("option");
+					optionProduction.text="Oil Production";
+					newDropdown.add(optionProduction,newDropdown.options[null]);
+
+
+				}
+
+				created = 1
+
+			}
+
+			function removeDrop() {
+				var d = document.getElementById('myDiv');
+
+				var oldmenu = document.getElementById('newDropdownMenu');
+
+				d.removeChild(oldmenu);
+			}
+		</script>
 		<meta charset = "utf-8">
 		<meta name = "viewport" content = "width=device-width, initial-scale=1">
 		<title>SENG 515 Petroleum Explorer</title>
@@ -93,6 +160,7 @@
 
 								<h5>Status</h5>
 								<div class="status-search accordianContent">
+
 									<select id="status" placeholder="Status" name = "status" results = "10" autosave = "status">
 										<option value="none"></option>
 										<option value="Pumping Crude Oil">Pumping Crude Oil</option>
@@ -122,29 +190,31 @@
 					</form>
 				</section>
 
+
+
 				<section class = "graph-form">
-					<form action = "/graph">
+					 <form action = "/graph">
 						<fieldset>
 							<hr>
-							<h5>Select Graphs</h5>
-							<div class="graph">
-								<select id="graph" placeholder="graph" name = "graph">
-									<option value="none"></option>
-									<option value="bar chart">Bar Chart</option>
-									<option value="pie chart">Pie Chart</option>
+
+
+							<h5>Select Graphs and Properties</h5>
+							<div class="graph" id = "myDiv">
+
+								<select id="mainMenu" onchange="displayAccordingly()">
+									<option value="">--</option>
+									<option value="barGraph">Bar Graph</option>
+									<option value="pieChart">Pie chart</option>
 								</select>
-								<br>
-								<select id="prop" placeholder="prop" name = "prop">
-									<option value="none"></option>
-									<option value="company">Company</option>
-									<option value="status">Status</option>
-									<option value="oilprod">Oil Production</option>
-								</select>
+								</div>
+
+
 							</div>
 
 						</fieldset>
 					</form>
 				</section>
+
 			</article>
 		</aside>
 		<footer>
