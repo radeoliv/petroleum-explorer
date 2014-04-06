@@ -58,7 +58,10 @@
 			//console.dir(this.SearchController.resultSet);
 			// Check if datatable has already been initialized.  If it is, then exit to avoid error
 			if (this.$tableContainer.hasClass(".dataTable") === true) {
-				return;
+				// remove the existing datatable
+				this.$tableContainer.parent().remove();
+				// reinitialize table container
+				this.$tableContainer = $('<table class = "replace-datatable"></table>').appendTo(this.$contentContainer);
 			}
 			if(typeof(this.SearchController) != "undefined"){
 				if (this.SearchController.resultSet.length > 0) {
