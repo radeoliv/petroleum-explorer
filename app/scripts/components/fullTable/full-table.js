@@ -31,198 +31,70 @@
 	FullTable = (function () {
 		function FullTable(SearchController, $fullTableResultsContainer) {
 			this.SearchController = SearchController;
-			console.log(this.SearchController);
 			this.$fullTableResultsContainer = $fullTableResultsContainer;
 			this.$tableContainer = $fullTableResultsContainer.find(".full-results-table");
+
 			this.$contentContainer = $fullTableResultsContainer.find(".full-table-content");
 			this.$columnFilter = this.$contentContainer.find(".filter-form");
 			this.toggleButton = $fullTableResultsContainer.find(".toggle-table");
-				/*.attr({
-				//"disabled": "disabled"
-				"title": "Toggle Full Table View"
-			});*/
-			this.displayTable();
-			this.listenChanges();
 
+			this.displayHandsOnTable();
+			this.listenChanges();
 			this.listenToggle();
 			this.$contentContainer.dialog("close");
 		}
 
-		/**
-		 * Display all search results in table container using datatables
-		 * @returns {*}
-		 */
-		FullTable.prototype.displayTable = function () {
+		FullTable.prototype.displayHandsOnTable = function() {
+
+			console.log("Just called DisplayHandsOnTable Full");
+
+			this.$tableContainer.remove();
+
 			var data;
-			//console.log("Call to display table");
-			//console.dir(this.SearchController.resultSet);
-			// Check if datatable has already been initialized.  If it is, then exit to avoid error
-			if (this.$tableContainer.hasClass(".dataTable") === true) {
-				// remove the existing datatable
-				this.$tableContainer.parent().remove();
-				// reinitialize table container
-				this.$tableContainer = $('<table class = "replace-datatable"></table>').appendTo(this.$contentContainer);
-			}
+
 			if(typeof(this.SearchController) != "undefined"){
+
+				console.log("undefined search controller check passed");
+
 				if (this.SearchController.resultSet.length > 0) {
+
+					console.log("search res > 0 passed");
+
 					data = this.SearchController.resultSet;
-					var table = this.$tableContainer.dataTable({
-						data:    data,
-						//bRetrieve for the popup window showing an error doesn"t always appear (not sure how it solves the problem though)
-						bRetrieve: true,
-						"dom": 'C<"clear">lfrtip',
-						"oColVis": {
-							"activate": "mouseover"
-						},
-						columns: [
-							{
-								data: "H",
-								title: "Thickness"
-							},
-							{
-								data: "KRav",
-								title: "Average Hydrocarbon Movability"
-							},
-							{
-								data: "KRc",
-								title: "Cumulative Hydrocarbon Movability"
-							},
-							{
-								data: "PHIR",
-								title: "Cumulative Pore Volume"
-							},
-							{
-								data: "PHIc",
-								title: "Cumulative Porosity"
-							},
-							{
-								data: "Pc",
-								title: "Effective Yield"
-							},
-							{
-								data: "Pp",
-								title: "Peak Value"
-							},
-							{
-								data: "Pt",
-								title: "Effective Life Cycle"
-							},
-							{
-								data: "Soc",
-								title: "Oil Saturation"
-							},
-							{
-								data: "Well_Unique_Identifier_Simplified_Format",
-								title: "UWI"
-							},
-							{
-								data: "Vshc",
-								title: "Cumulative Shale Content"
-							},
-							{
-								data: "Well_Class",
-								title: "Well Class"
-							},
-							{
-								data: "Well_Drillers_Total_Depth",
-								title: "Well Drillers Total Depth"
-							},
-							{
-								data: "Well_Operator",
-								title: "Company"
-							},
-							{
-								data: "Well_Pool_Name",
-								title: "Well Pool Name"
-							},
-							{
-								data: "Well_Primary_Producing_Formation",
-								title: "Primary Formation"
-							},
-							{
-								data: "Well_Province",
-								title: "Province"
-							},
-							{
-								data: "Well_Status",
-								title: "Status"
-							},
-							{
-								data: "Well_Unique_Identifier",
-								title: "Full UWI"
-							},
-							{
-								data: "Well_Name",
-								title: "Name"
-							}
-						]
+
+					console.log(this.SearchController);
+
+					//plot results on google maps
+					//self.mapCanvasController = new MapCanvasController().plotResults(data);
+
+					this.$tableContainer = $('<div id="results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
+
+					this.$tableContainer.handsontable({
+						data: data,
+						colHeaders: ["Name", "Full UWI", "Status", "Province", "Primary Formation", "Well Pool Name", "Company", "Well Drillers Total Depth", "Well Class", "Cumulative Shale Content", "UWI", "Oil Saturation", "Effective Life Cycle", "Peak Value", "Effective Yield", "Cumulative Porosity", "Cumulative Pore Volume", "Cumulative Hydrocarbon Movability", "Average Hydrocarbon Movability", "Thickness"],
+
+						width: 300,
+						height: 300,
+						readOnly: true,
+						columnSorting: true,
+						currentRowClassName: 'currentRow'
+
 					});
-					table.fnDraw(true); // TODO: Fix table not updating
-					//this.toggleButton.removeAttr("disabled").attr("title", "Toggle Full Table View").addClass("active");
 					this.toggleButton.addClass("active");
 					this.$contentContainer.dialog({
 						title: 'Show results',
 						draggable: true,
 						resizable: true,
-						height: 600,
-						width: 750
+						modal : true,
+						width: 500,
+						height: 500
 					});
 					this.initColumnFilter();
-					// For debugging
-					console.log("Attempting to create datatable with data");
 					console.dir(this.SearchController.resultSet);
 				}
 			}
-		};
-
-		/**
-		 * Add individual option elements for each column in full table
-		 */
-		FullTable.prototype.initColumnFilter = function () {
-			if (this.$columnFilter.length > 0) { // if the selector works...
-				var tableColumns = this.$tableContainer.dataTable().api().columns(),
-					html,
-					$columnSelectFilter,
-					$addConstraintButton = this.$columnFilter.find(".add-constraint");
-				//populateColumnFilter.call(this, tableColumns, html);
-				var $columnSelectFilter = this.$columnFilter.find("#tableColumnFilter");
-				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
-				$columnSelectFilter.on("change", function() {
-					switch($(this).val()) { // the current selected <option>
-						case "0":
-							console.log('hello');
-							break;
-						case "Well_Operator":
-						case "Well_Pool_Name":
-						case "Well_Primary_Producing_Formation":
-						case "Well_Province":
-						case "Well_Status":
-						case "Well_Unique_Identifier":
-						case "Well_Name":
-							cloneAndAppend.call(this);
-							addStringConstraint.call(this);
-							// Enable button
-							$addConstraintButton.attr({
-								title: "Add New String Constraint"
-							}).removeAttr("disabled").on("click", function() {
-								addStringConstraint.call(this);
-								return false;
-							});
-							break;
-						default: // Numeric
-							// find the values in the SearchResults array
-							cloneAndAppend.call(this);
-							addNumberConstraint.call(this);
-							$addConstraintButton.attr({
-								title: "Add New Number Constraint"
-							}).removeAttr("disabled").on("click", function() {
-								addNumberConstraint.call(this);
-								return false;
-							});
-					}
-				});
-			}
 		}
+
 
 		/**
 		 * Toggle table update on `ResultsUpdated` event
@@ -232,10 +104,64 @@
 			console.log('change occured');
 			return $("body").on("ResultsUpdated", (function (_this) {
 				return function () {
-					return _this.displayTable();
+					return _this.displayHandsOnTable();
 				};
 			})(this));
 		};
+
+
+		/**
+		 * Add individual option elements for each column in full table
+		 */
+		FullTable.prototype.initColumnFilter = function () {
+			if (this.$columnFilter.length > 0) {
+
+				//populateColumnFilter.call(this, tableColumns, html);
+				var $columnSelectFilter = this.$columnFilter.find("#tableColumnFilter");
+
+			 	// if the selector works...
+				var tableColumns = this.$tableContainer.handsontable("getColHeader"),
+									html, $columnSelectFilter,
+									$addConstraintButton = this.$columnFilter.find(".add-constraint");
+
+
+				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
+				$columnSelectFilter.on("change", function() {
+				switch($(this).val()) { // the current selected <option>
+					case "0":
+						console.log('hello');
+						break;
+					case "Well_Operator":
+					case "Well_Pool_Name":
+					case "Well_Primary_Producing_Formation":
+					case "Well_Province":
+					case "Well_Status":
+					case "Well_Unique_Identifier":
+					case "Well_Name":
+						cloneAndAppend.call(this);
+						addStringConstraint.call(this);
+						// Enable button
+						$addConstraintButton.attr({
+							title: "Add New String Constraint"
+						}).removeAttr("disabled").on("click", function() {
+							addStringConstraint.call(this);
+							return false;
+						});
+						break;
+					default: // Numeric
+						// find the values in the SearchResults array
+						cloneAndAppend.call(this);
+						addNumberConstraint.call(this);
+						$addConstraintButton.attr({
+							title: "Add New Number Constraint"
+						}).removeAttr("disabled").on("click", function() {
+							addNumberConstraint.call(this);
+							return false;
+						});
+					}
+				});
+			}
+		}
 
 		/**
 		 * Toggle full table data when clicking the button

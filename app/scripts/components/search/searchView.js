@@ -179,13 +179,13 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				$('#results-table').handsontable({
 					data: data,
 					colHeaders: ["UWI", "Company", "Status"],
+					colWidths: [150, 500, 100],
 					overflow: scroll,
 					readOnly: true,
 					columnSorting: true,
 					currentRowClassName: 'currentRow',
 					height: function(){
 						if (results.length < 10){
-							console.log($("#htCore").height());
 							return ($("#htCore").height());
 						}
 						else

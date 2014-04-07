@@ -6,7 +6,7 @@
 		@extend %bordered;
 		left: 50%;
 		bottom: 0;
-		z-index: 9999; // it's over 9000!
+		z-index: 999; // it's over 9000!
 		padding: $padding-small;
 		@extend %margin-none;
 		transition: $transition-time $transition-function all;
@@ -21,44 +21,25 @@
 		}*/
 	}
 
-	.filter-form{
-		border-right: solid 1px black;
-	}
-
 	section{
 		//@extend %fixed;
 		//height:100%;
 		background: $body-background;
 	}
-	.dataTables_wrapper {
-		background: $body-background;
-		overflow-x: scroll;
-		z-index: 99; // it's over 9000!
-		margin-left: 11em;
-	}
-	.dataTables_length, .dataTables_filter, .dataTables_info {
-		padding: 0.5em;
-	}
-
-	table.dataTable tbody th, table.dataTable tbody td,table.dataTable thead th, table.dataTable thead td  {
-		padding: 0 0.5em;
-	}
-
 }
 
 .full-table-content{
 	font-size: 0.85em;
-	overflow-x: initial;
-	overflow-y: scroll;
 	.filter-form {
 		fieldset {
 			@extend %fixed;
 			background: $body-background;
-			z-index: 99;
+			z-index: 9999;
+			width: 10em;
 		}
 	}
-	.dataTables_wrapper {
-		margin-left: 13em;
+	.wtHolder {
+		margin-left: 20em;
 	}
 }
 
@@ -73,3 +54,4 @@
 		cursor: pointer;
 	}
 }
+

@@ -212,7 +212,7 @@ table {
 .search-results-table .toggle-table {
   left: 50%;
   bottom: 0;
-  z-index: 9999;
+  z-index: 999;
   padding: 0.76923em;
   transition: 0.5s ease all;
   outline: none;
@@ -223,41 +223,23 @@ table {
   }*/ }
   .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
     background: darkgrey; }
-.search-results-table .filter-form {
-  border-right: solid 1px black; }
 .search-results-table section {
   background: white; }
-.search-results-table .dataTables_wrapper {
-  background: white;
-  overflow-x: scroll;
-  z-index: 99;
-  margin-left: 11em; }
-.search-results-table .dataTables_length, .search-results-table .dataTables_filter, .search-results-table .dataTables_info {
-  padding: 0.5em; }
-.search-results-table table.dataTable tbody th, .search-results-table table.dataTable tbody td, .search-results-table table.dataTable thead th, .search-results-table table.dataTable thead td {
-  padding: 0 0.5em; }
 
 .full-table-content {
-  font-size: 0.85em;
-  overflow-x: initial;
-  overflow-y: scroll; }
+  font-size: 0.85em; }
   .full-table-content .filter-form fieldset {
     background: white;
-    z-index: 99; }
-  .full-table-content .dataTables_wrapper {
-    margin-left: 13em; }
+    z-index: 9999;
+    width: 10em; }
+  .full-table-content .wtHolder {
+    margin-left: 20em; }
 
 .ColVis_collection {
   background: white;
   list-style: none; }
   .ColVis_collection label {
     cursor: pointer; }
-
-
-/* =============================================================================
-Graph Styles
-========================================================================== */
-
 
 /*
 =============================================================================
