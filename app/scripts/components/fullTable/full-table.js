@@ -63,8 +63,30 @@
 
 					this.$tableContainer.handsontable({
 						data: data,
-						colHeaders: ["Name", "Full UWI", "Status", "Province", "Primary Formation", "Well Pool Name", "Company", "Well Drillers Total Depth", "Well Class", "Cumulative Shale Content", "UWI", "Oil Saturation", "Effective Life Cycle", "Peak Value", "Effective Yield", "Cumulative Porosity", "Cumulative Pore Volume", "Cumulative Hydrocarbon Movability", "Average Hydrocarbon Movability", "Thickness"],
-
+						colHeaders: ["Full UWI",
+										"UWI",
+										"Longitude",
+										"Latitude",
+										"Name",
+										"Plot Symbol",
+										"Well Name",
+										"Well Drillers Total Depth",
+										"Company",
+										"Status",
+										"Province",
+										"Well Class",
+										"Primary Formation",
+										"Well Pool Name",
+										"Cumulative Porosity",
+										"Cumulative Pore Volume",
+										"Cumulative Shale Content",
+										"Oil Saturation",
+										"Cumulative Hydrocarbon Movability",
+										"Average Hydrocarbon Movability",
+										"Thickness",
+										"Effective Yield",
+										"Peak Value",
+										"Effective Life Cycle"],
 						width: function(){
 							return ($(".full-table-content").width() - $(".filter-form").width() - 10);
 						},
@@ -84,7 +106,7 @@
 						modal : true,
 						autoOpen: true,
 						width: 650,
-						height: 650
+						height: 400
 					});
 					this.initColumnFilter();
 				}
@@ -117,6 +139,7 @@
 						return _this.$contentContainer.dialog("close");
 					}
 					else {
+						$('#results-table').remove();
 						return _this.$contentContainer.dialog("open");
 					}
 				};

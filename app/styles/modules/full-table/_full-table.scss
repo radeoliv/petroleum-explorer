@@ -1,8 +1,16 @@
+/* =============================================================================
+Variables
+========================================================================== */
+$mapToolbarButtonColour: rgb(220,220,220);
+$mapToolbarButtonTextColour: black;
+
+/* =============================================================================
+Full Table
+========================================================================== */
 .ui-dialog{
 	font-size: 0.85em;
 	overflow: hidden;
 	padding: 0em;
-	min-width: 50em;
 
 	.ui-dialog-title{
 		font-size: 1.25em;
@@ -10,6 +18,16 @@
 
 	.ui-dialog-titlebar{
 		margin-bottom: 0em;
+		background: darken($body-background, 5);
+	}
+
+	.ui-button{
+		padding: 0.5em;
+		outline: none;
+	}
+
+	select{
+		outline: none;
 	}
 }
 
@@ -33,6 +51,9 @@
 	height: inherit;
 	width: 18em;
 	top: inherit;
+
+	background: darken($body-background, 5);
+
 	h4{
 		margin-top: 0.5em;
 		margin-bottom: 0.5em;
@@ -83,7 +104,6 @@
 .ColVis_collection {
 	@extend %normal-padding;
 	@extend %margin-none;
-	background: $body-background;
 	@extend %bordered;
 	list-style: none;
 	label {
