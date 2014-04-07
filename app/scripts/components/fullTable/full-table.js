@@ -46,35 +46,31 @@
 
 		FullTable.prototype.displayHandsOnTable = function() {
 
-			console.log("Just called DisplayHandsOnTable Full");
-
 			this.$tableContainer.remove();
 
 			var data;
 
 			if(typeof(this.SearchController) != "undefined"){
 
-				console.log("undefined search controller check passed");
-
 				if (this.SearchController.resultSet.length > 0) {
 
-					console.log("search res > 0 passed");
-
 					data = this.SearchController.resultSet;
-
-					console.log(this.SearchController);
 
 					//plot results on google maps
 					//self.mapCanvasController = new MapCanvasController().plotResults(data);
 
-					this.$tableContainer = $('<div id="results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
+					this.$tableContainer = $('<div id="full-results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
 
 					this.$tableContainer.handsontable({
 						data: data,
 						colHeaders: ["Name", "Full UWI", "Status", "Province", "Primary Formation", "Well Pool Name", "Company", "Well Drillers Total Depth", "Well Class", "Cumulative Shale Content", "UWI", "Oil Saturation", "Effective Life Cycle", "Peak Value", "Effective Yield", "Cumulative Porosity", "Cumulative Pore Volume", "Cumulative Hydrocarbon Movability", "Average Hydrocarbon Movability", "Thickness"],
 
-						width: 300,
-						height: 300,
+						width: function(){
+							return ($(".full-table-content").width() - $(".filter-form").width() - 10);
+						},
+						height: function(){
+							return ($(".full-table-content").height() - 10);
+						},
 						readOnly: true,
 						columnSorting: true,
 						currentRowClassName: 'currentRow'
@@ -82,15 +78,15 @@
 					});
 					this.toggleButton.addClass("active");
 					this.$contentContainer.dialog({
-						title: 'Show results',
+						title: 'Detailed Results',
 						draggable: true,
 						resizable: true,
 						modal : true,
-						width: 500,
-						height: 500
+						autoOpen: true,
+						width: 650,
+						height: 650
 					});
 					this.initColumnFilter();
-					console.dir(this.SearchController.resultSet);
 				}
 			}
 		}
@@ -101,14 +97,31 @@
 		 * @returns {*|jQuery}
 		 */
 		FullTable.prototype.listenChanges = function () {
-			console.log('change occured');
 			return $("body").on("ResultsUpdated", (function (_this) {
 				return function () {
-					return _this.displayHandsOnTable();
+					_this.displayHandsOnTable();
+					_this.$contentContainer.dialog("close");
 				};
 			})(this));
 		};
 
+		/**
+		 * Toggle full table data when clicking the button
+		 * @returns {*}
+		 */
+		FullTable.prototype.listenToggle = function () {
+			return this.toggleButton.on("click", (function (_this) {
+				return function () {
+					$(this).toggleClass("active");
+					if ($(this).hasClass("active")) {
+						return _this.$contentContainer.dialog("close");
+					}
+					else {
+						return _this.$contentContainer.dialog("open");
+					}
+				};
+			})(this));
+		};
 
 		/**
 		 * Add individual option elements for each column in full table
@@ -123,7 +136,6 @@
 				var tableColumns = this.$tableContainer.handsontable("getColHeader"),
 									html, $columnSelectFilter,
 									$addConstraintButton = this.$columnFilter.find(".add-constraint");
-
 
 				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
 				$columnSelectFilter.on("change", function() {
@@ -162,24 +174,6 @@
 				});
 			}
 		}
-
-		/**
-		 * Toggle full table data when clicking the button
-		 * @returns {*}
-		 */
-		FullTable.prototype.listenToggle = function () {
-			return this.toggleButton.on("click", (function (_this) {
-				return function () {
-					$(this).toggleClass("active");
-					if ($(this).hasClass("active")) {
-						return _this.$contentContainer.dialog("close");
-					}
-					else {
-						return _this.$contentContainer.dialog("open");
-					}
-				};
-			})(this));
-		};
 
 		return FullTable;
 

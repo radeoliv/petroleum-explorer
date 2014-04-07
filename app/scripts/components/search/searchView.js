@@ -127,7 +127,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		}
 
 		displayResults(error, results);
-		this.tableController.displayTable();
+		//this.tableController.displayTable();
 	});
 
 	statusSearchInput.change( function (e) {

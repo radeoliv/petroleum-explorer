@@ -1,45 +1,82 @@
-// Button placement
-.search-results-table {
+.ui-dialog{
+	font-size: 0.85em;
+	overflow: hidden;
+	padding: 0em;
+	min-width: 50em;
 
-	.toggle-table {
-		@extend %fixed;
-		@extend %bordered;
-		left: 50%;
-		bottom: 0;
-		z-index: 999; // it's over 9000!
-		padding: $padding-small;
-		@extend %margin-none;
-		transition: $transition-time $transition-function all;
-		outline: none;
-		font-size: 1.2em;
-		color: $mapToolbarButtonTextColour;
-		&:active, &.active, &:hover {
-			background: darken($mapToolbarButtonColour, 20);
-		}
-		/*&.active {
-			bottom: 85%;
-		}*/
+	.ui-dialog-title{
+		font-size: 1.25em;
 	}
 
-	section{
-		//@extend %fixed;
-		//height:100%;
-		background: $body-background;
+	.ui-dialog-titlebar{
+		margin-bottom: 0em;
 	}
 }
 
-.full-table-content{
-	font-size: 0.85em;
-	.filter-form {
-		fieldset {
-			@extend %fixed;
-			background: $body-background;
-			z-index: 9999;
-			width: 10em;
+.toggle-table {
+	@extend %fixed;
+	@extend %bordered;
+	left: 50%;
+	bottom: 0;
+	z-index: 9999; // it's over 9000!
+	padding: $padding-small;
+	@extend %margin-none;
+	outline: none;
+	font-size: 1.2em;
+	color: $mapToolbarButtonTextColour;
+}
+
+.filter-form{
+	position:absolute;
+	display: inline-block;
+	border-right: solid black 1px;
+	height: inherit;
+	width: 18em;
+	top: inherit;
+	h4{
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	fieldset{
+		border: none;
+	}
+}
+
+#full-results-table{
+	display: inline-block;
+	top: inherit;
+	position:absolute;
+	left: 18em;
+	padding: 0.5em;
+
+	.htDimmed{
+		color: black;
+	}
+
+	th{
+		background: $mapToolbarButtonColour;
+		color: black;
+	}
+
+	.wtHider{
+		padding-bottom: .75em;
+	}
+
+	.dragdealer{
+		right: 0;
+		background: lighten($mapToolbarButtonColour, 15);
+		&.handle{
+			background: darken($mapToolbarButtonColour, 50);
 		}
 	}
-	.wtHolder {
-		margin-left: 20em;
+
+	.currentRow{
+		background: $mapToolbarButtonColour;
+	}
+
+	.current{
+		background: $mapToolbarButtonColour;
 	}
 }
 
@@ -54,4 +91,3 @@
 		cursor: pointer;
 	}
 }
-

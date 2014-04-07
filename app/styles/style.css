@@ -29,7 +29,7 @@ Overflow
 Margins
 ========================================================================== */
 /* Normal margin */
-.search-results-table .toggle-table, .ColVis_collection, body {
+.toggle-table, .ColVis_collection, body {
   margin: 0; }
 
 /* Normal margin combinations */
@@ -75,7 +75,7 @@ button[disabled] {
 /* =============================================================================
 Borders
 ========================================================================== */
-.mapToolbar, .search-results-table .toggle-table, .ColVis_collection, .ui-dialog {
+.mapToolbar, .toggle-table, .ColVis_collection, .ui-dialog {
   border: 1px solid black; }
 
 .ui-dialog .ui-dialog-titlebar {
@@ -90,7 +90,7 @@ Positions
 .mapToolbar, .ui-resizable-handle {
   position: absolute; }
 
-.search-results-table .toggle-table, .full-table-content .filter-form fieldset {
+.toggle-table {
   position: fixed; }
 
 .ui-resizable {
@@ -113,7 +113,7 @@ Map Toolbar
 ========================================================================== */
 .mapToolbar {
   right: 1em;
-  z-index: 9;
+  z-index: 9999;
   background: #f2f2f2;
   top: 3em;
   display: inline;
@@ -209,31 +209,60 @@ table {
   right: 8em;
   position: static !important; }
 
-.search-results-table .toggle-table {
+.ui-dialog {
+  font-size: 0.85em;
+  overflow: hidden;
+  padding: 0em;
+  min-width: 50em; }
+  .ui-dialog .ui-dialog-title {
+    font-size: 1.25em; }
+  .ui-dialog .ui-dialog-titlebar {
+    margin-bottom: 0em; }
+
+.toggle-table {
   left: 50%;
   bottom: 0;
-  z-index: 999;
+  z-index: 9999;
   padding: 0.76923em;
-  transition: 0.5s ease all;
   outline: none;
   font-size: 1.2em;
-  color: black;
-  /*&.active {
-  	bottom: 85%;
-  }*/ }
-  .search-results-table .toggle-table:active, .search-results-table .toggle-table.active, .search-results-table .toggle-table:hover {
-    background: darkgrey; }
-.search-results-table section {
-  background: white; }
+  color: black; }
 
-.full-table-content {
-  font-size: 0.85em; }
-  .full-table-content .filter-form fieldset {
-    background: white;
-    z-index: 9999;
-    width: 10em; }
-  .full-table-content .wtHolder {
-    margin-left: 20em; }
+.filter-form {
+  position: absolute;
+  display: inline-block;
+  border-right: solid black 1px;
+  height: inherit;
+  width: 18em;
+  top: inherit; }
+  .filter-form h4 {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em; }
+  .filter-form fieldset {
+    border: none; }
+
+#full-results-table {
+  display: inline-block;
+  top: inherit;
+  position: absolute;
+  left: 18em;
+  padding: 0.5em; }
+  #full-results-table .htDimmed {
+    color: black; }
+  #full-results-table th {
+    background: gainsboro;
+    color: black; }
+  #full-results-table .wtHider {
+    padding-bottom: .75em; }
+  #full-results-table .dragdealer {
+    right: 0;
+    background: white; }
+    #full-results-table .dragdealer.handle {
+      background: #5d5d5d; }
+  #full-results-table .currentRow {
+    background: gainsboro; }
+  #full-results-table .current {
+    background: gainsboro; }
 
 .ColVis_collection {
   background: white;
