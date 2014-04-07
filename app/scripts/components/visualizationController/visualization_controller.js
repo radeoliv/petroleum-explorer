@@ -174,9 +174,7 @@
 			//Find the minimum and maximum values:
 			var min = this.oil_data[0];
 			var max = this.oil_data[0];
-			for (var i = 1;
-				i < N;
-				i++) {
+			for (var i = 1; i < N; i++) {
 				if (this.oil_data[i] < min) {
 					min = this.oil_data[i];
 				}
@@ -187,16 +185,12 @@
 			var data_out = [];
 			//If min=max, then return an array with all values set to (low_val + high_val)/2
 			if (min == max) {
-				for (var i = 0;
-					i < N;
-					i++) {
+				for (var i = 0; i < N; i++) {
 					data_out[i] = (low_val + high_val) / 2;
 				}
 			}
 			else { //If min != max, then the data can be scaled by the factor (high_val-low_val)/(max-min) without dividing by 0.
-				for (var i = 0;
-					i < N;
-					i++) {
+				for (var i = 0; i < N; i++) {
 					data_out[i] = low_val + (high_val - low_val) * (this.oil_data[i] - min) / (max - min);
 				}
 			}

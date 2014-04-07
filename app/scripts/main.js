@@ -11,7 +11,6 @@
 
 jQuery(document).ready(function ($) {
 	function loadSearchController() {
-		window.search_controller === null || window.search_controller === 'undefined' ? alert('search controller has not been loaded') : console.log('search controller loaded');
 		var dataSet;
 		//parse JSON file with all informations about wells
 		$.ajax({
@@ -25,21 +24,14 @@ jQuery(document).ready(function ($) {
 		return new SearchController(dataSet, []);
 	}
 
-	function loadMapCanvasController() {
-		window.mapCanvas_controller === null || window.mapCanvas_controller === 'undefined' ? alert('map canvas controller has not been loaded') : console.log('map canvas controller loaded');
-
-		return new MapCanvasController();
-	}
-
 	var mySearchController = loadSearchController();
-	var myMapCanvasController = loadMapCanvasController();
-
+	var myMapCanvasController = new MapCanvasController();
+	var mySearchView = new SearchView(mySearchController, myMapCanvasController);
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
 	// load in datatable
 	var $fullTableContainer = $(".search-results-table"),
 		myTableController = new FullTable(mySearchController, $fullTableContainer);
-	var mySearchView = new SearchView(mySearchController, myMapCanvasController);//,myTableController);
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
 	//var $visualization_view = new Visualization_View($fullTableContainer)
 });
