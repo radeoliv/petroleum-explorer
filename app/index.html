@@ -21,19 +21,39 @@
 
 				if (mainMenu.value == "barGraph") { //The person chose fruit
 
-					//Add an option called "Company"
+					//Add an option called "Well Driller Total Depth"
 					var optionCompany=document.createElement("option");
-					optionCompany.text="Company";
+					optionCompany.text="Driller Total Depth";
 					newDropdown.add(optionCompany,newDropdown.options[null]);
 
-					//Add an option called "Status"
+					//Add an option called "Cumulative Porosity( PHIc) "
 					var optionStatus=document.createElement("option");
-					optionStatus.text="Status";
+					optionStatus.text="Cumulative Porosity (PHIc)";
 					newDropdown.add(optionStatus,newDropdown.options[null]);
 
-					//Add an option called "Oil production"
+					//Add an option called "Average Porosity( PHIav)"
 					var optionProduction=document.createElement("option");
-					optionProduction.text="Oil Production";
+					optionProduction.text="Average Porosity (PHIav)";
+					newDropdown.add(optionProduction,newDropdown.options[null]);
+
+					//Add an option called "Cumulative Hydrocarbon Movability(KRc)"
+					var optionProduction=document.createElement("option");
+					optionProduction.text="Cumulative Hydrocarbon Movability (KRc)";
+					newDropdown.add(optionProduction,newDropdown.options[null]);
+
+					//Add an option called "Average Hydrocarbon Movability(KRV)"
+					var optionProduction=document.createElement("option");
+					optionProduction.text="Average Hydrocarbon Movability (KRc)";
+					newDropdown.add(optionProduction,newDropdown.options[null]);
+
+					//Add an option called "Cumulative Hydrocarbon Movability(KRc)"
+					var optionProduction=document.createElement("option");
+					optionProduction.text="Cumulative Hydrocarbon Movability (KRc)";
+					newDropdown.add(optionProduction,newDropdown.options[null]);
+
+					//Add an option called "Average Hydrocarbon Movability(KRV)"
+					var optionProduction=document.createElement("option");
+					optionProduction.text="Average Hydrocarbon Movability (KRc)";
 					newDropdown.add(optionProduction,newDropdown.options[null]);
 
 				} else if (mainMenu.value == "pieChart") { //User chooses pie chart
@@ -48,12 +68,10 @@
 					optionStatus.text="Status";
 					newDropdown.add(optionStatus,newDropdown.options[null]);
 
-					//Add an option called "Oil production"
+					//Add an option called "Well Primary Producing Formation"
 					var optionProduction=document.createElement("option");
-					optionProduction.text="Oil Production";
+					optionProduction.text="Well Primary Producing Formation";
 					newDropdown.add(optionProduction,newDropdown.options[null]);
-
-
 				}
 
 				created = 1
@@ -156,7 +174,7 @@
 										</tr>
 									</table>
 								</div>
-f
+
 								<h5>Company</h5>
 								<div class="company-search accordianContent">
 									<input type = "search" id="company" placeholder="Company" name = "company" results = "10" autosave = "company">
@@ -212,9 +230,7 @@ f
 								</select>
 								</div>
 
-
 							</div>
-
 						</fieldset>
 					</form>
 					<div id="highchart-basic"></div>
