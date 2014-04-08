@@ -229,6 +229,8 @@ Full Table
     outline: none; }
   .ui-dialog select {
     outline: none; }
+  .ui-dialog .ui-dialog-titlebar-close {
+    display: none; }
 
 .toggle-table {
   left: 50%;
@@ -246,6 +248,7 @@ Full Table
   height: inherit;
   width: 18em;
   top: inherit;
+  overflow-y: auto;
   background: #f2f2f2; }
   .filter-form h4 {
     margin-top: 0.5em;
@@ -275,6 +278,28 @@ Full Table
     background: gainsboro; }
   #full-results-table .current {
     background: gainsboro; }
+
+.filterButton {
+  display: inline-block;
+  top: inherit;
+  padding: 0.5em;
+  outline: none; }
+
+.filterBtnParent {
+  width: 2.25em;
+  display: inline-block;
+  float: right; }
+
+.filterInputField {
+  width: 85%; }
+
+#tableColumnFilter {
+  display: inline-block;
+  top: inherit;
+  width: 15.5em;
+  text-align: center; }
+  #tableColumnFilter label {
+    display: inline-block; }
 
 .ColVis_collection {
   list-style: none; }

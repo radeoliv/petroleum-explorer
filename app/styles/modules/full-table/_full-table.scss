@@ -29,6 +29,10 @@ Full Table
 	select{
 		outline: none;
 	}
+
+	.ui-dialog-titlebar-close{
+		display: none;
+	}
 }
 
 .toggle-table {
@@ -51,7 +55,7 @@ Full Table
 	height: inherit;
 	width: 18em;
 	top: inherit;
-
+	overflow-y: auto;
 	background: darken($body-background, 5);
 
 	h4{
@@ -98,6 +102,34 @@ Full Table
 
 	.current{
 		background: $mapToolbarButtonColour;
+	}
+}
+
+.filterButton{
+	display: inline-block;
+	top: inherit;
+	padding: 0.5em;
+	outline: none;
+}
+
+.filterBtnParent{
+	width: 2.25em;
+	display: inline-block;
+	float: right;
+}
+
+.filterInputField{
+	width: 100%;
+}
+
+#tableColumnFilter{
+	display: inline-block;
+	top: inherit;
+	width: 15.5em;
+
+	text-align: center;
+	label{
+		display: inline-block;
 	}
 }
 

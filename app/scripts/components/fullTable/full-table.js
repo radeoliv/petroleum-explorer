@@ -11,16 +11,28 @@
 		var $columnSelect = this.$columnFilter.find("#tableColumnFilter").append(html);
 	}
 
-	function addNumberConstraint() {
-		var constraintSelectTypeString = $('<select><option value="matches">Matches</option><option value="contains">Contains</option></select>').appendTo($(this).parent());
+	function addNumberOption() {
+		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
+
+		var removeFilterOption = '<div class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
+
+		var constraintSelectTypeString = '<select><option value="matches">Matches</option><option value="contains">Contains</option></select>';
+
+		var inputField = '<input class="filterInputField"><hr>';
+
+		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeString+inputField+'</div>').appendTo($(this).parent());
 	}
 
-	function addStringConstraint() {
-		var constraintSelectTypeNumber = $('<select><option value="gt">Is Greater Than</option><option value="lt">Is Less Than</option><option value="eq">Is Equal To</option></select>').appendTo($(this).parent());
-	}
+	function addStringOption() {
+		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
-	function cloneAndAppend() {
-		$(this).clone().appendTo($(this).parent());
+		var removeFilterOption = '<div class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
+
+		var constraintSelectTypeNumber = '<select><option value="gt">Is Greater Than</option><option value="lt">Is Less Than</option><option value="eq">Is Equal To</option></select>';
+
+		var inputField = '<input class="filterInputField"><hr>';
+
+		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeNumber+inputField+'</div>').appendTo($(this).parent());
 	}
 
 	/**
@@ -31,9 +43,7 @@
 	FullTable = (function () {
 		function FullTable(SearchController, $fullTableResultsContainer) {
 			this.SearchController = SearchController;
-			this.$fullTableResultsContainer = $fullTableResultsContainer;
 			this.$tableContainer = $fullTableResultsContainer.find(".full-results-table");
-
 			this.$contentContainer = $fullTableResultsContainer.find(".full-table-content");
 			this.$columnFilter = this.$contentContainer.find(".filter-form");
 			this.toggleButton = $fullTableResultsContainer.find(".toggle-table");
@@ -41,6 +51,8 @@
 			this.displayHandsOnTable();
 			this.listenChanges();
 			this.listenToggle();
+			this.initColumnFilter();
+			this.filterOptionRemove();
 			this.$contentContainer.dialog("close");
 		}
 
@@ -108,7 +120,6 @@
 						width: 650,
 						height: 400
 					});
-					this.initColumnFilter();
 				}
 			}
 		}
@@ -136,64 +147,64 @@
 				return function () {
 					$(this).toggleClass("active");
 					if ($(this).hasClass("active")) {
-						return _this.$contentContainer.dialog("close");
+						$('#results-table').slideToggle();
+						return _this.$contentContainer.dialog("close", _this.$contentContainer.fadeOut());
 					}
 					else {
-						$('#results-table').remove();
-						return _this.$contentContainer.dialog("open");
+						$('#results-table').slideToggle();
+						return _this.$contentContainer.dialog("open", _this.$contentContainer.fadeIn());
 					}
 				};
 			})(this));
+		};
+
+		FullTable.prototype.filterOptionRemove = function () {
+			//TODO add filter parameter remove functionality.
 		};
 
 		/**
 		 * Add individual option elements for each column in full table
 		 */
 		FullTable.prototype.initColumnFilter = function () {
-			if (this.$columnFilter.length > 0) {
 
+			var i = 0;
+
+			if (this.$columnFilter.length > 0) {
 				//populateColumnFilter.call(this, tableColumns, html);
 				var $columnSelectFilter = this.$columnFilter.find("#tableColumnFilter");
+				var $addConstraintButton = this.$columnFilter.find("#add-constraint");
 
+				/*
 			 	// if the selector works...
 				var tableColumns = this.$tableContainer.handsontable("getColHeader"),
 									html, $columnSelectFilter,
 									$addConstraintButton = this.$columnFilter.find(".add-constraint");
+				*/
 
 				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
-				$columnSelectFilter.on("change", function() {
-				switch($(this).val()) { // the current selected <option>
-					case "0":
-						console.log('hello');
-						break;
-					case "Well_Operator":
-					case "Well_Pool_Name":
-					case "Well_Primary_Producing_Formation":
-					case "Well_Province":
-					case "Well_Status":
-					case "Well_Unique_Identifier":
-					case "Well_Name":
-						cloneAndAppend.call(this);
-						addStringConstraint.call(this);
-						// Enable button
-						$addConstraintButton.attr({
-							title: "Add New String Constraint"
-						}).removeAttr("disabled").on("click", function() {
-							addStringConstraint.call(this);
-							return false;
-						});
-						break;
-					default: // Numeric
-						// find the values in the SearchResults array
-						cloneAndAppend.call(this);
-						addNumberConstraint.call(this);
-						$addConstraintButton.attr({
-							title: "Add New Number Constraint"
-						}).removeAttr("disabled").on("click", function() {
-							addNumberConstraint.call(this);
-							return false;
-						});
-					}
+				$addConstraintButton.on("click", function() {
+					switch($columnSelectFilter.val()) { // the current selected <option>
+						case "0":
+							console.log('No Option Chosen');
+							break;
+						// String Options
+						case "Well_Operator":
+						case "Well_Pool_Name":
+						case "Well_Primary_Producing_Formation":
+						case "Well_Province":
+						case "Well_Status":
+						case "Well_Unique_Identifier":
+						case "Well_Name": // String Option
+							i++;
+							addStringOption.call($columnSelectFilter);
+							break;
+						default: // Numeric Options
+							i++
+							addNumberOption.call($columnSelectFilter);
+						}
+
+					console.log(i);
+					console.log($columnSelectFilter.parent().find(".filterParameter"));
 				});
 			}
 		}
