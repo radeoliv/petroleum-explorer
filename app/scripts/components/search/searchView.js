@@ -194,6 +194,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				});
 
 				// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
+				console.log('sending event');
 				$("body").trigger("ResultsUpdated");
 				//console.log("Results updated.  Results:");
 				//console.dir(this.resultSet);

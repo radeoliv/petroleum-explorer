@@ -24,7 +24,6 @@
 	 rangeErrorMsg = "<b>RNG</b> value must be within 01 and 34.",
 	 meridianErrorMsg = "<b>MER</b> value must be within 1 and 6.";
 
-
  (function() {
 	 var SearchController;
 

@@ -60,7 +60,7 @@
 
 			this.$tableContainer.remove();
 
-			var data;
+			var data = [];
 
 			if(typeof(this.SearchController) != "undefined"){
 
@@ -72,33 +72,34 @@
 					//self.mapCanvasController = new MapCanvasController().plotResults(data);
 
 					this.$tableContainer = $('<div id="full-results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
-
+					console.dir(data);
 					this.$tableContainer.handsontable({
 						data: data,
-						colHeaders: ["Full UWI",
-										"UWI",
-										"Longitude",
-										"Latitude",
-										"Name",
-										"Plot Symbol",
-										"Well Name",
-										"Well Drillers Total Depth",
-										"Company",
-										"Status",
-										"Province",
-										"Well Class",
-										"Primary Formation",
-										"Well Pool Name",
-										"Cumulative Porosity",
-										"Cumulative Pore Volume",
-										"Cumulative Shale Content",
-										"Oil Saturation",
-										"Cumulative Hydrocarbon Movability",
-										"Average Hydrocarbon Movability",
-										"Thickness",
-										"Effective Yield",
-										"Peak Value",
-										"Effective Life Cycle"],
+						colHeaders:["UWI",
+								   "UWI Simplified Format",
+								   "Longitude",
+								   "Latitude",
+								   "Plot Symbol",
+								   "Well Name",
+								   "Well Drillers Total Depth",
+								   "Well Operator",
+								   "Well Status",
+								   "Well Province",
+								   "Well Class",
+								   "Well Primary Producing Formation",
+								   "Well Pool Name",
+								   "Cumulative Porosity",
+								   "Cumulative Pore Volume",
+								   "Cumulative Shale Content",
+								   "Cumulative Oil Saturation",
+								   "Cumulative Hydrocarbon Movability",
+								   "Average Hydrocarbon Movability",
+								   "Thickness",
+								   "Effective yield",
+								   "Peak Value",
+								   "Effective Life Cycle"
+						],
+
 						width: function(){
 							return ($(".full-table-content").width() - $(".filter-form").width() - 10);
 						},
