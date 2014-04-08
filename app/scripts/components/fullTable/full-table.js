@@ -11,7 +11,7 @@
 		var $columnSelect = this.$columnFilter.find("#tableColumnFilter").append(html);
 	}
 
-	function addNumberOption() {
+	function addStringOption() {
 		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
 		var removeFilterOption = '<div class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
@@ -23,7 +23,7 @@
 		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeString+inputField+'</div>').appendTo($(this).parent());
 	}
 
-	function addStringOption() {
+	function addNumberOption() {
 		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
 		var removeFilterOption = '<div class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
@@ -99,7 +99,6 @@
 								   "Peak Value",
 								   "Effective Life Cycle"
 						],
-						colWidth:[ , , , ,0 ],
 						width: function(){
 							return ($(".full-table-content").width() - $(".filter-form").width() - 10);
 						},
@@ -184,6 +183,7 @@
 
 				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
 				$addConstraintButton.on("click", function() {
+					console.log($columnSelectFilter.val());
 					switch($columnSelectFilter.val()) { // the current selected <option>
 						case "0":
 							console.log('No Option Chosen');
@@ -195,11 +195,15 @@
 						case "Well_Province":
 						case "Well_Status":
 						case "Well_Unique_Identifier":
+						case "Well_Unique_Identifier_Simplified_Format":
+						case "Well_Class":
 						case "Well_Name": // String Option
+							console.log('String');
 							i++;
 							addStringOption.call($columnSelectFilter);
 							break;
 						default: // Numeric Options
+							console.log('Num');
 							i++
 							addNumberOption.call($columnSelectFilter);
 						}
