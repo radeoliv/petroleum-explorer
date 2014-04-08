@@ -60,26 +60,26 @@
 
 			this.$tableContainer.remove();
 
-			var data = [];
-
 			if(typeof(this.SearchController) != "undefined"){
 
 				if (this.SearchController.resultSet.length > 0) {
-
-					data = this.SearchController.resultSet;
+					var data = [];
+					var result = this.SearchController.resultSet;
+					for(var i=0; i<result.length ; i++){
+						data.push([result[i]["Well_Unique_Identifier"], result[i]["Well_Unique_Identifier_Simplified_Format"], result[i]["Longitude Decimal Degrees"], result[i]["Latitude Decimal Degrees"], result[i]["Well_Name"], result[i]["Well_Drillers_Total_Depth"], result[i]["Well_Operator"], result[i]["Well_Status"], result[i]["Well_Province"], result[i]["Well_Class"], result[i]["Well_Primary_Producing_Formation"], result[i]["Well_Pool_Name"], result[i]["PHIc"], result[i]["PHIR"], result[i]["Vshc"], result[i]["Soc"], result[i]["KRc"], result[i]["KRav"], result[i]["H"], result[i]["Pc"], result[i]["Pp"], result[i]["Pt"]]);
+					}
 
 					//plot results on google maps
 					//self.mapCanvasController = new MapCanvasController().plotResults(data);
 
 					this.$tableContainer = $('<div id="full-results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
-					console.dir(data);
+
 					this.$tableContainer.handsontable({
 						data: data,
 						colHeaders:["UWI",
 								   "UWI Simplified Format",
 								   "Longitude",
 								   "Latitude",
-								   "Plot Symbol",
 								   "Well Name",
 								   "Well Drillers Total Depth",
 								   "Well Operator",
@@ -99,7 +99,7 @@
 								   "Peak Value",
 								   "Effective Life Cycle"
 						],
-
+						colWidth:[ , , , ,0 ],
 						width: function(){
 							return ($(".full-table-content").width() - $(".filter-form").width() - 10);
 						},

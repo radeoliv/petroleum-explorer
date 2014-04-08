@@ -173,7 +173,6 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 				for (var i=0;i<results.length;i++) {
 					data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
-					//TODO: show these corresponding pins
 				}
 
 				$('#results-table').handsontable({
