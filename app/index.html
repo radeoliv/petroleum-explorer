@@ -19,65 +19,67 @@
 				newDropdown.setAttribute('id',"newDropdownMenu");
 				whereToPut.appendChild(newDropdown);
 
-				if (mainMenu.value == "barGraph") { //The person chose fruit
+				if (mainMenu.value == "barGraph") { //The person chose bar graph
 
 					//Add an option called "Well Driller Total Depth"
-					var optionCompany=document.createElement("option");
-					optionCompany.text="Driller Total Depth";
-					newDropdown.add(optionCompany,newDropdown.options[null]);
+					var optionTotalDeph=document.createElement("option");
+					optionTotalDeph.text="Driller Total Depth";
+					newDropdown.add(optionTotalDeph,newDropdown.options[null]);
 
 					//Add an option called "Cumulative Porosity( PHIc) "
-					var optionStatus=document.createElement("option");
-					optionStatus.text="Cumulative Porosity (PHIc)";
-					newDropdown.add(optionStatus,newDropdown.options[null]);
+					var optionCumulPoro =document.createElement("option");
+					optionCumulPoro.text ="Cumulative Porosity (PHIc)";
+					newDropdown.add(optionCumulPoro,newDropdown.options[null]);
 
 					//Add an option called "Average Porosity( PHIav)"
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Average Porosity (PHIav)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionAvPorosity=document.createElement("option");
+					optionAvPorosity.text="Average Porosity (PHIav)";
+					newDropdown.add(optionAvPorosity,newDropdown.options[null]);
 
 					//Add an option called "Cumulative Hydrocarbon Movability(KRc)"
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Cumulative Hydrocarbon Movability (KRc)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionCumulHydrocarbon=document.createElement("option");
+					optionCumulHydrocarbon.text="Cumulative Hydrocarbon Movability (KRc)";
+					newDropdown.add(optionCumulHydrocarbon,newDropdown.options[null]);
 
 					//Add an option called "Average Hydrocarbon Movability(KRAV)"
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Average Hydrocarbon Movability (KRav)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionAvHydrocarbon=document.createElement("option");
+					optionAvHydrocarbon.text="Average Hydrocarbon Movability (KRav)";
+					newDropdown.add(optionAvHydrocarbon,newDropdown.options[null]);
 
 					//Add an option called "Cumulative Oil Saturation (SOc)"
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Cumulative Oil Saturation (SOc)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionCumulOil=document.createElement("option");
+					optionCumulOil.text="Cumulative Oil Saturation (SOc)";
+					newDropdown.add(optionCumulOil,newDropdown.options[null]);
 
 					//Add an option called " Cumulative Shale Content(VSHc) "
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Cumulative Shale Content (VSHc)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionCumulShale=document.createElement("option");
+					optionCumulShale.text="Cumulative Shale Content (VSHc)";
+					newDropdown.add(optionCumulShale,newDropdown.options[null]);
 
 					//Add an option called " Effective Thickness (H) "
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Effective Thickness (H)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionEffThick=document.createElement("option");
+					optionEffThick.text="Effective Thickness (H)";
+					newDropdown.add(optionEffThick,newDropdown.options[null]);
 
 					//Add an option called " Effective Yield (Pc) "
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Effective Yield (Pc)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionEffYield=document.createElement("option");
+					optionEffYield.text="Effective Yield (Pc)";
+					newDropdown.add(optionEffYield,newDropdown.options[null]);
 
 					//Add an option called "Peak Value(Pp) "
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Peak Value (Pp)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionPeakValue=document.createElement("option");
+					optionPeakValue.text="Peak Value (Pp)";
+					newDropdown.add(optionPeakValue,newDropdown.options[null]);
 
 					//Add an option called "Effective life cycle (Pt) "
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Effective life cycle (Pt)";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionEffCycle=document.createElement("option");
+					optionEffCycle.text="Effective Life Cycle (Pt)";
+					newDropdown.add(optionEffCycle,newDropdown.options[null]);
 
 
-				} else if (mainMenu.value == "pieChart") { //User chooses pie chart
+				}
+
+				else if (mainMenu.value == "pieChart") { //User chooses pie chart
 
 					//Add an option called "Company"
 					var optionCompany=document.createElement("option");
@@ -90,9 +92,9 @@
 					newDropdown.add(optionStatus,newDropdown.options[null]);
 
 					//Add an option called "Well Primary Producing Formation"
-					var optionProduction=document.createElement("option");
-					optionProduction.text="Well Primary Producing Formation";
-					newDropdown.add(optionProduction,newDropdown.options[null]);
+					var optionProdForm =document.createElement("option");
+					optionProdForm.text="Well Primary Producing Formation";
+					newDropdown.add(optionProdForm,newDropdown.options[null]);
 				}
 
 				created = 1
