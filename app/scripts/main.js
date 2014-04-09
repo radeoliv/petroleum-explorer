@@ -10,8 +10,10 @@
  -------------------------------------------------------------------------------*/
 
 jQuery(document).ready(function ($) {
+	var dataSet;
+
 	function loadSearchController() {
-		var dataSet;
+
 		//parse JSON file with all informations about wells
 		$.ajax({
 			url: './wells.json',
@@ -27,6 +29,7 @@ jQuery(document).ready(function ($) {
 	var mySearchController = loadSearchController();
 	var myMapCanvasController = new MapCanvasController();
 	var mySearchView = new SearchView(mySearchController, myMapCanvasController);
+
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
 	// load in datatable
