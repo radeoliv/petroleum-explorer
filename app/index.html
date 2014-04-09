@@ -117,6 +117,7 @@
 		<link rel = "stylesheet" href = "styles/style.css">
 		<link rel = "stylesheet" href = "styles/icomoon/style.css"/>
 		<link rel = "stylesheet" type = "text/css" href = "bower_components/datatables/media/css/jquery.dataTables.css" media = "all"/>
+		<link rel="stylesheet" href="bower_components/magnific-popup/dist/magnific-popup.css">
 		<!-- endbuild -->
 
 		<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -124,10 +125,50 @@
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/highcharts-more.js"></script>
 		<script src="http://code.highcharts.com/modules/exporting.js"></script>
-
+		<script src="bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
 	</head>
 	<body>
 		<main id = "map-canvas"></main>
+
+		<!-- TESTING! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -- >
+		<!--
+		<div id="test-popup" class="white-popup mfp-hide">
+			<img src = "http://fc09.deviantart.net/fs36/i/2008/265/0/7/Bla_Bla_Bla_by_explosiv22.jpg" style={'width=100px'}>
+		</div>
+		<a href="#test-popup" class="open-popup-link">Show inline popup</a>
+		<script>
+			$('.open-popup-link').magnificPopup({
+				//type:'inline',
+				midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+				items: [
+					{
+						src: 'http://fc09.deviantart.net/fs36/i/2008/265/0/7/Bla_Bla_Bla_by_explosiv22.jpg'
+					},
+					{
+						src: 'http://vimeo.com/123123',
+						type: 'iframe' // this overrides default type
+					},
+					{
+						src: $('<div>Dynamically created element</div>'), // Dynamically created element
+						type: 'inline'
+					},
+					{
+						src: '<div>HTML string</div>',
+						type: 'inline'
+					},
+					{
+						src: '#my-popup', // CSS selector of an element on page that should be used as a popup
+						type: 'inline'
+					}
+				],
+				gallery: {
+					enabled: true
+				},
+				type: 'image' // this is default type
+			});
+		</script>
+		-->
+		<!-- TESTING! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -- >
 
 		<aside class = "mapToolbar">
 			<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
