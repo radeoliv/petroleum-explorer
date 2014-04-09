@@ -14,13 +14,19 @@
 	function addStringOption() {
 		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
-		var removeFilterOption = '<div class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
+		var removeFilterOption = '<div class="filterBtnParent"><button id="remove-constraint" type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
 
 		var constraintSelectTypeString = '<select><option value="matches">Matches</option><option value="contains">Contains</option></select>';
 
 		var inputField = '<input class="filterInputField"><hr>';
 
 		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeString+inputField+'</div>').appendTo($(this).parent());
+
+		var $removeFilterButton = $(this).parent().find(".filterBtnParent");
+		$removeFilterButton.on("click", function() {
+			console.log('hello');
+			$(this).parent().find("#filterParameter").remove();
+		});
 	}
 
 	function addNumberOption() {
@@ -33,6 +39,12 @@
 		var inputField = '<input class="filterInputField"><hr>';
 
 		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeNumber+inputField+'</div>').appendTo($(this).parent());
+
+		var $removeFilterButton = $(this).parent().find(".filterBtnParent");
+		$removeFilterButton.on("click", function() {
+			console.log('hello');
+			$(this).parent().find("#filterParameter").remove();
+		});
 	}
 
 	/**
@@ -186,7 +198,6 @@
 					console.log($columnSelectFilter.val());
 					switch($columnSelectFilter.val()) { // the current selected <option>
 						case "0":
-							console.log('No Option Chosen');
 							break;
 						// String Options
 						case "Well_Operator":
@@ -198,17 +209,13 @@
 						case "Well_Unique_Identifier_Simplified_Format":
 						case "Well_Class":
 						case "Well_Name": // String Option
-							console.log('String');
 							i++;
 							addStringOption.call($columnSelectFilter);
 							break;
 						default: // Numeric Options
-							console.log('Num');
 							i++
 							addNumberOption.call($columnSelectFilter);
 						}
-
-					console.log(i);
 					console.log($columnSelectFilter.parent().find(".filterParameter"));
 				});
 			}
