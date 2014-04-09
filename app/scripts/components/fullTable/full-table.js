@@ -11,39 +11,48 @@
 		var $columnSelect = this.$columnFilter.find("#tableColumnFilter").append(html);
 	}
 
-	function addStringOption() {
+	function addStringOption(index) {
 		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
-		var removeFilterOption = '<div class="filterBtnParent"><button id="remove-constraint" type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
+		var removeFilterOption = '<div  id="'+index+'" class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
 
 		var constraintSelectTypeString = '<select><option value="matches">Matches</option><option value="contains">Contains</option></select>';
 
 		var inputField = '<input class="filterInputField"><hr>';
 
-		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeString+inputField+'</div>').appendTo($(this).parent());
+		$('<div  id="'+index+'" class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeString+inputField+'</div>').appendTo($(this).parent());
 
-		var $removeFilterButton = $(this).parent().find(".filterBtnParent");
+		var $removeFilterButton = $("#"+index).parent().find(".filterBtnParent");
+		console.log(index);
 		$removeFilterButton.on("click", function() {
-			console.log('hello');
-			$(this).parent().find("#filterParameter").remove();
+			console.log("start");
+			if($removeFilterButton.find("#"+index)["selector"].indexOf($removeFilterButton.parent().find("#"+index)["selector"]) > 0){
+				console.log("passed");
+				$removeFilterButton.parent().parent().find("#"+index).remove();
+			}
 		});
 	}
 
-	function addNumberOption() {
+	function addNumberOption(index) {
 		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
-		var removeFilterOption = '<div class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
+		var removeFilterOption = '<div  id="'+index+'" class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
 
 		var constraintSelectTypeNumber = '<select><option value="gt">Is Greater Than</option><option value="lt">Is Less Than</option><option value="eq">Is Equal To</option></select>';
 
 		var inputField = '<input class="filterInputField"><hr>';
 
-		$('<div class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeNumber+inputField+'</div>').appendTo($(this).parent());
+		$('<div  id="'+index+'" class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeNumber+inputField+'</div>').appendTo($(this).parent());
 
-		var $removeFilterButton = $(this).parent().find(".filterBtnParent");
+		var $removeFilterButton = $("#"+index).parent().find(".filterBtnParent");
+		console.log(index);
+
 		$removeFilterButton.on("click", function() {
-			console.log('hello');
-			$(this).parent().find("#filterParameter").remove();
+			console.log("start");
+			if($removeFilterButton.find("#"+index)["selector"].indexOf($removeFilterButton.parent().find("#"+index)["selector"]) > 0){
+				console.log("passed");
+				$removeFilterButton.parent().parent().find("#"+index).remove();
+			}
 		});
 	}
 
@@ -64,7 +73,6 @@
 			this.listenChanges();
 			this.listenToggle();
 			this.initColumnFilter();
-			this.filterOptionRemove();
 			this.$contentContainer.dialog("close");
 		}
 
@@ -170,10 +178,6 @@
 			})(this));
 		};
 
-		FullTable.prototype.filterOptionRemove = function () {
-			//TODO add filter parameter remove functionality.
-		};
-
 		/**
 		 * Add individual option elements for each column in full table
 		 */
@@ -186,16 +190,9 @@
 				var $columnSelectFilter = this.$columnFilter.find("#tableColumnFilter");
 				var $addConstraintButton = this.$columnFilter.find("#add-constraint");
 
-				/*
-			 	// if the selector works...
-				var tableColumns = this.$tableContainer.handsontable("getColHeader"),
-									html, $columnSelectFilter,
-									$addConstraintButton = this.$columnFilter.find(".add-constraint");
-				*/
-
 				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
 				$addConstraintButton.on("click", function() {
-					console.log($columnSelectFilter.val());
+					//console.log($columnSelectFilter.val());
 					switch($columnSelectFilter.val()) { // the current selected <option>
 						case "0":
 							break;
@@ -210,13 +207,13 @@
 						case "Well_Class":
 						case "Well_Name": // String Option
 							i++;
-							addStringOption.call($columnSelectFilter);
+							addStringOption.call($columnSelectFilter, i);
 							break;
 						default: // Numeric Options
 							i++
-							addNumberOption.call($columnSelectFilter);
+							addNumberOption.call($columnSelectFilter, i);
 						}
-					console.log($columnSelectFilter.parent().find(".filterParameter"));
+					//console.log($columnSelectFilter.parent().find(".filterParameter"));
 				});
 			}
 		}
