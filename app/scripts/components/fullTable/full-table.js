@@ -22,14 +22,10 @@
 
 		$('<div  id="'+index+'" class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeString+inputField+'</div>').appendTo($(this).parent());
 
-		var $removeFilterButton = $("#"+index).parent().find(".filterBtnParent");
-		console.log(index);
+		var $removeFilterButton = $("#" + index).find(".filterBtnParent");
 		$removeFilterButton.on("click", function() {
-			console.log("start");
-			if($removeFilterButton.find("#"+index)["selector"].indexOf($removeFilterButton.parent().find("#"+index)["selector"]) > 0){
-				console.log("passed");
-				$removeFilterButton.parent().parent().find("#"+index).remove();
-			}
+			$removeFilterButton.parent().remove();
+			// TODO: decrease index on delete filter option
 		});
 	}
 
@@ -44,15 +40,10 @@
 
 		$('<div  id="'+index+'" class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectTypeNumber+inputField+'</div>').appendTo($(this).parent());
 
-		var $removeFilterButton = $("#"+index).parent().find(".filterBtnParent");
-		console.log(index);
-
+		var $removeFilterButton = $("#" + index).find(".filterBtnParent");
 		$removeFilterButton.on("click", function() {
-			console.log("start");
-			if($removeFilterButton.find("#"+index)["selector"].indexOf($removeFilterButton.parent().find("#"+index)["selector"]) > 0){
-				console.log("passed");
-				$removeFilterButton.parent().parent().find("#"+index).remove();
-			}
+			$removeFilterButton.parent().remove();
+			// TODO: decrease index on delete filter option
 		});
 	}
 
