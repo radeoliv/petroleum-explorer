@@ -124,10 +124,7 @@ Map Toolbar
     font-size: 1.2em;
     color: black; }
     .mapToolbar button:active, .mapToolbar button.active, .mapToolbar button:hover {
-      background: darkgrey;
-      border-top: none;
-      border-bottom: none;
-      border-color: transparent; }
+      background: #b6b6b6; }
   .mapToolbar label {
     font-size: .85em; }
   .mapToolbar table, .mapToolbar td, .mapToolbar tr, .mapToolbar tbody {
@@ -396,6 +393,7 @@ button {
   right: -0.3em;
   top: -0.3em; }
 
-#highchart-basic {
-  max-width: 80% !important;
-  margin: 0 auto; }
+.white-popup {
+  width: 50em;
+  height: 35em;
+  margin: 25px auto; }

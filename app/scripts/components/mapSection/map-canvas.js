@@ -182,7 +182,8 @@
 							tPrev: 'Previous', // title for left button
 							tNext: 'Next', // title for right button
 							tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
-						}
+						},
+						fixedContentPos: true
 					});
 
 					//marker.setAnimation(google.maps.Animation.BOUNCE);

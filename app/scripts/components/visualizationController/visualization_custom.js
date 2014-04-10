@@ -42,11 +42,11 @@ Visualization_custom.prototype.renderVisualization = function () {
 		chart:       {
 			type: this.chartType
 		},
-		title:       {
+		title: {
 			text: 'Petroleum Data'
 		},
-		subtitle:    {
-			text: 'by Mandy Wong'
+		subtitle:	{
+			text: ''
 		},
 		xAxis:       {
 			//categories:

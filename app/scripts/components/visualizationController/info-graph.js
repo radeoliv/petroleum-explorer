@@ -1,6 +1,6 @@
  /*--------------------------------------------------------------------------------
 	Author: Rodrigo Silva
-	github: https://github.com/srsgores/
+	github: https://github.com/srsgores/seng515-petroleum-explorer
 
 	seng515-petroleum-explorer
 
@@ -12,10 +12,15 @@
 
  (function () {
 
+	 // Variable used to access the functionality of generating the charts
 	 var InfoGraph;
+	 // Auxiliar variable used to select the right values for the chart
 	 var index = 0;
+	 // The entire data set of all wells in the system
 	 var dataSet;
+	 // All the wells present in the map at the moment
 	 var currentWells;
+	 // Attributes considered in the creation of this chart
 	 var attributesToConsider = [
 		 ["PHIc", "Cumulative Porosity"],
 		 ["PHIR", "Cumulative Pore Volume"],
@@ -33,6 +38,9 @@
 
 	 var self = this;
 
+	 /*
+	  * Calculates all the normalized values and create the custom chart
+	  */
 	 InfoGraph.prototype.generateChart = function(currentUWI, allCurrentWells, allDataSet) {
 
 		 $(function() {
@@ -40,6 +48,7 @@
 			 dataSet = allDataSet;
 			 currentWells = allCurrentWells;
 
+			 // Save the index of the current selected well to be used later
 			 for(var i=0; i<dataSet.length; i++)
 			 {
 				 if(dataSet[i]["Well_Unique_Identifier"] === currentUWI)
@@ -49,6 +58,7 @@
 				 }
 			 }
 
+			 // Calculate the minimum and maximum values regarding all the considered attributes
 			 var minMax = getMinMaxValuesFromAllAttributes(dataSet);
 			 var minMaxValues =
 				 [
@@ -94,6 +104,9 @@
 			 var KRavCurrentSelectedWellValue = useDefinedNumberOfDecimalPlaces([KRavAllValues[currentIndex]], 1)[0];
 			 var HCurrentSelectedWellValue = useDefinedNumberOfDecimalPlaces([HAllValues[currentIndex]], 1)[0];
 
+			 /*
+			  * Holding all the values regarding the current selected well
+			  */
 			 var currentSelectedWellValues =
 				 [{
 					 "PHIc": PHIcCurrentSelectedWellValue,
@@ -163,6 +176,9 @@
 					 useDefinedNumberOfDecimalPlaces(normalizedCurrentHValue, 1)[0]
 				 ];
 
+			 /*
+			  * Calculate the minimum and maximum values fo the normalized data
+			  */
 			 var minMaxNormalizedData =
 				 [
 					 getMinMaxValues(normalizedPHIcValues),
@@ -174,6 +190,9 @@
 					 getMinMaxValues(normalizedHValues)
 				 ];
 
+			 /*
+			  * Get the minimum and maximum values of the pins being shown on the map
+			  */
 			 var minMaxActualData =
 				 [
 					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(PHIcValues), 1),
@@ -185,6 +204,9 @@
 					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(HValues), 1)
 				 ];
 
+			 /*
+			  * Get the minimum and maximum values of the considered properties regarding the entire data set
+			  */
 			 var minMaxTotalData =
 				 [
 					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[0][0])), 1),
@@ -196,6 +218,9 @@
 					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[6][0])), 1)
 				 ];
 
+			 /*
+			  * Create the chart itself!
+			  */
 			 $('#highchart-basic').highcharts({
 
 				 chart: {
@@ -235,6 +260,9 @@
 							 inside: true,
 							 enabled: true,
 							 useHTML: true,
+							 /*
+							  * Formatter function utilized to put the labels on the top and bottom of the bars
+							  */
 							 formatter: function() {
 								 var html;
 
@@ -259,6 +287,7 @@
 					 },
 					 arearange: {
 						 dataLabels: {
+							 // Formmater function utilized to put the actual real values of maximum and minimum of each attribute
 							 formatter: function() {
 								 if(this.y === this.point.low) {
 									 return minMaxTotalData[index++ % 7][0];
@@ -303,7 +332,7 @@
 								 return content;
 							 }
 							 else
-							 // to disable the tooltip at a point return false
+								// to disable the tooltip at a point return false
 								 return false;
 						 }
 					 }
@@ -353,18 +382,9 @@
 		 });
 	 };
 
-	 function getMinMaxValues(allWells) {
-		 var allValues = [];
-
-		 for(var i=0; i<allWells.length; i++)
-			 for(var j=0; j<attributesToConsider.length; j++)
-				 allValues.push(allWells[i][attributesToConsider[j][0]]);
-
-		 allValues.sort();
-
-		 return [allValues[0], allValues[allValues.length - 1]];
-	 }
-
+	 /*
+	  * Gets the minimum and maximum value from all the considered attributes
+	  */
 	 function getMinMaxValuesFromAllAttributes(allWells) {
 		 var max = -999999999, min = 999999999;
 
@@ -382,6 +402,9 @@
 		 return [min, max];
 	 }
 
+	 /*
+	  * Gets the minimum and maximum value within a list of values
+	  */
 	 function getMinMaxValues(values) {
 		 var max = -999999999, min = 999999999;
 		 for(var i=0; i<values.length; i++)
@@ -395,6 +418,9 @@
 		 return [min, max];
 	 }
 
+	 /*
+	  * Get all the values of a given property
+	  */
 	 function getValuesFromProperty(wells, attribute) {
 		 var result = [];
 
@@ -404,6 +430,9 @@
 		 return result;
 	 }
 
+	 /*
+	  * Force the number to have only a defined decimal places
+	  */
 	 function useDefinedNumberOfDecimalPlaces(values, decimalPlaces) {
 		 if(decimalPlaces < 0)
 			 return null;
@@ -418,6 +447,7 @@
 
 	 /*
 	  * TODO: USE SHAWN'S NORMALIZATION TO DO IT!
+	  * Normalize data within a specific range
 	  */
 	 function normalize_data (values, lowVal, highVal) {
 		 var N = values.length;
@@ -444,6 +474,9 @@
 		 return data_out;
 	 }
 
+	 /*
+	  * Get all the indices from a subSet in the totalSet
+	  */
 	 function getValuesIndices(totalSet, subSet) {
 		 var indices = [];
 
@@ -455,6 +488,9 @@
 		 return indices;
 	 }
 
+	 /*
+	  * Get all the values based on the given indices
+	  */
 	 function getValuesFromIndices(totalSet, indices) {
 		 var result = [];
 

@@ -24,10 +24,11 @@ Map Toolbar
 		font-size: 1.2em;
 		color: $mapToolbarButtonTextColour;
 		&:active, &.active, &:hover{
-			background: darken($mapToolbarButtonColour, 20);
-			border-top: none;
-			border-bottom: none;
-			border-color: transparent;
+			background: darken($mapToolbarButtonColour, 15);
+			// These three lines makes the UI on MAC look good. But not on Windows!
+			//border-top: none;
+			//border-bottom: none;
+			//border-color: transparent;
 
 		}
 		&.show-toolbar {
