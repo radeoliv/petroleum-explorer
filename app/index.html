@@ -1,162 +1,6 @@
 <!doctype html>
 <html>
 	<head>
-		<script type="text/javascript">
-			var created = 0;
-
-			function displayAccordingly() {
-
-				if (created == 1) {
-					removeDrop();
-				}
-
-				//Call mainMenu the main dropdown menu
-				var mainMenu = document.getElementById('mainMenu');
-
-				//Create the new dropdown menu
-				var whereToPut = document.getElementById('myDiv');
-				var newDropdown = document.createElement('select');
-				newDropdown.setAttribute('id',"newDropdownMenu");
-				whereToPut.appendChild(newDropdown);
-
-				if (mainMenu.value == "barGraph") { //The person chose bar graph
-
-					//Add an option called "Well Driller Total Depth"
-					var optionTotalDeph=document.createElement("option");
-					optionTotalDeph.text="Driller Total Depth";
-					newDropdown.add(optionTotalDeph,newDropdown.options[null]);
-
-					//Add an option called "Cumulative Porosity( PHIc) "
-					var optionCumulPoro =document.createElement("option");
-					optionCumulPoro.text ="Cumulative Porosity (PHIc)";
-					newDropdown.add(optionCumulPoro,newDropdown.options[null]);
-
-					//Add an option called "Average Porosity( PHIav)"
-					var optionAvPorosity=document.createElement("option");
-					optionAvPorosity.text="Average Porosity (PHIav)";
-					newDropdown.add(optionAvPorosity,newDropdown.options[null]);
-
-					//Add an option called "Cumulative Hydrocarbon Movability(KRc)"
-					var optionCumulHydrocarbon=document.createElement("option");
-					optionCumulHydrocarbon.text="Cumulative Hydrocarbon Movability (KRc)";
-					newDropdown.add(optionCumulHydrocarbon,newDropdown.options[null]);
-
-					//Add an option called "Average Hydrocarbon Movability(KRAV)"
-					var optionAvHydrocarbon=document.createElement("option");
-					optionAvHydrocarbon.text="Average Hydrocarbon Movability (KRav)";
-					newDropdown.add(optionAvHydrocarbon,newDropdown.options[null]);
-
-					//Add an option called "Cumulative Oil Saturation (SOc)"
-					var optionCumulOil=document.createElement("option");
-					optionCumulOil.text="Cumulative Oil Saturation (SOc)";
-					newDropdown.add(optionCumulOil,newDropdown.options[null]);
-
-					//Add an option called " Cumulative Shale Content(VSHc) "
-					var optionCumulShale=document.createElement("option");
-					optionCumulShale.text="Cumulative Shale Content (VSHc)";
-					newDropdown.add(optionCumulShale,newDropdown.options[null]);
-
-					//Add an option called " Effective Thickness (H) "
-					var optionEffThick=document.createElement("option");
-					optionEffThick.text="Effective Thickness (H)";
-					newDropdown.add(optionEffThick,newDropdown.options[null]);
-
-					//Add an option called " Effective Yield (Pc) "
-					var optionEffYield=document.createElement("option");
-					optionEffYield.text="Effective Yield (Pc)";
-					newDropdown.add(optionEffYield,newDropdown.options[null]);
-
-					//Add an option called "Peak Value(Pp) "
-					var optionPeakValue=document.createElement("option");
-					optionPeakValue.text="Peak Value (Pp)";
-					newDropdown.add(optionPeakValue,newDropdown.options[null]);
-
-					//Add an option called "Effective life cycle (Pt) "
-					var optionEffCycle=document.createElement("option");
-					optionEffCycle.text="Effective Life Cycle (Pt)";
-					newDropdown.add(optionEffCycle,newDropdown.options[null]);
-
-
-				}
-
-				else if (mainMenu.value == "pieChart") { //User chooses pie chart
-
-					//Add an option called "Company"
-					var optionCompany=document.createElement("option");
-					optionCompany.text="Company";
-					newDropdown.add(optionCompany,newDropdown.options[null]);
-
-					//Add an option called "Status"
-					var optionStatus=document.createElement("option");
-					optionStatus.text="Status";
-					newDropdown.add(optionStatus,newDropdown.options[null]);
-
-					//Add an option called "Well Primary Producing Formation"
-					var optionProdForm =document.createElement("option");
-					optionProdForm.text="Well Primary Producing Formation";
-					newDropdown.add(optionProdForm,newDropdown.options[null]);
-				}
-
-				created = 1
-
-			}
-
-			function removeDrop() {
-				var d = document.getElementById('myDiv');
-
-				var oldmenu = document.getElementById('newDropdownMenu');
-
-				d.removeChild(oldmenu);
-			}
-
-			// function to create table, add rows and append atributes
-			function addRow(graph_table) {
-
-				var table = document.getElementById(graph_table);
-
-				var rowCount = table.rows.length;
-				var row = table.insertRow(rowCount);
-
-				var colCount = table.rows[0].cells.length;
-
-				for(var i=0; i<colCount; i++) {
-
-					var newcell = row.insertCell(i);
-
-					newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-					switch(newcell.childNodes[0].type) {
-						case "select-one":
-							newcell.childNodes[0].selectedIndex = 0;
-							break;
-						}
-				}
-			}
-
-			function deleteRow(graph_table) {
-				try {
-					var table = document.getElementById(graph_table);
-					var rowCount = table.rows.length;
-
-					for(var i=0; i<rowCount; i++) {
-						var row = table.rows[i];
-						if(rowCount <= 1) {
-							alert("Cannot delete all the rows.");
-							break;
-						}
-						table.deleteRow(i);
-						rowCount--;
-						i--;
-					}
-				}
-			catch(e) {
-				alert(e);
-			}
-		}
-
-
-
-
-		</script>
 
 		<meta charset = "utf-8">
 		<meta name = "viewport" content = "width=device-width, initial-scale=1">
@@ -274,27 +118,42 @@
 						<fieldset>
 							<hr>
 							<h5>Select Chart Type and Properties</h5>
-							<div class="graph" id = "myDiv">
-								<table id="dataTable" width="350px" border="1">
+							<div id="graphDiv">
+								<table id="graphTable" >
 									<tr>
 										<td>
-											<select id="mainmenu">
-												<option value="">--</option>
-												<option value="barGraph">Bar Chart</option>
-												<option value="pieChart">Pie chart</option>
+											<select id="graphMenu">
+												<option value="bar">Bar Chart</option>
+												<option value="pie">Pie chart</option>
 											</select>
 										</td>
 										<td>
-											<select id="try" onchange="displayAccordingly()">
+											<select id="barMenu">
+												<option value="Well_Drillers_Total_Depth">Well Driller Total Depth</option>
+												<option value="PHIc">Cumulative Porosity</option>
+												<option value="PHIav">Average Porosity</option>
+												<option value="KRc">Cumulative Hydrocarbon Movability</option>
+												<option value="KRav">Average Hydrocarbon Movability</option>
+												<option value="SOc">Cumulative Oil Saturation</option>
+												<option value="VSHc">Cumulative Shale Content</option>
+												<option value="H">Effective Thickness</option>
+												<option value="Pc">Effective Yield</option>
+												<option value="Pp">Peak Value</option>
+												<option value="Pt">Effective Life Cycle</option>
 											</select>
 										</td>
-										<!-- <td><input type="text" name="txt"/></td> -->
+										<td>
+											<select id="pieMenu">
+												<option value="Well_Operator">Company</option>
+												<option value="Well_Status">Status</option>
+												<option value="Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
+											</select>
+										</td>
 									</tr>
 								</table>
-
-								<input type="button" value="Add Row" onclick="addRow('dataTable')" />
-
-								<input type="button" value="Delete Row" onclick="deleteRow('dataTable')" />
+								<input type="button" id="addRow" value="Add Row"/>
+								<hr>
+								<div id="graphOptions"></div>
 							</div>
 						</fieldset>
 					</form>
@@ -353,6 +212,7 @@
 			<script src="scripts/components/fullTable/full-table.js"></script>
 			<script src="scripts/components/mapSection/map-canvas.js"></script>
 			<script src="scripts/components/visualizationController/info-graph.js"></script>
+			<script src="scripts/components/visualizationController/graph-selection.js"></script>
 			<script src="scripts/main.js"></script>
 			<!-- Hands on table -->
 			<script src="http://handsontable.com/dist/jquery.handsontable.full.js"></script>
