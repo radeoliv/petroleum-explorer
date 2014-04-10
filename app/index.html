@@ -124,12 +124,11 @@
 					var newcell = row.insertCell(i);
 
 					newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-					//alert(newcell.childNodes);
 					switch(newcell.childNodes[0].type) {
 						case "select-one":
 							newcell.childNodes[0].selectedIndex = 0;
 							break;
-					}
+						}
 				}
 			}
 
@@ -296,18 +295,22 @@
 							<hr>
 
 
-							<h5>Select Graphs and Properties</h5>
+							<h5>Select Chart Type and Properties</h5>
 							<div class="graph" id = "myDiv">
 								<table id="dataTable" width="350px" border="1">
 									<tr>
 										<td>
-											<select id="mainMenu" onchange="displayAccordingly()">
+											<select id="mainmenu">
 												<option value="">--</option>
-												<option value="barGraph">Bar Graph</option>
+												<option value="barGraph">Bar Chart</option>
 												<option value="pieChart">Pie chart</option>
 											</select>
 										</td>
-										<td><input type="text" name="txt"/></td>
+										<td>
+											<select id="try" onchange="displayAccordingly()">
+											</select>
+										</td>
+										<!-- <td><input type="text" name="txt"/></td> -->
 									</tr>
 								</table>
 
