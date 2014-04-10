@@ -16,6 +16,15 @@
 	 var index = 0;
 	 var dataSet;
 	 var currentWells;
+	 var attributesToConsider = [
+		 ["PHIc", "Cumulative Porosity"],
+		 ["PHIR", "Cumulative Pore Volume"],
+		 ["Vshc", "Cumulative Shale Content"],
+		 ["Soc", "Cumulative Oil Saturation"],
+		 ["KRc", "Cumulative Hydrocarbon Movability"],
+		 ["KRav", "Average Hydrocarbon Movability"],
+		 ["H", "Thickness"]
+	 ];
 
 	 InfoGraph = (function(){
 		 function InfoGraph(){
@@ -55,24 +64,24 @@
 			 /*
 			  * Values from all the wells
 			  */
-			 var PHIcAllValues = getValuesFromProperty(dataSet, "PHIc");
-			 var PHIRAllValues = getValuesFromProperty(dataSet, "PHIR");
-			 var VshcAllValues = getValuesFromProperty(dataSet, "Vshc");
-			 var SocAllValues = getValuesFromProperty(dataSet, "Soc");
-			 var KRcAllValues = getValuesFromProperty(dataSet, "KRc");
-			 var KRavAllValues = getValuesFromProperty(dataSet, "KRav");
-			 var HAllValues = getValuesFromProperty(dataSet, "H");
+			 var PHIcAllValues = getValuesFromProperty(dataSet, attributesToConsider[0][0]);
+			 var PHIRAllValues = getValuesFromProperty(dataSet, attributesToConsider[1][0]);
+			 var VshcAllValues = getValuesFromProperty(dataSet, attributesToConsider[2][0]);
+			 var SocAllValues = getValuesFromProperty(dataSet, attributesToConsider[3][0]);
+			 var KRcAllValues = getValuesFromProperty(dataSet, attributesToConsider[4][0]);
+			 var KRavAllValues = getValuesFromProperty(dataSet, attributesToConsider[5][0]);
+			 var HAllValues = getValuesFromProperty(dataSet, attributesToConsider[6][0]);
 
 			 /*
 			  * Values from the wells being shown on the map
 			  */
-			 var PHIcValues = getValuesFromProperty(currentWells, "PHIc");
-			 var PHIRValues = getValuesFromProperty(currentWells, "PHIR");
-			 var VshcValues = getValuesFromProperty(currentWells, "Vshc");
-			 var SocValues = getValuesFromProperty(currentWells, "Soc");
-			 var KRcValues = getValuesFromProperty(currentWells, "KRc");
-			 var KRavValues = getValuesFromProperty(currentWells, "KRav");
-			 var HValues = getValuesFromProperty(currentWells, "H");
+			 var PHIcValues = getValuesFromProperty(currentWells, attributesToConsider[0][0]);
+			 var PHIRValues = getValuesFromProperty(currentWells, attributesToConsider[1][0]);
+			 var VshcValues = getValuesFromProperty(currentWells, attributesToConsider[2][0]);
+			 var SocValues = getValuesFromProperty(currentWells, attributesToConsider[3][0]);
+			 var KRcValues = getValuesFromProperty(currentWells, attributesToConsider[4][0]);
+			 var KRavValues = getValuesFromProperty(currentWells, attributesToConsider[5][0]);
+			 var HValues = getValuesFromProperty(currentWells, attributesToConsider[6][0]);
 
 			 /*
 			  * Values from the current selected well
@@ -178,13 +187,13 @@
 
 			 var minMaxTotalData =
 				 [
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "PHIc")), 1),
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "PHIR")), 1),
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "Vshc")), 1),
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "Soc")), 1),
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "KRc")), 1),
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "KRav")), 1),
-					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, "H")), 1)
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[0][0])), 1),
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[1][0])), 1),
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[2][0])), 1),
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[3][0])), 1),
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[4][0])), 1),
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[5][0])), 1),
+					 useDefinedNumberOfDecimalPlaces(getMinMaxValues(getValuesFromProperty(dataSet, attributesToConsider[6][0])), 1)
 				 ];
 
 			 $('#highchart-basic').highcharts({
@@ -199,7 +208,16 @@
 				 },
 
 				 xAxis: {
-					 categories: ['PHIc', 'PHIR', 'Vshc', 'Soc', 'KRc', 'KRav', 'H']
+					 categories:
+						 [
+							 attributesToConsider[0][0],
+							 attributesToConsider[1][0],
+							 attributesToConsider[2][0],
+							 attributesToConsider[3][0],
+							 attributesToConsider[4][0],
+							 attributesToConsider[5][0],
+							 attributesToConsider[6][0]
+						 ]
 				 },
 
 				 yAxis: {
@@ -336,40 +354,28 @@
 	 };
 
 	 function getMinMaxValues(allWells) {
-		 var attributesToConsider = ["PHIc", "PHIR", "Vshc", "Soc", "KRc", "KRav", "H"];
 		 var allValues = [];
 
 		 for(var i=0; i<allWells.length; i++)
 			 for(var j=0; j<attributesToConsider.length; j++)
-				 allValues.push(allWells[i][attributesToConsider[j]]);
+				 allValues.push(allWells[i][attributesToConsider[j][0]]);
 
 		 allValues.sort();
 
 		 return [allValues[0], allValues[allValues.length - 1]];
 	 }
 
-	 function getMinMaxValuesFromAttribute(wells, attribute) {
-		 var values = [];
-		 for(var i=0; i<wells.length; i++)
-			 values.push(wells[i][attribute]);
-		 values.sort();
-
-		 return [values[0], values[values.length - 1]];
-	 }
-
 	 function getMinMaxValuesFromAllAttributes(allWells) {
-		 var attributesToConsider = ["PHIc", "PHIR", "Vshc", "Soc", "KRc", "KRav", "H"];
-
 		 var max = -999999999, min = 999999999;
 
 		 for(var i=0; i<allWells.length; i++)
 		 {
 			 for(var j=0; j<attributesToConsider.length; j++)
 			 {
-				 if(allWells[i][attributesToConsider[j]] > max)
-					 max = allWells[i][attributesToConsider[j]];
-				 if(allWells[i][attributesToConsider[j]] < min)
-					 min = allWells[i][attributesToConsider[j]];
+				 if(allWells[i][attributesToConsider[j][0]] > max)
+					 max = allWells[i][attributesToConsider[j][0]];
+				 if(allWells[i][attributesToConsider[j][0]] < min)
+					 min = allWells[i][attributesToConsider[j][0]];
 			 }
 		 }
 

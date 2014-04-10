@@ -40,7 +40,7 @@ Full Table
 	@extend %bordered;
 	left: 50%;
 	bottom: 0;
-	z-index: 9999; // it's over 9000!
+	z-index: 5;
 	padding: $padding-small;
 	@extend %margin-none;
 	outline: none;

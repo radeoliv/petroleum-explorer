@@ -113,7 +113,7 @@ Map Toolbar
 ========================================================================== */
 .mapToolbar {
   right: 1em;
-  z-index: 9999;
+  z-index: 5;
   background: #f2f2f2;
   top: 3em;
   display: inline;
@@ -235,7 +235,7 @@ Full Table
 .toggle-table {
   left: 50%;
   bottom: 0;
-  z-index: 9999;
+  z-index: 5;
   padding: 0.76923em;
   outline: none;
   font-size: 1.2em;
@@ -291,7 +291,7 @@ Full Table
   float: right; }
 
 .filterInputField {
-  width: 85%; }
+  width: 100%; }
 
 #tableColumnFilter {
   display: inline-block;
@@ -395,3 +395,7 @@ button {
   height: 0.6em;
   right: -0.3em;
   top: -0.3em; }
+
+#highchart-basic {
+  max-width: 80% !important;
+  margin: 0 auto; }

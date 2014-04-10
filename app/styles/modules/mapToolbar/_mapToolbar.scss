@@ -10,7 +10,7 @@ Map Toolbar
 .mapToolbar {
 	@extend %absolute;
 	right: $margin;
-	z-index: 9999;
+	z-index: 5;
 	@extend %bordered;
 	@extend %small-padding;
 	@extend %border-box;
