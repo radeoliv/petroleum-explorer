@@ -1,40 +1,79 @@
-var $barMenu = $('#barMenu');
-var $pieMenu = $('#pieMenu').hide();
-var $mainMenu = $("#graphMenu");
-var $graphOpt = $("#graphOptions");
+(function () {
+	var $barMenu = $('#barMenu');
+	var $pieMenu = $('#pieMenu').hide();
+	var $mainMenu = $("#graphMenu");
+	var $highchart = $('.highchart-basic');
 
-$barMenu.addClass('active');
+	$barMenu.addClass('active');
 
-var i = 0;
+	var index = 0;
+	var currentData;
+	var search;
+	var visual;
 
-$("#graphMenu").on("change", function () {
-		if ($mainMenu.val() == "bar") { //The person chose bar graph
-			$barMenu.show();
-			$pieMenu.hide();
-			$barMenu.addClass('active');
-			$pieMenu.removeClass('active');
-		}
+	var GraphSelection;
+	GraphSelection = function (searchController, visualizationCustom){
+		search = searchController;
+		visual = visualizationCustom;
 
-		else if ($mainMenu.val() == "pie") { //User chooses pie chart
-			$barMenu.hide();
-			$pieMenu.show();
-			$barMenu.removeClass('active');
-			$pieMenu.addClass('active');
-		}
-});
+		currentData = searchController.dataSet;
+	};
 
-$("#addRow").on("click", function () {
-	i++;
-
-	if($barMenu.hasClass('active')){
-		console.log($mainMenu.val());
-		console.log($barMenu.val());
-		$('<label id="'+i+'" value="'+$mainMenu.val()+'"></label>asd<label id="'+i+'" value="'+$barMenu.val()+'"></label><br>').appendTo($graphOpt);
-	}
-	else if($pieMenu.hasClass('active')){
-		console.log($mainMenu.val());
-		console.log($pieMenu.val());
-		$('<label id="'+i+'" value="'+$mainMenu.val()+'"></label>ddd<label id="'+i+'" value="'+$pieMenu.val()+'"></label><br>').appendTo($graphOpt);
+	GraphSelection.prototype.setCurrentData = function(newData) {
+		currentData = newData;
 	}
 
-});
+	$("#graphMenu").on("change", function () {
+			if ($mainMenu.val() == "bar") { //The person chose bar graph
+				$barMenu.show();
+				$pieMenu.hide();
+				$barMenu.addClass('active');
+				$pieMenu.removeClass('active');
+			}
+
+			else if ($mainMenu.val() == "pie") { //User chooses pie chart
+				$barMenu.hide();
+				$pieMenu.show();
+				$barMenu.removeClass('active');
+				$pieMenu.addClass('active');
+			}
+	});
+
+	$("#addRow").on("click", function () {
+		index++;
+
+		var chartType;
+
+		if($barMenu.hasClass('active')){
+			chartType = '<label id="'+index+'" value="'+$mainMenu.val()+'">'+"Bar Chart"+'</label></br><label id="'+index+'" value="'+$barMenu.val()+'">'+$barMenu.find("option:selected").text()+'</label><hr>';
+
+
+		}
+		else if($pieMenu.hasClass('active')){
+			chartType = '<label id="'+index+'" value="'+$mainMenu.val()+'">'+"Pie Chart"+'</label></br><label id="'+index+'" value="'+$pieMenu.val()+'">'+$pieMenu.find("option:selected").text()+'</label><hr>';
+
+
+		}
+
+		var removeGraphOption = '<div  id="'+index+'" class="graphBtnParent"><button type="button" class="graphButton minusButton"><i class="icon-minus"></i></button></div>';
+
+		$('<div  id="'+index+'" class="graphParameter">'+removeGraphOption+chartType+'</div>').appendTo($(this).parent());
+
+		var $removeGraphButton = $("#" + index).find(".graphBtnParent");
+		$removeGraphButton.on("click", function() {
+			$removeGraphButton.parent().remove();
+			$("body").trigger("graphParameterCalled");
+		});
+	});
+
+	$("body").on("graphParameterCalled", function () {
+		if($barMenu.hasClass('active')){
+			visual.renderVisualization($highchart, currentData, $barMenu.val(), $mainMenu.val());
+		}
+		else if($pieMenu.hasClass('active')){
+			visual.renderVisualization($highchart, currentData, $pieMenu.val(), $mainMenu.val());
+		}
+	});
+
+	(typeof exports !== "undefined" && exports !== null ? exports : window).GraphSelection = GraphSelection;
+}).call(this);

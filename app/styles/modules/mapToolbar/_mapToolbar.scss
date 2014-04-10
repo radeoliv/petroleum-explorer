@@ -60,7 +60,7 @@ Map Toolbar
 	}
 
 	%wide {
-		min-width: 20em;
+		width: 20em;
 	}
 	.search-form {
 		@extend %wide;
@@ -113,6 +113,7 @@ Map Toolbar
 
 	h4{
 		margin-top: 0em;
+		margin-bottom: 0.75em;
 	}
 
 	.accordianContent{
@@ -175,8 +176,51 @@ Map Toolbar
 	.handsontable .current{
 		background: $mapToolbarButtonColour;
 	}
+
 }
 
 table {
 	width: 100%;
+}
+
+
+.graphButton{
+	display: inline-block;
+	top: inherit;
+	padding: 0.5em;
+	outline: none;
+}
+
+.graphBtnParent{
+	width: 2.25em;
+	display: inline-block;
+	float: right;
+
+	button{
+		font-size: 0.75em;
+	}
+}
+
+#graphMenu, #barMenu, #pieMenu{
+	font-size: 0.85em;
+	width: 75%;
+}
+
+#addRow{
+	width: 75%;
+	font-size: 0.75em;
+	padding-top: 0.5em;
+}
+
+#graphDiv{
+	 align-content: center;
+	 text-align: center;
+ }
+
+.graphParameter{
+	align-content: left;
+	text-align: left;
+	label{
+		margin-left: 1em;
+	}
 }

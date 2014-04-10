@@ -137,7 +137,7 @@ Map Toolbar
   .mapToolbar .sidebar-content-container {
     display: inline; }
   .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .layer-form, .mapToolbar .graph-form {
-    min-width: 20em; }
+    width: 20em; }
   .mapToolbar .grouped-search {
     align-content: center;
     text-align: center; }
@@ -157,7 +157,8 @@ Map Toolbar
   .mapToolbar h5 {
     margin: 0em; }
   .mapToolbar h4 {
-    margin-top: 0em; }
+    margin-top: 0em;
+    margin-bottom: 0.75em; }
   .mapToolbar .accordianContent {
     text-align: center; }
   .mapToolbar .ui-accordion .ui-accordion-header {
@@ -200,6 +201,38 @@ Map Toolbar
 
 table {
   width: 100%; }
+
+.graphButton {
+  display: inline-block;
+  top: inherit;
+  padding: 0.5em;
+  outline: none; }
+
+.graphBtnParent {
+  width: 2.25em;
+  display: inline-block;
+  float: right; }
+  .graphBtnParent button {
+    font-size: 0.75em; }
+
+#graphMenu, #barMenu, #pieMenu {
+  font-size: 0.85em;
+  width: 75%; }
+
+#addRow {
+  width: 75%;
+  font-size: 0.75em;
+  padding-top: 0.5em; }
+
+#graphDiv {
+  align-content: center;
+  text-align: center; }
+
+.graphParameter {
+  align-content: left;
+  text-align: left; }
+  .graphParameter label {
+    margin-left: 1em; }
 
 #map-canvas {
   height: 100%;
@@ -280,12 +313,14 @@ Full Table
   display: inline-block;
   top: inherit;
   padding: 0.5em;
-  outline: none; }
+  outline: none;
+  font-size: 0.85em; }
 
 .filterBtnParent {
   width: 2.25em;
   display: inline-block;
-  float: right; }
+  float: right;
+  font-size: 0.85em; }
 
 .filterInputField {
   width: 100%; }

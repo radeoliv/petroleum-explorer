@@ -14,10 +14,11 @@
  //TODO: file description
  -------------------------------------------------------------------------------*/
 var SearchView;
-SearchView = function (searchController, mapCanvasController){//, tableController) {
+SearchView = function (searchController, mapCanvasController, graphSelection){//, tableController) {
 	//TODO: create constructor for searchview
 	this.searchController = searchController;
 	this.mapCanvasController = mapCanvasController;
+	this.graphSelection = graphSelection;
 	//this.tableController = tableController;
 };
 
@@ -165,6 +166,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 			//plot results on google maps
 			self.mapCanvasController = new MapCanvasController().plotResults(results);
+			self.graphSelection.setCurrentData(results);
 
 			if(results != null) {
 				//append the results container if javascript enabled

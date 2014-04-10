@@ -28,8 +28,11 @@ jQuery(document).ready(function ($) {
 
 	var mySearchController = loadSearchController();
 	var myMapCanvasController = new MapCanvasController();
+	var myVisualizationCustom = new Visualization_custom();
 
-	var mySearchView = new SearchView(mySearchController, myMapCanvasController);
+	var myGraphSelection = new GraphSelection(mySearchController, myVisualizationCustom);
+
+	var mySearchView = new SearchView(mySearchController, myMapCanvasController, myGraphSelection);
 
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
@@ -38,6 +41,7 @@ jQuery(document).ready(function ($) {
 	var myTableController = new FullTable(mySearchController, myMapCanvasController, $fullTableContainer);
 
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
+
 
 	//var $visualization_view = new Visualization_View($fullTableContainer)
 });

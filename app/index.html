@@ -117,41 +117,33 @@
 					 <form action = "/graph">
 						<fieldset>
 							<hr>
-							<h5>Select Chart Type and Properties</h5>
+							<h4>Graph</h4>
 							<div id="graphDiv">
-								<table id="graphTable" >
-									<tr>
-										<td>
-											<select id="graphMenu">
-												<option value="bar">Bar Chart</option>
-												<option value="pie">Pie chart</option>
-											</select>
-										</td>
-										<td>
-											<select id="barMenu">
-												<option value="Well_Drillers_Total_Depth">Well Driller Total Depth</option>
-												<option value="PHIc">Cumulative Porosity</option>
-												<option value="PHIav">Average Porosity</option>
-												<option value="KRc">Cumulative Hydrocarbon Movability</option>
-												<option value="KRav">Average Hydrocarbon Movability</option>
-												<option value="SOc">Cumulative Oil Saturation</option>
-												<option value="VSHc">Cumulative Shale Content</option>
-												<option value="H">Effective Thickness</option>
-												<option value="Pc">Effective Yield</option>
-												<option value="Pp">Peak Value</option>
-												<option value="Pt">Effective Life Cycle</option>
-											</select>
-										</td>
-										<td>
-											<select id="pieMenu">
-												<option value="Well_Operator">Company</option>
-												<option value="Well_Status">Status</option>
-												<option value="Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
-											</select>
-										</td>
-									</tr>
-								</table>
-								<input type="button" id="addRow" value="Add Row"/>
+								<div id="graphTable" >
+									<select id="graphMenu">
+										<option value="bar">Bar Chart</option>
+										<option value="pie">Pie chart</option>
+									</select>
+									<select id="barMenu">
+										<option value="Well_Drillers_Total_Depth">Well Driller Total Depth</option>
+										<option value="PHIc">Cumulative Porosity</option>
+										<option value="PHIav">Average Porosity</option>
+										<option value="KRc">Cumulative Hydrocarbon Movability</option>
+										<option value="KRav">Average Hydrocarbon Movability</option>
+										<option value="SOc">Cumulative Oil Saturation</option>
+										<option value="VSHc">Cumulative Shale Content</option>
+										<option value="H">Effective Thickness</option>
+										<option value="Pc">Effective Yield</option>
+										<option value="Pp">Peak Value</option>
+										<option value="Pt">Effective Life Cycle</option>
+									</select>
+									<select id="pieMenu">
+										<option value="Well_Operator">Company</option>
+										<option value="Well_Status">Status</option>
+										<option value="Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
+									</select>
+								</div>
+								<input type="button" id="addRow" value="Add"/>
 								<hr>
 								<div id="graphOptions"></div>
 							</div>
@@ -213,6 +205,7 @@
 			<script src="scripts/components/mapSection/map-canvas.js"></script>
 			<script src="scripts/components/visualizationController/info-graph.js"></script>
 			<script src="scripts/components/visualizationController/graph-selection.js"></script>
+			<script src="scripts/components/visualizationController/visualization_custom.js"></script>
 			<script src="scripts/main.js"></script>
 			<!-- Hands on table -->
 			<script src="http://handsontable.com/dist/jquery.handsontable.full.js"></script>
