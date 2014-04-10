@@ -223,7 +223,7 @@
 								 if(this.y === this.point.low) {
 									 var paddingLow = (this.point.plotLow - this.point.plotHigh) - 18;
 
-									 html = '<div style="color:black;height:' + (this.point.plotHigh - this.point.plotLow) + 'px;padding:' + paddingLow + 'px 0px 0px 0px">';
+									 html = '<div style="color:white;height:' + (this.point.plotHigh - this.point.plotLow) + 'px;padding:' + paddingLow + 'px 0px 0px 0px">';
 									 html += minMaxActualData[this.point.x][0];
 									 html += '</div>';
 									 return html;
@@ -231,7 +231,7 @@
 								 } else if(this.y === this.point.high) {
 									 var paddingHigh = (this.point.plotHigh - this.point.plotLow);
 
-									 html = '<div style="color:black;height:' + (this.point.plotLow - this.point.plotHigh) + 'px;padding: '+ paddingHigh +'px 0px 0px 0px">';
+									 html = '<div style="color:white;height:' + (this.point.plotLow - this.point.plotHigh) + 'px;padding: '+ paddingHigh +'px 0px 0px 0px">';
 									 html += minMaxActualData[this.point.x][1];
 									 html += '</div>';
 									 return html;
@@ -316,7 +316,8 @@
 						 states: {
 							 hover: false
 						 },
-						 zIndex: 2
+						 zIndex: 2,
+						 colorByPoint: true
 					 },
 					 {
 						 type: 'scatter',
@@ -324,7 +325,8 @@
 						 data: normalizedCurrentValues,
 						 marker: {
 							 fillColor: 'red',
-							 lineWidth: 2
+							 lineWidth: 3,
+							 lineColor: 'black'
 						 },
 						 zIndex: 3
 					 }

@@ -149,16 +149,41 @@
 						+ "<b>Well Operator</b><br>" + currentWells[i]["Well_Operator"] + "<br><br>"
 						+ "<b>Well Status</b><br>" + currentWells[i]["Well_Status"] + "<br><br>";
 
-					//content += "<div id=\"highchart-basic\" style=\"min-width: 350px; height: 425px; margin: 0 auto\"></div>";
+					// Defining the link to open the charts visualization
+					content += "<a href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
 
+					// Set the content of the infowindow
 					infoWindow.setContent("<p>" + content + "</p>");
 
 					// Defining new property to the info window to know when it's opened or closed
 					google.maps.InfoWindow.prototype.opened = false;
+					google.maps.Marker.prototype.id = i;
 					toggleInfoWindow(infoWindow, map, marker);
 
 					// Using this specific well (and all the rest) to generate the chart
 					new InfoGraph().generateChart(currentWells[i]["Well_Unique_Identifier"], currentWells, dataSet);
+
+					/*
+					 * Open light box to show the generated charts
+					 */
+					$('.open-charts').magnificPopup({
+						type:'inline',
+						midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+						items: [
+							{
+								src: '#highchart-basic',
+								type: 'inline'
+							}
+						],
+						gallery: {
+							enabled: true,
+							navigateByImgClick: true,
+							arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+							tPrev: 'Previous', // title for left button
+							tNext: 'Next', // title for right button
+							tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
+						}
+					});
 
 					//marker.setAnimation(google.maps.Animation.BOUNCE);
 				}
@@ -174,14 +199,34 @@
 	/*
 	 * Allow the infoWindow to be opened and closed by clicking on the pin
 	 */
+	// Last info window opened to control the toggle of opening and closing window. Array contains marker id and InfoWindow
+	var lastInfoWindowOpened = [-1, null];
 	function toggleInfoWindow(infoWindow, map, marker) {
 		if(infoWindow.opened) {
-			infoWindow.opened = false;
-			infoWindow.close();
+			if(lastInfoWindowOpened[0] != -1 && marker.id != lastInfoWindowOpened[0]) {
+				/*
+				 * If the last info window opened id and the marker clicked have different ids:
+				 * - Close the one that is opened (the last one)
+				 * - Open the new one
+				 * - Set it as the new last info window opened
+				 */
+				lastInfoWindowOpened[1].opened = false;
+				lastInfoWindowOpened[1].close();
+				infoWindow.opened = true;
+				infoWindow.open(map, marker);
+				lastInfoWindowOpened = [marker.id, infoWindow];
+			} else {
+				// Closing the opened info window and set the last info window opened as none
+				infoWindow.opened = false;
+				infoWindow.close();
+				lastInfoWindowOpened = [-1, null];
+			}
 		}
 		else {
+			// Opening the info window clicked and setting it as the last info window opened
 			infoWindow.opened = true;
 			infoWindow.open(map, marker);
+			lastInfoWindowOpened = [marker.id, infoWindow];
 		}
 	}
 
