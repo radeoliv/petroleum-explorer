@@ -57,7 +57,6 @@
 		});
 		initMapToggle();
 		setToggle();
-
 	});
 
 }).call(this);

@@ -28,13 +28,16 @@ jQuery(document).ready(function ($) {
 
 	var mySearchController = loadSearchController();
 	var myMapCanvasController = new MapCanvasController();
+
 	var mySearchView = new SearchView(mySearchController, myMapCanvasController);
 
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
-	// load in datatable
-	var $fullTableContainer = $(".search-results-table"),
-		myTableController = new FullTable(mySearchController, $fullTableContainer);
+
+	var $fullTableContainer = $(".search-results-table");
+	var myTableController = new FullTable(mySearchController, myMapCanvasController, $fullTableContainer);
+
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
+
 	//var $visualization_view = new Visualization_View($fullTableContainer)
 });
