@@ -4,12 +4,16 @@
 	<meta charset = "utf-8">
 	<meta name = "viewport" content = "width=device-width, initial-scale=1">
 	<title>SENG 515 Petroleum Explorer</title>
+	<!-- build:css styles/vendor.css -->
+	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/magnific-popup/dist/magnific-popup.css">
+	<link rel="stylesheet" href="bower_components/handsontable/dist/jquery.handsontable.full.css"/>
+	<!-- endbower -->
+	<!-- endbuild -->
 
 	<!-- build:css styles/main.css -->
-	<link rel = "stylesheet" href = "styles/style.css">
-	<link rel = "stylesheet" href = "styles/icomoon/style.css"/>
-	<link rel = "stylesheet" href = "bower_components/magnific-popup/dist/magnific-popup.css">
-	<link rel = "stylesheet" href = "bower_components/handsontable/dist/jquery.handsontable.full.css"/>
+	<link rel="stylesheet" href="styles/style.css">
+	<link rel="stylesheet" href="styles/fonts/icomoon/style.css"/>
 	<!-- endbuild -->
 
 	<script src = "http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -194,15 +198,18 @@
 			</article>
 		</aside>
 
-		<!-- build:js(.tmp) scripts/main.js -->
+		<!-- build:js scripts/vendor.js -->
+		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
 		<script src="bower_components/handsontable/dist/jquery.handsontable.full.js"></script>
 		<script src="bower_components/highcharts/highcharts.js"></script>
 		<script src="bower_components/highcharts/highcharts-more.js"></script>
 		<script src="bower_components/highcharts/modules/exporting.js"></script>
-		<script src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
+		<!-- endbower -->
+		<!-- endbuild -->
+		<!-- build:js scripts/main.js -->
 		<script src="scripts/components/mapToolbar/map-toolbar.js"></script>
 		<script src="scripts/components/search/search-controller.js"></script>
 		<script src="scripts/components/search/searchView.js"></script>
