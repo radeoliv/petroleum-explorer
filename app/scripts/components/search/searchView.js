@@ -32,7 +32,7 @@ var optionStatus;	//global var for handling accordion option for search select
 			return $("#accordion").on("click", function () {
 				optionAccordion = $("#accordion").accordion( "option", "active" );
 			});
-		}
+		};
 		active();
 	});
 }).call(this);
@@ -45,7 +45,7 @@ var optionStatus;	//global var for handling accordion option for search select
 				optionStatus = $("#status").val();
 				//console.log(optionStatus);
 			});
-		}
+		};
 		active();
 	});
 }).call(this);
@@ -227,4 +227,4 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		$searchInputForm.find("input[name='company']").val(''),
 		$searchInputForm.find("select[name='status']").val('');
 	}
-}
+};

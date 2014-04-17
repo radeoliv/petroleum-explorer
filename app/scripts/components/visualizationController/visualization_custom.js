@@ -38,7 +38,7 @@
 
 			}
 
-			console.log(this.$containerDiv, this.dataQuery, this.filterdata, this.chartType)
+			console.log(this.$containerDiv, this.dataQuery, this.filterdata, this.chartType);
 
 			if (this.data.length < 1) {
 				return;
