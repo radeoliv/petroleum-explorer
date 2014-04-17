@@ -29,10 +29,6 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		yeoman:         yeomanConfig,
 		watch:          {
-			emberTemplates: {
-				files: "<%= yeoman.app %>/templates/**/*.hbs",
-				tasks: ["emberTemplates"]
-			},
 			compass:        {
 				files: ["<%= yeoman.app %>/styles/{,*/}*.{scss,sass}"],
 				tasks: ["compass:server"]
@@ -248,8 +244,6 @@ module.exports = function (grunt) {
 			app:  {
 				options: {
 					variables: {
-						ember:      "bower_components/ember/ember.js",
-						ember_data: "bower_components/ember-data/ember-data.js"
 					}
 				},
 				files:   [
@@ -259,8 +253,6 @@ module.exports = function (grunt) {
 			dist: {
 				options: {
 					variables: {
-						ember:      "bower_components/ember/ember.prod.js",
-						ember_data: "bower_components/ember-data/ember-data.prod.js"
 					}
 				},
 				files:   [
@@ -289,33 +281,17 @@ module.exports = function (grunt) {
 		},
 		concurrent:     {
 			server: [
-				"emberTemplates",
 				"compass:server"
 			],
 			test:   [
-				"emberTemplates",
 				"compass"
 			],
 			dist:   [
-				"emberTemplates",
 				"compass:dist",
 				"imagemin",
 				"svgmin",
 				"htmlmin"
 			]
-		},
-		emberTemplates: {
-			options: {
-				templateName: function (sourceFile) {
-					var templatePath = yeomanConfig.app + "/templates/";
-					return sourceFile.replace(templatePath, "");
-				}
-			},
-			dist:    {
-				files: {
-					".tmp/scripts/compiled-templates.js": "<%= yeoman.app %>/templates/{,*/}*.hbs"
-				}
-			}
 		},
 		neuter:         {
 			app: {
@@ -324,8 +300,23 @@ module.exports = function (grunt) {
 						return "app/" + filepath;
 					}
 				},
-				src:     "<%= yeoman.app %>/scripts/app.js",
+				src:     "<%= yeoman.app %>/scripts/main.js",
 				dest:    ".tmp/scripts/combined-scripts.js"
+			}
+		},
+		autoprefixer: {
+			options: {
+				browsers: ["last 2 version", "ie 8", "ie 9"]
+			},
+			your_target: {
+				// Target-specific file lists and/or options go here.
+			},
+			single_file: {
+				options: {
+					// Target-specific options go here.
+				},
+				src: "<%= yeoman.dist %>/styles/main.css",
+				dest: "<%= yeoman.dist %>/styles/main-prefixed.css"
 			}
 		}
 	});
@@ -362,13 +353,14 @@ module.exports = function (grunt) {
 
 	grunt.registerTask("build", [
 		"clean:dist",
-		"replace:dist",
+		//"replace:dist",
 		"useminPrepare",
 		"concurrent:dist",
 		"neuter:app",
-		"concat",
+		//"concat",
+		"autoprefixer",
 		"cssmin",
-		"uglify",
+		//"uglify",
 		"copy",
 		"rev",
 		"usemin"

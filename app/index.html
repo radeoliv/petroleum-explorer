@@ -1,217 +1,218 @@
 <!doctype html>
 <html>
-	<head>
+<head>
+	<meta charset = "utf-8">
+	<meta name = "viewport" content = "width=device-width, initial-scale=1">
+	<title>SENG 515 Petroleum Explorer</title>
 
-		<meta charset = "utf-8">
-		<meta name = "viewport" content = "width=device-width, initial-scale=1">
-		<title>SENG 515 Petroleum Explorer</title>
+	<!-- build:css styles/main.css -->
+	<link rel = "stylesheet" href = "styles/style.css">
+	<link rel = "stylesheet" href = "styles/icomoon/style.css"/>
+	<link rel = "stylesheet" href = "bower_components/magnific-popup/dist/magnific-popup.css">
+	<link rel = "stylesheet" href = "bower_components/handsontable/dist/jquery.handsontable.full.css"/>
+	<!-- endbuild -->
 
-		<!-- build:css styles/main.css -->
-		<link rel = "stylesheet" href = "styles/style.css">
-		<link rel = "stylesheet" href = "styles/icomoon/style.css"/>
-		<link rel = "stylesheet" type = "text/css" href = "bower_components/datatables/media/css/jquery.dataTables.css" media = "all"/>
-		<link rel="stylesheet" href="bower_components/magnific-popup/dist/magnific-popup.css">
-		<!-- endbuild -->
+	<script src = "http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+</head>
+<body>
+	<main id = "map-canvas"></main>
 
-		<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script src="bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="http://code.highcharts.com/highcharts.js"></script>
-		<script src="http://code.highcharts.com/highcharts-more.js"></script>
-		<script src="http://code.highcharts.com/modules/exporting.js"></script>
-		<script src="bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
-	</head>
-	<body>
-		<main id = "map-canvas"></main>
+	<div id = "highchart-basic" class = "white-popup mfp-hide"></div>
 
-		<div id="highchart-basic" class="white-popup mfp-hide"></div>
+	<aside class = "mapToolbar">
+		<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
 
-		<aside class = "mapToolbar">
-			<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
+		<div class = "toolbar-buttons">
+			<button title = "Search" data-target = "search-form" class = "show-search">
+				<i class = "icon-search"></i>
+			</button>
+			<button title = "Graphs" data-target = "graph-form" class = "show-graph">
+				<i class = "icon-stats"></i>
+			</button>
+		</div>
 
-			<div class = "toolbar-buttons">
-				<button title = "Search" data-target = "search-form" class = "show-search">
-					<i class = "icon-search"></i>
-				</button>
-				<button title = "Graphs" data-target = "graph-form" class = "show-graph">
-					<i class = "icon-stats"></i>
-				</button>
-			</div>
+		<article class = "sidebar-content-container">
+			<section class = "search-form">
+				<form action = "/">
+					<fieldset>
+						<hr>
+						<h4>Search</h4>
 
-			<article class = "sidebar-content-container">
-				<section class = "search-form">
-					<form action = "/search">
-						<fieldset>
-							<hr>
-							<h4>Search</h4>
+						<div id = "accordion">
+							<h5>UWI</h5>
 
-							<div id="accordion">
-								<h5>UWI</h5>
-								<div class="uwi-search accordianContent">
-									<input type = "search" name = "uwi" id="uwi" placeholder="UWI Code" maxlength="16" results = 10" autosave = "uwi">
-								</div>
-								<h5>UWI Fields</h5>
-								<div class="grouped-search accordianContent">
-									<table>
-										<tr>
-											<td></td>
-											<td> <label for="lsd">LSD</label> </td>
-											<td></td>
-											<td> <label for="section">SEC</label> </td>
-											<td></td>
-											<td> <label for="township">TWP</label> </td>
-											<td></td>
-											<td> <label for="range">RNG</label> </td>
-											<td></td>
-											<td> <label for="meridian">MER</label> </td>
-											<td></td>
-										</tr>
-
-										<tr>
-											<td> <label for="lsd">00 /</label> </td>
-											<td>
-												<input type = "search" name = "lsd" id="lsd" results = "10" maxlength="2" pattern="{d}2" autosave = "lsd">
-											</td>
-											<td> <span>-</span> </td>
-											<td>
-												<input type = "search" name = "section" id="section" results = "10" maxlength="2" pattern="{d}2" autosave = "section">
-											</td>
-											<td> <span>-</span> </td>
-											<td>
-												<input type = "search" name = "township" id="township" results = "10" maxlength="3" pattern="{d}3" autosave = "township">
-											</td>
-											<td> <span>-</span> </td>
-											<td>
-												<input type = "search" name = "range" id="range" results = "10" maxlength="2" pattern="{d}2" autosave = "range">
-											</td>
-											<td> <label for="meridian">W</label> </td>
-											<td>
-												<input type = "search" id="meridian" name = "meridian" results = "10" maxlength="1" pattern="{d}1" autosave = "meridian">
-											</td>
-											<td> <span>/ 0</span> </td>
-										</tr>
-									</table>
-								</div>
-
-								<h5>Company</h5>
-								<div class="company-search accordianContent">
-									<input type = "search" id="company" placeholder="Company" name = "company" results = "10" autosave = "company">
-								</div>
-
-								<h5>Status</h5>
-								<div class="status-search accordianContent">
-
-									<select id="status" placeholder="Status" name = "status" results = "10" autosave = "status">
-										<option value="none"></option>
-										<option value="Pumping Crude Oil">Pumping Crude Oil</option>
-										<option value="Suspended Crude Oil">Suspended Crude Oil</option>
-										<option value="Abandoned Zone Crude Oil">Abandoned Zone Crude Oil</option>
-									</select>
-								</div>
+							<div class = "uwi-search accordianContent">
+								<input type = "search" name = "uwi" id = "uwi" placeholder = "UWI Code" maxlength = "16" results = 10" autosave = "uwi">
 							</div>
-							<hr>
-						</fieldset>
-					</form>
-				</section>
+							<h5>UWI Fields</h5>
 
-				<section class = "graph-form">
-					 <form action = "/graph">
-						<fieldset>
-							<hr>
-							<h4>Graph</h4>
-							<div id="graphDiv">
-								<div id="graphTable" >
-									<select id="graphMenu">
-										<option value="bar">Bar Chart</option>
-										<option value="pie">Pie chart</option>
-									</select>
-									<select id="barMenu">
-										<option value="Well_Drillers_Total_Depth">Well Driller Total Depth</option>
-										<option value="PHIc">Cumulative Porosity</option>
-										<option value="PHIav">Average Porosity</option>
-										<option value="KRc">Cumulative Hydrocarbon Movability</option>
-										<option value="KRav">Average Hydrocarbon Movability</option>
-										<option value="SOc">Cumulative Oil Saturation</option>
-										<option value="VSHc">Cumulative Shale Content</option>
-										<option value="H">Effective Thickness</option>
-										<option value="Pc">Effective Yield</option>
-										<option value="Pp">Peak Value</option>
-										<option value="Pt">Effective Life Cycle</option>
-									</select>
-									<select id="pieMenu">
-										<option value="Well_Operator">Company</option>
-										<option value="Well_Status">Status</option>
-										<option value="Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
-									</select>
-								</div>
-								<input type="button" id="addRow" value="Add"/>
-								<hr>
-								<div id="graphOptions"></div>
+							<div class = "grouped-search accordianContent">
+								<table>
+									<tr>
+										<td></td>
+										<td><label for = "lsd">LSD</label></td>
+										<td></td>
+										<td><label for = "section">SEC</label></td>
+										<td></td>
+										<td><label for = "township">TWP</label></td>
+										<td></td>
+										<td><label for = "range">RNG</label></td>
+										<td></td>
+										<td><label for = "meridian">MER</label></td>
+										<td></td>
+									</tr>
+
+									<tr>
+										<td><label for = "lsd">00 /</label></td>
+										<td>
+											<input type = "search" name = "lsd" id = "lsd" results = "10" maxlength = "2" pattern = "{d}2" autosave = "lsd">
+										</td>
+										<td><span>-</span></td>
+										<td>
+											<input type = "search" name = "section" id = "section" results = "10" maxlength = "2" pattern = "{d}2" autosave = "section">
+										</td>
+										<td><span>-</span></td>
+										<td>
+											<input type = "search" name = "township" id = "township" results = "10" maxlength = "3" pattern = "{d}3" autosave = "township">
+										</td>
+										<td><span>-</span></td>
+										<td>
+											<input type = "search" name = "range" id = "range" results = "10" maxlength = "2" pattern = "{d}2" autosave = "range">
+										</td>
+										<td><label for = "meridian">W</label></td>
+										<td>
+											<input type = "search" id = "meridian" name = "meridian" results = "10" maxlength = "1" pattern = "{d}1" autosave = "meridian">
+										</td>
+										<td><span>/ 0</span></td>
+									</tr>
+								</table>
 							</div>
-						</fieldset>
-					</form>
-				</section>
 
-			</article>
-		</aside>
-		<footer>
-			<aside class="search-results-table" title="Full Results">
-				<button title="Toggle Full Table View" class="toggle-table"><i class="icon-table2"></i></button>
-				<article class="full-table-content">
-					<section class = "filter-form">
-						<form action = "/filter">
-							<fieldset>
-								<h4>Add Filter Parameter</h4>
-								<button type="button" title="Please select a constraint above" id="add-constraint" class="filterButton"><i class="icon-plus"></i></button>
-								<select name = "tableColumnFilter" id = "tableColumnFilter">
+							<h5>Company</h5>
 
-									<option value = "0">Select a column</option>
-									<option value = "Well_Name">Name</option>
-									<option value = "Well_Unique_Identifier">Full UWI</option>
-									<option value = "Well_Status">Status</option>
-									<option value = "Well_Province">Province</option>
-									<option value = "Well_Primary_Producing_Formation">Primary Formation</option>
-									<option value = "Well_Pool_Name">Well Pool Name</option>
-									<option value = "Well_Operator">Company</option>
-									<option value = "Well_Drillers_Total_Depth">Well Drillers Total Depth</option>
-									<option value = "Well_Class">Well Class</option>
-									<option value = "Vshc">Cumulative Shale Content</option>
-									<option value = "Well_Unique_Identifier_Simplified_Format">UWI</option>
-									<option value = "Soc">Oil Saturation</option>
-									<option value = "Pt">Effective Life Cycle</option>
-									<option value = "Pp">Peak Value</option>
-									<option value = "Pc">Effective Yield</option>
+							<div class = "company-search accordianContent">
+								<input type = "search" id = "company" placeholder = "Company" name = "company" results = "10" autosave = "company">
+							</div>
+
+							<h5>Status</h5>
+
+							<div class = "status-search accordianContent">
+
+								<select id = "status" placeholder = "Status" name = "status" results = "10" autosave = "status">
+									<option value = "none"></option>
+									<option value = "Pumping Crude Oil">Pumping Crude Oil</option>
+									<option value = "Suspended Crude Oil">Suspended Crude Oil</option>
+									<option value = "Abandoned Zone Crude Oil">Abandoned Zone Crude Oil</option>
+								</select>
+							</div>
+						</div>
+						<hr>
+					</fieldset>
+				</form>
+			</section>
+
+			<section class = "graph-form">
+				<form action = "/graph">
+					<fieldset>
+						<hr>
+						<h4>Graph</h4>
+
+						<div id = "graphDiv">
+							<div id = "graphTable">
+								<select id = "graphMenu">
+									<option value = "bar">Bar Chart</option>
+									<option value = "pie">Pie chart</option>
+								</select>
+								<select id = "barMenu">
+									<option value = "Well_Drillers_Total_Depth">Well Driller Total Depth</option>
 									<option value = "PHIc">Cumulative Porosity</option>
-									<option value = "PHIR">Cumulative Pore Volume</option>
+									<option value = "PHIav">Average Porosity</option>
 									<option value = "KRc">Cumulative Hydrocarbon Movability</option>
 									<option value = "KRav">Average Hydrocarbon Movability</option>
-									<option value = "H">Thickness</option>
-
+									<option value = "SOc">Cumulative Oil Saturation</option>
+									<option value = "VSHc">Cumulative Shale Content</option>
+									<option value = "H">Effective Thickness</option>
+									<option value = "Pc">Effective Yield</option>
+									<option value = "Pp">Peak Value</option>
+									<option value = "Pt">Effective Life Cycle</option>
 								</select>
-								<hr>
-							</fieldset>
-						</form>
-					</section>
-					<table class="full-results-table" aria-hidden="true"></table>
-				</article>
-			</aside>
+								<select id = "pieMenu">
+									<option value = "Well_Operator">Company</option>
+									<option value = "Well_Status">Status</option>
+									<option value = "Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
+								</select>
+							</div>
+							<input type = "button" id = "addRow" value = "Add"/>
+							<hr>
+							<div id = "graphOptions"></div>
+						</div>
+					</fieldset>
+				</form>
+			</section>
 
-			<!-- build:js(.tmp) scripts/main.js -->
-			<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
-			<script src="scripts/components/mapToolbar/map-toolbar.js"></script>
-			<script src="scripts/components/search/search-controller.js"></script>
-			<script src="scripts/components/search/searchView.js"></script>
-			<script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
-			<script src="scripts/components/fullTable/full-table.js"></script>
-			<script src="scripts/components/mapSection/map-canvas.js"></script>
-			<script src="scripts/components/visualizationController/info-graph.js"></script>
-			<script src="scripts/components/visualizationController/graph-selection.js"></script>
-			<script src="scripts/components/visualizationController/visualization_custom.js"></script>
-			<script src="scripts/main.js"></script>
-			<!-- Hands on table -->
-			<script src="http://handsontable.com/dist/jquery.handsontable.full.js"></script>
+		</article>
+	</aside>
+	<footer>
+		<aside class = "search-results-table" title = "Full Results">
+			<button title = "Toggle Full Table View" class = "toggle-table"><i class = "icon-table2"></i></button>
+			<article class = "full-table-content">
+				<section class = "filter-form">
+					<form action = "/filter">
+						<fieldset>
+							<h4>Add Filter Parameter</h4>
+							<button type = "button" title = "Please select a constraint above" id = "add-constraint" class = "filterButton">
+								<i class = "icon-plus"></i></button>
+							<select name = "tableColumnFilter" id = "tableColumnFilter">
 
-			<link rel="stylesheet" media="screen" href="http://handsontable.com/dist/jquery.handsontable.full.css">
-			<!-- endbuild -->
-		</footer>
-	</body>
+								<option value = "0">Select a column</option>
+								<option value = "Well_Name">Name</option>
+								<option value = "Well_Unique_Identifier">Full UWI</option>
+								<option value = "Well_Status">Status</option>
+								<option value = "Well_Province">Province</option>
+								<option value = "Well_Primary_Producing_Formation">Primary Formation</option>
+								<option value = "Well_Pool_Name">Well Pool Name</option>
+								<option value = "Well_Operator">Company</option>
+								<option value = "Well_Drillers_Total_Depth">Well Drillers Total Depth</option>
+								<option value = "Well_Class">Well Class</option>
+								<option value = "Vshc">Cumulative Shale Content</option>
+								<option value = "Well_Unique_Identifier_Simplified_Format">UWI</option>
+								<option value = "Soc">Oil Saturation</option>
+								<option value = "Pt">Effective Life Cycle</option>
+								<option value = "Pp">Peak Value</option>
+								<option value = "Pc">Effective Yield</option>
+								<option value = "PHIc">Cumulative Porosity</option>
+								<option value = "PHIR">Cumulative Pore Volume</option>
+								<option value = "KRc">Cumulative Hydrocarbon Movability</option>
+								<option value = "KRav">Average Hydrocarbon Movability</option>
+								<option value = "H">Thickness</option>
+							</select>
+							<hr>
+						</fieldset>
+					</form>
+				</section>
+				<table class = "full-results-table" aria-hidden = "true"></table>
+			</article>
+		</aside>
+
+		<!-- build:js(.tmp) scripts/main.js -->
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+		<script src="bower_components/handsontable/dist/jquery.handsontable.full.js"></script>
+		<script src="bower_components/highcharts/highcharts.js"></script>
+		<script src="bower_components/highcharts/highcharts-more.js"></script>
+		<script src="bower_components/highcharts/modules/exporting.js"></script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
+		<script src="scripts/components/mapToolbar/map-toolbar.js"></script>
+		<script src="scripts/components/search/search-controller.js"></script>
+		<script src="scripts/components/search/searchView.js"></script>
+		<script src="scripts/components/fullTable/full-table.js"></script>
+		<script src="scripts/components/mapSection/map-canvas.js"></script>
+		<script src="scripts/components/visualizationController/info-graph.js"></script>
+		<script src="scripts/components/visualizationController/graph-selection.js"></script>
+		<script src="scripts/components/visualizationController/visualization_custom.js"></script>
+		<script src="scripts/main.js"></script>
+		<!-- endbuild -->
+	</footer>
+</body>
 </html>
