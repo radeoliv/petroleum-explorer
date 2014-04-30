@@ -21,7 +21,7 @@
 	Visualization_custom = (function () {
 		function Visualization_custom() {
 		}
-
+		//depending on user's selection, either a pie chart or a bar chart is displayed
 		Visualization_custom.prototype.renderVisualization = function ($container, data, dataQuery, chartType) {
 
 			this.$containerDiv = $container.selector;
@@ -43,7 +43,7 @@
 			if (this.data.length < 1) {
 				return;
 			}
-
+			//chart type code from high charts
 			$('#highchart-basic').highcharts({
 				chart:       {
 					type: this.chartType
@@ -86,6 +86,7 @@
 			});
 		};
 
+		//filter results based on the choice of chart selected and pushes the data onto an array
 		Visualization_custom.prototype.filterResults = function(dataset, dataQuery)
 		{
 			var result = [];
