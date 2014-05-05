@@ -38,7 +38,7 @@
 
 			}
 
-			console.log(this.$containerDiv, this.dataQuery, this.filterdata, this.chartType);
+			//console.log(this.$containerDiv, this.dataQuery, this.filterdata, this.chartType);
 
 			if (this.data.length < 1) {
 				return;
@@ -58,7 +58,7 @@
 					//categories:
 				},
 				yAxis:       {
-					min:   0,
+					min: 0,
 					title: {
 						text: this.dataQuery
 					}
@@ -77,7 +77,7 @@
 						borderWidth:  0
 					}
 				},
-				series:      [
+				series: [
 					{
 						name: this.dataQuery,
 						data: this.filterdata
@@ -90,9 +90,13 @@
 		Visualization_custom.prototype.filterResults = function(dataset, dataQuery)
 		{
 			var result = [];
-			for (var i =0; i<dataset.length; i++)
+
+			if(dataset != undefined)
 			{
-				result.push(dataset[i][dataQuery]);
+				for (var i =0; i<dataset.length; i++)
+				{
+					result.push(dataset[i][dataQuery]);
+				}
 			}
 
 			return result;

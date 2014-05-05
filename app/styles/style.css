@@ -158,9 +158,20 @@ Map Toolbar
     margin: 0em; }
   .mapToolbar h4 {
     margin-top: 0em;
-    margin-bottom: 0.75em; }
+    margin-bottom: 0.75em;
+    width: 90%;
+    margin-right: 0em; }
   .mapToolbar .accordianContent {
     text-align: center; }
+  .mapToolbar #clear-all-search {
+    position: absolute;
+    left: 22em;
+    top: 6.4em;
+    display: inline-block;
+    float: right;
+    font-size: 0.7em; }
+  .mapToolbar #clear-search {
+    padding: 0.2em 0.3em 0.2em 0.3em; }
   .mapToolbar .ui-accordion .ui-accordion-header {
     display: block;
     cursor: pointer;

@@ -3,8 +3,8 @@
 	$(function () {
 		var initMapToggle,
 			mapToolbar, mapToolbarButtons, mapToolbarIcon,
-			setToggle, toolbarToggle,
-			mapToolbarContent, mainAccordion;
+			setToggle, toolbarToggle, clearFields,
+			mapToolbarContent;
 
 		/**
 		 * mapToolbarButtons finds all buttons in toolbar-buttons div.
@@ -18,6 +18,23 @@
 		mapToolbarButtons = mapToolbar.find(".toolbar-buttons button");
 		mapToolbarContent = mapToolbar.find(".sidebar-content-container section").hide();
 		mapToolbarAccordion = mapToolbar.find("#accordion");
+
+		// Used to clear all the seach input
+		mapToolbarClearSearch = mapToolbar.find("#clear-search");
+		searchFields =
+			[
+				mapToolbar.find("#uwi"),
+				mapToolbar.find("#lsd"),
+				mapToolbar.find("#section"),
+				mapToolbar.find("#township"),
+				mapToolbar.find("#range"),
+				mapToolbar.find("#meridian"),
+				mapToolbar.find("#company"),
+				mapToolbar.find("#status")
+			];
+
+
+
 		/**
 		 * This function initializes mapToolbarButtons to hidden, and toggles
 		 * the contents of the sidebar when called.
@@ -51,12 +68,43 @@
 				$(this).toggleClass("active");
 			});
 		};
+
 		mapToolbarAccordion.accordion({
 			collapsible: true,
 			heightStyle: "content"
 		});
+
+		/*
+		 * This function is called to clear all the search fields that the user might have filled.
+		 */
+		clearFields = function() {
+			return mapToolbarClearSearch.on("click", function() {
+				if(searchFields != undefined) {
+					var i;
+					for(i=0; i<searchFields.length; i++)
+					{
+						if(searchFields[i][0].id === "status")
+						{
+							if(searchFields[i][0].value != "none")
+							{
+								searchFields[i][0].value = "none";
+							}
+						}
+						else
+						{
+							if(searchFields[i][0].value != "")
+								searchFields[i][0].value = "";
+						}
+					}
+					// Is necessary to call the change function of status, as the event is not triggered automatically.
+					searchFields[--i].change();
+				}
+			})
+		}
+
 		initMapToggle();
 		setToggle();
+		clearFields();
 	});
 
 }).call(this);

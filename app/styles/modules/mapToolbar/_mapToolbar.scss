@@ -114,10 +114,25 @@ Map Toolbar
 	h4{
 		margin-top: 0em;
 		margin-bottom: 0.75em;
+		width: 90%;
+		margin-right: 0em;
 	}
 
 	.accordianContent{
 		text-align: center;
+	}
+
+	#clear-all-search{
+		position: absolute;
+		left: 22em;
+		top: 6.4em;
+		display: inline-block;
+		float: right;
+		font-size: 0.7em;
+	}
+
+	#clear-search{
+		padding: 0.2em 0.3em 0.2em 0.3em;
 	}
 
 	.ui-accordion .ui-accordion-header {
@@ -182,7 +197,6 @@ Map Toolbar
 table {
 	width: 100%;
 }
-
 
 .graphButton{
 	display: inline-block;

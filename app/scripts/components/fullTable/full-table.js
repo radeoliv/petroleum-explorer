@@ -306,14 +306,18 @@
 						case "Well_Unique_Identifier":
 						case "Well_Unique_Identifier_Simplified_Format":
 						case "Well_Class":
-						case "Well_Name": // String Option
+						case "Well_Name":
 							i++;
 							addParameterOption.call($columnSelectFilter, i, "String");
 							break;
 						default: // Numeric Options
 							i++
 							addParameterOption.call($columnSelectFilter, i, "Number");
-						}
+							break;
+					}
+
+					// Resetting the selected value
+					$columnSelectFilter.val(0);
 				});
 			}
 		}

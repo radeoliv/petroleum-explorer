@@ -66,7 +66,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		rangeSearchInput = $searchInputForm.find("input[name='range']"),
 		meridianSearchInput = $searchInputForm.find("input[name='meridian']"),
 		companySearchInput = $searchInputForm.find("input[name='company']"),
-		statusSearchInput = $searchInputForm.find("select[name='status']");
+		statusSearchInput = $searchInputForm.find("select[name='status']"),
+		clearSearchInputs = $searchInputForm.find("#clear-search");
 
 	var self = this;
 
@@ -85,9 +86,15 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		var results;
 		var error = false;
 
+		// Clears all fields
+		//clearSearchInputs.click();
+
 		switch(optionAccordion) {
 			// Search by the entire UWI
 			case 0:
+				// Set again the original input
+				//uwiSearchInput[0].value = uwiQuery;
+
 				if(checkUWIInput(uwiQuery))
 					results = self.searchController.findResultsUWI(uwiQuery);
 				else {
@@ -100,6 +107,13 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				break;
 			// Search by the UWI values
 			case 1:
+				// Set again the original inputs
+				//lsdSearchInput[0].value = lsdQuery;
+				//sectionSearchInput[0].value = sectionQuery;
+				//townshipSearchInput[0].value = townshipQuery;
+				//rangeSearchInput[0].value = rangeQuery;
+				//meridianSearchInput[0].value = meridianQuery;
+
 				if(checkUWIValueInputs([lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery]))
 					results = self.searchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery);
 				else {
@@ -112,6 +126,9 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				break;
 			// Search by the company name
 			case 2:
+				// Set again the original input
+				//companySearchInput[0].value = companyQuery;
+
 				if(checkCompanyInput(companyQuery))
 					results = self.searchController.findResultsCompany(companyQuery);
 				else {
@@ -135,7 +152,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 		var statusQuery=statusSearchInput[0].value;
 
-		var results;
+		var results = null;
 		var error = false;
 		switch(optionAccordion) {
 			case 0:
@@ -143,18 +160,28 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			case 2:
 				break;
 			case 3:
-				if(optionStatus != "none")
+				var tempOptionStatus = optionStatus;
+
+				// Clears all fields
+				//clearSearchInputs.click();
+
+				if(tempOptionStatus != "none")
 					results = self.searchController.findResultsStatus(statusQuery);
 				else
 					// If the selection is none, there is nothing to be searched.
 					results = null;
+
 				break;
 			default:
 				console.log("Accordion error!");
 				break;
 		}
 
+		// Set again the original input
+		//statusSearchInput[0].value = tempOptionStatus;
+
 		displayResults(error, results);
+
 	});
 
 	function displayResults(errorOccurred, results) {
@@ -195,7 +222,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				});
 
 				// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
-				console.log('sending event');
+				//console.log('sending event');
 				$("body").trigger("ResultsUpdated");
 				//console.log("Results updated.  Results:");
 				//console.dir(this.resultSet);
