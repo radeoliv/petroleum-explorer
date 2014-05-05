@@ -250,7 +250,8 @@ Full Table
   overflow: hidden;
   padding: 0em; }
   .ui-dialog .ui-dialog-title {
-    font-size: 1.25em; }
+    font-size: 1.25em;
+    font-weight: bold; }
   .ui-dialog .ui-dialog-titlebar {
     margin-bottom: 0em;
     background: #f2f2f2; }
@@ -276,7 +277,7 @@ Full Table
   display: inline-block;
   border-right: solid black 1px;
   height: inherit;
-  width: 18em;
+  width: 21.5em;
   top: inherit;
   overflow-y: auto;
   background: #f2f2f2; }
@@ -284,13 +285,14 @@ Full Table
     margin-top: 0.5em;
     margin-bottom: 0.5em; }
   .filter-form fieldset {
-    border: none; }
+    border: none;
+    width: 18.5em; }
 
 #full-results-table {
   display: inline-block;
   top: inherit;
   position: absolute;
-  left: 18em;
+  left: 21.5em;
   padding: 0.5em; }
   #full-results-table .htDimmed {
     color: black; }
@@ -314,21 +316,25 @@ Full Table
   top: inherit;
   padding: 0.5em;
   outline: none;
-  font-size: 0.85em; }
+  font-size: 0.85em;
+  margin-left: 0em; }
 
 .filterBtnParent {
-  width: 2.25em;
   display: inline-block;
   float: right;
-  font-size: 0.85em; }
+  font-size: 0.85em;
+  margin: 0.3em 0.1em 0em 0em; }
 
 .filterInputField {
-  width: 100%; }
+  width: 98%; }
+
+.filterConstraintField {
+  margin-left: 0em; }
 
 #tableColumnFilter {
   display: inline-block;
   top: inherit;
-  width: 15.5em;
+  width: 86%;
   text-align: center; }
   #tableColumnFilter label {
     display: inline-block; }

@@ -3,9 +3,7 @@
 	var FullTable;
 
 	function populateColumnFilter(tableColumns, html) {
-		for (var i = 0;
-			i < tableColumns.length;
-			i++) {
+		for (var i = 0; i < tableColumns.length; i++) {
 			html += '<option>' + i + tableColumns[i].sTitle + '</option>';
 		}
 		var $columnSelect = this.$columnFilter.find("#tableColumnFilter").append(html);
@@ -14,19 +12,19 @@
 	function addParameterOption(index, type) {
 		var labelForFilter = '<label value="'+$(this)[0].value+'">'+$(this).find("option:selected").text()+'</label></br>';
 
-		var removeFilterOption = '<div  id="'+index+'" class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
+		var removeFilterOption = '<div id="'+index+'" class="filterBtnParent"><button type="button" class="filterButton minusButton"><i class="icon-minus"></i></button></div>';
 
 		var constraintSelectType;
 		if(type == "String") {
-			constraintSelectType = '<select  id="'+index+'"><option value="matches">Matches</option><option value="contains">Contains</option></select></br>';
+			constraintSelectType = '<select id="'+index+'" class="filterConstraintField"><option value="matches">Matches</option><option value="contains">Contains</option></select></br>';
 		}
 		else if(type == "Number") {
-			constraintSelectType = '<select  id="'+index+'"><option value="gt">Is Greater Than</option><option value="lt">Is Less Than</option><option value="eq">Is Equal To</option></select></br>';
+			constraintSelectType = '<select id="'+index+'" class="filterConstraintField"><option value="gt">Is Greater Than</option><option value="lt">Is Less Than</option><option value="eq">Is Equal To</option></select></br>';
 		}
 
-		var inputField = '<input  id="'+index+'" class="filterInputField"><hr>';
+		var inputField = '<input id="'+index+'" class="filterInputField"><hr>';
 
-		$('<div  id="'+index+'" class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectType+inputField+'</div>').appendTo($(this).parent());
+		$('<div id="'+index+'" class="filterParameter">'+removeFilterOption+labelForFilter+constraintSelectType+inputField+'</div>').appendTo($(this).parent());
 
 		var $removeFilterButton = $("#" + index).find(".filterBtnParent");
 		$removeFilterButton.on("click", function() {
@@ -215,10 +213,10 @@
 								   "Effective Life Cycle"
 						],
 						width: function(){
-							return ($(".full-table-content").width() - $(".filter-form").width() - 10);
+							return ($(".full-table-content").width() - $(".filter-form").width() - 13);
 						},
 						height: function(){
-							return ($(".full-table-content").height() - 10);
+							return ($(".full-table-content").height() - 13);
 						},
 						readOnly: true,
 						columnSorting: true,
