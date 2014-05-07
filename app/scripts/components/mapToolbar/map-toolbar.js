@@ -44,7 +44,7 @@
 			mapToolbarButtons.hide();
 			return toolbarToggle.on("click", function () {
 				mapToolbarButtons.toggle();
-				mapToolbarContent.slideUp();
+				mapToolbarContent.slideUp("normal");
 				mapToolbarButtons.removeClass("active");
 				return mapToolbarIcon.toggleClass("icon-expand icon-contract");
 			});
@@ -60,11 +60,12 @@
 		setToggle = function () {
 			return mapToolbarButtons.on("click", function () {
 
-				mapToolbarContent.slideUp();
+
 				mapToolbarButtons.removeClass("active");
+				mapToolbarContent.slideUp("slow");
 
 				var targetSelector = $(this).attr("data-target");
-				var target = $("."+targetSelector).slideDown();
+				var target = $("."+targetSelector).slideDown("slow");
 				$(this).toggleClass("active");
 			});
 		};

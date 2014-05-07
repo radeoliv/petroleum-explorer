@@ -1,8 +1,7 @@
  /*--------------------------------------------------------------------------------
 	Author: Rodrigo Silva
-	github: https://github.com/srsgores/seng515-petroleum-explorer
 
-	seng515-petroleum-explorer
+	petroleum-explorer
 
 	=============================================================================
 	Filename: info-graph.js

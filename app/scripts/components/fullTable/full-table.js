@@ -60,6 +60,152 @@
 			this.$contentContainer.dialog("close");
 		}
 
+		function getColumns() {
+			var columns =
+				[
+					{
+						data: "Selected",
+						type: "checkbox",
+						readOnly: false
+					},
+					{
+						data: "UWI"
+					},
+					{
+						data: "UWISimplifiedFormat"
+					},
+					{
+						data: "Longitude"
+					},
+					{
+						data: "Latitude"
+					},
+					{
+						data: "WellName"
+					},
+					{
+						data: "WellDrillersTotalDepth"
+					},
+					{
+						data: "WellOperator"
+					},
+					{
+						data: "WellStatus"
+					},
+					{
+						data: "WellProvince"
+					},
+					{
+						data: "WellClass"
+					},
+					{
+						data: "WellPrimaryProducingFormation"
+					},
+					{
+						data: "WellPoolName"
+					},
+					{
+						data: "CumulativePorosity"
+					},
+					{
+						data: "CumulativePoreVolume"
+					},
+					{
+						data: "CumulativeShaleContent"
+					},
+					{
+						data: "CumulativeOilSaturation"
+					},
+					{
+						data: "CumulativeHydrocarbonMovability"
+					},
+					{
+						data: "AverageHydrocarbonMovability"
+					},
+					{
+						data: "Thickness"
+					},
+					{
+						data: "EffectiveYield"
+					},
+					{
+						data: "PeakValue"
+					},
+					{
+						data: "EffectiveLifeCycle"
+					}
+				];
+
+			return columns;
+		}
+
+		function getColumnHeaders() {
+			var headers =
+				[
+					"",
+					"UWI",
+					"UWI Simplified Format",
+					"Longitude",
+					"Latitude",
+					"Well Name",
+					"Well Drillers Total Depth",
+					"Well Operator",
+					"Well Status",
+					"Well Province",
+					"Well Class",
+					"Well Primary Producing Formation",
+					"Well Pool Name",
+					"Cumulative Porosity",
+					"Cumulative Pore Volume",
+					"Cumulative Shale Content",
+					"Cumulative Oil Saturation",
+					"Cumulative Hydrocarbon Movability",
+					"Average Hydrocarbon Movability",
+					"Thickness",
+					"Effective Yield",
+					"Peak Value",
+					"Effective Life Cycle"
+				];
+
+			return headers;
+		}
+
+		function getSignificantAttributesData(searchResults) {
+			var data = [];
+
+			for(var i=0; i<searchResults.length ; i++){
+				data.push(
+					{
+						Selected: false,
+						UWI: searchResults[i]["Well_Unique_Identifier"],
+						UWISimplifiedFormat: searchResults[i]["Well_Unique_Identifier_Simplified_Format"],
+						Longitude: searchResults[i]["Longitude Decimal Degrees"],
+						Latitude: searchResults[i]["Latitude Decimal Degrees"],
+						WellName: searchResults[i]["Well_Name"],
+						WellDrillersTotalDepth: searchResults[i]["Well_Drillers_Total_Depth"],
+						WellOperator: searchResults[i]["Well_Operator"],
+						WellStatus: searchResults[i]["Well_Status"],
+						WellProvince: searchResults[i]["Well_Province"],
+						WellClass: searchResults[i]["Well_Class"],
+						WellPrimaryProducingFormation: searchResults[i]["Well_Primary_Producing_Formation"],
+						WellPoolName: searchResults[i]["Well_Pool_Name"],
+						CumulativePorosity: searchResults[i]["PHIc"],
+						CumulativePoreVolume: searchResults[i]["PHIR"],
+						CumulativeShaleContent:searchResults[i]["Vshc"],
+						CumulativeOilSaturation: searchResults[i]["Soc"],
+						CumulativeHydrocarbonMovability:searchResults[i]["KRc"],
+						AverageHydrocarbonMovability: searchResults[i]["KRav"],
+						Thickness: searchResults[i]["H"],
+						EffectiveYield: searchResults[i]["Pc"],
+						PeakValue: searchResults[i]["Pp"],
+						EffectiveLifeCycle: searchResults[i]["Pt"]
+					}
+				);
+			}
+
+			return data;
+		}
+
 		FullTable.prototype.listenForInput = function($columnFilter) {
 
 			var filterQueryArray = [];
@@ -91,6 +237,7 @@
 		FullTable.prototype.listenParameterRemoved = function ($columnFilter) {
 			return $("body").on("filterParameterRemoved", (function (_this) {
 				return function () {
+					console.log("Filter removed - line 95ish");
 					var filterQueryArray = [];
 					for(var i = 0; i < $columnFilter.find(".filterParameter").length; i++){
 
@@ -113,42 +260,33 @@
 
 			for(var i=0; i<searchResultSet.length;i++) {
 				var boolPush = true;
-				for(var j = 0; j < query.length; j++){
-					if(query[j][2] != ""){
 
-						switch(query[j][1]){
+				for(var j = 0; j < query.length; j++) {
+					if(query[j][2] != "") {
+
+						switch(query[j][1]) {
 							case "matches":
-								if((searchResultSet[i][query[j][0]].toUpperCase()) == ((query[j][2]).toUpperCase())){
-									//filterResultSet.push(searchResultSet[i]);
-								} else{
+								if((searchResultSet[i][query[j][0]].toUpperCase()) != ((query[j][2]).toUpperCase())) {
 									boolPush = false;
 								}
 								break;
 							case "contains":
-								if((searchResultSet[i][query[j][0]].toUpperCase()).search((query[j][2]).toUpperCase()) >= 0){
-									//filterResultSet.push(searchResultSet[i]);
-								} else{
+								if((searchResultSet[i][query[j][0]].toUpperCase()).search((query[j][2]).toUpperCase()) < 0) {
 									boolPush = false;
 								}
 								break;
 							case "gt":
-								if(searchResultSet[i][query[j][0]] > parseFloat(query[j][2])){
-									//filterResultSet.push(searchResultSet[i]);
-								} else{
+								if(searchResultSet[i][query[j][0]] <= parseFloat(query[j][2])) {
 									boolPush = false;
 								}
 								break;
 							case "lt":
-								if(searchResultSet[i][query[j][0]] < parseFloat(query[j][2])){
-									//filterResultSet.push(searchResultSet[i]);
-								} else{
+								if(searchResultSet[i][query[j][0]] >= parseFloat(query[j][2])) {
 									boolPush = false;
 								}
 								break;
 							case "eq":
-								if(searchResultSet[i][query[j][0]] == parseFloat(query[j][2])){
-									//filterResultSet.push(searchResultSet[i]);
-								} else{
+								if(searchResultSet[i][query[j][0]] != parseFloat(query[j][2])) {
 									boolPush = false;
 								}
 								break;
@@ -157,7 +295,7 @@
 						}
 					}
 				}
-				if(boolPush){
+				if(boolPush) {
 					filterResultSet.push(searchResultSet[i]);
 				}
 			}
@@ -165,7 +303,6 @@
 			this.initSearchResults = filterResultSet;
 			$("body").trigger("FilterUpdated");
 			this.MapController.plotResults(filterResultSet);
-
 		}
 
 		FullTable.prototype.displayHandsOnTable = function() {
@@ -175,12 +312,11 @@
 			if(typeof(this.SearchController) != "undefined"){
 
 				if (this.initSearchResults.length > 0) {
-					var data = [];
 					var searchResults = this.initSearchResults;
 
-					for(var i=0; i<searchResults.length ; i++){
-						data.push([searchResults[i]["Well_Unique_Identifier"], searchResults[i]["Well_Unique_Identifier_Simplified_Format"], searchResults[i]["Longitude Decimal Degrees"], searchResults[i]["Latitude Decimal Degrees"], searchResults[i]["Well_Name"], searchResults[i]["Well_Drillers_Total_Depth"], searchResults[i]["Well_Operator"], searchResults[i]["Well_Status"], searchResults[i]["Well_Province"], searchResults[i]["Well_Class"], searchResults[i]["Well_Primary_Producing_Formation"], searchResults[i]["Well_Pool_Name"], searchResults[i]["PHIc"], searchResults[i]["PHIR"], searchResults[i]["Vshc"], searchResults[i]["Soc"], searchResults[i]["KRc"], searchResults[i]["KRav"], searchResults[i]["H"], searchResults[i]["Pc"], searchResults[i]["Pp"], searchResults[i]["Pt"]]);
-					}
+					var data = getSignificantAttributesData(searchResults);
+					var columns = getColumns();
+					var columnsHeaders = getColumnHeaders();
 
 					//plot results on google maps
 					//self.mapCanvasController = new MapCanvasController().plotResults(data);
@@ -189,29 +325,8 @@
 
 					this.$tableContainer.handsontable({
 						data: data,
-						colHeaders:["UWI",
-								   "UWI Simplified Format",
-								   "Longitude",
-								   "Latitude",
-								   "Well Name",
-								   "Well Drillers Total Depth",
-								   "Well Operator",
-								   "Well Status",
-								   "Well Province",
-								   "Well Class",
-								   "Well Primary Producing Formation",
-								   "Well Pool Name",
-								   "Cumulative Porosity",
-								   "Cumulative Pore Volume",
-								   "Cumulative Shale Content",
-								   "Cumulative Oil Saturation",
-								   "Cumulative Hydrocarbon Movability",
-								   "Average Hydrocarbon Movability",
-								   "Thickness",
-								   "Effective yield",
-								   "Peak Value",
-								   "Effective Life Cycle"
-						],
+						colHeaders: columnsHeaders,
+						columns: columns,
 						width: function(){
 							return ($(".full-table-content").width() - $(".filter-form").width() - 13);
 						},
@@ -220,18 +335,41 @@
 						},
 						readOnly: true,
 						columnSorting: true,
-						currentRowClassName: 'currentRow'
-
+						currentRowClassName: 'currentRow',
+						fixedColumnsLeft: 1
 					});
+
 					this.toggleButton.addClass("active");
+
+					// Default initial values for width and height
+					var width = 650;
+					var height = 400;
+					// The height and width of the dialog need to be the same as before
+					if(this.$contentContainer != undefined && this.$contentContainer != null) {
+						var tempDialog = this.$contentContainer.dialog();
+						if(tempDialog != undefined && tempDialog != null && tempDialog.length == 1) {
+							var tempFullTableDialog = tempDialog[0];
+							var dialogWithHeaderOffset = tempFullTableDialog.offsetHeight + 46;
+
+							if(dialogWithHeaderOffset > height) {
+								height = dialogWithHeaderOffset;
+							}
+							if(tempFullTableDialog.offsetWidth > width) {
+								width = tempFullTableDialog.offsetWidth;
+							}
+						}
+					}
+
+					console.log("atualizado!");
+
 					this.$contentContainer.dialog({
 						title: 'Detailed Results',
 						draggable: true,
 						resizable: true,
 						modal : true,
 						autoOpen: true,
-						width: 650,
-						height: 400
+						width: width,
+						height: height
 					});
 				}
 			}
@@ -244,6 +382,7 @@
 		FullTable.prototype.listenChanges = function () {
 			return $("body").on("ResultsUpdated", (function (_this) {
 				return function () {
+					console.log("Results updated - line 240ish");
 					_this.initSearchResults = _this.SearchController.resultSet;
 					_this.displayHandsOnTable();
 					_this.$contentContainer.dialog("close");
@@ -254,6 +393,7 @@
 		FullTable.prototype.filterChanges = function () {
 			return $("body").on("FilterUpdated", (function (_this) {
 				return function () {
+					console.log("Filter updated - line 260ish");
 					_this.displayHandsOnTable();
 				};
 			})(this));

@@ -2,7 +2,7 @@
  Author: Shawn Eastwood
 
 
- seng515-petroleum-explorer
+ petroleum-explorer
 
  =============================================================================
  Filename: visualization_controller.js

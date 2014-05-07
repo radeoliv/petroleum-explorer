@@ -1,5 +1,5 @@
 {
-	"name":            "seng515-petroleum-explorer",
+	"name":            "petroleum-explorer",
 	"private":         true,
 	"dependencies":    {
 		"chai":  "~1.8.0",

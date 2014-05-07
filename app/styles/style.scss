@@ -47,7 +47,7 @@ button {
 	}
 	.ui-dialog-titlebar {
 		@extend %small-padding;
-		@extend header;
+		//@extend header;
 		@extend %small-margin-bottom;
 		@extend %bordered-bottom;
 	}
