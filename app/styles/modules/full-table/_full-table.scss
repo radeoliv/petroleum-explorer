@@ -48,6 +48,9 @@ Full Table
 	outline: none;
 	font-size: 1.2em;
 	color: $mapToolbarButtonTextColour;
+	&:active, &.active, &:hover {
+		background: darken($mapToolbarButtonColour, 15);
+	}
 }
 
 .filter-form{

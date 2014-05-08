@@ -47,9 +47,9 @@
 			this.$columnFilter = this.$contentContainer.find(".filter-form");
 			this.toggleButton = $fullTableResultsContainer.find(".toggle-table");
 
-			this.initSearchResults = this.SearchController.resultSet
+			this.initSearchResults = this.SearchController.resultSet;
 
-			this.displayHandsOnTable(this.initSearchResults);
+			this.displayHandsOnTable();
 			this.listenChanges();
 			this.filterChanges();
 			this.listenToggle();
@@ -57,9 +57,45 @@
 			this.listenForInput(this.$columnFilter);
 			this.listenParameterRemoved(this.$columnFilter);
 			this.findFilterQuery([]);
-			this.$contentContainer.dialog("close");
+			closeDialog(this, false);
 		}
 
+		/*
+		 * Function to open the content container dialog with or without fade in.
+		 * A verification on the toggle button is done, in order to keep the consistency.
+		 */
+		function openDialog(_this, withFadeIn) {
+			if (_this.toggleButton.hasClass("active") == false) {
+				_this.toggleButton.toggleClass("active");
+			}
+
+			if(withFadeIn == true) {
+				return _this.$contentContainer.dialog("open", _this.$contentContainer.fadeIn());
+			} else {
+				return _this.$contentContainer.dialog("open");
+			}
+		}
+
+		/*
+		 * Function to close the content container dialog with or without fade out.
+		 * A verification on the toggle button is done, in order to keep the consistency.
+		 */
+		function closeDialog(_this, withFadeOut) {
+			if (_this.toggleButton.hasClass("active") == true) {
+				_this.toggleButton.toggleClass("active");
+			}
+
+			if(withFadeOut == true) {
+				return _this.$contentContainer.dialog("close", _this.$contentContainer.fadeOut());
+			} else {
+				return _this.$contentContainer.dialog("close");
+			}
+		}
+
+		/*
+		 * Indicates which data belongs to each column, the type of it and some other properties.
+		 * Returns all the columns for the handsontable API.
+		 */
 		function getColumns() {
 			var columns =
 				[
@@ -70,79 +106,115 @@
 					},
 					{
 						data: "UWI"
+						//simple text, no special options
 					},
 					{
 						data: "UWISimplifiedFormat"
+						//simple text, no special options
 					},
 					{
 						data: "Longitude"
+						//number, but precision is important in coordinates
 					},
 					{
 						data: "Latitude"
+						//number, but precision is important in coordinates
 					},
 					{
 						data: "WellName"
+						//simple text, no special options
 					},
 					{
-						data: "WellDrillersTotalDepth"
+						data: "WellDrillersTotalDepth",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
 						data: "WellOperator"
+						//simple text, no special options
 					},
 					{
 						data: "WellStatus"
+						//simple text, no special options
 					},
 					{
 						data: "WellProvince"
+						//simple text, no special options
 					},
 					{
 						data: "WellClass"
+						//simple text, no special options
 					},
 					{
 						data: "WellPrimaryProducingFormation"
+						//simple text, no special options
 					},
 					{
 						data: "WellPoolName"
+						//simple text, no special options
 					},
 					{
-						data: "CumulativePorosity"
+						data: "CumulativePorosity",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "CumulativePoreVolume"
+						data: "CumulativePoreVolume",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "CumulativeShaleContent"
+						data: "CumulativeShaleContent",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "CumulativeOilSaturation"
+						data: "CumulativeOilSaturation",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "CumulativeHydrocarbonMovability"
+						data: "CumulativeHydrocarbonMovability",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "AverageHydrocarbonMovability"
+						data: "AverageHydrocarbonMovability",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "Thickness"
+						data: "Thickness",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "EffectiveYield"
+						data: "EffectiveYield",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "PeakValue"
+						data: "PeakValue",
+						type: "numeric",
+						format: "0.000"
 					},
 					{
-						data: "EffectiveLifeCycle"
+						data: "EffectiveLifeCycle",
+						type: "numeric",
+						format: "0.000"
 					}
 				];
 
 			return columns;
 		}
 
+		/*
+		 * Returns all the headers name on the table
+		 */
 		function getColumnHeaders() {
 			var headers =
 				[
-					"",
+					" ",
 					"UWI",
 					"UWI Simplified Format",
 					"Longitude",
@@ -170,6 +242,9 @@
 			return headers;
 		}
 
+		/*
+		 * Returns a list with all the values that are significant to be displayed on the table
+		 */
 		function getSignificantAttributesData(searchResults) {
 			var data = [];
 
@@ -237,7 +312,6 @@
 		FullTable.prototype.listenParameterRemoved = function ($columnFilter) {
 			return $("body").on("filterParameterRemoved", (function (_this) {
 				return function () {
-					console.log("Filter removed - line 95ish");
 					var filterQueryArray = [];
 					for(var i = 0; i < $columnFilter.find(".filterParameter").length; i++){
 
@@ -306,7 +380,7 @@
 		}
 
 		FullTable.prototype.displayHandsOnTable = function() {
-
+			var _this = this;
 			this.$tableContainer.remove();
 
 			if(typeof(this.SearchController) != "undefined"){
@@ -339,7 +413,24 @@
 						fixedColumnsLeft: 1
 					});
 
-					this.toggleButton.addClass("active");
+					this.$tableContainer.handsontable('getInstance').addHook('afterChange', function() {
+						var allData = this.getData();
+						var selectedRows = [];
+
+						for(var i=0; i<allData.length; i++) {
+							if(allData[i]["Selected"] === true) {
+								// The UWI should be enough to identify the selected wells
+								// The string below must be the same as in the table (UWI, not the full name)
+								selectedRows.push(allData[i]["UWI"]);
+							}
+						}
+
+						if(_this.MapController != undefined && _this.MapController != null) {
+							_this.MapController.highlightWells(selectedRows);
+						}
+
+						// TODO: What to do with this data?! How to change these wells on the map?!
+					});
 
 					// Default initial values for width and height
 					var width = 650;
@@ -359,8 +450,6 @@
 							}
 						}
 					}
-
-					console.log("atualizado!");
 
 					this.$contentContainer.dialog({
 						title: 'Detailed Results',
@@ -382,10 +471,10 @@
 		FullTable.prototype.listenChanges = function () {
 			return $("body").on("ResultsUpdated", (function (_this) {
 				return function () {
-					console.log("Results updated - line 240ish");
 					_this.initSearchResults = _this.SearchController.resultSet;
 					_this.displayHandsOnTable();
-					_this.$contentContainer.dialog("close");
+
+					closeDialog(_this, false);
 				};
 			})(this));
 		};
@@ -393,7 +482,6 @@
 		FullTable.prototype.filterChanges = function () {
 			return $("body").on("FilterUpdated", (function (_this) {
 				return function () {
-					console.log("Filter updated - line 260ish");
 					_this.displayHandsOnTable();
 				};
 			})(this));
@@ -407,14 +495,15 @@
 		FullTable.prototype.listenToggle = function () {
 			return this.toggleButton.on("click", (function (_this) {
 				return function () {
-					$(this).toggleClass("active");
 					if ($(this).hasClass("active")) {
+						$(this).toggleClass("active");
 						$('#results-table').slideToggle();
-						return _this.$contentContainer.dialog("close", _this.$contentContainer.fadeOut());
+						return closeDialog(_this, true);
 					}
 					else {
+						$(this).toggleClass("active");
 						$('#results-table').slideToggle();
-						return _this.$contentContainer.dialog("open", _this.$contentContainer.fadeIn());
+						return openDialog(_this, true);
 					}
 				};
 			})(this));

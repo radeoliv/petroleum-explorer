@@ -19,6 +19,8 @@
 	var markers = [];
 	// Current values of the selected well
 	var currentWellValues = [];
+	// Info window that will be used to in the markers
+	var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
 	// Create options for the map
 	var mapOptions = {
@@ -119,82 +121,140 @@
 	initializeMap();
 
 	/*
+	 * Highlight specific pins on the map
+	 */
+	MapCanvasController.prototype.highlightWells = function(UWIsToHighlight) {
+
+		// Remove the highlighted wells that aren't in the UWIsToHighlight list anymore!
+		for(var i=0; i<markers.length; i++) {
+			if(markers[i].isHighlighted === true && $.inArray(markers[i].id, UWIsToHighlight) < 0) {
+				markers[i].setMap(null);
+				markers[i] = null;
+				createMarker(currentWells[i], i, false);
+			}
+		}
+
+		// Then, highlight the ones that are not highlighted!
+		for(var i=0; i<currentWells.length; i++) {
+			// If the well is in the UWIsToHighlight list, it must be highlighted
+			if($.inArray(currentWells[i]["Well_Unique_Identifier"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
+				markers[i].setMap(null);
+				markers[i] = null;
+				createMarker(currentWells[i], i, true);
+			}
+		}
+
+		/* If there are others wells that don't match the conditions above, it means that they are correctly
+		 * highlighted or correctly not highlighted.
+		 */
+	}
+
+	/*
 	 * Plot points on the map (adding markers/pins)
 	 */
 	function plotPoints() {
-		var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
-
-		var self = this;
-
 		// Go through all wells and create markers for them
 		for (var i = 0; i < currentWells.length; i++) {
-			// Create a marker
-			var marker = new google.maps.Marker({
-				position:  new google.maps.LatLng(currentWells[i]["Latitude Decimal Degrees"], currentWells[i]["Longitude Decimal Degrees"]),
-				map:       map,
-				title:     currentWells[i]["Well_Name"],
-				draggable: false,
-				animation: google.maps.Animation.DROP
-			});
-
-			// Adding the new marker on the array of markers
-			markers.push(marker);
-
-			// Define an event to execute every time a marker/pin is clicked
-			// It will show the UWI, Company and Status of a well
-			google.maps.event.addListener(marker, 'click', (function (marker, i) {
-				return function () {
-					//var content = "<b>Unique Well Identifier</b><br>" + marker.title;
-					var content = "<b>Unique Well Identifier</b><br>" + currentWells[i]["Well_Unique_Identifier"] + "<br><br>"
-						+ "<b>Well Operator</b><br>" + currentWells[i]["Well_Operator"] + "<br><br>"
-						+ "<b>Well Status</b><br>" + currentWells[i]["Well_Status"] + "<br><br>";
-
-					// Defining the link to open the charts visualization
-					content += "<a href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
-
-					// Set the content of the infowindow
-					infoWindow.setContent("<p>" + content + "</p>");
-
-					// Defining new property to the info window to know when it's opened or closed
-					google.maps.InfoWindow.prototype.opened = false;
-					google.maps.Marker.prototype.id = i;
-					toggleInfoWindow(infoWindow, map, marker);
-
-					// Using this specific well (and all the rest) to generate the chart
-					new InfoGraph().generateChart(currentWells[i]["Well_Unique_Identifier"], currentWells, dataSet);
-
-					/*
-					 * Open light box to show the generated charts
-					 */
-					$('.open-charts').magnificPopup({
-						type:'inline',
-						midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
-						items: [
-							{
-								src: '#highchart-basic',
-								type: 'inline'
-							}
-						],
-						gallery: {
-							enabled: true,
-							navigateByImgClick: true,
-							arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
-							tPrev: 'Previous', // title for left button
-							tNext: 'Next', // title for right button
-							tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
-						},
-						fixedContentPos: true
-					});
-
-					//marker.setAnimation(google.maps.Animation.BOUNCE);
-				}
-			})(marker, i));
-
-			// Used to change the opened property when the user closes the info window by pressing the top right x.
-			google.maps.event.addListener(infoWindow,'closeclick',function(){
-				infoWindow.opened = false;
-			});
+			createMarker(currentWells[i], i, null);
 		}
+	}
+
+	/*
+	 * Be careful with the 3 different situations that this function can be called:
+	 *  - Creating a marker for the first time (isHighlighted must be null)
+	 *  - Updating a marker
+	 *    - Highlight it (isHighlighted must be true)
+	 *    - ! Highlight it (isHighlighted must be false)
+	 */
+	function createMarker(well, i, isHighlighted) {
+
+		var iconUrl = 'resources/red-pin.png';
+		if(isHighlighted != null && isHighlighted === true) {
+			iconUrl = 'resources/blue-pin.png';
+		}
+
+		// Defining new properties to the marker to know if it's highlighted or not
+		google.maps.Marker.prototype.isHighlighted = false;
+		google.maps.Marker.prototype.id = "";
+
+		// Create a marker
+		var marker = new google.maps.Marker({
+			position:  new google.maps.LatLng(well["Latitude Decimal Degrees"], well["Longitude Decimal Degrees"]),
+			map:       map,
+			title:     well["Well_Name"],
+			draggable: false,
+			animation: google.maps.Animation.DROP,
+			icon: iconUrl
+		});
+		marker.id = well["Well_Unique_Identifier"];
+
+		/* Adding the new marker on the array of markers.
+		 * If the marker is supposed to be highlighted, it is being replaced in the array of markers,
+		 * so it must be inserted at the same location as before.
+		 */
+		if(isHighlighted === null) {
+			markers.push(marker);
+		} else {
+			if(isHighlighted === true) {
+				marker.isHighlighted = true;
+			}
+			markers[i] = marker;
+		}
+
+		// Define an event to execute every time a marker/pin is clicked
+		// It will show the UWI, Company and Status of a well
+		google.maps.event.addListener(marker, 'click', (function (marker, i) {
+			return function () {
+				//var content = "<b>Unique Well Identifier</b><br>" + marker.title;
+				var content = "<b>Unique Well Identifier</b><br>" + well["Well_Unique_Identifier"] + "<br><br>"
+					+ "<b>Well Operator</b><br>" + well["Well_Operator"] + "<br><br>"
+					+ "<b>Well Status</b><br>" + well["Well_Status"] + "<br><br>";
+
+				// Defining the link to open the charts visualization
+				content += "<a href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
+
+				// Set the content of the infowindow
+				infoWindow.setContent("<p>" + content + "</p>");
+
+				// Defining new property to the info window to know when it's opened or closed
+				google.maps.InfoWindow.prototype.opened = false;
+				google.maps.Marker.prototype.id = i;
+				toggleInfoWindow(infoWindow, map, marker);
+
+				// Using this specific well (and all the rest) to generate the chart
+				new InfoGraph().generateChart(well["Well_Unique_Identifier"], currentWells, dataSet);
+
+				/*
+				 * Open light box to show the generated charts
+				 */
+				$('.open-charts').magnificPopup({
+					type:'inline',
+					midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+					items: [
+						{
+							src: '#highchart-basic',
+							type: 'inline'
+						}
+					],
+					gallery: {
+						enabled: true,
+						navigateByImgClick: true,
+						arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+						tPrev: 'Previous', // title for left button
+						tNext: 'Next', // title for right button
+						tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
+					},
+					fixedContentPos: true
+				});
+
+				//marker.setAnimation(google.maps.Animation.BOUNCE);
+			}
+		})(marker, i));
+
+		// Used to change the opened property when the user closes the info window by pressing the top right x.
+		google.maps.event.addListener(infoWindow,'closeclick',function(){
+			infoWindow.opened = false;
+		});
 	}
 
 	/*

@@ -293,6 +293,8 @@ Full Table
   outline: none;
   font-size: 1.2em;
   color: black; }
+  .toggle-table:active, .toggle-table.active, .toggle-table:hover {
+    background: #b6b6b6; }
 
 .filter-form {
   position: absolute;
