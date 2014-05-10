@@ -9,7 +9,7 @@
  Unit tests for Oil_well_filter.
  -------------------------------------------------------------------------------*/
 
-var Oil_well_filter = require("../../app/scripts/components/visualizationController/visualization_controller.js");
+var Oil_well_filter = require("../../app/scripts/components/visualizationController/visualization-controller.js");
 
 var assert = require("chai").assert;
 (function () {

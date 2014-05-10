@@ -43,6 +43,13 @@
 			 this.NULL_QUERY_ERROR_MESSAGE = "search query is null";
 		 }
 
+		 /*
+		  * Used to keep the data consistent
+		  */
+		 SearchController.prototype.resetResultSet = function() {
+			 this.resultSet = this.dataSet;
+		 };
+
 		 /**
 		  * find the UWID matching the search criteria (LSD, range, township, section, meridian)
 		  * @param query the search query we will use to search through UWID
@@ -303,8 +310,6 @@ function getMeridian(uwi) {
 
 	 var validity = true;
 	 var mandatoryField = false;
-
-	 // TODO: Create a function to append error messages modularly.
 
 	 /*
 	  * Township

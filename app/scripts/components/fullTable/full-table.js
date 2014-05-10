@@ -307,7 +307,7 @@
 					$("body").trigger("filterParameterRemoved");
 				}
 			});
-		}
+		};
 
 		FullTable.prototype.listenParameterRemoved = function ($columnFilter) {
 			return $("body").on("filterParameterRemoved", (function (_this) {
@@ -375,25 +375,21 @@
 			}
 
 			this.initSearchResults = filterResultSet;
-			$("body").trigger("FilterUpdated");
 			this.MapController.plotResults(filterResultSet);
-		}
+			$("body").trigger("FilterUpdated");
+		};
 
 		FullTable.prototype.displayHandsOnTable = function() {
 			var _this = this;
 			this.$tableContainer.remove();
 
-			if(typeof(this.SearchController) != "undefined"){
-
+			if(typeof(this.SearchController) != "undefined") {
 				if (this.initSearchResults.length > 0) {
 					var searchResults = this.initSearchResults;
-
+					var self = this;
 					var data = getSignificantAttributesData(searchResults);
 					var columns = getColumns();
 					var columnsHeaders = getColumnHeaders();
-
-					//plot results on google maps
-					//self.mapCanvasController = new MapCanvasController().plotResults(data);
 
 					this.$tableContainer = $('<div id="full-results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
 
@@ -414,22 +410,7 @@
 					});
 
 					this.$tableContainer.handsontable('getInstance').addHook('afterChange', function() {
-						var allData = this.getData();
-						var selectedRows = [];
-
-						for(var i=0; i<allData.length; i++) {
-							if(allData[i]["Selected"] === true) {
-								// The UWI should be enough to identify the selected wells
-								// The string below must be the same as in the table (UWI, not the full name)
-								selectedRows.push(allData[i]["UWI"]);
-							}
-						}
-
-						if(_this.MapController != undefined && _this.MapController != null) {
-							_this.MapController.highlightWells(selectedRows);
-						}
-
-						// TODO: What to do with this data?! How to change these wells on the map?!
+						updateSelectedRows(this.getData(), false, self);
 					});
 
 					// Default initial values for width and height
@@ -460,9 +441,52 @@
 						width: width,
 						height: height
 					});
+
+					// If the user selected some rows before, they need to be kept as selected after the table is updated.
+					updateSelectedRows(this.$tableContainer.handsontable('getInstance').getData(), true, self);
 				}
 			}
+		};
+
+		/*
+		 * Function responsible to update the map with the selected rows
+		 */
+		function updateSelectedRows(allData, isTableUpdated, ref) {
+			var currentlySelectedRows = [];
+
+			for(var i=0; i<allData.length; i++) {
+				// If the row was selected before, it must keep selected now.
+				if(isTableUpdated && $.inArray(allData[i]["UWI"], ref.selectedRows) >= 0) {
+					allData[i]["Selected"] = true;
+				}
+
+				if(allData[i]["Selected"] === true) {
+					// The UWI should be enough to identify the selected wells
+					// The string below must be the same as in the table (UWI, not the full name)
+					currentlySelectedRows.push(allData[i]["UWI"]);
+				}
+			}
+
+			ref.selectedRows = currentlySelectedRows;
+
+			if(ref.MapController != undefined && ref.MapController != null) {
+				ref.MapController.highlightWells(ref.selectedRows);
+			}
 		}
+
+		/*
+		 * Returns the values in the table
+		 */
+		FullTable.prototype.getCurrentTableData = function() {
+			return this.$tableContainer.handsontable('getInstance').getData();
+		};
+
+		/*
+		 * Returns the column headers as presented in the table
+		 */
+		FullTable.prototype.getCurrentTableHeaders = function() {
+			return this.$tableContainer.handsontable('getInstance').getColHeader();
+		};
 
 		/**
 		 * Toggle table update on `ResultsUpdated` event

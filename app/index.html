@@ -33,15 +33,19 @@
 			<button title = "Graphs" data-target = "graph-form" class = "show-graph">
 				<i class = "icon-stats"></i>
 			</button>
+			<button title = "Export" data-target = "export-form" class = "show-export">
+				<i class = "icon-download2"></i>
+			</button>
 		</div>
 
 		<article class = "sidebar-content-container">
+
 			<section class = "search-form">
 				<form action = "/">
 					<fieldset>
 						<hr>
 						<h4>Search</h4>
-						<button type="button" id="clear-search">Clear all</button>
+						<input type="button" id="clear-search" value = "Clear all"/>
 
 						<div id = "accordion">
 							<h5>UWI</h5>
@@ -155,6 +159,23 @@
 				</form>
 			</section>
 
+			<section class = "export-form">
+				<form action = "/export">
+					<fieldset>
+						<hr>
+						<h4>Export</h4>
+
+						<div id="exportContent">
+							<label id = "fileNameLabel" ><b>File name</b> (optional)</label>
+							<input type = "text" id = "fileName" placeholder = "Example.csv" name = "fileName">
+							<input type = "button" id = "exportButton" value = "Export"/>
+						</div>
+
+						<hr>
+					</fieldset>
+				</form>
+			</section>
+
 		</article>
 	</aside>
 	<footer>
@@ -165,7 +186,7 @@
 					<form action = "/filter">
 						<fieldset>
 							<h4>Add Filter Parameter</h4>
-							<button type = "button" title = "Please select a constraint above" id = "add-constraint" class = "filterButton">
+							<button type = "button" title = "Add constraint" id = "add-constraint" class = "filterButton">
 								<i class = "icon-plus"></i></button>
 							<select name = "tableColumnFilter" id = "tableColumnFilter">
 
@@ -213,12 +234,14 @@
 		<!-- build:js scripts/main.js -->
 		<script src="scripts/components/mapToolbar/map-toolbar.js"></script>
 		<script src="scripts/components/search/search-controller.js"></script>
-		<script src="scripts/components/search/searchView.js"></script>
+		<script src="scripts/components/search/search-view.js"></script>
 		<script src="scripts/components/fullTable/full-table.js"></script>
 		<script src="scripts/components/mapSection/map-canvas.js"></script>
 		<script src="scripts/components/visualizationController/info-graph.js"></script>
 		<script src="scripts/components/visualizationController/graph-selection.js"></script>
-		<script src="scripts/components/visualizationController/visualization_custom.js"></script>
+		<script src="scripts/components/visualizationController/visualization-custom.js"></script>
+		<script src="scripts/components/export/export-controller.js"></script>
+		<script src="scripts/components/export/export-view.js"></script>
 		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
 	</footer>

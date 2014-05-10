@@ -136,7 +136,7 @@ Map Toolbar
     display: inline; }
   .mapToolbar .sidebar-content-container {
     display: inline; }
-  .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .layer-form, .mapToolbar .graph-form {
+  .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .export-form, .mapToolbar .graph-form {
     width: 20em; }
   .mapToolbar .grouped-search {
     align-content: center;
@@ -166,11 +166,10 @@ Map Toolbar
   .mapToolbar #clear-search {
     padding: 0.2em 0.3em 0.2em 0.3em;
     position: relative;
-    left: 0.2em;
-    top: -2.6em;
-    display: inline-block;
+    top: -2.4em;
     float: right;
-    font-size: 0.8em; }
+    font-size: 0.8em;
+    width: 25%; }
   .mapToolbar .separator {
     width: 100%;
     /*border-bottom: inset 1px gray;*/
@@ -244,7 +243,8 @@ table {
 #addRow {
   width: 75%;
   font-size: 0.75em;
-  padding-top: 0.5em; }
+  padding-top: 0.3em;
+  padding-bottom: 0.3em; }
 
 #graphDiv {
   align-content: center;
@@ -255,6 +255,20 @@ table {
   text-align: left; }
   .graphParameter label {
     margin-left: 1em; }
+
+#exportContent {
+  align-content: center;
+  text-align: center; }
+  #exportContent #fileNameLabel {
+    padding-right: 38%; }
+  #exportContent #fileName {
+    font-size: 0.75em;
+    padding: 0.3em 0em 0.3em 0.3em; }
+  #exportContent #exportButton {
+    width: 81.8%;
+    font-size: 0.75em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em; }
 
 #map-canvas {
   height: 100%;

@@ -145,7 +145,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 	statusSearchInput.change( function (e) {
 
-		var statusQuery=statusSearchInput[0].value;
+		var statusQuery = statusSearchInput[0].value;
 
 		var results = null;
 		var error = false;
@@ -215,13 +215,11 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 							return 250;
 					}
 				});
-
-				// Trigger the custom ResultsUpdated event on Body, telling other components that data has been updated
-				//console.log('sending event');
-				$("body").trigger("ResultsUpdated");
-				//console.log("Results updated.  Results:");
-				//console.dir(this.resultSet);
+			} else {
+				// All the wells should be in the result set for the full table to show everything
+				self.searchController.resetResultSet();
 			}
+			$("body").trigger("ResultsUpdated");
 		} else {
 			// Cleaning the results area
 			if($('#results-table') != undefined) {
@@ -229,8 +227,6 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			}
 		}
 	}
-
-	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
 
 	function forceNumeric(fields) {
 		// Replacing non numeric characters with empty string for UWI value search
@@ -241,12 +237,15 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 	function clearFields() {
 		$searchInputForm.find("input[name='uwi']").val(''),
-		$searchInputForm.find("input[name='lsd']").val(''),
-		$searchInputForm.find("input[name='section']").val(''),
-		$searchInputForm.find("input[name='township']").val(''),
-		$searchInputForm.find("input[name='range']").val(''),
-		$searchInputForm.find("input[name='meridian']").val(''),
-		$searchInputForm.find("input[name='company']").val(''),
-		$searchInputForm.find("select[name='status']").val('');
+			$searchInputForm.find("input[name='lsd']").val(''),
+			$searchInputForm.find("input[name='section']").val(''),
+			$searchInputForm.find("input[name='township']").val(''),
+			$searchInputForm.find("input[name='range']").val(''),
+			$searchInputForm.find("input[name='meridian']").val(''),
+			$searchInputForm.find("input[name='company']").val(''),
+			$searchInputForm.find("select[name='status']").val('');
 	}
+
+
+	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
 };

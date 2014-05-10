@@ -17,8 +17,6 @@
 	var currentWells;
 	// Markers (pins) shown on the map
 	var markers = [];
-	// Current values of the selected well
-	var currentWellValues = [];
 	// Info window that will be used to in the markers
 	var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
 
@@ -62,7 +60,7 @@
 			clearAllMarkers();
 			initializeMap();
 		}
-	}
+	};
 
 	/*
 	 * Clear all the markers (pins) on the map
@@ -169,8 +167,10 @@
 	function createMarker(well, i, isHighlighted) {
 
 		var iconUrl = 'resources/red-pin.png';
+		var animation = google.maps.Animation.DROP;
 		if(isHighlighted != null && isHighlighted === true) {
 			iconUrl = 'resources/blue-pin.png';
+			animation = google.maps.Animation.BOUNCE;
 		}
 
 		// Defining new properties to the marker to know if it's highlighted or not
@@ -183,7 +183,7 @@
 			map:       map,
 			title:     well["Well_Name"],
 			draggable: false,
-			animation: google.maps.Animation.DROP,
+			animation: animation,
 			icon: iconUrl
 		});
 		marker.id = well["Well_Unique_Identifier"];

@@ -29,7 +29,6 @@ jQuery(document).ready(function ($) {
 	var mySearchController = loadSearchController();
 	var myMapCanvasController = new MapCanvasController();
 	var myVisualizationCustom = new Visualization_custom();
-
 	var myGraphSelection = new GraphSelection(mySearchController, myVisualizationCustom);
 
 	var mySearchView = new SearchView(mySearchController, myMapCanvasController, myGraphSelection);
@@ -42,6 +41,6 @@ jQuery(document).ready(function ($) {
 
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
 
-
-	//var $visualization_view = new Visualization_View($fullTableContainer)
+	var myExportController = new ExportController(myTableController);
+	var myExportView = new ExportView(myExportController);
 });

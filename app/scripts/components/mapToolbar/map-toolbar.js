@@ -33,8 +33,6 @@
 				mapToolbar.find("#status")
 			];
 
-
-
 		/**
 		 * This function initializes mapToolbarButtons to hidden, and toggles
 		 * the contents of the sidebar when called.
@@ -70,6 +68,9 @@
 			});
 		};
 
+		/*
+		 * Allows the accordion in the search tab to be collapsible.
+		 */
 		mapToolbarAccordion.accordion({
 			collapsible: true,
 			heightStyle: "content"
@@ -101,7 +102,7 @@
 					searchFields[--i].change();
 				}
 			})
-		}
+		};
 
 		initMapToggle();
 		setToggle();

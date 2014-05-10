@@ -71,7 +71,7 @@ Map Toolbar
 		@extend %wide;
 	}
 
-	.layer-form{
+	.export-form{
 		@extend %wide;
 	}
 
@@ -126,11 +126,10 @@ Map Toolbar
 	#clear-search{
 		padding: 0.2em 0.3em 0.2em 0.3em;
 		position: relative;
-		left: 0.2em;
-		top: -2.6em;
-		display: inline-block;
+		top: -2.4em;
 		float: right;
 		font-size: 0.8em;
+		width: 25%;
 	}
 
 	.separator{
@@ -237,7 +236,8 @@ table {
 #addRow{
 	width: 75%;
 	font-size: 0.75em;
-	padding-top: 0.5em;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
 }
 
 #graphDiv{
@@ -252,3 +252,25 @@ table {
 		margin-left: 1em;
 	}
 }
+
+#exportContent{
+	align-content: center;
+	text-align: center;
+
+	#fileNameLabel{
+		padding-right: 38%;
+	}
+
+	#fileName{
+		font-size: 0.75em;
+		padding: 0.3em 0em 0.3em 0.3em;
+	}
+
+	#exportButton{
+		width: 81.8%;
+		font-size: 0.75em;
+		padding-top: 0.3em;
+		padding-bottom: 0.3em;
+	}
+}
+
