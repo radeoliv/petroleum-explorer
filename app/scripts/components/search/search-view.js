@@ -19,6 +19,7 @@ SearchView = function (searchController, mapCanvasController, graphSelection){//
 
 var optionAccordion;	//global var for handling accordion option for search select
 var optionStatus;	//global var for handling accordion option for search select
+var isEventListenerActive = true;
 
 (function () {
 	$(function () {
@@ -61,122 +62,127 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		rangeSearchInput = $searchInputForm.find("input[name='range']"),
 		meridianSearchInput = $searchInputForm.find("input[name='meridian']"),
 		companySearchInput = $searchInputForm.find("input[name='company']"),
-		statusSearchInput = $searchInputForm.find("select[name='status']"),
-		clearSearchInputs = $searchInputForm.find("#clear-search");
+		statusSearchInput = $searchInputForm.find("select[name='status']");
 
 	var self = this;
 
 	$searchInputSelector.on("keyup", function (e) { //retrieving the value in the input and saving it as a string variable.  Whenever a search input has typed in it, performs the search
+		if(isEventListenerActive) {
+			forceNumeric([lsdSearchInput, sectionSearchInput, townshipSearchInput, rangeSearchInput, meridianSearchInput]);
 
-		forceNumeric([lsdSearchInput, sectionSearchInput, townshipSearchInput, rangeSearchInput, meridianSearchInput]);
+			var uwiQuery=uwiSearchInput[0].value,
+				lsdQuery=lsdSearchInput[0].value,
+				sectionQuery=sectionSearchInput[0].value,
+				townshipQuery=townshipSearchInput[0].value,
+				rangeQuery=rangeSearchInput[0].value,
+				meridianQuery=meridianSearchInput[0].value,
+				companyQuery=companySearchInput[0].value;
 
-		var uwiQuery=uwiSearchInput[0].value,
-			lsdQuery=lsdSearchInput[0].value,
-			sectionQuery=sectionSearchInput[0].value,
-			townshipQuery=townshipSearchInput[0].value,
-			rangeQuery=rangeSearchInput[0].value,
-			meridianQuery=meridianSearchInput[0].value,
-			companyQuery=companySearchInput[0].value;
+			var results;
+			var error = false;
 
-		var results;
-		var error = false;
+			// Clears all fields
+			isEventListenerActive = false;
+			clearFields();
 
-		// Clears all fields
-		//clearSearchInputs.click();
+			switch(optionAccordion) {
+				// Search by the entire UWI
+				case 0:
+					// Set again the original input
+					uwiSearchInput[0].value = uwiQuery;
 
-		switch(optionAccordion) {
-			// Search by the entire UWI
-			case 0:
-				// Set again the original input
-				//uwiSearchInput[0].value = uwiQuery;
+					if(checkUWIInput(uwiQuery))
+						results = self.searchController.findResultsUWI(uwiQuery);
+					else {
+						if(uwiQuery.length == 0)
+							// If the query is empty, there is nothing to be searched.
+							results = null;
+						else
+							error = true;
+					}
+					break;
+				// Search by the UWI values
+				case 1:
+					// Set again the original inputs
+					lsdSearchInput[0].value = lsdQuery;
+					sectionSearchInput[0].value = sectionQuery;
+					townshipSearchInput[0].value = townshipQuery;
+					rangeSearchInput[0].value = rangeQuery;
+					meridianSearchInput[0].value = meridianQuery;
 
-				if(checkUWIInput(uwiQuery))
-					results = self.searchController.findResultsUWI(uwiQuery);
-				else {
-					if(uwiQuery.length == 0)
-						// If the query is empty, there is nothing to be searched.
-						results = null;
-					else
-						error = true;
-				}
-				break;
-			// Search by the UWI values
-			case 1:
-				// Set again the original inputs
-				//lsdSearchInput[0].value = lsdQuery;
-				//sectionSearchInput[0].value = sectionQuery;
-				//townshipSearchInput[0].value = townshipQuery;
-				//rangeSearchInput[0].value = rangeQuery;
-				//meridianSearchInput[0].value = meridianQuery;
+					if(checkUWIValueInputs([lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery]))
+						results = self.searchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery);
+					else {
+						if(lsdQuery.length == 0 && sectionQuery.length == 0 && townshipQuery.length == 0 && rangeQuery.length == 0 && meridianQuery.length == 0)
+							// If the query is empty, there is nothing to be searched.
+							results = null;
+						else
+							error = true;
+					}
+					break;
+				// Search by the company name
+				case 2:
+					// Set again the original input
+					companySearchInput[0].value = companyQuery;
 
-				if(checkUWIValueInputs([lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery]))
-					results = self.searchController.findResultsUWIValues(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery);
-				else {
-					if(lsdQuery.length == 0 && sectionQuery.length == 0 && townshipQuery.length == 0 && rangeQuery.length == 0 && meridianQuery.length == 0)
-						// If the query is empty, there is nothing to be searched.
-						results = null;
-					else
-						error = true;
-				}
-				break;
-			// Search by the company name
-			case 2:
-				// Set again the original input
-				//companySearchInput[0].value = companyQuery;
+					if(checkCompanyInput(companyQuery))
+						results = self.searchController.findResultsCompany(companyQuery);
+					else {
+						if(companyQuery.length == 0)
+							// If the query is empty, there is nothing to be searched.
+							results = null;
+						else
+							error = true;
+					}
+					break;
+				default:
+					console.log("Accordion error!");
+					break;
+			}
 
-				if(checkCompanyInput(companyQuery))
-					results = self.searchController.findResultsCompany(companyQuery);
-				else {
-					if(companyQuery.length == 0)
-						// If the query is empty, there is nothing to be searched.
-						results = null;
-					else
-						error = true;
-				}
-				break;
-			default:
-				console.log("Accordion error!");
-				break;
+			isEventListenerActive = true;
+			displayResults(error, results);
+			//this.tableController.displayTable();
 		}
-
-		displayResults(error, results);
-		//this.tableController.displayTable();
 	});
 
 	statusSearchInput.change( function (e) {
+		if(isEventListenerActive) {
+			var statusQuery = statusSearchInput[0].value;
 
-		var statusQuery = statusSearchInput[0].value;
+			var results = null;
+			var error = false;
+			switch(optionAccordion) {
+				case 0:
+				case 1:
+				case 2:
+					break;
+				case 3:
+					var tempOptionStatus = optionStatus;
 
-		var results = null;
-		var error = false;
-		switch(optionAccordion) {
-			case 0:
-			case 1:
-			case 2:
-				break;
-			case 3:
-				var tempOptionStatus = optionStatus;
+					// Clears all fields
+					isEventListenerActive = false;
+					clearFields();
+					statusSearchInput[0].value = statusQuery;
 
-				// Clears all fields
-				//clearSearchInputs.click();
+					if(tempOptionStatus != "none")
+						results = self.searchController.findResultsStatus(statusQuery);
+					else
+						// If the selection is none, there is nothing to be searched.
+						results = null;
 
-				if(tempOptionStatus != "none")
-					results = self.searchController.findResultsStatus(statusQuery);
-				else
-					// If the selection is none, there is nothing to be searched.
-					results = null;
+					break;
+				default:
+					console.log("Accordion error!");
+					break;
+			}
 
-				break;
-			default:
-				console.log("Accordion error!");
-				break;
+			// Set again the original input
+			//statusSearchInput[0].value = tempOptionStatus;
+
+			isEventListenerActive = true;
+			displayResults(error, results);
 		}
-
-		// Set again the original input
-		//statusSearchInput[0].value = tempOptionStatus;
-
-		displayResults(error, results);
-
 	});
 
 	function displayResults(errorOccurred, results) {
@@ -237,15 +243,29 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 	function clearFields() {
 		$searchInputForm.find("input[name='uwi']").val(''),
-			$searchInputForm.find("input[name='lsd']").val(''),
-			$searchInputForm.find("input[name='section']").val(''),
-			$searchInputForm.find("input[name='township']").val(''),
-			$searchInputForm.find("input[name='range']").val(''),
-			$searchInputForm.find("input[name='meridian']").val(''),
-			$searchInputForm.find("input[name='company']").val(''),
-			$searchInputForm.find("select[name='status']").val('');
+		$searchInputForm.find("input[name='lsd']").val(''),
+		$searchInputForm.find("input[name='section']").val(''),
+		$searchInputForm.find("input[name='township']").val(''),
+		$searchInputForm.find("input[name='range']").val(''),
+		$searchInputForm.find("input[name='meridian']").val(''),
+		$searchInputForm.find("input[name='company']").val(''),
+		$searchInputForm.find("select[name='status']").val('none');
 	}
 
+	/*
+	 * This function is called to clear all the search fields that the user might have filled.
+	 */
+	(function () {
+		$(function () {
+			function clearSearch() {
+				return $("#clear-search").on("click", function () {
+					clearFields();
+					statusSearchInput.change();
+				});
+			};
+			clearSearch();
+		});
+	}).call(this);
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
 };

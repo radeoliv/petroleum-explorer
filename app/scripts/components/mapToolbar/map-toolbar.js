@@ -76,37 +76,8 @@
 			heightStyle: "content"
 		});
 
-		/*
-		 * This function is called to clear all the search fields that the user might have filled.
-		 */
-		clearFields = function() {
-			return mapToolbarClearSearch.on("click", function() {
-				if(searchFields != undefined) {
-					var i;
-					for(i=0; i<searchFields.length; i++)
-					{
-						if(searchFields[i][0].id === "status")
-						{
-							if(searchFields[i][0].value != "none")
-							{
-								searchFields[i][0].value = "none";
-							}
-						}
-						else
-						{
-							if(searchFields[i][0].value != "")
-								searchFields[i][0].value = "";
-						}
-					}
-					// Is necessary to call the change function of status, as the event is not triggered automatically.
-					searchFields[--i].change();
-				}
-			})
-		};
-
 		initMapToggle();
 		setToggle();
-		clearFields();
 	});
 
 }).call(this);
