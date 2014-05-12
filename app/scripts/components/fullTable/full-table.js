@@ -1,6 +1,17 @@
+/*--------------------------------------------------------------------------------
+ Author: Rodrigo Silva
+
+ petroleum-explorer
+
+ =============================================================================
+ Filename: full-table.js
+ =============================================================================
+ Contains all the logic to create, display, update and format data in a table (handsontable).
+ -------------------------------------------------------------------------------*/
 
 (function () {
 	var FullTable;
+	var self;
 
 	function populateColumnFilter(tableColumns, html) {
 		for (var i = 0; i < tableColumns.length; i++) {
@@ -40,6 +51,7 @@
 	 */
 	FullTable = (function () {
 		function FullTable(SearchController, MapCanvasController, $fullTableResultsContainer) {
+			self = this;
 			this.MapController = MapCanvasController;
 			this.SearchController = SearchController;
 			this.$tableContainer = $fullTableResultsContainer.find(".full-results-table");
@@ -65,7 +77,7 @@
 		 * A verification on the toggle button is done, in order to keep the consistency.
 		 */
 		function openDialog(_this, withFadeIn) {
-			if (_this.toggleButton.hasClass("active") == false) {
+			if (_this.toggleButton.hasClass("active") === false) {
 				_this.toggleButton.toggleClass("active");
 			}
 
@@ -81,7 +93,7 @@
 		 * A verification on the toggle button is done, in order to keep the consistency.
 		 */
 		function closeDialog(_this, withFadeOut) {
-			if (_this.toggleButton.hasClass("active") == true) {
+			if (_this.toggleButton.hasClass("active") === true) {
 				_this.toggleButton.toggleClass("active");
 			}
 
@@ -282,24 +294,10 @@
 		}
 
 		FullTable.prototype.listenForInput = function($columnFilter) {
-
-			var filterQueryArray = [];
-
-			this.$columnFilter.on("keyup", (function (_this) {
+			this.$columnFilter.on("keyup", (function (e) {
 				return function () {
-					filterQueryArray = [];
-					for(var i = 0; i < $columnFilter.find(".filterParameter").length; i++){
-
-						var labelValue = $columnFilter.find(".filterParameter").find("label")[i].getAttribute("value");
-						var constraintValue = $columnFilter.find(".filterParameter").find("select")[i].value;
-						var inputValue = $columnFilter.find(".filterParameter").find("input")[i].value;
-
-						filterQueryArray.push([labelValue, constraintValue, inputValue]);
-					}
-
-					_this.findFilterQuery(filterQueryArray);
+					getAndFilterQueries();
 				}
-
 			})(this));
 
 			this.$columnFilter.children().on("change", function (e){
@@ -312,23 +310,30 @@
 		FullTable.prototype.listenParameterRemoved = function ($columnFilter) {
 			return $("body").on("filterParameterRemoved", (function (_this) {
 				return function () {
-					var filterQueryArray = [];
-					for(var i = 0; i < $columnFilter.find(".filterParameter").length; i++){
-
-						var labelValue = $columnFilter.find(".filterParameter").find("label")[i].getAttribute("value");
-						var constraintValue = $columnFilter.find(".filterParameter").find("select")[i].value;
-						var inputValue = $columnFilter.find(".filterParameter").find("input")[i].value;
-
-						filterQueryArray.push([labelValue, constraintValue, inputValue]);
-					}
-
-					_this.findFilterQuery(filterQueryArray);
+					getAndFilterQueries();
 				};
 			})(this));
 		};
 
-		FullTable.prototype.findFilterQuery = function(query) {
+		/*
+		 * Goes through all defined filters, generate the filter query and filter results.
+		 */
+		function getAndFilterQueries() {
+			var filterQueryArray = [];
+			var filterParameters = self.$columnFilter.find(".filterParameter");
+			for(var i = 0; i < filterParameters.length; i++){
 
+				var labelValue = filterParameters.find("label")[i].getAttribute("value");
+				var constraintValue = filterParameters.find("select")[i].value;
+				var inputValue = filterParameters.find("input")[i].value;
+
+				filterQueryArray.push([labelValue, constraintValue, inputValue]);
+			}
+
+			self.findFilterQuery(filterQueryArray);
+		}
+
+		FullTable.prototype.findFilterQuery = function(query) {
 			var searchResultSet = this.SearchController.resultSet;
 			var filterResultSet = [];
 
@@ -512,13 +517,14 @@
 		};
 
 		/**
-		 * Toggle table update on `ResultsUpdated` event
+		 * Toggle table update on 'ResultsUpdated' event
 		 * @returns {*|jQuery}
 		 */
 		FullTable.prototype.listenChanges = function () {
 			return $("body").on("ResultsUpdated", (function (_this) {
 				return function () {
 					_this.initSearchResults = _this.SearchController.resultSet;
+					getAndFilterQueries();
 					_this.displayHandsOnTable();
 
 					closeDialog(_this, false);
@@ -545,12 +551,14 @@
 					if ($(this).hasClass("active")) {
 						$(this).toggleClass("active");
 						$('#results-table').slideToggle();
+						// The other search fields are disabled (still don't know what is causing that)
 						document.getElementById("status").disabled = false;
 						return closeDialog(_this, true);
 					}
 					else {
 						$(this).toggleClass("active");
 						$('#results-table').slideToggle();
+						// The other search fields are disabled (still don't know what is causing that)
 						document.getElementById("status").disabled = true;
 						return openDialog(_this, true);
 					}
