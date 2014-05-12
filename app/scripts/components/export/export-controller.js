@@ -45,6 +45,9 @@
 			 var day = date.getDate();
 			 // The getMonth function returns values from 0 to 11
 			 var month = date.getMonth() + 1;
+			 if((month+"").length == 1) {
+			 	month = "0" + month;
+			 }
 			 var year = date.getFullYear();
 
 			 // yyyy-mm-dd (ISO 8601)
