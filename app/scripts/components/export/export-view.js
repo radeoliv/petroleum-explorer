@@ -21,50 +21,24 @@
 	 ExportView = function (exportController){
 		 this.exportController = exportController;
 		 self = this;
-		 $fileNameTextBox[0].placeholder = generateDefaultFileName();
+		 $fileNameTextBox[0].placeholder = this.exportController.generateDefaultFileName();
 	 };
 
-	 function generateDefaultFileName() {
-		 // Getting date to form the file name
-		 var date = new Date();
-		 // yyyy-mm-dd (ISO 8601)
-		 var dateISO = date.toISOString().substring(0, 10);
-		 return 'Petroleum-Explorer Wells ' + dateISO + '.csv';
-	 }
-
 	 $fileNameTextBox.on("keyup", function (e) {
-		 // The user cannot define a file name starting with space in the beginning...
-		 this.value = this.value.trimLeft();
-		 // ... or with invalid characters!
-		 this.value = this.value.replace(/[\\/:"*?<>|]+/g, '');
+		 // Removing all invalid characters for the file name
+		 this.value = self.exportController.removeInvalidCharacters(this.value);
 	 });
 
 	 $exportButton.on("click", function(e) {
-		 var actualFileName = $fileNameTextBox[0].value;
-		 if(actualFileName === undefined || actualFileName === null || actualFileName.trim().length === 0) {
-			 actualFileName = generateDefaultFileName();
-		 } else {
-			 // Checking if the file name provided has the right extension
-			 var extension = actualFileName.substring(actualFileName.length - 4);
-			 // If not, we put the right one
-			 if(extension.toLowerCase() != ".csv") {
-				 actualFileName += ".csv";
-			 }
-		 }
+		 // Checking if the given file name is valid
+		 var actualFileName = self.exportController.validateFileName($fileNameTextBox[0].value);
 
-		 // Since the file name is now well defined, the values can be exported.
+		 // Since the file name is now well defined, the values to be exported can be collected.
 		 var data = self.exportController.getDataToExport();
 
-		 // Creating a temporary HTML link element (they support setting file names)
-		 var temp = document.createElement('a');
-		 // Creating the header of the csv file
-		 var data_type = 'data:application/vnd.ms-excel';
-		 // Setting the content of the file
-		 temp.href = data_type + ', ' + data;
-		 // Setting the file name
-		 temp.download = actualFileName;
-		 // Triggering the function
-		 temp.click();
+		 // Export everything
+		 self.exportController.exportData(actualFileName, data);
+
 		 // Just in case, prevent default behaviour
 		 e.preventDefault();
 

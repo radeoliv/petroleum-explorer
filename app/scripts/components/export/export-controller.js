@@ -21,6 +21,56 @@
 			 this.FullTable = FullTable;
 		 }
 
+		 /*
+		  * Removing invalid characters in the file name
+		  */
+		 ExportController.prototype.removeInvalidCharacters = function(fileName) {
+			 // The user cannot define a file name starting with space in the beginning...
+			 fileName = fileName.trimLeft();
+			 // ... or with invalid characters!
+			 fileName = fileName.replace(/[\\/:"*?<>|]+/g, '');
+
+			 return fileName;
+		 };
+
+		 /*
+		  * Generates the default file name to export
+		  * @returns {string}
+		  */
+		 ExportController.prototype.generateDefaultFileName = function() {
+			 // Getting date to form the file name
+			 var date = new Date();
+
+			 // Getting current day, month and year
+			 var day = date.getDate();
+			 // The getMonth function returns values from 0 to 11
+			 var month = date.getMonth() + 1;
+			 var year = date.getFullYear();
+
+			 // yyyy-mm-dd (ISO 8601)
+			 var dateISO = year + "-" + month + "-" + day;
+
+			 return 'Petroleum-Explorer Wells ' + dateISO + '.csv';
+		 };
+
+		 /*
+		  * Validates the file name given by the user
+		  */
+		 ExportController.prototype.validateFileName = function(actualFileName) {
+			 if(actualFileName === undefined || actualFileName === null || actualFileName.trim().length === 0) {
+				 actualFileName = this.generateDefaultFileName();
+			 } else {
+				 // Checking if the file name provided has the right extension
+				 var extension = actualFileName.substring(actualFileName.length - 4);
+				 // If not, we put the right one
+				 if(extension.toLowerCase() != ".csv") {
+					 actualFileName += ".csv";
+				 }
+			 }
+
+			 return actualFileName;
+		 };
+
 		 /**
 		  * Generates a string containing all the values of the current wells in a specific format to generate a csv file.
 		  * @returns {string}
@@ -65,6 +115,22 @@
 
 			 // Done!
 			 return allDataString;
+		 };
+
+		 /*
+		  * Export all the data to a CSV file
+		  */
+		 ExportController.prototype.exportData = function(fileName, data) {
+			 // Creating a temporary HTML link element (they support setting file names)
+			 var temp = document.createElement('a');
+			 // Creating the header of the csv file
+			 var data_type = 'data:application/vnd.ms-excel';
+			 // Setting the content of the file
+			 temp.href = data_type + ', ' + data;
+			 // Setting the file name
+			 temp.download = fileName;
+			 // Triggering the function
+			 temp.click();
 		 };
 
 		 return ExportController;
