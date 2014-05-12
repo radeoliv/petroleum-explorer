@@ -214,7 +214,7 @@
 		function getColumnHeaders() {
 			var headers =
 				[
-					" ",
+					"",
 					"UWI",
 					"UWI Simplified Format",
 					"Longitude",
@@ -391,7 +391,11 @@
 					var columns = getColumns();
 					var columnsHeaders = getColumnHeaders();
 
-					this.$tableContainer = $('<div id="full-results-table" class="handsontable"></div>').appendTo(this.$contentContainer);
+					// The checkbox was added inside the table div to allow customization of style and event
+					this.$tableContainer = $(
+						'<div id="full-results-table" class="handsontable">' +
+							'<input type=\"checkbox\" id=\"checkAll\">' +
+							'</div>').appendTo(this.$contentContainer);
 
 					this.$tableContainer.handsontable({
 						data: data,
@@ -410,7 +414,12 @@
 					});
 
 					this.$tableContainer.handsontable('getInstance').addHook('afterChange', function() {
-						updateSelectedRows(this.getData(), false, self);
+						updateSelectedRows(this, false, self);
+					});
+
+					this.$tableContainer.on('mouseup', '#checkAll', function (event) {
+						var isChecked = !$(this).is(':checked');
+						checkAll(isChecked, self.$tableContainer.handsontable('getInstance'));
 					});
 
 					// Default initial values for width and height
@@ -443,15 +452,29 @@
 					});
 
 					// If the user selected some rows before, they need to be kept as selected after the table is updated.
-					updateSelectedRows(this.$tableContainer.handsontable('getInstance').getData(), true, self);
+					updateSelectedRows(this.$tableContainer.handsontable('getInstance'), true, self);
 				}
 			}
 		};
 
 		/*
+		 * Checks or unchecks all the rows in the table
+		 */
+		function checkAll(isChecked, instance) {
+			var rows = instance.countRows();
+			var changes = [];
+			// Storing all changes in array to do a bulk change
+			for(var row=0; row<rows; row++) {
+				changes.push([row, 0, isChecked]);
+			}
+			instance.setDataAtCell(changes);
+		}
+
+		/*
 		 * Function responsible to update the map with the selected rows
 		 */
-		function updateSelectedRows(allData, isTableUpdated, ref) {
+		function updateSelectedRows(instance, isTableUpdated, ref) {
+			var allData = instance.getData();
 			var currentlySelectedRows = [];
 
 			for(var i=0; i<allData.length; i++) {
@@ -522,11 +545,13 @@
 					if ($(this).hasClass("active")) {
 						$(this).toggleClass("active");
 						$('#results-table').slideToggle();
+						document.getElementById("status").disabled = false;
 						return closeDialog(_this, true);
 					}
 					else {
 						$(this).toggleClass("active");
 						$('#results-table').slideToggle();
+						document.getElementById("status").disabled = true;
 						return openDialog(_this, true);
 					}
 				};
