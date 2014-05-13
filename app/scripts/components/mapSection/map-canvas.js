@@ -296,8 +296,7 @@
 				if(infoWindow.opened === true) {
 					infoWindow.opened = false;
 					infoWindow.close();
-					// Set small timeout to make it smoother
-					setTimeout(function() { toggleInfoWindow(infoWindow, map, marker) }, 100);
+					toggleInfoWindow(infoWindow, map, marker);
 				}
 			}
 		})(marker, i));
