@@ -11,6 +11,8 @@
 
 (function () {
 
+	// Auxiliar variable
+	var self;
 	// Full dataSet - all wells
 	var dataSet = initializeDataSet();
 	// Wells that are being currently displayed - all wells in the beginning
@@ -30,11 +32,21 @@
 	// Define the map itself
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-	var MapCanvasController;
+	// The table which links directly with the map
+	var FullTableController;
 
-	MapCanvasController = (function(){
-		function MapCanvasController() { }
-	});
+	var MapCanvasController;
+	MapCanvasController = function() {
+		self = this;
+		// Constructor. Not being used.
+	};
+
+	/*
+	 * Store the full table to link the markers in the future
+	 */
+	MapCanvasController.prototype.setFullTable = function(tableController) {
+		FullTableController = tableController;
+	}
 
 	/*
 	 * Plot the pins of the wells in parameter
@@ -126,9 +138,7 @@
 		// Remove the highlighted wells that aren't in the UWIsToHighlight list anymore!
 		for(var i=0; i<markers.length; i++) {
 			if(markers[i].isHighlighted === true && $.inArray(markers[i].id, UWIsToHighlight) < 0) {
-				markers[i].setMap(null);
-				markers[i] = null;
-				createMarker(currentWells[i], i, false);
+				this.deselectMarker(i, false);
 			}
 		}
 
@@ -136,15 +146,37 @@
 		for(var i=0; i<currentWells.length; i++) {
 			// If the well is in the UWIsToHighlight list, it must be highlighted
 			if($.inArray(currentWells[i]["Well_Unique_Identifier"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
-				markers[i].setMap(null);
-				markers[i] = null;
-				createMarker(currentWells[i], i, true);
+				this.selectMarker(i, false);
 			}
 		}
 
-		/* If there are others wells that don't match the conditions above, it means that they are correctly
+		/*
+		 * If there are others wells that don't match the conditions above, it means that they are correctly
 		 * highlighted or correctly not highlighted.
 		 */
+	}
+
+	/*
+	 * Deselects a marker on the map
+	 */
+	MapCanvasController.prototype.deselectMarker = function(i) {
+		toggleMarkerSelection(false, i);
+	};
+
+	/*
+	 * Selects a marker on the map
+	 */
+	MapCanvasController.prototype.selectMarker = function(i) {
+		toggleMarkerSelection(true, i);
+	}
+
+	/*
+	 * General function to select or deselect a marker on the map
+	 */
+	function toggleMarkerSelection(isSelected, i) {
+		markers[i].setMap(null);
+		markers[i] = null;
+		createMarker(currentWells[i], i, isSelected);
 	}
 
 	/*
@@ -153,7 +185,7 @@
 	function plotPoints() {
 		// Go through all wells and create markers for them
 		for (var i = 0; i < currentWells.length; i++) {
-			createMarker(currentWells[i], i, null);
+			createMarker(currentWells[i], i, false);
 		}
 	}
 
@@ -179,9 +211,9 @@
 
 		// Create a marker
 		var marker = new google.maps.Marker({
-			position:  new google.maps.LatLng(well["Latitude Decimal Degrees"], well["Longitude Decimal Degrees"]),
-			map:       map,
-			title:     well["Well_Name"],
+			position: new google.maps.LatLng(well["Latitude Decimal Degrees"], well["Longitude Decimal Degrees"]),
+			map: map,
+			title: well["Well_Name"],
 			draggable: false,
 			animation: animation,
 			icon: iconUrl
@@ -205,13 +237,12 @@
 		// It will show the UWI, Company and Status of a well
 		google.maps.event.addListener(marker, 'click', (function (marker, i) {
 			return function () {
-				//var content = "<b>Unique Well Identifier</b><br>" + marker.title;
 				var content = "<b>Unique Well Identifier</b><br>" + well["Well_Unique_Identifier"] + "<br><br>"
 					+ "<b>Well Operator</b><br>" + well["Well_Operator"] + "<br><br>"
-					+ "<b>Well Status</b><br>" + well["Well_Status"] + "<br><br>";
+					+ "<b>Well Status</b><br>" + well["Well_Status"] + "<br><hr>";
 
 				// Defining the link to open the charts visualization
-				content += "<a href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
+				content += "<a id=\"chart-link\" href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
 
 				// Set the content of the infowindow
 				infoWindow.setContent("<p>" + content + "</p>");
@@ -246,8 +277,28 @@
 					},
 					fixedContentPos: true
 				});
+			}
+		})(marker, i));
 
-				//marker.setAnimation(google.maps.Animation.BOUNCE);
+		google.maps.event.addListener(marker, 'rightclick', (function (marker, i) {
+			return function () {
+				// Toggles the selection
+				if(marker.isHighlighted) {
+					self.deselectMarker(i);
+				} else {
+					self.selectMarker(i);
+				}
+
+				// Update the full table with the selection
+				FullTableController.toggleRowsSelection(marker.id);
+
+				// Making sure to control the info window behaviour
+				if(infoWindow.opened === true) {
+					infoWindow.opened = false;
+					infoWindow.close();
+					// Set small timeout to make it smoother
+					setTimeout(function() { toggleInfoWindow(infoWindow, map, marker) }, 100);
+				}
 			}
 		})(marker, i));
 
