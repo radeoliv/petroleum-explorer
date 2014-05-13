@@ -38,6 +38,7 @@ jQuery(document).ready(function ($) {
 
 	var $fullTableContainer = $(".search-results-table");
 	var myTableController = new FullTable(mySearchController, myMapCanvasController, $fullTableContainer);
+	myMapCanvasController.setFullTable(myTableController);
 
 	mySearchView.listenKeyboard($searchQueryInput, $searchQueryForm);
 

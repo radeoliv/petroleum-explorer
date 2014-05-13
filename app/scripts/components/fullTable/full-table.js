@@ -399,9 +399,10 @@
 					// The checkbox was added inside the table div to allow customization of style and event
 					this.$tableContainer = $(
 						'<div id="full-results-table" class="handsontable">' +
-							'<input type=\"checkbox\" id=\"checkAll\">' +
+							'<input type=\"checkbox\" id=\"checkAll\"/>' +
 							'</div>').appendTo(this.$contentContainer);
 
+					// Definition of the table itself
 					this.$tableContainer.handsontable({
 						data: data,
 						colHeaders: columnsHeaders,
@@ -507,6 +508,19 @@
 		 */
 		FullTable.prototype.getCurrentTableData = function() {
 			return this.$tableContainer.handsontable('getInstance').getData();
+		};
+
+		/*
+		 * Toggles selection of the row that matches the UWI of the element
+		 */
+		FullTable.prototype.toggleRowsSelection = function(element) {
+			var table = this.$tableContainer.handsontable('getInstance');
+			// The wells are identified by the UWI
+			var index = $.inArray(element, table.getDataAtProp("UWI"));
+			if(index >= 0) {
+				var isSelected = table.getDataAtRowProp(index, "Selected");
+				table.setDataAtRowProp(index, "Selected", !isSelected);
+			}
 		};
 
 		/*
