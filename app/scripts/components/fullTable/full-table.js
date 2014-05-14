@@ -12,6 +12,12 @@
 (function () {
 	var FullTable;
 	var self;
+	// Default initial values for the dialog position
+	var left = null;
+	var top = null;
+	// Default initial values for width and height
+	var width = 650;
+	var height = 400;
 
 	function populateColumnFilter(tableColumns, html) {
 		for (var i = 0; i < tableColumns.length; i++) {
@@ -80,6 +86,11 @@
 			if (_this.toggleButton.hasClass("active") === false) {
 				_this.toggleButton.toggleClass("active");
 			}
+
+			// Making sure that the dialog position will be the same as before!
+			_this.$contentContainer.dialog("option", "height", height);
+			_this.$contentContainer.dialog("option", "width", width);
+			_this.$contentContainer.dialog("option", "position", [left,top]);
 
 			if(withFadeIn == true) {
 				return _this.$contentContainer.dialog("open", _this.$contentContainer.fadeIn());
@@ -386,6 +397,7 @@
 
 		FullTable.prototype.displayHandsOnTable = function() {
 			var _this = this;
+			// Removing the old container
 			this.$tableContainer.remove();
 
 			if(typeof(this.SearchController) != "undefined") {
@@ -428,33 +440,18 @@
 						checkAll(isChecked, self.$tableContainer.handsontable('getInstance'));
 					});
 
-					// Default initial values for width and height
-					var width = 650;
-					var height = 400;
-					// The height and width of the dialog need to be the same as before
-					if(this.$contentContainer != undefined && this.$contentContainer != null) {
-						var tempDialog = this.$contentContainer.dialog();
-						if(tempDialog != undefined && tempDialog != null && tempDialog.length == 1) {
-							var tempFullTableDialog = tempDialog[0];
-							var dialogWithHeaderOffset = tempFullTableDialog.offsetHeight + 46;
-
-							if(dialogWithHeaderOffset > height) {
-								height = dialogWithHeaderOffset;
-							}
-							if(tempFullTableDialog.offsetWidth > width) {
-								width = tempFullTableDialog.offsetWidth;
-							}
-						}
-					}
-
 					this.$contentContainer.dialog({
 						title: 'Detailed Results',
+						id: 'full-table-dialog',
 						draggable: true,
 						resizable: true,
 						modal : true,
 						autoOpen: true,
 						width: width,
-						height: height
+						height: height,
+						position: [left, top],
+						dragStop: function( event, ui ) { setDialogSizeAndPosition(); },
+						resizeStop: function(event, ui ) { setDialogSizeAndPosition(); }
 					});
 
 					// If the user selected some rows before, they need to be kept as selected after the table is updated.
@@ -462,6 +459,32 @@
 				}
 			}
 		};
+
+		function setDialogSizeAndPosition() {
+
+			// The height, width and the position of the dialog need to be the same as before
+			var tempDialog = $(".ui-dialog");
+
+			if(tempDialog != undefined && tempDialog != null && tempDialog.length > 0) {
+				tempDialog = tempDialog[0];
+
+				if(tempDialog != undefined && tempDialog != null) {
+					// It is unlikely to have negative values, but just to ensure..
+					if(tempDialog.offsetHeight >= 0) {
+						height = tempDialog.offsetHeight;
+					}
+					if(tempDialog.offsetWidth - 2 >= 0) {
+						width = tempDialog.offsetWidth - 2;
+					}
+					if(tempDialog.offsetLeft >= 0) {
+						left = tempDialog.offsetLeft;
+					}
+					if(tempDialog.offsetTop >= 0) {
+						top = tempDialog.offsetTop;
+					}
+				}
+			}
+		}
 
 		/*
 		 * Checks or unchecks all the rows in the table

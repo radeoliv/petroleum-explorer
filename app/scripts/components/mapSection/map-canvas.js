@@ -122,6 +122,8 @@
 		 * the markers disappear, keeping the same location as before.
 		 */
 		if(currentWells != undefined && currentWells.length > 0) {
+			// Don't know why, but setting this property in mapOptions does not work
+			map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
 			// Plot the wells' locations
 			plotPoints();
 			// Center the map based on markers
