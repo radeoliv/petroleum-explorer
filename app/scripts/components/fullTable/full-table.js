@@ -65,6 +65,9 @@
 			this.$columnFilter = this.$contentContainer.find(".filter-form");
 			this.toggleButton = $fullTableResultsContainer.find(".toggle-table");
 
+			this.$filterParameter = $fullTableResultsContainer.find("#tableColumnFilter");
+			this.$addConstraint = $fullTableResultsContainer.find("#add-constraint");
+
 			this.initSearchResults = this.SearchController.resultSet;
 
 			this.displayHandsOnTable();
@@ -74,6 +77,7 @@
 			this.initColumnFilter();
 			this.listenForInput(this.$columnFilter);
 			this.listenParameterRemoved(this.$columnFilter);
+			this.listenParameterChanged(this.$filterParameter, this.$addConstraint);
 			this.findFilterQuery([]);
 			closeDialog(this, false);
 		}
@@ -312,7 +316,7 @@
 			})(this));
 
 			this.$columnFilter.children().on("change", function (e){
-				if(e.target.getAttribute("name") != "tableColumnFilter"){
+				if(e.target.getAttribute("name") != "tableColumnFilter") {
 					$("body").trigger("filterParameterRemoved");
 				}
 			});
@@ -322,6 +326,28 @@
 			return $("body").on("filterParameterRemoved", (function (_this) {
 				return function () {
 					getAndFilterQueries();
+				};
+			})(this));
+		};
+
+		FullTable.prototype.listenParameterChanged = function ($filterParameter, $addConstraint) {
+			return $filterParameter.on("change", (function (_this) {
+				return function () {
+					if($filterParameter != undefined && $filterParameter != null && $filterParameter.length > 0) {
+						var tempSelect = $filterParameter[0];
+						if(tempSelect != undefined && tempSelect != null) {
+							if($addConstraint != undefined && $addConstraint != null && $addConstraint.length > 0) {
+								var tempAddButton = $addConstraint[0];
+								if(tempAddButton != undefined && tempAddButton != null) {
+									if(tempSelect.selectedIndex === 0) {
+										tempAddButton.disabled = true;
+									} else {
+										tempAddButton.disabled = false;
+									}
+								}
+							}
+						}
+					}
 				};
 			})(this));
 		};
@@ -614,6 +640,7 @@
 				//populateColumnFilter.call(this, tableColumns, html);
 				var $columnSelectFilter = this.$columnFilter.find("#tableColumnFilter");
 				var $addConstraintButton = this.$columnFilter.find("#add-constraint");
+				var $filterParameterRef = this.$filterParameter;
 
 				// Check when the select element is changed, and NOT the default is selected, then add constraint filter
 				$addConstraintButton.on("click", function() {
@@ -639,8 +666,9 @@
 							break;
 					}
 
-					// Resetting the selected value
+					// Resetting the selected value and triggering the proper event
 					$columnSelectFilter.val(0);
+					$filterParameterRef.change();
 				});
 			}
 		}
