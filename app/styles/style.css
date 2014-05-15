@@ -132,6 +132,8 @@ Map Toolbar
   .mapToolbar .error-msg {
     color: red;
     padding-left: 1em; }
+  .mapToolbar .alert-msg {
+    padding-left: 1em; }
   .mapToolbar .toolbar-buttons {
     display: inline; }
   .mapToolbar .sidebar-content-container {
@@ -170,6 +172,8 @@ Map Toolbar
     float: right;
     font-size: 0.8em;
     width: 25%; }
+  .mapToolbar #search-fieldset {
+    padding-bottom: 0px; }
   .mapToolbar .separator {
     width: 100%;
     /*border-bottom: inset 1px gray;*/

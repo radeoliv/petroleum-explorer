@@ -13,11 +13,13 @@
  /*
   * Static error messages
   */
- var lsdErrorMsg = "<b>LSD</b> value must be within 01 and 16.",
+ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely filled.",
+	 lsdErrorMsg = "<b>LSD</b> value must be within 01 and 16.",
 	 sectionErrorMsg = "<b>SEC</b> value must be within 01 and 36.",
 	 townshipErrorMsg = "<b>TWP</b> value must be within 001 and 126.",
 	 rangeErrorMsg = "<b>RNG</b> value must be within 01 and 34.",
-	 meridianErrorMsg = "<b>MER</b> value must be within 1 and 6.";
+	 meridianErrorMsg = "<b>MER</b> value must be within 1 and 6.",
+	 UWIAlertMsg = "The <b>UWI</b> must be completely filled.";
 
  (function() {
 	 var SearchController;
@@ -50,12 +52,32 @@
 			 this.resultSet = this.dataSet;
 		 };
 
+		 /*
+		  * Used to keep the data consistent
+		  */
+		 SearchController.prototype.emptyResultSet = function() {
+			 this.resultSet = [];
+		 };
+
+		 /*
+		  * Returns the result set
+		  */
+		 SearchController.prototype.getResultSet = function() {
+			 return this.resultSet;
+		 };
+
 		 /**
 		  * find the UWID matching the search criteria (LSD, range, township, section, meridian)
 		  * @param query the search query we will use to search through UWID
 		  * @returns {string}
 		  */
-		 SearchController.prototype.findResultsUWIValues = function(lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery) {
+		 SearchController.prototype.findResultsUWIValues = function(fieldValues) {
+
+			 var lsdQuery = fieldValues[0],
+				 sectionQuery = fieldValues[1],
+				 townshipQuery = fieldValues[2],
+				 rangeQuery = fieldValues[3],
+				 meridianQuery = fieldValues[4];
 
 			 //TODO: parse JSON file (wells.json)
 			 // check if any values are empty
@@ -289,7 +311,43 @@ function getMeridian(uwi) {
 }
 
  function checkUWIInput(uwiFieldValue) {
-	 return uwiFieldValue.length === 16;
+	 $( ".alert-msg" ).remove();
+	 var divToAppend = '.search-form';
+	 var result = uwiFieldValue.length === 16;
+
+	 if(result === false) {
+		 $(createAlertMessage(UWIAlertMsg)).appendTo(divToAppend);
+	 }
+
+	 return result;
+ }
+
+ function checkEmptyUWIInputs(fieldValues) {
+	 var lsd = fieldValues[0],
+		 section = fieldValues[1],
+		 township = fieldValues[2],
+		 range = fieldValues[3],
+		 meridian = fieldValues[4];
+
+	 var result = lsd.length === 0 && section.length === 0 && township.length === 0 && range.length === 0 && meridian.length === 0;
+
+	 return result;
+ }
+
+ function checkUWIInputsCompleteness(fieldValues) {
+	 var lsd = fieldValues[0],
+		 section = fieldValues[1],
+		 township = fieldValues[2],
+		 range = fieldValues[3],
+		 meridian = fieldValues[4];
+
+	 var result = lsd.length === 2
+		 || section.length === 2
+		 || township.length === 3
+		 || range.length === 2
+		 || meridian.length === 1;
+
+	 return result;
  }
 
  function checkUWIValueInputs(fieldValues) {
@@ -310,6 +368,7 @@ function getMeridian(uwi) {
 
 	 var validity = true;
 	 var mandatoryField = false;
+	 var appendMandatoryFieldError = false;
 
 	 /*
 	  * Township
@@ -360,6 +419,10 @@ function getMeridian(uwi) {
 		 if(!(lsd >= 1 && lsd <= 16)) {
 			 $(createErrorMessage(lsdErrorMsg)).appendTo(divToAppend);
 			 validity = false;
+		 } else {
+			 if(appendMandatoryFieldError === false && mandatoryField === false) {
+				 appendMandatoryFieldError = true;
+			 }
 		 }
 	 } else if(lsd.length > 0) {
 		 validity = false;
@@ -372,12 +435,25 @@ function getMeridian(uwi) {
 		 if(!(section >= 1 && section <= 36)) {
 			 $(createErrorMessage(sectionErrorMsg)).appendTo(divToAppend);
 			 validity = false;
+		 } else {
+			 if(appendMandatoryFieldError === false && mandatoryField === false) {
+				 appendMandatoryFieldError = true;
+			 }
 		 }
 	 } else if(section.length > 0) {
 		 validity = false;
 	 }
 
+	 if(appendMandatoryFieldError === true) {
+		 $(createErrorMessage(requiredErrorMsg)).appendTo(divToAppend);
+	 }
+
 	 return validity && mandatoryField;
+ }
+
+ function removeAllErrorAndAlertMessages() {
+	 $(".error-msg").remove();
+	 $(".alert-msg").remove();
  }
 
  function checkCompanyInput(companyFieldValue) {
@@ -386,4 +462,8 @@ function getMeridian(uwi) {
 
  function createErrorMessage(message) {
 	 return '<label class = "error-msg">'+message+'</br></label>';
+ }
+
+ function createAlertMessage(message) {
+	 return '<label class = "alert-msg">'+message+'</br></label>';
  }

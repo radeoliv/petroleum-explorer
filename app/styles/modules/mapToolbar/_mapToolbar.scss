@@ -51,6 +51,10 @@ Map Toolbar
 		padding-left: 1em;
 	}
 
+	.alert-msg{
+		padding-left: 1em;
+	}
+
 	.toolbar-buttons{
 		display: inline;
 	}
@@ -130,6 +134,10 @@ Map Toolbar
 		float: right;
 		font-size: 0.8em;
 		width: 25%;
+	}
+
+	#search-fieldset {
+		padding-bottom: 0px;
 	}
 
 	.separator{

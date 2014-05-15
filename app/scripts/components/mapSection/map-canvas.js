@@ -49,6 +49,13 @@
 	}
 
 	/*
+	 * Returns the current wells being displayed
+	 */
+	MapCanvasController.prototype.getCurrentWells = function() {
+		return currentWells;
+	}
+
+	/*
 	 * Plot the pins of the wells in parameter
 	 */
 	MapCanvasController.prototype.plotResults = function(wells){
