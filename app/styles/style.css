@@ -138,7 +138,7 @@ Map Toolbar
     display: inline; }
   .mapToolbar .sidebar-content-container {
     display: inline; }
-  .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .export-form, .mapToolbar .graph-form {
+  .mapToolbar .search-form, .mapToolbar .filter-form, .mapToolbar .export-form, .mapToolbar .graph-form, .mapToolbar .visualization-form {
     width: 20em; }
   .mapToolbar .grouped-search {
     align-content: center;
@@ -393,6 +393,32 @@ Full Table
   position: absolute;
   top: 0.8em;
   margin-left: 0.64em; }
+
+/* =============================================================================
+Variables
+============================================================================= */
+/* =============================================================================
+Map Toolbar
+============================================================================= */
+#info-visualization {
+  height: 50em;
+  width: 90%;
+  background-color: red;
+  padding: 0.5em 0.5em 0.5em 0.5em; }
+  #info-visualization #control-panel-container {
+    display: inline-block;
+    width: 20%;
+    height: inherit;
+    background-color: blue;
+    float: left; }
+    #info-visualization #control-panel-container #control-panel {
+      padding: 0.5em 0.5em 0.5em 0.5em; }
+  #info-visualization #visualization-container {
+    display: inline-block;
+    width: 80%;
+    height: inherit;
+    background-color: green;
+    float: right; }
 
 /*
 =============================================================================

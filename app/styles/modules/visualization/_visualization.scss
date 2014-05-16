@@ -1,0 +1,35 @@
+/* =============================================================================
+Variables
+============================================================================= */
+
+
+/* =============================================================================
+Map Toolbar
+============================================================================= */
+
+#info-visualization {
+	height: 50em;
+	width: 90%;
+	background-color: red;
+	padding: 0.5em 0.5em 0.5em 0.5em;
+
+	#control-panel-container {
+		display: inline-block;
+		width: 20%;
+		height: inherit;
+		background-color: blue;
+		float: left;
+
+		#control-panel {
+			padding: 0.5em 0.5em 0.5em 0.5em;
+		}
+	}
+
+	#visualization-container {
+		display: inline-block;
+		width: 80%;
+		height: inherit;
+		background-color: green;
+		float: right;
+	}
+}

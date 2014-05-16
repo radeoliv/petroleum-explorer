@@ -71,15 +71,19 @@ Map Toolbar
 		@extend %wide;
 	}
 
-	.filter-form{
+	.filter-form {
 		@extend %wide;
 	}
 
-	.export-form{
+	.export-form {
 		@extend %wide;
 	}
 
-	.graph-form{
+	.graph-form {
+		@extend %wide;
+	}
+
+	.visualization-form {
 		@extend %wide;
 	}
 

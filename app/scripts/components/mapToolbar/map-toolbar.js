@@ -58,7 +58,6 @@
 		setToggle = function () {
 			return mapToolbarButtons.on("click", function () {
 
-
 				mapToolbarButtons.removeClass("active");
 				mapToolbarContent.slideUp("slow");
 

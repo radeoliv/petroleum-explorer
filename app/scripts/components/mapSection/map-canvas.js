@@ -274,6 +274,10 @@
 						{
 							src: '#highchart-basic',
 							type: 'inline'
+						},
+						{
+							src: '#info-visualization',
+							type: 'inline'
 						}
 					],
 					gallery: {
