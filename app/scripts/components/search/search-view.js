@@ -39,6 +39,7 @@ var lastCompanyQuery = noQuery;
 		active = function () {
 			return $("#accordion").on("click", function () {
 				optionAccordion = $("#accordion").accordion( "option", "active" );
+				removeAllErrorAndAlertMessages();
 			});
 		};
 		active();
@@ -113,7 +114,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 						if(checkUWIInput(uwiQuery)) {
 							results = self.searchController.findResultsUWI(uwiQuery);
 						} else {
-							// If the query is empty, there is nothing to be searched.
+							// If the query is empty or incomplete, there is nothing to be searched.
 							results = null;
 						}
 					}

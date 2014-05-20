@@ -23,10 +23,46 @@
 
 	<div id = "highchart-basic" class = "white-popup mfp-hide"></div>
 
-	<div id="info-visualization" class="white-popup mfp-hide">
+	<div id="info-visualization" class="white-popup mfp-hide mfp-with-anim">
 		<div id="control-panel-container">
 			<div id="control-panel">
 				<h3>Control panel</h3>
+				<hr>
+
+				<div id = "visualizationAccordion">
+
+					<h5>Bar Chart</h5>
+					<div class = "company-search accordion-content">
+						<select id = "bar-chart-attributes" placeholder = "Bar Chart" name = "attributes" results = "10" autosave = "Attributes">
+							<option value = "none"></option>
+							<option value = "KRav">Average Hydrocarbon Movability</option>
+							<option value = "PHIav">Average Porosity</option>
+							<option value = "KRc">Cumulative Hydrocarbon Movability</option>
+							<option value = "SOc">Cumulative Oil Saturation</option>
+							<option value = "PHIc">Cumulative Porosity</option>
+							<option value = "VSHc">Cumulative Shale Content</option>
+							<option value = "Pt">Effective Life Cycle</option>
+							<option value = "H">Effective Thickness</option>
+							<option value = "Pc">Effective Yield</option>
+							<option value = "Pp">Peak Value</option>
+							<option value = "Well_Drillers_Total_Depth">Well Driller Total Depth</option>
+						</select>
+					</div>
+
+					<h5>Pie Chart</h5>
+					<div class = "status-search accordion-content">
+						<select id = "pie-chart-attributes" placeholder = "Pie Chart" name = "attributes" results = "10" autosave = "Attributes">
+							<option value="none"></option>
+							<option value = "Well_Operator">Company Name</option>
+							<option value = "Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
+							<option value = "Well_Status">Well Status</option>
+						</select>
+					</div>
+
+				</div>
+				<hr>
+				<input type = "button" id = "applyVisualization" value = "Apply"/>
+				<input type = "button" id = "resetVisualization" value = "Reset"/>
 			</div>
 		</div>
 		<div id="visualization-container">
@@ -56,7 +92,7 @@
 
 			<section class = "search-form">
 				<form action = "/">
-					<fieldset id="search-fieldset">
+					<fieldset class="fieldset-class">
 						<hr>
 						<h4>Search</h4>
 						<input type="button" id="clear-search" value = "Clear all"/>
@@ -64,12 +100,12 @@
 						<div id = "accordion">
 							<h5>UWI</h5>
 
-							<div class = "uwi-search accordianContent">
+							<div class = "uwi-search accordion-content">
 								<input type = "search" name = "uwi" id = "uwi" placeholder = "UWI Code" maxlength = "16" results = 10" autosave = "uwi">
 							</div>
 							<h5>UWI Fields</h5>
 
-							<div class = "grouped-search accordianContent">
+							<div class = "grouped-search accordion-content">
 								<table>
 									<tr>
 										<td></td>
@@ -113,13 +149,13 @@
 
 							<h5>Company</h5>
 
-							<div class = "company-search accordianContent">
+							<div class = "company-search accordion-content">
 								<input type = "search" id = "company" placeholder = "Company" name = "company" results = "10" autosave = "company">
 							</div>
 
 							<h5>Status</h5>
 
-							<div class = "status-search accordianContent">
+							<div class = "status-search accordion-content">
 
 								<select id = "status" placeholder = "Status" name = "status" results = "10" autosave = "status">
 									<option value = "none"></option>
@@ -136,7 +172,7 @@
 
 			<section class = "graph-form">
 				<form action = "/graph">
-					<fieldset>
+					<fieldset class="fieldset-class">
 						<hr>
 						<h4>Graph</h4>
 
@@ -175,7 +211,7 @@
 
 			<section class = "export-form">
 				<form action = "/export">
-					<fieldset>
+					<fieldset class="fieldset-class">
 						<hr>
 						<h4>Export</h4>
 
@@ -192,12 +228,13 @@
 
 			<section class = "visualization-form">
 				<form action = "/visualization">
-					<fieldset>
+					<fieldset class="fieldset-class">
 						<hr>
 						<h4>Data visualization</h4>
 
 						<div id="visualizationContent">
-							<input type = "button" id = "visualizationButton" value = "Open visualization"/>
+							<!--<input type = "button" id = "visualizationButton" value = "Open visualization"/>-->
+							<a id="visualization-link" href="#visualization-popup" class="open-visualization" data-effect="mfp-zoom-in">Open</a>
 						</div>
 
 						<hr>
@@ -267,9 +304,10 @@
 		<script src="scripts/components/search/search-view.js"></script>
 		<script src="scripts/components/fullTable/full-table.js"></script>
 		<script src="scripts/components/mapSection/map-canvas.js"></script>
-		<script src="scripts/components/visualizationController/info-graph.js"></script>
-		<script src="scripts/components/visualizationController/graph-selection.js"></script>
-		<script src="scripts/components/visualizationController/visualization-custom.js"></script>
+		<script src="scripts/components/visualization/info-graph.js"></script>
+		<script src="scripts/components/visualization/graph-selection.js"></script>
+		<script src="scripts/components/visualization/visualization-custom.js"></script>
+		<script src="scripts/components/visualization/visualization-view.js"></script>
 		<script src="scripts/components/export/export-controller.js"></script>
 		<script src="scripts/components/export/export-view.js"></script>
 		<script src="scripts/main.js"></script>

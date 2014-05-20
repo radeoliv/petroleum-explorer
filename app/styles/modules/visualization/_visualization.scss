@@ -1,23 +1,24 @@
 /* =============================================================================
 Variables
 ============================================================================= */
-
+$visualizationForegroundColor: rgb(220,220,220);
+$visualizationBackgroundColor: black;
 
 /* =============================================================================
-Map Toolbar
+Visualization
 ============================================================================= */
 
 #info-visualization {
 	height: 50em;
 	width: 90%;
-	background-color: red;
-	padding: 0.5em 0.5em 0.5em 0.5em;
+	background-color: $visualizationBackgroundColor;
+	padding: 0.1em 0.1em 0.1em 0.1em;
 
 	#control-panel-container {
 		display: inline-block;
-		width: 20%;
+		width: 19.95%;
 		height: inherit;
-		background-color: blue;
+		background-color: $visualizationForegroundColor;
 		float: left;
 
 		#control-panel {
@@ -26,10 +27,58 @@ Map Toolbar
 	}
 
 	#visualization-container {
+		border-left-color: $visualizationBackgroundColor;
 		display: inline-block;
 		width: 80%;
 		height: inherit;
-		background-color: green;
+		background-color: $visualizationForegroundColor;
 		float: right;
 	}
+}
+
+.accordion-content{
+	text-align: center;
+}
+
+#applyVisualization {
+	float: right;
+}
+
+//====== Zoom effect ======
+.mfp-zoom-in {
+
+	/* start state */
+	.mfp-with-anim {
+		opacity: 0;
+		transition: all 0.2s ease-in-out;
+		transform: scale(0.8);
+	}
+
+	&.mfp-bg {
+		opacity: 0;
+		transition: all 0.3s ease-out;
+	}
+
+	/* animate in */
+	&.mfp-ready {
+		.mfp-with-anim {
+			opacity: 1;
+			transform: scale(1);
+		}
+		&.mfp-bg {
+			opacity: 0.8;
+		}
+	}
+
+	/* animate out */
+	&.mfp-removing {
+		.mfp-with-anim {
+			transform: scale(0.8);
+			opacity: 0;
+		}
+		&.mfp-bg {
+			opacity: 0;
+		}
+	}
+
 }

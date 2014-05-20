@@ -44,4 +44,6 @@ jQuery(document).ready(function ($) {
 
 	var myExportController = new ExportController(myTableController);
 	var myExportView = new ExportView(myExportController);
+
+	var myVisualizationView = new VisualizationView();
 });

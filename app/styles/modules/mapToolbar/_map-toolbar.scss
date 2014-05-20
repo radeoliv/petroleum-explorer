@@ -67,6 +67,11 @@ Map Toolbar
 		width: 20em;
 	}
 
+	.fieldset-class {
+		padding-top: 0em;
+		padding-bottom: 0em;
+	}
+
 	.search-form {
 		@extend %wide;
 	}
@@ -114,6 +119,14 @@ Map Toolbar
 				display: none;
 			}
 		}
+		&[type="button"] {
+			border: 2px outset buttonface;
+			border-image-source: initial;
+			border-image-slice: initial;
+			border-image-width: initial;
+			border-image-outset: initial;
+			border-image-repeat: initial;
+		}
 	}
 
 	h5{
@@ -127,7 +140,7 @@ Map Toolbar
 		margin-bottom: 0.5em;
 	}
 
-	.accordianContent{
+	.accordion-content{
 		text-align: center;
 	}
 
@@ -140,10 +153,6 @@ Map Toolbar
 		width: 25%;
 	}
 
-	#search-fieldset {
-		padding-bottom: 0px;
-	}
-
 	.separator{
 		width: 100%;
 		/*border-bottom: inset 1px gray;*/
@@ -154,30 +163,6 @@ Map Toolbar
 		-webkit-margin-end: auto;
 		border-style: inset;
 		border-width: 1px;
-	}
-
-	.ui-accordion {
-		margin-top: 1em;
-	}
-
-	.ui-accordion .ui-accordion-header {
-		display: block;
-		cursor: pointer;
-		position: relative;
-		padding: .15em .15em .15em 1em;
-		min-height: 0; /* support: IE7 */
-		background: darken($mapToolbarButtonColour, 10);
-		border: 1px solid black;
-		outline: none;
-		margin-top: 0.5em;
-	}
-
-	.ui-accordion .ui-accordion-content {
-		padding: .5em .5em .5em .5em;
-		border: 1px solid black;
-		border-top: none;
-		overflow: auto;
-		outline: none;
 	}
 
 	fieldset{
@@ -262,27 +247,6 @@ table {
 	text-align: left;
 	label{
 		margin-left: 1em;
-	}
-}
-
-#exportContent{
-	align-content: center;
-	text-align: center;
-
-	#fileNameLabel{
-		padding-right: 38%;
-	}
-
-	#fileName{
-		font-size: 0.75em;
-		padding: 0.3em 0em 0.3em 0.3em;
-	}
-
-	#exportButton{
-		width: 81.8%;
-		font-size: 0.75em;
-		padding-top: 0.3em;
-		padding-bottom: 0.3em;
 	}
 }
 

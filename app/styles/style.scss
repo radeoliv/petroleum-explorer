@@ -4,6 +4,7 @@
 @import "modules/map-controller/_map-controller.scss";
 @import "modules/full-table/_full-table.scss";
 @import "modules/visualization/_visualization.scss";
+@import "modules/export/_export.scss";
 
 /*
 =============================================================================
@@ -135,4 +136,30 @@ button {
 	width: 50em;
 	height: 35em;
 	margin: 25px auto;
+}
+
+.ui-accordion {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.ui-accordion .ui-accordion-header {
+	display: block;
+	cursor: pointer;
+	position: relative;
+	padding: .15em .15em .15em 1em;
+	min-height: 0; /* support: IE7 */
+	background: darken($mapToolbarButtonColour, 10);
+	border: 1px solid black;
+	outline: none;
+	margin-top: 0.5em;
+	margin-bottom: 0em;
+}
+
+.ui-accordion .ui-accordion-content {
+	padding: .5em .5em .5em .5em;
+	border: 1px solid black;
+	border-top: none;
+	overflow: auto;
+	outline: none;
 }
