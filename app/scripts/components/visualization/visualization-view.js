@@ -14,18 +14,22 @@
 
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
-	var $visualizationButton = $('#visualizationButton');
+	var $applyVisualizationButton = $('#applyVisualization');
+
 	var self;
 
 	var VisualizationView;
-	VisualizationView = function (visualizationController){
-		//this.visualizationController = visualizationController;
+	VisualizationView = function (visualizationCharts){
+		this.visualizationCharts = visualizationCharts;
 		self = this;
 	};
 
+	$applyVisualizationButton.on("click", function() {
+		self.visualizationCharts.generatePieChart();
+	});
+
 	openVisualization = function() {
 		$(".open-visualization").magnificPopup({
-			//delegate: 'a',
 			type:'inline',
 			midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
 			removalDelay: 500,
@@ -43,6 +47,7 @@
 			fixedContentPos: true
 		});
 	};
+	openVisualization();
 
 	/*
 	 * Allows the accordion in the control panel to be collapsible.
@@ -51,8 +56,6 @@
 		collapsible: true,
 		heightStyle: "content"
 	});
-
-	openVisualization();
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).VisualizationView = VisualizationView;
 }).call(this);

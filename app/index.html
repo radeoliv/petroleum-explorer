@@ -24,50 +24,58 @@
 	<div id = "highchart-basic" class = "white-popup mfp-hide"></div>
 
 	<div id="info-visualization" class="white-popup mfp-hide mfp-with-anim">
-		<div id="control-panel-container">
-			<div id="control-panel">
-				<h3>Control panel</h3>
-				<hr>
+		<table>
+			<tr>
+				<td>
+					<div id="control-panel-container">
+						<div id="control-panel">
+						<h3>Control panel</h3>
+						<hr>
 
-				<div id = "visualizationAccordion">
+						<div id = "visualizationAccordion">
 
-					<h5>Bar Chart</h5>
-					<div class = "company-search accordion-content">
-						<select id = "bar-chart-attributes" placeholder = "Bar Chart" name = "attributes" results = "10" autosave = "Attributes">
-							<option value = "none"></option>
-							<option value = "KRav">Average Hydrocarbon Movability</option>
-							<option value = "PHIav">Average Porosity</option>
-							<option value = "KRc">Cumulative Hydrocarbon Movability</option>
-							<option value = "SOc">Cumulative Oil Saturation</option>
-							<option value = "PHIc">Cumulative Porosity</option>
-							<option value = "VSHc">Cumulative Shale Content</option>
-							<option value = "Pt">Effective Life Cycle</option>
-							<option value = "H">Effective Thickness</option>
-							<option value = "Pc">Effective Yield</option>
-							<option value = "Pp">Peak Value</option>
-							<option value = "Well_Drillers_Total_Depth">Well Driller Total Depth</option>
-						</select>
+							<h5>Bar Chart</h5>
+							<div class = "company-search accordion-content">
+								<select id = "bar-chart-attributes" placeholder = "Bar Chart" name = "attributes" results = "10" autosave = "Attributes">
+									<option value = "none"></option>
+									<option value = "KRav">Average Hydrocarbon Movability</option>
+									<option value = "PHIav">Average Porosity</option>
+									<option value = "KRc">Cumulative Hydrocarbon Movability</option>
+									<option value = "SOc">Cumulative Oil Saturation</option>
+									<option value = "PHIc">Cumulative Porosity</option>
+									<option value = "VSHc">Cumulative Shale Content</option>
+									<option value = "Pt">Effective Life Cycle</option>
+									<option value = "H">Effective Thickness</option>
+									<option value = "Pc">Effective Yield</option>
+									<option value = "Pp">Peak Value</option>
+									<option value = "Well_Drillers_Total_Depth">Well Driller Total Depth</option>
+								</select>
+							</div>
+
+							<h5>Pie Chart</h5>
+							<div class = "status-search accordion-content">
+								<select id = "pie-chart-attributes" placeholder = "Pie Chart" name = "attributes" results = "10" autosave = "Attributes">
+									<option value="none"></option>
+									<option value = "Well_Operator">Company Name</option>
+									<option value = "Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
+									<option value = "Well_Status">Well Status</option>
+								</select>
+							</div>
+
+						</div>
+						<hr>
+						<input type = "button" id = "applyVisualization" value = "Apply"/>
+						<input type = "button" id = "resetVisualization" value = "Reset"/>
 					</div>
-
-					<h5>Pie Chart</h5>
-					<div class = "status-search accordion-content">
-						<select id = "pie-chart-attributes" placeholder = "Pie Chart" name = "attributes" results = "10" autosave = "Attributes">
-							<option value="none"></option>
-							<option value = "Well_Operator">Company Name</option>
-							<option value = "Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
-							<option value = "Well_Status">Well Status</option>
-						</select>
 					</div>
-
-				</div>
-				<hr>
-				<input type = "button" id = "applyVisualization" value = "Apply"/>
-				<input type = "button" id = "resetVisualization" value = "Reset"/>
-			</div>
-		</div>
-		<div id="visualization-container">
-
-		</div>
+				</td>
+				<td>
+					<div id="visualization-container">
+						<div id="canvas-svg"></div>
+					</div>
+				</td>
+			</tr>
+		</table>
 	</div>
 
 	<aside class = "mapToolbar">
@@ -233,7 +241,6 @@
 						<h4>Data visualization</h4>
 
 						<div id="visualizationContent">
-							<!--<input type = "button" id = "visualizationButton" value = "Open visualization"/>-->
 							<a id="visualization-link" href="#visualization-popup" class="open-visualization" data-effect="mfp-zoom-in">Open</a>
 						</div>
 
@@ -291,6 +298,7 @@
 		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+		<script src="bower_components/d3/d3.min.js"></script>
 		<script src="bower_components/handsontable/dist/jquery.handsontable.full.js"></script>
 		<script src="bower_components/highcharts/highcharts.js"></script>
 		<script src="bower_components/highcharts/highcharts-more.js"></script>
@@ -307,6 +315,7 @@
 		<script src="scripts/components/visualization/info-graph.js"></script>
 		<script src="scripts/components/visualization/graph-selection.js"></script>
 		<script src="scripts/components/visualization/visualization-custom.js"></script>
+		<script src="scripts/components/visualization/visualization-charts.js"></script>
 		<script src="scripts/components/visualization/visualization-view.js"></script>
 		<script src="scripts/components/export/export-controller.js"></script>
 		<script src="scripts/components/export/export-view.js"></script>

@@ -194,7 +194,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 			else if(typeof(companyQuery) === "undefined"){
 				return this.UNDEFINED_ERROR_MESSAGE;
 			}
-			else if(this.isEmptyQuery(companyQuery)){
+			else if(this.isEmptyQuery(companyQuery)) {
 				return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
 			}
 
@@ -203,9 +203,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				 * Search by company name
 				 */
 				if(!this.isEmptyQuery(companyQuery)) {
-					// TODO: Change the JSON attribute when the new json file is created
 					var cMatch = this.dataSet[i]['Well_Operator'].toUpperCase().search(companyQuery.toUpperCase());
-
 					if(cMatch >= 0)
 						this.resultSet.push(this.dataSet[i]);
 				}

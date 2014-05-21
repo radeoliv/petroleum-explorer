@@ -82,6 +82,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		if(isEventListenerActive) {
 			removeAllErrorAndAlertMessages();
 			forceNumeric([lsdSearchInput, sectionSearchInput, townshipSearchInput, rangeSearchInput, meridianSearchInput]);
+			removeInitialWhiteSpace(companySearchInput);
 
 			var uwiQuery = uwiSearchInput[0].value,
 				lsdQuery = lsdSearchInput[0].value,
@@ -272,6 +273,12 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		// Replacing non numeric characters with empty string for UWI value search
 		for(var i=0; i<fields.length; i++) {
 			fields[i].val(fields[i][0].value.replace(/\D/g, ''));
+		}
+	}
+
+	function removeInitialWhiteSpace(field) {
+		if(field != undefined && field != null && field.length > 0 && field[0].value != undefined && field[0].value != null) {
+			field.val(field[0].value.replace(/ /g, ''));
 		}
 	}
 

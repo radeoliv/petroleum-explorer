@@ -376,25 +376,36 @@ Variables
 Visualization
 ============================================================================= */
 #info-visualization {
-  height: 50em;
+  height: 92%;
   width: 90%;
   background-color: black;
-  padding: 0.1em 0.1em 0.1em 0.1em; }
+  padding: 0.1em 0.1em 0.1em 0.1em;
+  position: relative; }
   #info-visualization #control-panel-container {
     display: inline-block;
-    width: 19.95%;
-    height: inherit;
+    height: 98.5%;
     background-color: gainsboro;
-    float: left; }
+    overflow-y: auto;
+    position: absolute;
+    width: 22em;
+    top: inherit;
+    left: 0.4em; }
     #info-visualization #control-panel-container #control-panel {
-      padding: 0.5em 0.5em 0.5em 0.5em; }
+      padding: 0.5em 0.5em 0.5em 0.5em;
+      width: 19.9em; }
   #info-visualization #visualization-container {
+    position: absolute;
     border-left-color: black;
     display: inline-block;
-    width: 80%;
-    height: inherit;
+    height: 98.5%;
     background-color: gainsboro;
-    float: right; }
+    left: 22.55em;
+    max-width: 84.2em;
+    right: 0.4em; }
+
+.mfp-content {
+  height: 100%;
+  width: 100%; }
 
 .accordion-content {
   text-align: center; }
@@ -402,6 +413,18 @@ Visualization
 #applyVisualization {
   float: right; }
 
+#resetVisualization {
+  float: left; }
+
+/*
+ * ====== D3 Charts ======
+ */
+.arc path {
+  stroke: #ffffff; }
+
+/*
+ * ====== Zoom effect ======
+ */
 .mfp-zoom-in {
   /* start state */
   /* animate in */
