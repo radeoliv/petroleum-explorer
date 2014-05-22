@@ -45,12 +45,13 @@
 	};
 
 	$applyVisualizationButton.on("click", function() {
-
 		switch(optionAccordion) {
 			case 0:
 				if($barChartSelection[0].value != "none") {
 					generateTitle();
-					// Generate de bar chart!
+					var attribute = $barChartSelection[0].value;
+					var attributeText = $barChartSelection[0][$barChartSelection[0].selectedIndex].label;
+					self.visualizationCharts.generateBarChart(attribute, attributeText);
 				} else {
 					self.clearVisualization();
 				}

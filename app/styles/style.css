@@ -406,7 +406,6 @@ Visualization
     overflow: auto;
     text-align: center; }
     #info-visualization #visualization-container #visualization-header {
-      width: 100%;
       height: 1.5em;
       text-align: left;
       padding-top: 1.5em;
@@ -418,6 +417,22 @@ Visualization
     #info-visualization #visualization-container #canvas-svg {
       width: 100%;
       height: 100%; }
+      #info-visualization #visualization-container #canvas-svg .bar {
+        fill: steelblue; }
+      #info-visualization #visualization-container #canvas-svg .bar:hover {
+        fill: brown; }
+      #info-visualization #visualization-container #canvas-svg .axis {
+        font: 10px sans-serif; }
+      #info-visualization #visualization-container #canvas-svg .axis path,
+      #info-visualization #visualization-container #canvas-svg .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges; }
+      #info-visualization #visualization-container #canvas-svg .x.axis path {
+        display: none; }
+      #info-visualization #visualization-container #canvas-svg .arc path {
+        stroke: black;
+        stroke-width: 0.02em; }
 
 .mfp-content {
   height: 100%;
@@ -431,12 +446,6 @@ Visualization
 
 #resetVisualization {
   float: left; }
-
-/*
- * ====== D3 Charts ======
- */
-.arc path {
-  stroke: #ffffff; }
 
 /*
  * ====== Zoom effect ======
