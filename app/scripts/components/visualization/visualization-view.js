@@ -12,10 +12,30 @@
 
 (function () {
 
+	// Controlling the active item of the accordion
+	var optionAccordion;	// Variable for handling accordion option
+	(function () {
+		$(function () {
+			var active;
+			active = function () {
+				return visualizationAccordion.on("click", function () {
+					optionAccordion = $("#visualizationAccordion").accordion( "option", "active" );
+				});
+			};
+			active();
+		});
+	}).call(this);
+
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
 	var $applyVisualizationButton = $('#applyVisualization');
+	var $resetVisualizationButton = $('#resetVisualization');
+	var $pieChartSelection = $('#pie-chart-attributes');
+	var $barChartSelection = $('#bar-chart-attributes');
+	var $visualizationTitle = $("#visualization-title");
 
+	var barChartTitle = "<i>Bar Chart</i> - ";
+	var pieChartTitle = "<i>Pie Chart</i> - ";
 	var self;
 
 	var VisualizationView;
@@ -25,8 +45,55 @@
 	};
 
 	$applyVisualizationButton.on("click", function() {
-		self.visualizationCharts.generatePieChart();
+
+		switch(optionAccordion) {
+			case 0:
+				if($barChartSelection[0].value != "none") {
+					generateTitle();
+					// Generate de bar chart!
+				} else {
+					self.clearVisualization();
+				}
+				break;
+			case 1:
+				if($pieChartSelection[0].value != "none") {
+					generateTitle();
+					self.visualizationCharts.generatePieChart($pieChartSelection[0].value);
+				} else {
+					self.clearVisualization();
+				}
+				break;
+			default:
+				console.log("No option selected!");
+				self.clearVisualization();
+				break;
+		}
 	});
+
+	function generateTitle() {
+		switch(optionAccordion) {
+			case 0:
+				$visualizationTitle[0].innerHTML = barChartTitle + "<b>" + $barChartSelection[0][$barChartSelection[0].selectedIndex].label + "</b>";
+				break;
+			case 1:
+				$visualizationTitle[0].innerHTML = pieChartTitle + "<b>" + $pieChartSelection[0][$pieChartSelection[0].selectedIndex].label + "</b>";
+				break;
+			default:
+				console.log("No option selected!");
+				break;
+		}
+	}
+
+	$resetVisualizationButton.on("click", function() {
+		self.clearVisualization();
+	});
+
+	VisualizationView.prototype.clearVisualization = function() {
+		$pieChartSelection[0].value = "none";
+		$barChartSelection[0].value = "none";
+		$visualizationTitle[0].innerHTML = "";
+		self.visualizationCharts.removeCurrentChart();
+	};
 
 	openVisualization = function() {
 		$(".open-visualization").magnificPopup({

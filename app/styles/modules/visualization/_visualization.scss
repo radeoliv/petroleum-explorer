@@ -6,7 +6,7 @@ $visualizationBackgroundColor: black;
 $controlPanelSize: 22em;
 // Based on the controlPanelSize
 $visualizationContainerLeftPosition: 22.55em;
-$internalContainerHeight: 98.5%;
+$outsideContainerMargin: 0.3em;
 
 /* =============================================================================
 Visualization
@@ -21,13 +21,14 @@ Visualization
 
 	#control-panel-container {
 		display: inline-block;
-		height: $internalContainerHeight;
 		background-color: $visualizationForegroundColor;
 		overflow-y: auto;
 		position: absolute;
 		width: $controlPanelSize;
 		top: inherit;
-		left: 0.4em;
+		left: $outsideContainerMargin;
+		top: $outsideContainerMargin;
+		bottom: $outsideContainerMargin;
 
 		#control-panel {
 			padding: 0.5em 0.5em 0.5em 0.5em;
@@ -39,11 +40,32 @@ Visualization
 		position: absolute;
 		border-left-color: $visualizationBackgroundColor;
 		display: inline-block;
-		height: $internalContainerHeight;
 		background-color: $visualizationForegroundColor;
 		left: $visualizationContainerLeftPosition;
-		max-width: 84.2em;
-		right: 0.4em;
+		right: $outsideContainerMargin;
+		top: $outsideContainerMargin;
+		bottom: $outsideContainerMargin;
+		overflow: auto;
+		text-align: center;
+
+		#visualization-header {
+			width: 100%;
+			height: 1.5em;
+			text-align: left;
+			padding-top: 1.5em;
+			position: absolute;
+
+			#visualization-title {
+				font-size: 1.5em;
+				padding-left: 1em;
+				padding-top: 1em;
+			}
+		}
+
+		#canvas-svg {
+			width: 100%;
+			height: 100%;
+		}
 	}
 }
 
