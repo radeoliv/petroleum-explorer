@@ -417,10 +417,6 @@ Visualization
     #info-visualization #visualization-container #canvas-svg {
       width: 100%;
       height: 100%; }
-      #info-visualization #visualization-container #canvas-svg .bar {
-        fill: steelblue; }
-      #info-visualization #visualization-container #canvas-svg .bar:hover {
-        fill: brown; }
       #info-visualization #visualization-container #canvas-svg .axis {
         font: 10px sans-serif; }
       #info-visualization #visualization-container #canvas-svg .axis path,
