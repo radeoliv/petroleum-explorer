@@ -46,5 +46,5 @@ jQuery(document).ready(function ($) {
 	var myExportView = new ExportView(myExportController);
 
 	var myVisualizationCharts = new VisualizationCharts(myMapCanvasController);
-	var myVisualizationView = new VisualizationView(myVisualizationCharts);
+	var myVisualizationView = new VisualizationView(myVisualizationCharts, myTableController);
 });

@@ -119,6 +119,10 @@
 			}
 		}
 
+		FullTable.prototype.closeFullTableDialog = function() {
+			closeDialog(this, false);
+		};
+
 		/*
 		 * Indicates which data belongs to each column, the type of it and some other properties.
 		 * Returns all the columns for the handsontable API.

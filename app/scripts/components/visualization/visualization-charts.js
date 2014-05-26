@@ -77,14 +77,6 @@
 				.attr("height", height)
 				.attr("transform", "translate(" + (radius*0.2) + "," + (radius*0.4) + ")");
 
-
-				/*
-				.attr("viewBox", "0 0 " + (width*1.3) + " " + (height*1.4))
-				.append("g")
-				.attr("transform", "translate(" + (width/20) + "," + (height/2) + ")");
-				//.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-*/
-
 			var drawD3Document = function(data) {
 				// Making sure that the value is a double
 				data.forEach(function(d) {
@@ -242,8 +234,6 @@
 					.attr("height", function(d) { return height - y(d); })
 					.style("fill", "steelblue");
 
-
-
 				var rect = svg.append("rect")
 					.attr("x", width)
 					.attr("y", 0)
@@ -347,23 +337,26 @@
 					d[DATA] = +d[DATA];
 				});
 
-				var count = 0;
 				var g = svg.selectAll(".arc")
 					.data(pie(data))
 					.enter().append("g")
 					.attr("class", "arc")
-					.on("click", function() {
+					.on("mouseover", function() {
 						var arcId = $(this)[0].children[0].id;
 						arcId = arcId.replace(/^\D*/g, '');
+
+						d3.selectAll(".legend")
+							.style("opacity", 0.2);
+
 						var legend = d3.select("#legend-" + arcId);
-						legend.style("fill", "white");
-						var ref = $(this);
-						setTimeout(function() {
-							legend.style("fill", "black");
-						}, 500);
+						legend.style("opacity", "1.0");
+					})
+					.on("mouseout", function() {
+						d3.selectAll(".legend")
+							.style("opacity", 1.0);
 					});
 
-
+				var count = 0;
 				var legend = svg.selectAll(".legend")
 					.data(data).enter()
 					.append("g").attr("class", "legend")
@@ -371,17 +364,20 @@
 					.attr("transform", function(d, i) {
 						return "translate(-60," + (-70 + i * 20) + ")";
 					})
-					.on("click", function() {
+					.on("mouseover", function() {
 						var legendId = $(this).attr("id");
 						legendId = legendId.replace(/^\D*/g, '');
 						var arc = d3.select("#arc-" + legendId);
-						arc.style("opacity", 0.7);
-						arc.style("fill", "black");
-						var ref = $(this);
-						setTimeout(function() {
-							arc.style("opacity", 1);
-							arc.style("fill", color(legendId));
-						}, 500);
+						var allArcs = d3.selectAll("path")
+							.style({
+								"opacity": function(d) { return (this === arc[0][0]) ? 1.0 : 0.2; },
+								"stroke-width": function(d) { return (this === arc[0][0]) ? "0.1em" : "0.02em" }
+							});
+					})
+					.on("mouseout", function() {
+						var arc = d3.selectAll("path")
+							.style("opacity", 1)
+							.style("stroke-width", "0.02em");
 					});
 
 				var legendOffset = biggestNameLength * 7;

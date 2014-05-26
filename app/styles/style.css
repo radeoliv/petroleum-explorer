@@ -249,6 +249,9 @@ table {
   .graphParameter label {
     margin-left: 1em; }
 
+#visualizationContent {
+  text-align: center; }
+
 #map-canvas {
   height: 100%;
   right: 8em;
@@ -440,7 +443,7 @@ Visualization
 #applyVisualization {
   float: right; }
 
-#resetVisualization {
+#clearVisualization {
   float: left; }
 
 /*

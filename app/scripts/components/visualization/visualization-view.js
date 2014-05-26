@@ -29,20 +29,28 @@
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
 	var $applyVisualizationButton = $('#applyVisualization');
-	var $resetVisualizationButton = $('#resetVisualization');
+	var $clearVisualizationButton = $('#clearVisualization');
 	var $pieChartSelection = $('#pie-chart-attributes');
 	var $barChartSelection = $('#bar-chart-attributes');
 	var $visualizationTitle = $("#visualization-title");
+	var $openVisualizationButton = $("#openVisualization");
 
 	var barChartTitle = "<i>Bar Chart</i> - ";
 	var pieChartTitle = "<i>Pie Chart</i> - ";
 	var self;
 
 	var VisualizationView;
-	VisualizationView = function (visualizationCharts){
+	VisualizationView = function (visualizationCharts, fullTable){
 		this.visualizationCharts = visualizationCharts;
+		this.fullTable = fullTable;
 		self = this;
 	};
+
+	// The full table dialog must be closed in order to avoid jquery error of 'Maximum call stack size exceeded'
+	// This error probably happens due to some incompatibility with the
+	$openVisualizationButton.on("click", function() {
+		self.fullTable.closeFullTableDialog();
+	});
 
 	$applyVisualizationButton.on("click", function() {
 		switch(optionAccordion) {
@@ -85,7 +93,7 @@
 		}
 	}
 
-	$resetVisualizationButton.on("click", function() {
+	$clearVisualizationButton.on("click", function() {
 		self.clearVisualization();
 	});
 
