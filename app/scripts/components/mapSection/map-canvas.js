@@ -32,6 +32,89 @@
 	// Define the map itself
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
+
+	/* TESTING BEGIN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+	var poly;
+	var path = new google.maps.MVCArray;
+	var polygonMarkers = [];
+	var $polygonSelectionButton = $("#myonoffswitch");
+
+	poly = new google.maps.Polygon({
+		strokeWeight: 2,
+		fillColor: '#5555FF',
+		draggable: true
+	});
+	poly.setMap(map);
+	poly.setPaths(new google.maps.MVCArray([path]));
+	// Add a listener for the click event
+	google.maps.event.addListener(map, 'dblclick', addPoint);
+
+	function addPoint(event) {
+		if($polygonSelectionButton[0].checked) {
+			path.insertAt(path.length, event.latLng);
+
+			var marker = new google.maps.Marker({
+				position: event.latLng,
+				map: map,
+				draggable: true,
+				icon: {
+					path: google.maps.SymbolPath.CIRCLE,
+					scale: 5
+				}
+			});
+			polygonMarkers.push(marker);
+			marker.setTitle("#" + path.length);
+
+			google.maps.event.addListener(marker, 'dblclick', function() {
+				marker.setMap(null);
+				for (var i = 0, I = markers.length; i < I && polygonMarkers[i] != marker; ++i);
+				polygonMarkers.splice(i, 1);
+				path.removeAt(i);
+
+
+				getMarkersInsidePolygon();
+			});
+
+			google.maps.event.addListener(marker, 'drag', function() {
+				for (var i = 0, I = polygonMarkers.length; i < I && polygonMarkers[i] != marker; ++i);
+				path.setAt(i, marker.getPosition());
+
+				getMarkersInsidePolygon();
+			});
+
+			google.maps.event.addListener(poly, 'drag', function() {
+				var vertices = poly.getPath()["j"];
+				var numberOfVertices = vertices.length;
+
+				if(numberOfVertices != polygonMarkers.length) {
+					return;
+				}
+
+				for(var i=0; i<numberOfVertices; i++) {
+					polygonMarkers[i].setPosition(vertices[i]);
+				}
+
+				getMarkersInsidePolygon();
+			});
+
+			getMarkersInsidePolygon();
+		}
+	}
+
+	function getMarkersInsidePolygon() {
+		// Checking how many markers are inside the polygon
+		var j = 0;
+		for(var i=0; i<markers.length; i++)
+		{
+			if (google.maps.geometry.poly.containsLocation(markers[i]["position"], poly)) {
+				j++;
+			}
+		}
+		console.log(j);
+	}
+	/* TESTING END @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+
 	// The table which links directly with the map
 	var FullTableController;
 
@@ -131,6 +214,8 @@
 		if(currentWells != undefined && currentWells.length > 0) {
 			// Don't know why, but setting this property in mapOptions does not work
 			map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+			map.set('disableDoubleClickZoom', true);
+
 			// Plot the wells' locations
 			plotPoints();
 			// Center the map based on markers

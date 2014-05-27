@@ -89,14 +89,17 @@
 			<button title = "Search" data-target = "search-form" class = "show-search">
 				<i class = "icon-search"></i>
 			</button>
+			<button title = "Polygon selection" data-target = "selection-form" class = "show-selection">
+				<i class = "icon-share"></i>
+			</button>
 			<button title = "Graphs" data-target = "graph-form" class = "show-graph">
 				<i class = "icon-stats"></i>
 			</button>
-			<button title = "Export" data-target = "export-form" class = "show-export">
-				<i class = "icon-download2"></i>
-			</button>
 			<button title = "Data visualization" data-target = "visualization-form" class = "show-visualization">
 				<i class = "icon-pie"></i>
+			</button>
+			<button title = "Export" data-target = "export-form" class = "show-export">
+				<i class = "icon-download2"></i>
 			</button>
 		</div>
 
@@ -182,6 +185,26 @@
 				</form>
 			</section>
 
+			<section class = "selection-form">
+				<form action = "/">
+					<fieldset class="fieldset-class">
+						<hr>
+						<h4>Polygon selection</h4>
+
+						<div id="selectionContent">
+							<div class="onoffswitch">
+								<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+								<label class="onoffswitch-label" for="myonoffswitch">
+									<span class="onoffswitch-inner"></span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>
+						</div>
+						<hr>
+					</fieldset>
+				</form>
+			</section>
+
 			<section class = "graph-form">
 				<form action = "/graph">
 					<fieldset class="fieldset-class">
@@ -221,23 +244,6 @@
 				</form>
 			</section>
 
-			<section class = "export-form">
-				<form action = "/export">
-					<fieldset class="fieldset-class">
-						<hr>
-						<h4>Export</h4>
-
-						<div id="exportContent">
-							<label id = "fileNameLabel" ><b>File name</b> (optional)</label>
-							<input type = "text" id = "fileName" placeholder = "Example.csv" name = "fileName">
-							<input type = "button" id = "exportButton" value = "Export"/>
-						</div>
-
-						<hr>
-					</fieldset>
-				</form>
-			</section>
-
 			<section class = "visualization-form">
 				<form action = "/visualization">
 					<fieldset class="fieldset-class">
@@ -248,6 +254,23 @@
 							<a id="visualization-link" href="#visualization-popup" class="open-visualization" data-effect="mfp-zoom-in">
 								<input type = "button" id = "openVisualization" value = "Open"/>
 							</a>
+						</div>
+
+						<hr>
+					</fieldset>
+				</form>
+			</section>
+
+			<section class = "export-form">
+				<form action = "/export">
+					<fieldset class="fieldset-class">
+						<hr>
+						<h4>Export</h4>
+
+						<div id="exportContent">
+							<label id = "fileNameLabel" ><b>File name</b> (optional)</label>
+							<input type = "text" id = "fileName" placeholder = "Example.csv" name = "fileName">
+							<input type = "button" id = "exportButton" value = "Export"/>
 						</div>
 
 						<hr>
