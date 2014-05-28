@@ -92,9 +92,6 @@
 			<button title = "Polygon selection" data-target = "selection-form" class = "show-selection">
 				<i class = "icon-share"></i>
 			</button>
-			<button title = "Graphs" data-target = "graph-form" class = "show-graph">
-				<i class = "icon-stats"></i>
-			</button>
 			<button title = "Data visualization" data-target = "visualization-form" class = "show-visualization">
 				<i class = "icon-pie"></i>
 			</button>
@@ -210,45 +207,6 @@
 				</form>
 			</section>
 
-			<section class = "graph-form">
-				<form action = "/graph">
-					<fieldset class="fieldset-class">
-						<hr>
-						<h4>Graph</h4>
-
-						<div id = "graphDiv">
-							<div id = "graphTable">
-								<select id = "graphMenu">
-									<option value = "bar">Bar Chart</option>
-									<option value = "pie">Pie chart</option>
-								</select>
-								<select id = "barMenu">
-									<option value = "Well_Drillers_Total_Depth">Well Driller Total Depth</option>
-									<option value = "PHIc">Cumulative Porosity</option>
-									<option value = "PHIav">Average Porosity</option>
-									<option value = "KRc">Cumulative Hydrocarbon Movability</option>
-									<option value = "KRav">Average Hydrocarbon Movability</option>
-									<option value = "SOc">Cumulative Oil Saturation</option>
-									<option value = "VSHc">Cumulative Shale Content</option>
-									<option value = "H">Effective Thickness</option>
-									<option value = "Pc">Effective Yield</option>
-									<option value = "Pp">Peak Value</option>
-									<option value = "Pt">Effective Life Cycle</option>
-								</select>
-								<select id = "pieMenu">
-									<option value = "Well_Operator">Company</option>
-									<option value = "Well_Status">Status</option>
-									<option value = "Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
-								</select>
-							</div>
-							<input type = "button" id = "addRow" value = "Add"/>
-							<hr>
-							<div id = "graphOptions"></div>
-						</div>
-					</fieldset>
-				</form>
-			</section>
-
 			<section class = "visualization-form">
 				<form action = "/visualization">
 					<fieldset class="fieldset-class">
@@ -348,8 +306,6 @@
 		<script src="scripts/components/mapSection/map-canvas.js"></script>
 		<script src="scripts/components/mapSection/polygon-selection.js"></script>
 		<script src="scripts/components/visualization/info-graph.js"></script>
-		<script src="scripts/components/visualization/graph-selection.js"></script>
-		<script src="scripts/components/visualization/visualization-custom.js"></script>
 		<script src="scripts/components/visualization/visualization-charts.js"></script>
 		<script src="scripts/components/visualization/visualization-view.js"></script>
 		<script src="scripts/components/export/export-controller.js"></script>

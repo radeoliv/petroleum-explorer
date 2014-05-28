@@ -9,11 +9,10 @@
  //TODO: file description
  -------------------------------------------------------------------------------*/
 var SearchView;
-SearchView = function (searchController, mapCanvasController, graphSelection){//, tableController) {
+SearchView = function (searchController, mapCanvasController){//, tableController) {
 	//TODO: create constructor for searchview
 	this.searchController = searchController;
 	this.mapCanvasController = mapCanvasController;
-	this.graphSelection = graphSelection;
 	//this.tableController = tableController;
 	lastResultSet = this.searchController.getAllWells();
 };
@@ -264,7 +263,6 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			lastResultSet = self.searchController.getResultSet();
 			// Plot results on map
 			self.mapCanvasController.plotResults(results);
-			self.graphSelection.setCurrentData(results);
 			$("body").trigger("ResultsUpdated");
 		}
 	}

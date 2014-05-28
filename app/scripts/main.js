@@ -14,7 +14,7 @@ jQuery(document).ready(function ($) {
 
 	function loadSearchController() {
 
-		//parse JSON file with all informations about wells
+		// Parse JSON file with all information about wells
 		$.ajax({
 			url: './wells.json',
 			dataType:'json',
@@ -28,10 +28,8 @@ jQuery(document).ready(function ($) {
 
 	var mySearchController = loadSearchController();
 	var myMapCanvasController = new MapCanvasController();
-	var myVisualizationCustom = new Visualization_custom();
-	var myGraphSelection = new GraphSelection(mySearchController, myVisualizationCustom);
 
-	var mySearchView = new SearchView(mySearchController, myMapCanvasController, myGraphSelection);
+	var mySearchView = new SearchView(mySearchController, myMapCanvasController);
 
 	var $searchQueryForm = $(".search-form form"),
 		$searchQueryInput = $($searchQueryForm.find("input[type='search']"));
