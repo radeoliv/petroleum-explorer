@@ -21,6 +21,8 @@
 	var markers = [];
 	// Info window that will be used to in the markers
 	var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
+	// Auxiliar variable to store the highlighted markers
+	var highlightedMarkers = [];
 
 	// Create options for the map
 	var mapOptions = {
@@ -31,89 +33,6 @@
 
 	// Define the map itself
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-
-	/* TESTING BEGIN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-	var poly;
-	var path = new google.maps.MVCArray;
-	var polygonMarkers = [];
-	var $polygonSelectionButton = $("#myonoffswitch");
-
-	poly = new google.maps.Polygon({
-		strokeWeight: 2,
-		fillColor: '#5555FF',
-		draggable: true
-	});
-	poly.setMap(map);
-	poly.setPaths(new google.maps.MVCArray([path]));
-	// Add a listener for the click event
-	google.maps.event.addListener(map, 'dblclick', addPoint);
-
-	function addPoint(event) {
-		if($polygonSelectionButton[0].checked) {
-			path.insertAt(path.length, event.latLng);
-
-			var marker = new google.maps.Marker({
-				position: event.latLng,
-				map: map,
-				draggable: true,
-				icon: {
-					path: google.maps.SymbolPath.CIRCLE,
-					scale: 5
-				}
-			});
-			polygonMarkers.push(marker);
-			marker.setTitle("#" + path.length);
-
-			google.maps.event.addListener(marker, 'dblclick', function() {
-				marker.setMap(null);
-				for (var i = 0, I = markers.length; i < I && polygonMarkers[i] != marker; ++i);
-				polygonMarkers.splice(i, 1);
-				path.removeAt(i);
-
-
-				getMarkersInsidePolygon();
-			});
-
-			google.maps.event.addListener(marker, 'drag', function() {
-				for (var i = 0, I = polygonMarkers.length; i < I && polygonMarkers[i] != marker; ++i);
-				path.setAt(i, marker.getPosition());
-
-				getMarkersInsidePolygon();
-			});
-
-			google.maps.event.addListener(poly, 'drag', function() {
-				var vertices = poly.getPath()["j"];
-				var numberOfVertices = vertices.length;
-
-				if(numberOfVertices != polygonMarkers.length) {
-					return;
-				}
-
-				for(var i=0; i<numberOfVertices; i++) {
-					polygonMarkers[i].setPosition(vertices[i]);
-				}
-
-				getMarkersInsidePolygon();
-			});
-
-			getMarkersInsidePolygon();
-		}
-	}
-
-	function getMarkersInsidePolygon() {
-		// Checking how many markers are inside the polygon
-		var j = 0;
-		for(var i=0; i<markers.length; i++)
-		{
-			if (google.maps.geometry.poly.containsLocation(markers[i]["position"], poly)) {
-				j++;
-			}
-		}
-		console.log(j);
-	}
-	/* TESTING END @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
 
 	// The table which links directly with the map
 	var FullTableController;
@@ -227,12 +146,12 @@
 	/*
 	 * Highlight specific pins on the map
 	 */
-	MapCanvasController.prototype.highlightWells = function(UWIsToHighlight) {
+	MapCanvasController.prototype.highlightWells = function(UWIsToHighlight, hasToUpdateTable) {
 
 		// Remove the highlighted wells that aren't in the UWIsToHighlight list anymore!
 		for(var i=0; i<markers.length; i++) {
 			if(markers[i].isHighlighted === true && $.inArray(markers[i].id, UWIsToHighlight) < 0) {
-				this.deselectMarker(i, false);
+				this.deselectMarker(i, hasToUpdateTable);
 			}
 		}
 
@@ -240,7 +159,7 @@
 		for(var i=0; i<currentWells.length; i++) {
 			// If the well is in the UWIsToHighlight list, it must be highlighted
 			if($.inArray(currentWells[i]["Well_Unique_Identifier"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
-				this.selectMarker(i, false);
+				this.selectMarker(i, hasToUpdateTable);
 			}
 		}
 
@@ -253,24 +172,44 @@
 	/*
 	 * Deselects a marker on the map
 	 */
-	MapCanvasController.prototype.deselectMarker = function(i) {
-		toggleMarkerSelection(false, i);
+	MapCanvasController.prototype.deselectMarker = function(i, hasToUpdateTable, id) {
+		toggleMarkerSelection(false, i, hasToUpdateTable);
+
+		for(var i=0; i<highlightedMarkers.length; i++) {
+			if(highlightedMarkers[i][0] === id) {
+				highlightedMarkers.splice(i, 1);
+				break;
+			}
+		}
 	};
 
 	/*
 	 * Selects a marker on the map
 	 */
-	MapCanvasController.prototype.selectMarker = function(i) {
-		toggleMarkerSelection(true, i);
+	MapCanvasController.prototype.selectMarker = function(i, hasToUpdateTable, id) {
+		toggleMarkerSelection(true, i, hasToUpdateTable);
+		highlightedMarkers.push([id, i]);
 	}
 
 	/*
 	 * General function to select or deselect a marker on the map
 	 */
-	function toggleMarkerSelection(isSelected, i) {
+	function toggleMarkerSelection(isSelected, i, selectedByPolygon) {
 		markers[i].setMap(null);
 		markers[i] = null;
 		createMarker(currentWells[i], i, isSelected);
+
+		if(selectedByPolygon === true) {
+			// Update the full table with the selection
+			FullTableController.toggleRowsSelection(currentWells[i]["Well_Unique_Identifier"]);
+		}
+	}
+
+	/*
+	 * Returns all the highlighted markers
+	 */
+	MapCanvasController.prototype.getHighlightedMarkers = function() {
+		return highlightedMarkers;
 	}
 
 	/*
@@ -378,13 +317,10 @@
 			return function () {
 				// Toggles the selection
 				if(marker.isHighlighted) {
-					self.deselectMarker(i);
+					self.deselectMarker(i, true, marker.id);
 				} else {
-					self.selectMarker(i);
+					self.selectMarker(i, true, marker.id);
 				}
-
-				// Update the full table with the selection
-				FullTableController.toggleRowsSelection(marker.id);
 
 				// Making sure to control the info window behaviour
 				if(infoWindow.opened === true) {
@@ -450,6 +386,100 @@
 		// Fit these bounds to the map
 		map.fitBounds(bounds);
 	}
+
+
+
+
+	/* TESTING BEGIN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+	var poly;
+	var path = new google.maps.MVCArray;
+	var polygonMarkers = [];
+
+	poly = new google.maps.Polygon({
+		strokeWeight: 2,
+		fillColor: '#5555FF',
+		draggable: true
+	});
+	poly.setMap(map);
+	poly.setPaths(new google.maps.MVCArray([path]));
+
+	// Adding listeners for the possible events
+	google.maps.event.addListener(map, 'dblclick', addPoint);
+
+	google.maps.event.addListener(poly, 'drag', function() {
+		var vertices = poly.getPath()["j"];
+		var numberOfVertices = vertices.length;
+
+		if(numberOfVertices != polygonMarkers.length) {
+			return;
+		}
+
+		for(var i=0; i<numberOfVertices; i++) {
+			polygonMarkers[i].setPosition(vertices[i]);
+		}
+	});
+
+	function addPoint(event) {
+		if($("#myonoffswitch")[0].checked) {
+
+			path.insertAt(path.length, event.latLng);
+
+			var marker = new google.maps.Marker({
+				position: event.latLng,
+				map: map,
+				draggable: true,
+				icon: {
+					path: google.maps.SymbolPath.CIRCLE,
+					scale: 5
+				}
+			});
+
+			marker.setTitle("#" + path.length);
+			polygonMarkers.push(marker);
+		}
+
+		google.maps.event.addListener(marker, 'rightclick', function() {
+			marker.setMap(null);
+			for (var i = 0, I = markers.length; i < I && polygonMarkers[i] != marker; ++i);
+			polygonMarkers.splice(i, 1);
+			path.removeAt(i);
+		});
+
+		google.maps.event.addListener(marker, 'drag', function() {
+			for (var i = 0, I = polygonMarkers.length; i < I && polygonMarkers[i] != marker; ++i);
+			path.setAt(i, marker.getPosition());
+		});
+	}
+
+	/*
+	 * Returns all the markers that are inside the defined polygon
+	 */
+	MapCanvasController.prototype.getMarkersIdInsidePolygon = function() {
+		// Checking how many markers are inside the polygon
+		var markersInside = [];
+		for(var i=0; i<markers.length; i++)
+		{
+			if (google.maps.geometry.poly.containsLocation(markers[i]["position"], poly)) {
+				markersInside.push([markers[i]["id"], i]);
+			}
+		}
+		return markersInside;
+	};
+
+	/*
+	 * Removes the polygon created by adding circular markers
+	 */
+	MapCanvasController.prototype.removePolygon = function() {
+		path = new google.maps.MVCArray;
+		poly.setPaths(new google.maps.MVCArray([path]));
+
+		for (var i = 0; i < polygonMarkers.length; i++) {
+			polygonMarkers[i].setMap(null);
+		}
+		polygonMarkers = [];
+	};
+	/* TESTING END @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).MapCanvasController = MapCanvasController;
 }).call(this);

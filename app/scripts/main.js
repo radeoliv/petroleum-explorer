@@ -47,4 +47,6 @@ jQuery(document).ready(function ($) {
 
 	var myVisualizationCharts = new VisualizationCharts(myMapCanvasController);
 	var myVisualizationView = new VisualizationView(myVisualizationCharts, myTableController);
+
+	var myPolygonSelection = new PolygonSelection(myMapCanvasController);
 });

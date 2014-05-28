@@ -192,13 +192,18 @@
 						<h4>Polygon selection</h4>
 
 						<div id="selectionContent">
-							<div class="onoffswitch">
+							<div id="polygon-selection-switch" class="onoffswitch">
 								<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
 								<label class="onoffswitch-label" for="myonoffswitch">
 									<span class="onoffswitch-inner"></span>
 									<span class="onoffswitch-switch"></span>
 								</label>
 							</div>
+
+							<input type = "button" id = "polygon-highlight-markers-button" value = "Highlight wells" disabled="true"/>
+							<input type = "button" id = "polygon-select-markers-button" value = "Select wells" disabled="true"/>
+							<input type = "button" id = "polygon-remove-markers-button" value = "Remove wells" disabled="true"/>
+
 						</div>
 						<hr>
 					</fieldset>
@@ -341,6 +346,7 @@
 		<script src="scripts/components/search/search-view.js"></script>
 		<script src="scripts/components/fullTable/full-table.js"></script>
 		<script src="scripts/components/mapSection/map-canvas.js"></script>
+		<script src="scripts/components/mapSection/polygon-selection.js"></script>
 		<script src="scripts/components/visualization/info-graph.js"></script>
 		<script src="scripts/components/visualization/graph-selection.js"></script>
 		<script src="scripts/components/visualization/visualization-custom.js"></script>
