@@ -7,3 +7,23 @@
 #chart-link {
 	float: right;
 }
+
+#map-info-control{
+	padding: 0.5em;
+	z-index: 1;
+
+	#map-info-controlUI {
+		background-color: darken($body-background, 5);
+		border-style: groove;
+		border-width: 0.1em;
+		cursor: default;
+
+		#map-info-control-text {
+			font-family: "Arial", "sans-serif";
+			font-size: 1.3em;
+			padding-left: 0.3em;
+			padding-right: 0.3em;
+			text-align: right;
+		}
+	}
+}

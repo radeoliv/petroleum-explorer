@@ -182,16 +182,6 @@ Map Toolbar
     float: right;
     font-size: 0.8em;
     width: 25%; }
-  .mapToolbar .separator {
-    width: 100%;
-    /*border-bottom: inset 1px gray;*/
-    display: block;
-    -webkit-margin-before: 0.5em;
-    -webkit-margin-after: 0.5em;
-    -webkit-margin-start: auto;
-    -webkit-margin-end: auto;
-    border-style: inset;
-    border-width: 1px; }
   .mapToolbar fieldset {
     border: none; }
   .mapToolbar #results-table {
@@ -246,6 +236,21 @@ table {
 
 #chart-link {
   float: right; }
+
+#map-info-control {
+  padding: 0.5em;
+  z-index: 1; }
+  #map-info-control #map-info-controlUI {
+    background-color: #f2f2f2;
+    border-style: groove;
+    border-width: 0.1em;
+    cursor: default; }
+    #map-info-control #map-info-controlUI #map-info-control-text {
+      font-family: "Arial", "sans-serif";
+      font-size: 1.3em;
+      padding-left: 0.3em;
+      padding-right: 0.3em;
+      text-align: right; }
 
 /* =============================================================================
 Variables
@@ -560,6 +565,12 @@ Polygon selection
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 0px; }
+
+.info-msg {
+  padding-left: 1em; }
+
+.separator {
+  padding-bottom: 1em; }
 
 /*
 =============================================================================

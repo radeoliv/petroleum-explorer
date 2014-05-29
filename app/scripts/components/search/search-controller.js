@@ -51,6 +51,26 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 			this.resultSet = this.dataSet;
 		};
 
+		SearchController.prototype.setResultSetByIds = function(wellIds) {
+			if(wellIds != undefined && wellIds != null && wellIds.length > 0) {
+				this.resetResultSet();
+				var auxLength = this.resultSet.length;
+				var temp = [];
+
+				for(var i=0; i<auxLength; i++) {
+					if($.inArray(this.resultSet[i]["Well_Unique_Identifier"], wellIds) >= 0) {
+						temp.push(this.resultSet[i]);
+					}
+
+					// There is nothing to look for..
+					if(temp.length === wellIds.length) {
+						break;
+					}
+				}
+				this.resultSet = temp;
+			}
+		};
+
 		/*
 		 * Used to keep the data consistent
 		 */

@@ -34,14 +34,83 @@
 	// Define the map itself
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
+	/*
+	 * Variables to control the polygon selection
+	 */
+	var poly;
+	var path = new google.maps.MVCArray;
+	var polygonMarkers = [];
+
+	// Linking the polygon with the map and the path among polygon markers
+	poly = new google.maps.Polygon({
+		strokeWeight: 2,
+		fillColor: '#5555FF',
+		draggable: true
+	});
+	poly.setMap(map);
+	poly.setPaths(new google.maps.MVCArray([path]));
+
 	// The table which links directly with the map
 	var FullTableController;
 
 	var MapCanvasController;
 	MapCanvasController = function() {
 		self = this;
-		// Constructor. Not being used.
+
+		/* Creating the custom control on the top of the map to show statistics of total wells,
+		 * the amount of them being shown and the number of highlighted markers.
+		 */
+		var wellsControlDiv = document.createElement('div');
+		wellsControlDiv.id = "map-info-control";
+		var homeControl = new AddControl(wellsControlDiv, map);
+		map.controls[google.maps.ControlPosition.TOP_LEFT].push(wellsControlDiv);
 	};
+
+	function AddControl(controlDiv, map) {
+
+		// Set CSS styles for the DIV containing the control
+		// Setting padding to 5 px will offset the control
+		// from the edge of the map
+		controlDiv.style.padding = '5px';
+
+		// Set CSS for the control border
+		var controlUI = document.createElement('div');
+		controlUI.id = "map-info-controlUI";
+		controlDiv.appendChild(controlUI);
+
+		// Set CSS for the control interior
+		var controlText = document.createElement('div');
+		controlText.id = "map-info-control-text";
+		controlText.innerHTML = 'Home';
+		controlUI.appendChild(controlText);
+
+		$("body").on("mapInfoChanged", function() {
+			var totalWells = dataSet.length;
+			var maximumOffset = (totalWells+"").length;
+			var auxCount = 0;
+
+			var currentWellsOnTheMap = currentWells.length + "";
+			auxCount = currentWellsOnTheMap.length;
+			for(var i=0; i<(maximumOffset - auxCount); i++) {
+				currentWellsOnTheMap = " &nbsp " + currentWellsOnTheMap;
+			}
+
+			var highlightedMarkersOnTheMap = highlightedMarkers.length + "";
+			auxCount = highlightedMarkersOnTheMap.length;
+			for(var i=0; i<(maximumOffset - auxCount); i++) {
+				highlightedMarkersOnTheMap = " &nbsp " + highlightedMarkersOnTheMap;
+			}
+
+			// Which one is the best to show the information?!
+			//var txt1 = "<b>" + currentWellsOnTheMap + "</b> / <b>" + totalWells + "</b> wells being shown";
+			//var txt2 = "<b>" + highlightedMarkersOnTheMap + "</b> / <b>" +currentWellsOnTheMap + "</b> highlighted wells";
+
+			var txt1 = "Total Wells: <b>" + currentWellsOnTheMap + "</b> / <b>" + totalWells + "</b>";
+			var txt2 = "Highlighted: <b>" + highlightedMarkersOnTheMap + "</b> / <b>" +currentWellsOnTheMap + "</b>";
+			controlText.innerHTML = txt1 + '<br>' + txt2;
+		});
+	}
+
 
 	/*
 	 * Store the full table to link the markers in the future
@@ -131,14 +200,36 @@
 		 * the markers disappear, keeping the same location as before.
 		 */
 		if(currentWells != undefined && currentWells.length > 0) {
-			// Don't know why, but setting this property in mapOptions does not work
+			// Don't know why, but setting this properties when creating the mapOptions does not work
 			map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
 			map.set('disableDoubleClickZoom', true);
+
+			// Remove the highlighted markers that are not supposed to exist
+			console.log(highlightedMarkers.length);
+			var markerExists = false;
+			var tempHighlighted = [];
+			for(var i=0; i<highlightedMarkers.length; i++) {
+				markerExists = false;
+				for(var j=0; j<currentWells.length; j++) {
+					if(highlightedMarkers[i][0] === currentWells[j]["Well_Unique_Identifier"]) {
+						markerExists = true;
+						break;
+					}
+				}
+				// If the highlighted marker does not exist in the current wells, remove it
+				if(markerExists === true) {
+					tempHighlighted.push(highlightedMarkers[i]);
+				}
+			}
+			highlightedMarkers = tempHighlighted;
+			console.log(highlightedMarkers.length);
 
 			// Plot the wells' locations
 			plotPoints();
 			// Center the map based on markers
 			autoCenter();
+
+			console.log(highlightedMarkers.length);
 		}
 	}
 	initializeMap();
@@ -148,10 +239,16 @@
 	 */
 	MapCanvasController.prototype.highlightWells = function(UWIsToHighlight, hasToUpdateTable) {
 
+		console.log("debug");
+		console.log(highlightedMarkers);
+		console.log(UWIsToHighlight);
+		console.log(hasToUpdateTable);
+		var id;
+
 		// Remove the highlighted wells that aren't in the UWIsToHighlight list anymore!
 		for(var i=0; i<markers.length; i++) {
 			if(markers[i].isHighlighted === true && $.inArray(markers[i].id, UWIsToHighlight) < 0) {
-				this.deselectMarker(i, hasToUpdateTable);
+				this.deselectMarker(i, hasToUpdateTable, currentWells[i]["Well_Unique_Identifier"]);
 			}
 		}
 
@@ -159,7 +256,8 @@
 		for(var i=0; i<currentWells.length; i++) {
 			// If the well is in the UWIsToHighlight list, it must be highlighted
 			if($.inArray(currentWells[i]["Well_Unique_Identifier"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
-				this.selectMarker(i, hasToUpdateTable);
+				console.log("highlightou");
+				this.selectMarker(i, hasToUpdateTable, currentWells[i]["Well_Unique_Identifier"]);
 			}
 		}
 
@@ -188,20 +286,31 @@
 	 */
 	MapCanvasController.prototype.selectMarker = function(i, hasToUpdateTable, id) {
 		toggleMarkerSelection(true, i, hasToUpdateTable);
-		highlightedMarkers.push([id, i]);
+
+		var tempIds = [];
+		for(var i=0; i<highlightedMarkers.length; i++) {
+			tempIds.push(highlightedMarkers[i][0]);
+		}
+
+		if($.inArray(id, tempIds) < 0) {
+			console.log("pushei1");
+			highlightedMarkers.push([id, i]);
+		}
 	}
 
 	/*
 	 * General function to select or deselect a marker on the map
 	 */
 	function toggleMarkerSelection(isSelected, i, selectedByPolygon) {
-		markers[i].setMap(null);
-		markers[i] = null;
-		createMarker(currentWells[i], i, isSelected);
+		if(markers[i].isHighlighted != isSelected) {
+			markers[i].setMap(null);
+			markers[i] = null;
+			createMarker(currentWells[i], i, isSelected);
 
-		if(selectedByPolygon === true) {
-			// Update the full table with the selection
-			FullTableController.toggleRowsSelection(currentWells[i]["Well_Unique_Identifier"]);
+			if(selectedByPolygon === true) {
+				// Update the full table with the selection
+				FullTableController.toggleRowsSelection(currentWells[i]["Well_Unique_Identifier"]);
+			}
 		}
 	}
 
@@ -319,6 +428,7 @@
 				if(marker.isHighlighted) {
 					self.deselectMarker(i, true, marker.id);
 				} else {
+					console.log("right clickou");
 					self.selectMarker(i, true, marker.id);
 				}
 
@@ -335,6 +445,11 @@
 		google.maps.event.addListener(infoWindow,'closeclick',function(){
 			infoWindow.opened = false;
 		});
+
+		setTimeout(function() { $("body").trigger("mapInfoChanged") }, 300);
+		if(polygonMarkers.length > 0) {
+			setTimeout(function() { $("body").trigger("polygonChangedPosition") }, 300);
+		}
 	}
 
 	/*
@@ -383,29 +498,23 @@
 			bounds.extend(markers[i]["position"]);
 		}
 
+		for(var i = 0; i < polygonMarkers.length; i++) {
+			bounds.extend(polygonMarkers[i]["position"]);
+		}
+
 		// Fit these bounds to the map
 		map.fitBounds(bounds);
 	}
 
-
-
-
-	/* TESTING BEGIN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-	var poly;
-	var path = new google.maps.MVCArray;
-	var polygonMarkers = [];
-
-	poly = new google.maps.Polygon({
-		strokeWeight: 2,
-		fillColor: '#5555FF',
-		draggable: true
-	});
-	poly.setMap(map);
-	poly.setPaths(new google.maps.MVCArray([path]));
-
-	// Adding listeners for the possible events
+	/* Polygon */
+	/*
+	 * Add marker when double clicking
+	 */
 	google.maps.event.addListener(map, 'dblclick', addPoint);
 
+	/*
+	 * Forces the markers to follow the edges of the polygon
+	 */
 	google.maps.event.addListener(poly, 'drag', function() {
 		var vertices = poly.getPath()["j"];
 		var numberOfVertices = vertices.length;
@@ -417,8 +526,12 @@
 		for(var i=0; i<numberOfVertices; i++) {
 			polygonMarkers[i].setPosition(vertices[i]);
 		}
+		$("body").trigger("polygonChangedPosition");
 	});
 
+	/*
+	 * Add one polygon marker on the map
+	 */
 	function addPoint(event) {
 		if($("#myonoffswitch")[0].checked) {
 
@@ -438,17 +551,28 @@
 			polygonMarkers.push(marker);
 		}
 
+		/*
+		 * Removes the marker when right clicked
+		 */
 		google.maps.event.addListener(marker, 'rightclick', function() {
 			marker.setMap(null);
 			for (var i = 0, I = markers.length; i < I && polygonMarkers[i] != marker; ++i);
 			polygonMarkers.splice(i, 1);
 			path.removeAt(i);
+			$("body").trigger("polygonChangedPosition");
 		});
 
+		/*
+		 * Forces the polygon to be adjusted when the markers move
+		 */
 		google.maps.event.addListener(marker, 'drag', function() {
 			for (var i = 0, I = polygonMarkers.length; i < I && polygonMarkers[i] != marker; ++i);
 			path.setAt(i, marker.getPosition());
+			// Update text in the toolbar
+			$("body").trigger("polygonChangedPosition");
 		});
+
+		$("body").trigger("polygonChangedPosition");
 	}
 
 	/*
@@ -478,8 +602,6 @@
 		}
 		polygonMarkers = [];
 	};
-	/* TESTING END @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).MapCanvasController = MapCanvasController;
 }).call(this);
