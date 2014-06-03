@@ -282,8 +282,8 @@
 		toggleMarkerSelection(true, i, hasToUpdateTable);
 
 		var tempIds = [];
-		for(var i=0; i<highlightedMarkers.length; i++) {
-			tempIds.push(highlightedMarkers[i][0]);
+		for(var j=0; j<highlightedMarkers.length; j++) {
+			tempIds.push(highlightedMarkers[j][0]);
 		}
 
 		if($.inArray(id, tempIds) < 0) {
@@ -438,9 +438,9 @@
 			infoWindow.opened = false;
 		});
 
-		setTimeout(function() { $("body").trigger("mapInfoChanged") }, 300);
+		setTimeout(function() { $("body").trigger("mapInfoChanged") }, 200);
 		if(polygonMarkers.length > 0) {
-			setTimeout(function() { $("body").trigger("polygonChangedPosition") }, 300);
+			setTimeout(function() { $("body").trigger("polygonChangedPosition") }, 200);
 		}
 	}
 
@@ -490,6 +490,7 @@
 			bounds.extend(markers[i]["position"]);
 		}
 
+		// Expand the visualization bound considering each polygon marker
 		for(var i = 0; i < polygonMarkers.length; i++) {
 			bounds.extend(polygonMarkers[i]["position"]);
 		}

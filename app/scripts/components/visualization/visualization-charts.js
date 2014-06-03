@@ -14,7 +14,6 @@
 
 	var self;
 	var $visualizationContainer = $("#visualization-container");
-	var $visualizationHeader = $("#visualization-header")
 
 	var VisualizationCharts;
 	VisualizationCharts = function (MapController){
@@ -39,14 +38,31 @@
 		// Calculate the data distribution
 		var data = this.calculateBarChartValues(attribute);
 		var currentWells = this.MapController.getCurrentWells();
+		/*
+		 * highlightedMarkers contains all the highlighted markers on the map
+		 * For each element, index 0 = UWI, index 1 = index in the array of all wells being displayed
+		 */
+		var highlightedMarkers = this.MapController.getHighlightedMarkers();
+		var highlightedIndices = [];
+		if(highlightedMarkers != undefined && highlightedMarkers != null) {
+			for(var i=0; i<highlightedMarkers.length; i++) {
+				highlightedIndices[highlightedMarkers[i][1]] = 1;
+			}
+		}
+
+		function getRightBarFillColor(index) {
+			if(highlightedIndices[index] != undefined && highlightedIndices[index] === 1) {
+				return "#8563F2";
+			} else {
+				return "steelblue";
+			}
+		}
 
 		if(data != null && data.length > 0) {
 
 			var width = 800,
 				height = 600,
 				radius = Math.min(width, height)/1.5;
-
-			var color = d3.scale.category20();
 
 			var x = d3.scale.ordinal()
 				.rangeRoundBands([0, width], 0.1);
@@ -84,8 +100,8 @@
 				});
 
 				var count = 0;
-				x.domain(data.map(function(d) { return count++; }));//d.letter; }));
-				y.domain([0, d3.max(data, function(d) { return d; })]);//d.frequency; })]);
+				x.domain(data.map(function(d) { return count++; }));
+				y.domain([0, d3.max(data, function(d) { return d; })]);
 
 				/*svg.append("g")
 					.attr("class", "x axis")
@@ -157,7 +173,7 @@
 								return currentWells[barId]["Well_Unique_Identifier"];
 
 							case 6:
-								return "Well Operator"
+								return "Well Operator";
 							case 7:
 								return currentWells[barId]["Well_Operator"];
 
@@ -212,7 +228,9 @@
 					.on("mouseout", function() {
 						if(fixLegendContent === false) {
 							// Setting the normal color
-							d3.select("#" + $(this)[0].id).style("fill", "steelblue");
+							d3.select("#" + $(this)[0].id).style("fill", function() {
+								return getRightBarFillColor($(this)[0].id.replace(/^\D*/g, ''));
+							});
 							// Removing all text information
 							d3.selectAll(".text-info").remove();
 							d3.selectAll("#line-separator").remove();
@@ -222,7 +240,9 @@
 						// The click event fix the information in the rectangle (legends)
 						fixLegendContent = !fixLegendContent;
 						if(fixLegendContent === false) {
-							d3.selectAll(".bar").style("fill", "steelblue");
+							d3.selectAll(".bar").style("fill", function(d,i) {
+								return getRightBarFillColor(i);
+							});
 							d3.selectAll(".text-info").remove();
 							d3.selectAll("#line-separator").remove();
 						} else {
@@ -232,15 +252,16 @@
 					})
 					.transition().delay(function (d,i){ return i * 15;}).duration(200)
 					.attr("height", function(d) { return height - y(d); })
-					.style("fill", "steelblue");
+					.style("fill", function(d,i) {
+						return getRightBarFillColor(i);
+					});
 
 				var rect = svg.append("rect")
 					.attr("x", width)
 					.attr("y", 0)
 					.attr("width", (width / 2.8))
-					.attr("height", (height/2.5))
+					.attr("height", (height / 2.5))
 					.style({
-						//"fill": "rgb(220,220,220)",
 						"fill": "none",
 						"stroke": "black",
 						"stroke-width": "0.05em"
@@ -368,14 +389,16 @@
 						var legendId = $(this).attr("id");
 						legendId = legendId.replace(/^\D*/g, '');
 						var arc = d3.select("#arc-" + legendId);
-						var allArcs = d3.selectAll("path")
+
+						// All arcs
+						d3.selectAll("path")
 							.style({
 								"opacity": function(d) { return (this === arc[0][0]) ? 1.0 : 0.2; },
 								"stroke-width": function(d) { return (this === arc[0][0]) ? "0.1em" : "0.02em" }
 							});
 					})
 					.on("mouseout", function() {
-						var arc = d3.selectAll("path")
+						d3.selectAll("path")
 							.style("opacity", 1)
 							.style("stroke-width", "0.02em");
 					});
@@ -406,7 +429,7 @@
 						"text-anchor": "end",
 						"font-size": "0.9em"
 					})
-					.text(function(d,i) {
+					.text(function(d) {
 						return d[NAME];
 					});
 

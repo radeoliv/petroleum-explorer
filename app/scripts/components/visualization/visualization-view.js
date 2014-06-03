@@ -50,6 +50,9 @@
 	// This error probably happens due to some incompatibility with the
 	$openVisualizationButton.on("click", function() {
 		self.fullTable.closeFullTableDialog();
+		// Every time the visualization centre is opened, the visualization being shown before is reloaded.
+		// If there's none selected, nothing will be added.
+		$applyVisualizationButton.trigger("click");
 	});
 
 	$applyVisualizationButton.on("click", function() {
@@ -73,7 +76,6 @@
 				}
 				break;
 			default:
-				console.log("No option selected!");
 				self.clearVisualization();
 				break;
 		}
