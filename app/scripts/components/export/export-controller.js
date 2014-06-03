@@ -43,6 +43,10 @@
 
 			// Getting current day, month and year
 			var day = date.getDate();
+			if((day+"").length == 1) {
+				day = "0" + day;
+			}
+
 			// The getMonth function returns values from 0 to 11
 			var month = date.getMonth() + 1;
 			if((month+"").length == 1) {
