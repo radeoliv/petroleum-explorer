@@ -21,8 +21,9 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 	UWIAlertMsg = "The <b>UWI</b> must be completely filled.";
 
 (function() {
-	var SearchController;
+	var resultNotSetBySearch = false;
 
+	var SearchController;
 	SearchController = (function() {
 		/**
 		 * constructor for the search controller
@@ -45,12 +46,38 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 		}
 
 		/*
+		 * Retrieve resultNotSetBySearch variable, indicating if the result was not set by the search operation
+		 */
+		SearchController.prototype.isResultNotSetBySearch = function() {
+			return resultNotSetBySearch;
+		};
+
+		function setResultNotSetBySearch(isNotBySearch) {
+			resultNotSetBySearch = isNotBySearch;
+			$("body").trigger("resultSetChanged");
+
+			if(isNotBySearch === true) {
+				$("#clear-search").trigger("click");
+			}
+		}
+
+		/*
 		 * Used to keep the data consistent
 		 */
 		SearchController.prototype.resetResultSet = function() {
 			this.resultSet = this.dataSet;
 		};
 
+		/*
+		 * Sets a new value to the result set
+		 */
+		SearchController.prototype.setResultSet = function(result) {
+			this.resultSet = result;
+		}
+
+		/*
+		 * The result set is defined by the given ids
+		 */
 		SearchController.prototype.setResultSetByIds = function(wellIds) {
 			if(wellIds != undefined && wellIds != null && wellIds.length > 0) {
 				this.resetResultSet();
@@ -68,6 +95,34 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 					}
 				}
 				this.resultSet = temp;
+				setResultNotSetBySearch(true);
+			}
+		};
+
+		/*
+		 * The result set is defined by the inverse of the given ids
+		 */
+		SearchController.prototype.setResultSetByIdsInverse = function(currentWells, wellIds) {
+			if(currentWells != undefined && currentWells != null && currentWells.length > 0 &&
+				wellIds != undefined && wellIds != null && wellIds.length > 0) {
+
+				var countRemoved = 0;
+
+				for(var i=0; i<currentWells.length; i++) {
+					// If the id matches, remove the value from the result set
+					if($.inArray(currentWells[i]["Well_Unique_Identifier"], wellIds) >= 0) {
+						currentWells.splice(i--, 1);
+						countRemoved++;
+					}
+
+					// There is nothing to look for..
+					if(countRemoved === wellIds.length) {
+						break;
+					}
+				}
+
+				this.resultSet = currentWells;
+				setResultNotSetBySearch(true);
 			}
 		};
 
@@ -87,7 +142,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 
 		/**
 		 * find the UWID matching the search criteria (LSD, range, township, section, meridian)
-		 * @param query the search query we will use to search through UWID
+		 * @param query the search query we will use to search through UWI
 		 * @returns {string}
 		 */
 		SearchController.prototype.findResultsUWIValues = function(fieldValues) {
@@ -147,6 +202,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				this.resultSet.push(this.dataSet[i]);
 			}
 
+			setResultNotSetBySearch(false);
 			return this.resultSet;
 		};
 
@@ -189,6 +245,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				}
 			}
 
+			setResultNotSetBySearch(false);
 			return this.resultSet;
 		};
 
@@ -229,6 +286,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				}
 			}
 
+			setResultNotSetBySearch(false);
 			return this.resultSet;
 		};
 
@@ -270,6 +328,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				}
 			}
 
+			setResultNotSetBySearch(false);
 			return this.resultSet;
 		};
 

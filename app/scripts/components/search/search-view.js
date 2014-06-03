@@ -96,7 +96,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 			// Clears all fields
 			isEventListenerActive = false;
-			clearFields();
+			self.clearFields();
 
 			switch(optionAccordion) {
 				// Search by the entire UWI
@@ -195,7 +195,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 					// Clears all fields
 					isEventListenerActive = false;
-					clearFields();
+					self.clearFields();
 					statusSearchInput[0].value = statusQuery;
 
 					if(tempOptionStatus != "none") {
@@ -293,8 +293,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		return result;
 	}
 
-	function clearFields() {
-		checkIfFieldsAreEmpty();
+	SearchView.prototype.clearFields = function() {
 		$searchInputForm.find("input[name='uwi']").val(''),
 		$searchInputForm.find("input[name='lsd']").val(''),
 		$searchInputForm.find("input[name='section']").val(''),
@@ -303,24 +302,26 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		$searchInputForm.find("input[name='meridian']").val(''),
 		$searchInputForm.find("input[name='company']").val(''),
 		$searchInputForm.find("select[name='status']").val('none');
-	}
+	};
 
 	/*
 	 * This function is called to clear all the search fields that the user might have filled.
 	 */
-	(function () {
-		$(function () {
-			function clearSearch() {
-				return $("#clear-search").on("click", function () {
-					if(checkIfFieldsAreEmpty() === false) {
-						clearFields();
-						statusSearchInput.change();
-					}
-				});
-			};
-			clearSearch();
-		});
-	}).call(this);
+	$("#clear-search").on("click", function() {
+		if(checkIfFieldsAreEmpty() === false) {
+			var temp = self.searchController.isResultNotSetBySearch() === false;
+			self.clearFields();
+
+			if(temp) {
+				statusSearchInput.change();
+			} else {
+				// Cleaning the results area
+				if($('#results-table') != undefined) {
+					$('#results-table').remove();
+				}
+			}
+		}
+	});
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).SearchView = SearchView;
 };

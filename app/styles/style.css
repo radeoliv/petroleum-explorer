@@ -572,6 +572,9 @@ Polygon selection
 .separator {
   padding-bottom: 1em; }
 
+#polygon-reset-markers-button {
+  margin-bottom: 0.5em; }
+
 /*
 =============================================================================
 Main Styles

@@ -205,7 +205,6 @@
 			map.set('disableDoubleClickZoom', true);
 
 			// Remove the highlighted markers that are not supposed to exist
-			console.log(highlightedMarkers.length);
 			var markerExists = false;
 			var tempHighlighted = [];
 			for(var i=0; i<highlightedMarkers.length; i++) {
@@ -222,15 +221,16 @@
 				}
 			}
 			highlightedMarkers = tempHighlighted;
-			console.log(highlightedMarkers.length);
 
 			// Plot the wells' locations
 			plotPoints();
 			// Center the map based on markers
 			autoCenter();
-
-			console.log(highlightedMarkers.length);
+		} else {
+			$("body").trigger("mapInfoChanged");
+			$("body").trigger("polygonChangedPosition");
 		}
+
 	}
 	initializeMap();
 
@@ -238,11 +238,6 @@
 	 * Highlight specific pins on the map
 	 */
 	MapCanvasController.prototype.highlightWells = function(UWIsToHighlight, hasToUpdateTable) {
-
-		console.log("debug");
-		console.log(highlightedMarkers);
-		console.log(UWIsToHighlight);
-		console.log(hasToUpdateTable);
 		var id;
 
 		// Remove the highlighted wells that aren't in the UWIsToHighlight list anymore!
@@ -256,7 +251,6 @@
 		for(var i=0; i<currentWells.length; i++) {
 			// If the well is in the UWIsToHighlight list, it must be highlighted
 			if($.inArray(currentWells[i]["Well_Unique_Identifier"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
-				console.log("highlightou");
 				this.selectMarker(i, hasToUpdateTable, currentWells[i]["Well_Unique_Identifier"]);
 			}
 		}
@@ -293,7 +287,6 @@
 		}
 
 		if($.inArray(id, tempIds) < 0) {
-			console.log("pushei1");
 			highlightedMarkers.push([id, i]);
 		}
 	}
@@ -428,7 +421,6 @@
 				if(marker.isHighlighted) {
 					self.deselectMarker(i, true, marker.id);
 				} else {
-					console.log("right clickou");
 					self.selectMarker(i, true, marker.id);
 				}
 
