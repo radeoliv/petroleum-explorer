@@ -11,7 +11,7 @@
 
 (function () {
 
-	// Auxiliar variable
+	// Auxiliar reference variable
 	var self;
 	// Full dataSet - all wells
 	var dataSet = initializeDataSet();
