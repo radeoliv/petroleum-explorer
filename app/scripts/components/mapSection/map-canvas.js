@@ -183,6 +183,13 @@
 	}
 
 	/*
+	 * Get the data retrieved from the database access.
+	 */
+	MapCanvasController.prototype.getDataSet = function() {
+		return dataSet;
+	}
+
+	/*
 	 * Define the current wells that are going to be shown on the map
 	 */
 	function setCurrentWells(wells) {
