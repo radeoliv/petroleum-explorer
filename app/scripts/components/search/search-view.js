@@ -25,11 +25,13 @@ var wasTheSameResultSet = false;
 
 var noQuery = "";
 var lastUWIQuery = noQuery;
+var lastPrefixQuery = noQuery;
 var lastLsdQuery = noQuery;
 var lastSectionQuery = noQuery;
 var lastTownshipQuery = noQuery;
 var lastRangeQuery = noQuery;
 var lastMeridianQuery = noQuery;
+var lastEventQuery = noQuery;
 var lastCompanyQuery = noQuery;
 
 (function () {
@@ -67,11 +69,13 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 	//var $resultsArea = $('<ul class="results"></ul>').appendTo($searchInputForm); //append the results container if javascript enabled
 
 	var uwiSearchInput = $searchInputForm.find("input[name='uwi']"),
+		prefixSearchInput = $searchInputForm.find("input[name='prefix']"),
 		lsdSearchInput = $searchInputForm.find("input[name='lsd']"),
 		sectionSearchInput = $searchInputForm.find("input[name='section']"),
 		townshipSearchInput = $searchInputForm.find("input[name='township']"),
 		rangeSearchInput = $searchInputForm.find("input[name='range']"),
 		meridianSearchInput = $searchInputForm.find("input[name='meridian']"),
+		eventSearchInput = $searchInputForm.find("input[name='event']"),
 		companySearchInput = $searchInputForm.find("input[name='company']"),
 		statusSearchInput = $searchInputForm.find("select[name='status']");
 
@@ -84,11 +88,13 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			removeInitialWhiteSpace(companySearchInput);
 
 			var uwiQuery = uwiSearchInput[0].value,
+				prefixQuery = prefixSearchInput[0].value,
 				lsdQuery = lsdSearchInput[0].value,
 				sectionQuery = sectionSearchInput[0].value,
 				townshipQuery = townshipSearchInput[0].value,
 				rangeQuery = rangeSearchInput[0].value,
 				meridianQuery = meridianSearchInput[0].value,
+				eventQuery = eventSearchInput[0].value,
 				companyQuery = companySearchInput[0].value;
 
 			var results;
@@ -123,22 +129,24 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				// Search by the UWI values
 				case 1:
 					// Set again the original inputs
+					prefixSearchInput[0].value = prefixQuery;
 					lsdSearchInput[0].value = lsdQuery;
 					sectionSearchInput[0].value = sectionQuery;
 					townshipSearchInput[0].value = townshipQuery;
 					rangeSearchInput[0].value = rangeQuery;
 					meridianSearchInput[0].value = meridianQuery;
+					eventSearchInput[0].value = eventQuery;
 
-					if(lsdQuery === lastLsdQuery && sectionQuery === lastSectionQuery && townshipQuery === lastTownshipQuery
-						&& rangeQuery === lastRangeQuery && meridianQuery === lastMeridianQuery) {
+					if(prefixQuery === lastPrefixQuery && lsdQuery === lastLsdQuery && sectionQuery === lastSectionQuery && townshipQuery === lastTownshipQuery
+						&& rangeQuery === lastRangeQuery && meridianQuery === lastMeridianQuery && eventQuery === lastEventQuery) {
 						// If they are the same, do nothing
 						areTheSame = true;
 					} else {
 						// However, if they are different, proceed the search
-						lastLsdQuery = lsdQuery, lastSectionQuery = sectionQuery, lastTownshipQuery = townshipQuery,
-							lastRangeQuery = rangeQuery, lastMeridianQuery = meridianQuery;
+						lastPrefixQuery = prefixQuery, lastLsdQuery = lsdQuery, lastSectionQuery = sectionQuery, lastTownshipQuery = townshipQuery,
+							lastRangeQuery = rangeQuery, lastMeridianQuery = meridianQuery, lastEventQuery = eventQuery;
 
-						var fieldValues = [lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery];
+						var fieldValues = [prefixQuery, lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery, eventQuery];
 
 						// Checking for correct query length and range
 						if(checkUWIValueInputs(fieldValues)) {
@@ -282,24 +290,28 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 
 	function checkIfFieldsAreEmpty() {
 		var result = $searchInputForm.find("input[name='uwi']").val() === ""
+			&& $searchInputForm.find("input[name='prefix']").val() === ""
 			&& $searchInputForm.find("input[name='lsd']").val() === ""
-			&&$searchInputForm.find("input[name='section']").val() === ""
-			&&$searchInputForm.find("input[name='township']").val() === ""
-			&&$searchInputForm.find("input[name='range']").val() === ""
-			&&$searchInputForm.find("input[name='meridian']").val() === ""
-			&&$searchInputForm.find("input[name='company']").val() === ""
-			&&$searchInputForm.find("select[name='status']").val() === 'none';
+			&& $searchInputForm.find("input[name='section']").val() === ""
+			&& $searchInputForm.find("input[name='township']").val() === ""
+			&& $searchInputForm.find("input[name='range']").val() === ""
+			&& $searchInputForm.find("input[name='meridian']").val() === ""
+			&& $searchInputForm.find("input[name='event']").val() === ""
+			&& $searchInputForm.find("input[name='company']").val() === ""
+			&& $searchInputForm.find("select[name='status']").val() === 'none';
 
 		return result;
 	}
 
 	SearchView.prototype.clearFields = function() {
 		$searchInputForm.find("input[name='uwi']").val(''),
+		$searchInputForm.find("input[name='prefix']").val(''),
 		$searchInputForm.find("input[name='lsd']").val(''),
 		$searchInputForm.find("input[name='section']").val(''),
 		$searchInputForm.find("input[name='township']").val(''),
 		$searchInputForm.find("input[name='range']").val(''),
 		$searchInputForm.find("input[name='meridian']").val(''),
+		$searchInputForm.find("input[name='event']").val(''),
 		$searchInputForm.find("input[name='company']").val(''),
 		$searchInputForm.find("select[name='status']").val('none');
 	};

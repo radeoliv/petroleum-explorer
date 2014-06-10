@@ -102,13 +102,14 @@
 							<h5>UWI</h5>
 
 							<div class = "uwi-search accordion-content">
-								<input type = "search" name = "uwi" id = "uwi" placeholder = "UWI Code" maxlength = "16" results = 10" autosave = "uwi">
+								<input type = "search" name = "uwi" id = "uwi" placeholder = "UWI Code" maxlength = "19" results = 10" autosave = "uwi">
 							</div>
 							<h5>UWI Fields</h5>
 
 							<div class = "grouped-search accordion-content">
 								<table>
 									<tr>
+										<td></td>
 										<td></td>
 										<td><label for = "lsd"><i>LSD</i></label></td>
 										<td></td>
@@ -120,10 +121,14 @@
 										<td></td>
 										<td><label for = "meridian">MER</label></td>
 										<td></td>
+										<td></td>
 									</tr>
 
 									<tr>
-										<td><label for = "lsd">00 /</label></td>
+										<td>
+											<input type = "search" name = "prefix" id = "prefix" maxlength = "2" pattern = "{d}2" autosave = "prefix">
+										</td>
+										<td><span>/</span></td>
 										<td>
 											<input type = "search" name = "lsd" id = "lsd" results = "10" maxlength = "2" pattern = "{d}2" autosave = "lsd">
 										</td>
@@ -139,11 +144,14 @@
 										<td>
 											<input type = "search" name = "range" id = "range" results = "10" maxlength = "2" pattern = "{d}2" autosave = "range">
 										</td>
-										<td><label for = "meridian">W</label></td>
+										<td><span>W</span></td>
 										<td>
 											<input type = "search" id = "meridian" name = "meridian" results = "10" maxlength = "1" pattern = "{d}1" autosave = "meridian">
 										</td>
-										<td><label for = "meridian">/ 0</label></td>
+										<td><span>/</span></td>
+										<td>
+											<input type = "search" name = "event" id = "event" maxlength = "1" pattern = "{d}1" autosave = "event">
+										</td>
 									</tr>
 								</table>
 							</div>

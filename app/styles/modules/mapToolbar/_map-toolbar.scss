@@ -101,16 +101,19 @@ Map Toolbar
 		text-align: center;
 		input {
 			@extend %inline;
-			width: 2.5em;
 			align-content: center;
 			text-align: center;
+			width: 1.7em;
 			&[type="search"] {
 				&::-webkit-search-decoration, &::-webkit-search-cancel-button, &::-webkit-search-results-button, &::-webkit-search-results-decoration {
 					display: none;
 				}
 			}
-			&#township{
-				width: 3.5em;
+			&#township {
+				width: 2.2em;
+			}
+			&#meridian, &#event {
+				width: 1.6em;
 			}
 		}
 	}

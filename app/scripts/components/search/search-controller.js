@@ -147,11 +147,13 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 		 */
 		SearchController.prototype.findResultsUWIValues = function(fieldValues) {
 
-			var lsdQuery = fieldValues[0],
-				sectionQuery = fieldValues[1],
-				townshipQuery = fieldValues[2],
-				rangeQuery = fieldValues[3],
-				meridianQuery = fieldValues[4];
+			var prefixQuery = fieldValues[0],
+				lsdQuery = fieldValues[1],
+				sectionQuery = fieldValues[2],
+				townshipQuery = fieldValues[3],
+				rangeQuery = fieldValues[4],
+				meridianQuery = fieldValues[5],
+				eventQuery = fieldValues[6];
 
 			//TODO: parse JSON file (wells.json)
 			// check if any values are empty
@@ -163,13 +165,11 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 
 			this.resultSet = [];
 
-			var queryArray=[lsdQuery, sectionQuery, townshipQuery, rangeQuery, meridianQuery];
-
-			for(var i = 0; i < queryArray.length; i++) {
-				if(queryArray[i] === null) {
+			for(var i = 0; i < fieldValues.length; i++) {
+				if(fieldValues[i] === null) {
 					return this.NULL_QUERY_ERROR_MESSAGE;
 				}
-				else if(typeof(queryArray[i]) === "undefined") {
+				else if(typeof(fieldValues[i]) === "undefined") {
 					return this.UNDEFINED_ERROR_MESSAGE;
 				}
 				/*else if(this.isEmptyQuery(query)){
@@ -193,10 +193,16 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				if(!this.isEmptyQuery(meridianQuery) && meridianQuery != getMeridian(uwi))
 					continue;
 
+				if(!this.isEmptyQuery(prefixQuery) && prefixQuery.toLowerCase() != getPrefix(uwi).toLowerCase())
+					continue;
+
 				if(!this.isEmptyQuery(lsdQuery) && lsdQuery != getLSD(uwi))
 					continue;
 
 				if(!this.isEmptyQuery(sectionQuery) && sectionQuery != getSection(uwi))
+					continue;
+
+				if(!this.isEmptyQuery(eventQuery) && eventQuery != getEvent(uwi))
 					continue;
 
 				this.resultSet.push(this.dataSet[i]);
@@ -366,30 +372,38 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 
 }).call(this);
 
+function getPrefix(uwi) {
+	return uwi.substr(0,2);
+}
+
 function getLSD(uwi) {
 	return uwi.substr(3,2);
 }
 
 function getSection(uwi) {
-	return uwi.substr(5,2);
+	return uwi.substr(6,2);
 }
 
 function getTownship(uwi) {
-	return uwi.substr(7,3);
+	return uwi.substr(9,3);
 }
 
 function getRange(uwi) {
-	return uwi.substr(10,2);
+	return uwi.substr(13,2);
 }
 
 function getMeridian(uwi) {
-	return uwi.substr(13,1);
+	return uwi.substr(16,1);
+}
+
+function getEvent(uwi) {
+	return uwi.substr(18,1);
 }
 
 function checkUWIInput(uwiFieldValue) {
 	$(".alert-msg").remove();
 	var divToAppend = '.search-form';
-	var result = uwiFieldValue.length === 16;
+	var result = uwiFieldValue.length === 19;
 
 	if(result === false) {
 		$(createAlertMessage(UWIAlertMsg)).appendTo(divToAppend);
@@ -434,11 +448,13 @@ function checkUWIValueInputs(fieldValues) {
 	// If any one of these three fields is filled properly, the search should be executed.
 
 	$( ".error-msg" ).remove();
-	var lsd = fieldValues[0],
-		section = fieldValues[1],
-		township = fieldValues[2],
-		range = fieldValues[3],
-		meridian = fieldValues[4];
+	var prefix = fieldValues[0],
+		lsd = fieldValues[1],
+		section = fieldValues[2],
+		township = fieldValues[3],
+		range = fieldValues[4],
+		meridian = fieldValues[5],
+		event = fieldValues[6];
 
 	var divToAppend = '.search-form';
 
@@ -489,6 +505,17 @@ function checkUWIValueInputs(fieldValues) {
 	}
 
 	/*
+	 * Prefix
+	 */
+	if(prefix.length === 2) {
+		if(appendMandatoryFieldError === false && mandatoryField === false) {
+			appendMandatoryFieldError = true;
+		}
+	} else if(prefix.length > 0) {
+		validity = false;
+	}
+
+	/*
 	 * LSD
 	 */
 	if(lsd.length === 2) {
@@ -517,6 +544,17 @@ function checkUWIValueInputs(fieldValues) {
 			}
 		}
 	} else if(section.length > 0) {
+		validity = false;
+	}
+
+	/*
+	 * Event
+	 */
+	if(event.length === 1) {
+		if(appendMandatoryFieldError === false && mandatoryField === false) {
+			appendMandatoryFieldError = true;
+		}
+	} else if(event.length > 0) {
 		validity = false;
 	}
 

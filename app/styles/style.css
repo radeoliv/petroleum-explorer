@@ -147,13 +147,15 @@ Map Toolbar
     align-content: center;
     text-align: center; }
     .mapToolbar .grouped-search input {
-      width: 2.5em;
       align-content: center;
-      text-align: center; }
+      text-align: center;
+      width: 1.7em; }
       .mapToolbar .grouped-search input[type="search"]::-webkit-search-decoration, .mapToolbar .grouped-search input[type="search"]::-webkit-search-cancel-button, .mapToolbar .grouped-search input[type="search"]::-webkit-search-results-button, .mapToolbar .grouped-search input[type="search"]::-webkit-search-results-decoration {
         display: none; }
       .mapToolbar .grouped-search input#township {
-        width: 3.5em; }
+        width: 2.2em; }
+      .mapToolbar .grouped-search input#meridian, .mapToolbar .grouped-search input#event {
+        width: 1.6em; }
   .mapToolbar input {
     border: 1px solid black;
     width: 80%; }
