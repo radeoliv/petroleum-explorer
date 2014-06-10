@@ -228,7 +228,7 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				var data = [];
 
 				for (var i=0;i<results.length;i++) {
-					data.push([results[i]["Well_Unique_Identifier_Simplified_Format"], results[i]["Well_Operator"], results[i]["Well_Status"]]);
+					data.push([results[i]["w_uwi"], results[i]["w_operator"], results[i]["w_current_status"]]);
 				}
 
 				$('#results-table').handsontable({

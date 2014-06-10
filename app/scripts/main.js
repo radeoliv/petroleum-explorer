@@ -32,7 +32,7 @@ jQuery(document).ready(function ($) {
 			}
 		});
 	}
-	testingConnection();
+	//testingConnection();
 
 	/*
 	 * The data set is retrieved from the database from the map-canvas script.

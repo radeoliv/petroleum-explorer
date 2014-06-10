@@ -16,7 +16,7 @@
 	// Full dataSet - all wells
 	var dataSet = initializeDataSet();
 	// Wells that are being currently displayed - all wells in the beginning
-	var currentWells;
+	var currentWells = [];
 	// Markers (pins) shown on the map
 	var markers = [];
 	// Info window that will be used to in the markers
@@ -169,7 +169,8 @@
 		// Get JSON file with all information about wells
 		var temp;
 		$.ajax({
-			url: './wells.json',
+			//url: './wells.json',
+			url: 'http://localhost:3000/getAllWells',
 			dataType:'json',
 			async: false,
 			success: function(data){
@@ -217,7 +218,7 @@
 			for(var i=0; i<highlightedMarkers.length; i++) {
 				markerExists = false;
 				for(var j=0; j<currentWells.length; j++) {
-					if(highlightedMarkers[i][0] === currentWells[j]["Well_Unique_Identifier"]) {
+					if(highlightedMarkers[i][0] === currentWells[j]["w_uwi"]) {
 						markerExists = true;
 						break;
 					}
@@ -250,15 +251,15 @@
 		// Remove the highlighted wells that aren't in the UWIsToHighlight list anymore!
 		for(var i=0; i<markers.length; i++) {
 			if(markers[i].isHighlighted === true && $.inArray(markers[i].id, UWIsToHighlight) < 0) {
-				this.deselectMarker(i, hasToUpdateTable, currentWells[i]["Well_Unique_Identifier"]);
+				this.deselectMarker(i, hasToUpdateTable, currentWells[i]["w_uwi"]);
 			}
 		}
 
 		// Then, highlight the ones that are not highlighted!
 		for(var i=0; i<currentWells.length; i++) {
 			// If the well is in the UWIsToHighlight list, it must be highlighted
-			if($.inArray(currentWells[i]["Well_Unique_Identifier"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
-				this.selectMarker(i, hasToUpdateTable, currentWells[i]["Well_Unique_Identifier"]);
+			if($.inArray(currentWells[i]["w_uwi"], UWIsToHighlight) >= 0 && markers[i].isHighlighted === false) {
+				this.selectMarker(i, hasToUpdateTable, currentWells[i]["w_uwi"]);
 			}
 		}
 
@@ -309,7 +310,7 @@
 
 			if(selectedByPolygon === true) {
 				// Update the full table with the selection
-				FullTableController.toggleRowsSelection(currentWells[i]["Well_Unique_Identifier"]);
+				FullTableController.toggleRowsSelection(currentWells[i]["w_uwi"]);
 			}
 		}
 	}
@@ -353,14 +354,14 @@
 
 		// Create a marker
 		var marker = new google.maps.Marker({
-			position: new google.maps.LatLng(well["Latitude Decimal Degrees"], well["Longitude Decimal Degrees"]),
+			position: new google.maps.LatLng(well["w_lat_deg"], well["w_lng_deg"]),
 			map: map,
-			title: well["Well_Name"],
+			title: well["w_name"],
 			draggable: false,
 			animation: animation,
 			icon: iconUrl
 		});
-		marker.id = well["Well_Unique_Identifier"];
+		marker.id = well["w_uwi"];
 
 		/* Adding the new marker on the array of markers.
 		 * If the marker is supposed to be highlighted, it is being replaced in the array of markers,
@@ -379,9 +380,9 @@
 		// It will show the UWI, Company and Status of a well
 		google.maps.event.addListener(marker, 'click', (function (marker, i) {
 			return function () {
-				var content = "<b>Unique Well Identifier</b><br>" + well["Well_Unique_Identifier"] + "<br><br>"
-					+ "<b>Well Operator</b><br>" + well["Well_Operator"] + "<br><br>"
-					+ "<b>Well Status</b><br>" + well["Well_Status"] + "<br><hr>";
+				var content = "<b>Unique Well Identifier</b><br>" + well["w_uwi"] + "<br><br>"
+					+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
+					+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><hr>";
 
 				// Defining the link to open the charts visualization
 				content += "<a id=\"chart-link\" href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
@@ -395,7 +396,7 @@
 				toggleInfoWindow(infoWindow, map, marker);
 
 				// Using this specific well (and all the rest) to generate the chart
-				new InfoGraph().generateChart(well["Well_Unique_Identifier"], currentWells, dataSet);
+				new InfoGraph().generateChart(well["w_uwi"], currentWells, dataSet);
 
 				/*
 				 * Open light box to show the generated charts

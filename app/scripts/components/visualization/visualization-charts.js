@@ -170,17 +170,17 @@
 							case 3:
 								return "UWI";
 							case 4:
-								return currentWells[barId]["Well_Unique_Identifier"];
+								return currentWells[barId]["w_uwi"];
 
 							case 6:
 								return "Well Operator";
 							case 7:
-								return currentWells[barId]["Well_Operator"];
+								return currentWells[barId]["w_operator"];
 
 							case 9:
 								return "Well Status";
 							case 10:
-								return currentWells[barId]["Well_Status"];
+								return currentWells[barId]["w_current_status"];
 
 							default:
 								return "";

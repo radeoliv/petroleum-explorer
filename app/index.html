@@ -35,32 +35,21 @@
 						<div id = "visualizationAccordion">
 
 							<h5>Bar Chart</h5>
-							<div class = "company-search accordion-content">
+							<div class = "bar-chart accordion-content">
 								<select id = "bar-chart-attributes" placeholder = "Bar Chart" name = "attributes" results = "10" autosave = "Attributes">
 									<option value = "none"></option>
-									<option value = "Well_Drillers_Total_Depth">Well Drillers Total Depth</option>
-									<option value = "Vshc">Cumulative Shale Content</option>
-									<option value = "Soc">Oil Saturation</option>
-									<option value = "Pt">Effective Life Cycle</option>
-									<option value = "Pp">Peak Value</option>
-									<option value = "Pc">Effective Yield</option>
-									<option value = "PHIc">Cumulative Porosity</option>
-									<option value = "PHIR">Cumulative Pore Volume</option>
-									<option value = "KRc">Cumulative Hydrocarbon Movability</option>
-									<option value = "KRav">Average Hydrocarbon Movability</option>
-									<option value = "H">Thickness</option>
+									<option value = "w_drillers_total_depth">Well Drillers Total Depth</option>
 								</select>
 							</div>
 
 							<h5>Pie Chart</h5>
-							<div class = "status-search accordion-content">
+							<div class = "pie-chart accordion-content">
 								<select id = "pie-chart-attributes" placeholder = "Pie Chart" name = "attributes" results = "10" autosave = "Attributes">
 									<option value="none"></option>
-									<option value = "Well_Operator">Company Name</option>
-									<option value = "Well_Class">Well Class</option>
-									<option value = "Well_Primary_Producing_Formation">Well Primary Producing Formation</option>
-									<option value = "Well_Province">Province</option>
-									<option value = "Well_Status">Well Status</option>
+									<option value = "w_class">Well Class</option>
+									<option value = "w_current_status">Well Current Status</option>
+									<option value = "w_operator">Well Operator</option>
+									<option value = "w_province">Well Province</option>
 								</select>
 							</div>
 
@@ -154,7 +143,7 @@
 										<td>
 											<input type = "search" id = "meridian" name = "meridian" results = "10" maxlength = "1" pattern = "{d}1" autosave = "meridian">
 										</td>
-										<td><span>/ 0</span></td>
+										<td><label for = "meridian">/ 0</label></td>
 									</tr>
 								</table>
 							</div>
@@ -171,9 +160,13 @@
 
 								<select id = "status" placeholder = "Status" name = "status" results = "10" autosave = "status">
 									<option value = "none"></option>
-									<option value = "Pumping Crude Oil">Pumping Crude Oil</option>
-									<option value = "Suspended Crude Oil">Suspended Crude Oil</option>
-									<option value = "Abandoned Zone Crude Oil">Abandoned Zone Crude Oil</option>
+									<option value = "Abandoned">Abandoned</option>
+									<option value = "Abandoned & Whipstocked">Abandoned & Whipstocked</option>
+									<option value = "Abandoned Zone">Abandoned Zone</option>
+									<option value = "Drilled and Cased">Drilled and Cased</option>
+									<option value = "Observation">Observation</option>
+									<option value = "Steam Assis Gravity Drain">Steam Assis Gravity Drain</option>
+									<option value = "Suspended Steam Assis Gravity Drain">Suspended Steam Assis Gravity Drain</option>
 								</select>
 							</div>
 						</div>
@@ -254,32 +247,19 @@
 					<form action = "/filter">
 						<fieldset>
 							<h4>Add Filter Parameter</h4>
-							<button type = "button" title = "Add constraint" id = "add-constraint" class = "filterButton" disabled="true">
+							<button type = "button" id = "add-constraint" class = "filterButton" disabled="true">
 								<i class = "icon-plus"></i>
 							</button>
 							<select name = "tableColumnFilter" id = "tableColumnFilter">
 
 								<option value = "0">Select a column</option>
-								<option value = "Well_Name">Name</option>
-								<option value = "Well_Unique_Identifier">Full UWI</option>
-								<option value = "Well_Status">Status</option>
-								<option value = "Well_Province">Province</option>
-								<option value = "Well_Primary_Producing_Formation">Primary Formation</option>
-								<option value = "Well_Pool_Name">Well Pool Name</option>
-								<option value = "Well_Operator">Company</option>
-								<option value = "Well_Drillers_Total_Depth">Well Drillers Total Depth</option>
-								<option value = "Well_Class">Well Class</option>
-								<option value = "Vshc">Cumulative Shale Content</option>
-								<option value = "Well_Unique_Identifier_Simplified_Format">UWI</option>
-								<option value = "Soc">Oil Saturation</option>
-								<option value = "Pt">Effective Life Cycle</option>
-								<option value = "Pp">Peak Value</option>
-								<option value = "Pc">Effective Yield</option>
-								<option value = "PHIc">Cumulative Porosity</option>
-								<option value = "PHIR">Cumulative Pore Volume</option>
-								<option value = "KRc">Cumulative Hydrocarbon Movability</option>
-								<option value = "KRav">Average Hydrocarbon Movability</option>
-								<option value = "H">Thickness</option>
+								<option value = "w_uwi">UWI</option>
+								<option value = "w_name">Name</option>
+								<option value = "w_drillers_total_depth">Drillers Total Depth</option>
+								<option value = "w_operator">Operator</option>
+								<option value = "w_current_status">Current Status</option>
+								<option value = "w_province">Province</option>
+								<option value = "w_class">Class</option>
 							</select>
 							<hr><hr>
 						</fieldset>

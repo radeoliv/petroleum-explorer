@@ -140,25 +140,8 @@
 						//simple text, no special options
 					},
 					{
-						data: "UWISimplifiedFormat"
-						//simple text, no special options
-					},
-					{
-						data: "Longitude"
-						//number, but precision is important in coordinates
-					},
-					{
-						data: "Latitude"
-						//number, but precision is important in coordinates
-					},
-					{
 						data: "WellName"
 						//simple text, no special options
-					},
-					{
-						data: "WellDrillersTotalDepth",
-						type: "numeric",
-						format: "0.000"
 					},
 					{
 						data: "WellOperator"
@@ -177,62 +160,17 @@
 						//simple text, no special options
 					},
 					{
-						data: "WellPrimaryProducingFormation"
-						//simple text, no special options
-					},
-					{
-						data: "WellPoolName"
-						//simple text, no special options
-					},
-					{
-						data: "CumulativePorosity",
+						data: "WellDrillersTotalDepth",
 						type: "numeric",
 						format: "0.000"
 					},
 					{
-						data: "CumulativePoreVolume",
-						type: "numeric",
-						format: "0.000"
+						data: "Longitude"
+						//number, but precision is important in coordinates
 					},
 					{
-						data: "CumulativeShaleContent",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "CumulativeOilSaturation",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "CumulativeHydrocarbonMovability",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "AverageHydrocarbonMovability",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "Thickness",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "EffectiveYield",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "PeakValue",
-						type: "numeric",
-						format: "0.000"
-					},
-					{
-						data: "EffectiveLifeCycle",
-						type: "numeric",
-						format: "0.000"
+						data: "Latitude"
+						//number, but precision is important in coordinates
 					}
 				];
 
@@ -247,27 +185,14 @@
 				[
 					"",
 					"UWI",
-					"UWI Simplified Format",
-					"Longitude",
-					"Latitude",
 					"Well Name",
-					"Well Drillers Total Depth",
 					"Well Operator",
 					"Well Status",
 					"Well Province",
 					"Well Class",
-					"Well Primary Producing Formation",
-					"Well Pool Name",
-					"Cumulative Porosity",
-					"Cumulative Pore Volume",
-					"Cumulative Shale Content",
-					"Cumulative Oil Saturation",
-					"Cumulative Hydrocarbon Movability",
-					"Average Hydrocarbon Movability",
-					"Thickness",
-					"Effective Yield",
-					"Peak Value",
-					"Effective Life Cycle"
+					"Well Drillers Total Depth",
+					"Longitude",
+					"Latitude"
 				];
 
 			return headers;
@@ -283,28 +208,15 @@
 				data.push(
 					{
 						Selected: false,
-						UWI: searchResults[i]["Well_Unique_Identifier"],
-						UWISimplifiedFormat: searchResults[i]["Well_Unique_Identifier_Simplified_Format"],
-						Longitude: searchResults[i]["Longitude Decimal Degrees"],
-						Latitude: searchResults[i]["Latitude Decimal Degrees"],
-						WellName: searchResults[i]["Well_Name"],
-						WellDrillersTotalDepth: searchResults[i]["Well_Drillers_Total_Depth"],
-						WellOperator: searchResults[i]["Well_Operator"],
-						WellStatus: searchResults[i]["Well_Status"],
-						WellProvince: searchResults[i]["Well_Province"],
-						WellClass: searchResults[i]["Well_Class"],
-						WellPrimaryProducingFormation: searchResults[i]["Well_Primary_Producing_Formation"],
-						WellPoolName: searchResults[i]["Well_Pool_Name"],
-						CumulativePorosity: searchResults[i]["PHIc"],
-						CumulativePoreVolume: searchResults[i]["PHIR"],
-						CumulativeShaleContent:searchResults[i]["Vshc"],
-						CumulativeOilSaturation: searchResults[i]["Soc"],
-						CumulativeHydrocarbonMovability:searchResults[i]["KRc"],
-						AverageHydrocarbonMovability: searchResults[i]["KRav"],
-						Thickness: searchResults[i]["H"],
-						EffectiveYield: searchResults[i]["Pc"],
-						PeakValue: searchResults[i]["Pp"],
-						EffectiveLifeCycle: searchResults[i]["Pt"]
+						UWI: searchResults[i]["w_uwi"],
+						WellName: searchResults[i]["w_name"],
+						WellOperator: searchResults[i]["w_operator"],
+						WellStatus: searchResults[i]["w_current_status"],
+						WellProvince: searchResults[i]["w_province"],
+						WellClass: searchResults[i]["w_class"],
+						WellDrillersTotalDepth: searchResults[i]["w_drillers_total_depth"],
+						Longitude: searchResults[i]["w_lng_deg"],
+						Latitude: searchResults[i]["w_lat_deg"]
 					}
 				);
 			}
@@ -652,15 +564,12 @@
 						case "0":
 							break;
 						// String Options
-						case "Well_Operator":
-						case "Well_Pool_Name":
-						case "Well_Primary_Producing_Formation":
-						case "Well_Province":
-						case "Well_Status":
-						case "Well_Unique_Identifier":
-						case "Well_Unique_Identifier_Simplified_Format":
-						case "Well_Class":
-						case "Well_Name":
+						case "w_uwi":
+						case "w_name":
+						case "w_operator":
+						case "w_current_status":
+						case "w_province":
+						case "w_class":
 							i++;
 							addParameterOption.call($columnSelectFilter, i, "String");
 							break;

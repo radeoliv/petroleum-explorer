@@ -85,7 +85,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				var temp = [];
 
 				for(var i=0; i<auxLength; i++) {
-					if($.inArray(this.resultSet[i]["Well_Unique_Identifier"], wellIds) >= 0) {
+					if($.inArray(this.resultSet[i]["w_uwi"], wellIds) >= 0) {
 						temp.push(this.resultSet[i]);
 					}
 
@@ -110,7 +110,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 
 				for(var i=0; i<currentWells.length; i++) {
 					// If the id matches, remove the value from the result set
-					if($.inArray(currentWells[i]["Well_Unique_Identifier"], wellIds) >= 0) {
+					if($.inArray(currentWells[i]["w_uwi"], wellIds) >= 0) {
 						currentWells.splice(i--, 1);
 						countRemoved++;
 					}
@@ -182,7 +182,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				/*
 				 * Search by UWI values
 				 */
-				var uwi = this.dataSet[i]['Well_Unique_Identifier_Simplified_Format'];
+				var uwi = this.dataSet[i]['w_uwi'];
 
 				if(!this.isEmptyQuery(townshipQuery) && townshipQuery != getTownship(uwi))
 					continue;
@@ -238,7 +238,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				 */
 				if(!this.isEmptyQuery(uwiQuery)) {
 					// TODO: Change the JSON attribute when the new json file is created
-					var cMatch = this.dataSet[i]['Well_Unique_Identifier_Simplified_Format'].toUpperCase().search(uwiQuery.toUpperCase());
+					var cMatch = this.dataSet[i]['w_uwi'].toUpperCase().search(uwiQuery.toUpperCase());
 
 					if(cMatch >= 0)
 						this.resultSet.push(this.dataSet[i]);
@@ -280,7 +280,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				 * Search by company name
 				 */
 				if(!this.isEmptyQuery(companyQuery)) {
-					var cMatch = this.dataSet[i]['Well_Operator'].toUpperCase().search(companyQuery.toUpperCase());
+					var cMatch = this.dataSet[i]['w_operator'].toUpperCase().search(companyQuery.toUpperCase());
 					if(cMatch >= 0)
 						this.resultSet.push(this.dataSet[i]);
 				}
@@ -321,7 +321,7 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				 */
 				if(!this.isEmptyQuery(statusQuery)) {
 					// TODO: Change the JSON attribute when the new json file is created
-					var cMatch = this.dataSet[i]['Well_Status'].toUpperCase().search(statusQuery.toUpperCase());
+					var cMatch = this.dataSet[i]['w_current_status'].toUpperCase().search(statusQuery.toUpperCase());
 
 					if(cMatch >= 0)
 						this.resultSet.push(this.dataSet[i]);
