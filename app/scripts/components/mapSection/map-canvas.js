@@ -384,9 +384,6 @@
 					+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
 					+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><hr>";
 
-				// Defining the link to open the charts visualization
-				content += "<a id=\"chart-link\" href=\"#charts-popup\" class=\"open-charts\">Show chart</a>";
-
 				// Set the content of the infowindow
 				infoWindow.setContent("<p>" + content + "</p>");
 
@@ -394,32 +391,6 @@
 				google.maps.InfoWindow.prototype.opened = false;
 				google.maps.Marker.prototype.id = i;
 				toggleInfoWindow(infoWindow, map, marker);
-
-				// Using this specific well (and all the rest) to generate the chart
-				new InfoGraph().generateChart(well["w_uwi"], currentWells, dataSet);
-
-				/*
-				 * Open light box to show the generated charts
-				 */
-				$('.open-charts').magnificPopup({
-					type:'inline',
-					midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
-					items: [
-						{
-							src: '#highchart-basic',
-							type: 'inline'
-						}
-					],
-					gallery: {
-						enabled: true,
-						navigateByImgClick: true,
-						arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
-						tPrev: 'Previous', // title for left button
-						tNext: 'Next', // title for right button
-						tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
-					},
-					fixedContentPos: true
-				});
 			}
 		})(marker, i));
 
@@ -511,7 +482,7 @@
 	/*
 	 * Add marker when double clicking
 	 */
-	google.maps.event.addListener(map, 'dblclick', addPoint);
+	google.maps.event.addListener(map, 'dblclick', function(event) { addPoint(event); });
 
 	/*
 	 * Forces the markers to follow the edges of the polygon
@@ -550,30 +521,30 @@
 
 			marker.setTitle("#" + path.length);
 			polygonMarkers.push(marker);
+
+			/*
+			 * Removes the marker when right clicked
+			 */
+			google.maps.event.addListener(marker, 'rightclick', function() {
+				marker.setMap(null);
+				for (var i = 0, I = markers.length; i < I && polygonMarkers[i] != marker; ++i);
+				polygonMarkers.splice(i, 1);
+				path.removeAt(i);
+				$("body").trigger("polygonChangedPosition");
+			});
+
+			/*
+			 * Forces the polygon to be adjusted when the markers move
+			 */
+			google.maps.event.addListener(marker, 'drag', function() {
+				for (var i = 0, I = polygonMarkers.length; i < I && polygonMarkers[i] != marker; ++i);
+				path.setAt(i, marker.getPosition());
+				// Update text in the toolbar
+				$("body").trigger("polygonChangedPosition");
+			});
+
+			$("body").trigger("polygonChangedPosition");
 		}
-
-		/*
-		 * Removes the marker when right clicked
-		 */
-		google.maps.event.addListener(marker, 'rightclick', function() {
-			marker.setMap(null);
-			for (var i = 0, I = markers.length; i < I && polygonMarkers[i] != marker; ++i);
-			polygonMarkers.splice(i, 1);
-			path.removeAt(i);
-			$("body").trigger("polygonChangedPosition");
-		});
-
-		/*
-		 * Forces the polygon to be adjusted when the markers move
-		 */
-		google.maps.event.addListener(marker, 'drag', function() {
-			for (var i = 0, I = polygonMarkers.length; i < I && polygonMarkers[i] != marker; ++i);
-			path.setAt(i, marker.getPosition());
-			// Update text in the toolbar
-			$("body").trigger("polygonChangedPosition");
-		});
-
-		$("body").trigger("polygonChangedPosition");
 	}
 
 	/*
