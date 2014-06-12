@@ -32,11 +32,13 @@
 	var $clearVisualizationButton = $('#clearVisualization');
 	var $pieChartSelection = $('#pie-chart-attributes');
 	var $barChartSelection = $('#bar-chart-attributes');
+	var $timeSeriesSelection = $('#time-series-attributes');
 	var $visualizationTitle = $("#visualization-title");
 	var $openVisualizationButton = $("#openVisualization");
 
 	var barChartTitle = "<i>Bar Chart</i> - ";
 	var pieChartTitle = "<i>Pie Chart</i> - ";
+	var timeSeriesTitle = "<i>Time Series</i> - ";
 	var self;
 
 	var VisualizationView;
@@ -75,6 +77,15 @@
 					self.clearVisualization();
 				}
 				break;
+			case 2:
+				if($timeSeriesSelection[0].value != "none") {
+					generateTitle();
+					// Generate the chart
+					self.visualizationCharts.generateTimeSeriesChart("");
+				} else {
+					self.clearVisualization();
+				}
+				break;
 			default:
 				self.clearVisualization();
 				break;
@@ -89,6 +100,9 @@
 			case 1:
 				$visualizationTitle[0].innerHTML = pieChartTitle + "<b>" + $pieChartSelection[0][$pieChartSelection[0].selectedIndex].label + "</b>";
 				break;
+			case 2:
+				$visualizationTitle[0].innerHTML = timeSeriesTitle + "<b>" + $timeSeriesSelection[0][$timeSeriesSelection[0].selectedIndex].label + "</b>";
+				break;
 			default:
 				console.log("No option selected!");
 				break;
@@ -102,6 +116,7 @@
 	VisualizationView.prototype.clearVisualization = function() {
 		$pieChartSelection[0].value = "none";
 		$barChartSelection[0].value = "none";
+		$timeSeriesSelection[0].value = "none"
 		$visualizationTitle[0].innerHTML = "";
 		self.visualizationCharts.removeCurrentChart();
 	};

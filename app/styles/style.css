@@ -427,6 +427,13 @@ Visualization
       #info-visualization #visualization-container #canvas-svg .arc path {
         stroke: black;
         stroke-width: 0.02em; }
+      #info-visualization #visualization-container #canvas-svg .area {
+        fill: steelblue;
+        clip-path: url(#clip); }
+      #info-visualization #visualization-container #canvas-svg .brush .extent {
+        stroke: #fff;
+        fill-opacity: .125;
+        shape-rendering: crispEdges; }
 
 .mfp-content {
   height: 100%;

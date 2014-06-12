@@ -88,6 +88,23 @@ Visualization
 				stroke-width: 0.02em;
 			}
 			// ====== Pie Chart (end) ======
+
+			// ====== Time Series (begin) ======
+			svg {
+				//font: 10px sans-serif;
+			}
+
+			.area {
+				fill: steelblue;
+				clip-path: url(#clip);
+			}
+
+			.brush .extent {
+				stroke: #fff;
+				fill-opacity: .125;
+				shape-rendering: crispEdges;
+			}
+			// ====== Time Series (end) ======
 		}
 	}
 }
