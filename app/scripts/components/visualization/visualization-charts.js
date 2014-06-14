@@ -475,20 +475,22 @@
 	};
 
 	VisualizationCharts.prototype.generateTimeSeriesChart = function(attribute) {
-		var dates = ["Jan 2000","Feb 2000","Mar 2000","Apr 2000","May 2000","Jun 2000","Jul 2000","Aug 2000","Sep 2000","Oct 2000","Nov 2000","Dec 2000","Jan 2001","Feb 2001","Mar 2001","Apr 2001","May 2001","Jun 2001","Jul 2001","Aug 2001","Sep 2001","Oct 2001","Nov 2001","Dec 2001"];
+		var parseDate = d3.time.format("%b %Y").parse;
+
+		/*var dates = ["Jan 2000","Feb 2000","Mar 2000","Apr 2000","May 2000","Jun 2000","Jul 2000","Aug 2000",//"Sep 2000","Oct 2000","Nov 2000","Dec 2000",
+		//"Jan 2001","Feb 2001","Mar 2001","Apr 2001","May 2001","Jun 2001","Jul 2001",
+			"Aug 2001","Sep 2001","Oct 2001","Nov 2001","Dec 2001"];*/
+		var dates = ["Dec 2005", "Jan 2006", "May 2006"];
 		var values = [1,2,3,4,5,6,7,8,9,10,11,12,11,10,9,8,7,6,5,4,3,2,1,0];
 
 		var dataTest = [];
 		for(var i=0; i<dates.length; i++) {
-			dataTest.push([dates[i], values[i]]);
+			dataTest.push({"date": parseDate(dates[i]), "price":values[i]});
 		}
 
-
-		console.log("dddd");
 		/* TESTING STUFF */
 		this.removeCurrentChart();
 		$('<div id=\"canvas-svg\"</div>').appendTo($visualizationContainer);
-		console.log($("#canvas-svg"));
 		/* TESTING STUFF */
 		/* Testing stuff ^^^^^^^^ */
 
@@ -497,8 +499,6 @@
 			width = 960 - margin.left - margin.right,
 			height = 500 - margin.top - margin.bottom,
 			height2 = 500 - margin2.top - margin2.bottom;
-
-		var parseDate = d3.time.format("%b %Y").parse;
 
 		var x = d3.time.scale().range([0, width]),
 			x2 = d3.time.scale().range([0, width]),
@@ -514,13 +514,17 @@
 			.on("brush", brushed);
 
 		var area = d3.svg.area()
-			.interpolate("monotone")
+			//.interpolate("monotone")
+			.interpolate("cardinal").tension(0.94)
+			//.interpolate("linear")
 			.x(function(d) { return x(d.date); })
 			.y0(height)
 			.y1(function(d) { return y(d.price); });
 
 		var area2 = d3.svg.area()
-			.interpolate("monotone")
+			//.interpolate("monotone")
+			.interpolate("cardinal").tension(0.94)
+			//.interpolate("linear")
 			.x(function(d) { return x2(d.date); })
 			.y0(height2)
 			.y1(function(d) { return y2(d.price); });
@@ -543,14 +547,14 @@
 			.attr("class", "context")
 			.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-		d3.csv("./sp500.csv", type, function(error, data) {
-			x.domain(d3.extent(data.map(function(d) { return d.date; })));
-			y.domain([0, d3.max(data.map(function(d) { return d.price; }))]);
+		//d3.csv("./sp500.csv", type, function(error, data) {
+			x.domain(d3.extent(dataTest.map(function(d) { return d.date; })));
+			y.domain([0, d3.max(dataTest.map(function(d) { return d.price; }))]);
 			x2.domain(x.domain());
 			y2.domain(y.domain());
 
 			focus.append("path")
-				.datum(data)
+				.datum(dataTest)
 				.attr("class", "area")
 				.attr("d", area);
 
@@ -564,7 +568,7 @@
 				.call(yAxis);
 
 			context.append("path")
-				.datum(data)
+				.datum(dataTest)
 				.attr("class", "area")
 				.attr("d", area2);
 
@@ -579,7 +583,7 @@
 				.selectAll("rect")
 				.attr("y", -6)
 				.attr("height", height2 + 7);
-		});
+		//});
 
 		function brushed() {
 			x.domain(brush.empty() ? x2.domain() : brush.extent());

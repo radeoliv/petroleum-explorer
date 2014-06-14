@@ -165,11 +165,19 @@
 						format: "0.000"
 					},
 					{
-						data: "Longitude"
+						data: "BottomLongitude"
 						//number, but precision is important in coordinates
 					},
 					{
-						data: "Latitude"
+						data: "BottomLatitude"
+						//number, but precision is important in coordinates
+					},
+					{
+						data: "TopLongitude"
+						//number, but precision is important in coordinates
+					},
+					{
+						data: "TopLatitude"
 						//number, but precision is important in coordinates
 					}
 				];
@@ -191,8 +199,10 @@
 					"Well Province",
 					"Well Class",
 					"Well Drillers Total Depth",
-					"Longitude",
-					"Latitude"
+					"Bottom Longitude",
+					"Bottom Latitude",
+					"Top Longitude",
+					"Top Latitude"
 				];
 
 			return headers;
@@ -215,8 +225,10 @@
 						WellProvince: searchResults[i]["w_province"],
 						WellClass: searchResults[i]["w_class"],
 						WellDrillersTotalDepth: searchResults[i]["w_drillers_total_depth"],
-						Longitude: searchResults[i]["w_lng_deg"],
-						Latitude: searchResults[i]["w_lat_deg"]
+						BottomLongitude: searchResults[i]["w_bottom_lng"],
+						BottomLatitude: searchResults[i]["w_bottom_lat"],
+						TopLongitude: searchResults[i]["w_top_lng"],
+						TopLatitude: searchResults[i]["w_top_lat"]
 					}
 				);
 			}

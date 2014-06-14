@@ -354,12 +354,23 @@
 
 		// Create a marker
 		var marker = new google.maps.Marker({
-			position: new google.maps.LatLng(well["w_lat_deg"], well["w_lng_deg"]),
+			position: new google.maps.LatLng(well["w_bottom_lat"], well["w_bottom_lng"]),
 			map: map,
 			title: well["w_name"],
 			draggable: false,
 			animation: animation,
 			icon: iconUrl
+		});
+		var marker2 = new google.maps.Marker({
+			position: new google.maps.LatLng(well["w_top_lat"], well["w_top_lng"]),
+			map: map,
+			title: well["w_name"],
+			draggable: false,
+			animation: animation,
+			icon: {
+				path: google.maps.SymbolPath.CIRCLE,
+				scale: 2
+			}
 		});
 		marker.id = well["w_uwi"];
 
