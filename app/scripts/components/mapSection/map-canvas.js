@@ -19,6 +19,9 @@
 	var currentWells = [];
 	// Markers (pins) shown on the map
 	var markers = [];
+	var markersTop = [];
+	// Path between top and bottom markers
+	var deviations = [];
 	// Info window that will be used to in the markers
 	var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
 	// Auxiliar variable to store the highlighted markers
@@ -62,17 +65,22 @@
 		 */
 		var wellsControlDiv = document.createElement('div');
 		wellsControlDiv.id = "map-info-control";
-		var homeControl = new AddControl(wellsControlDiv, map);
+		AddMapInfoControl(wellsControlDiv);
 		map.controls[google.maps.ControlPosition.TOP_LEFT].push(wellsControlDiv);
+
+		/*
+		 * Creating the custom control on the top of the map to allow changing what appears on
+		 * the map, bottom and top locations of wells and deviations between them.
+		 * The name refers to layers, but it's only to give the right idea. The system does not
+		 * uses different layers to show data.
+		 */
+		var layersControlDiv = document.createElement('div');
+		layersControlDiv.id = "map-layers-control";
+		AddMapLayerControl(layersControlDiv);
+		map.controls[google.maps.ControlPosition.TOP_LEFT].push(layersControlDiv);
 	};
 
-	function AddControl(controlDiv, map) {
-
-		// Set CSS styles for the DIV containing the control
-		// Setting padding to 5 px will offset the control
-		// from the edge of the map
-		controlDiv.style.padding = '5px';
-
+	function AddMapInfoControl(controlDiv) {
 		// Set CSS for the control border
 		var controlUI = document.createElement('div');
 		controlUI.id = "map-info-controlUI";
@@ -81,7 +89,6 @@
 		// Set CSS for the control interior
 		var controlText = document.createElement('div');
 		controlText.id = "map-info-control-text";
-		controlText.innerHTML = 'Home';
 		controlUI.appendChild(controlText);
 
 		$("body").on("mapInfoChanged", function() {
@@ -111,6 +118,74 @@
 		});
 	}
 
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+	function AddMapLayerControl(controlDiv, map) {
+		var controlUI = document.createElement('div');
+		controlUI.id = "map-layers-controlUI";
+		controlDiv.appendChild(controlUI);
+
+		var controlContent = document.createElement('div');
+		controlContent.id = "map-layers-control-content";
+		controlUI.appendChild(controlContent);
+
+		var a1 = "<input type=\"checkbox\" name=\"layer-selection\" value=\"surface\" checked=\"true\">";
+		var t1 = "Surface";
+;		var a2 = "<input type=\"checkbox\" name=\"layer-selection\" value=\"bottom\" checked=\"true\">";
+		var t2 = "Underground";
+		var a3 = "<input type=\"checkbox\" name=\"layer-selection\" value=\"deviation\" checked=\"true\">";
+		var t3 = "Deviation";
+		var i2 = "<img src=\"./resources/red-pin-smaller.png\">";
+		var i1 = "<img src=\"./resources/top-red-marker.png\">";
+		var i3 = "<img src=\"./resources/line.png\">";
+
+		var table = "<table id=\"layerTable\">";
+		var endTable = "</table>";
+		var tr = "<tr>";
+		var endTr = "</tr>";
+		var td = "<td>";
+		var endTd = "</td>";
+		var sTd = "<td id=\"bla\">";
+
+		controlContent.innerHTML =
+			table +
+				tr+
+					td+
+						a1+
+					endTd +
+					td +
+						i1+
+					endTd+
+					sTd +
+						t1+
+					endTd+
+				endTr +
+				tr +
+					td+
+						a2+
+					endTd +
+					td+
+						i2+
+					endTd+
+					sTd+
+						t2+
+					endTd+
+				endTr +
+				tr +
+					td+
+						a3 +
+					endTd +
+					td+
+						i3+
+					endTd+
+					sTd+
+						t3+
+					endTd+
+				endTr+
+			endTable;
+	}
+
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	/*
 	 * Store the full table to link the markers in the future
@@ -158,8 +233,12 @@
 	function clearAllMarkers() {
 		for (var i = 0; i < markers.length; i++) {
 			markers[i].setMap(null);
+			markersTop[i].setMap(null);
+			deviations[i].setMap(null);
 		}
 		markers = [];
+		markersTop = [];
+		deviations = [];
 	}
 
 	/*
@@ -304,8 +383,17 @@
 	 */
 	function toggleMarkerSelection(isSelected, i, selectedByPolygon) {
 		if(markers[i].isHighlighted != isSelected) {
+			// Remove the older markers and line
+			// Bottom
 			markers[i].setMap(null);
 			markers[i] = null;
+			// Top
+			markersTop[i].setMap(null);
+			markersTop[i] = null;
+			// Line (deviation)
+			deviations[i].setMap(null);
+			deviations[i] = null;
+
 			createMarker(currentWells[i], i, isSelected);
 
 			if(selectedByPolygon === true) {
@@ -341,38 +429,66 @@
 	 */
 	function createMarker(well, i, isHighlighted) {
 
-		var iconUrl = 'resources/red-pin.png';
-		var animation = google.maps.Animation.DROP;
+		var iconUrl = 'resources/red-pin-small.png';
+		var topIconUrl = 'resources/top-red-marker.png';
+		var lineColor = '#000000';
+		var lineWeight = 1.0;
+		var animation = null;
+		var zIndex = google.maps.Marker.MAX_ZINDEX - 1;
 		if(isHighlighted != null && isHighlighted === true) {
-			iconUrl = 'resources/blue-pin.png';
-			animation = google.maps.Animation.BOUNCE;
+			iconUrl = 'resources/blue-pin-small.png';
+			topIconUrl = 'resources/top-blue-marker.png';
+			lineColor = '#1C86EE';//'#0000FF';
+			lineWeight = 3;
+			zIndex++;
+			//animation = google.maps.Animation.BOUNCE;
 		}
 
 		// Defining new properties to the marker to know if it's highlighted or not
 		google.maps.Marker.prototype.isHighlighted = false;
 		google.maps.Marker.prototype.id = "";
 
-		// Create a marker
+		// Creating image variable to center the circle marker of the well top position
+		var topMarkerImage = new google.maps.MarkerImage(topIconUrl,
+			new google.maps.Size(12, 12),
+			new google.maps.Point(0, 0),
+			new google.maps.Point(6, 7));
+
+		// Create markers for bottom and top of well
+		var markerTop = new google.maps.Marker({
+			position: new google.maps.LatLng(well["w_top_lat"], well["w_top_lng"]),
+			map: map,
+			title: well["w_name"],
+			draggable: false,
+			animation: null,
+			zIndex: zIndex,
+			icon: topMarkerImage
+			/*{
+				path: google.maps.SymbolPath.CIRCLE,
+				scale: 2
+			}*/
+		});
 		var marker = new google.maps.Marker({
 			position: new google.maps.LatLng(well["w_bottom_lat"], well["w_bottom_lng"]),
 			map: map,
 			title: well["w_name"],
 			draggable: false,
 			animation: animation,
+			zIndex: zIndex,
 			icon: iconUrl
 		});
-		var marker2 = new google.maps.Marker({
-			position: new google.maps.LatLng(well["w_top_lat"], well["w_top_lng"]),
-			map: map,
-			title: well["w_name"],
-			draggable: false,
-			animation: animation,
-			icon: {
-				path: google.maps.SymbolPath.CIRCLE,
-				scale: 2
-			}
-		});
 		marker.id = well["w_uwi"];
+		markerTop.id = well["w_uwi"];
+
+		// Create line representing the connection between top and bottom
+		var deviation = new google.maps.Polyline({
+			map: map,
+			path: [ marker["position"], markerTop["position"] ],
+			strokeColor: lineColor,
+			strokeOpacity: 1,
+			strokeWeight: lineWeight,
+			zIndex: zIndex
+		});
 
 		/* Adding the new marker on the array of markers.
 		 * If the marker is supposed to be highlighted, it is being replaced in the array of markers,
@@ -380,57 +496,85 @@
 		 */
 		if(isHighlighted === null) {
 			markers.push(marker);
+			markersTop.push(markerTop);
+			deviations.push(deviation);
 		} else {
 			if(isHighlighted === true) {
 				marker.isHighlighted = true;
+				markerTop.isHighlighted = true;
 			}
 			markers[i] = marker;
+			markersTop[i] = markerTop;
+			deviations[i] = deviation;
 		}
 
 		// Define an event to execute every time a marker/pin is clicked
 		// It will show the UWI, Company and Status of a well
 		google.maps.event.addListener(marker, 'click', (function (marker, i) {
-			return function () {
-				var content = "<b>Unique Well Identifier</b><br>" + well["w_uwi"] + "<br><br>"
-					+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
-					+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><hr>";
-
-				// Set the content of the infowindow
-				infoWindow.setContent("<p>" + content + "</p>");
-
-				// Defining new property to the info window to know when it's opened or closed
-				google.maps.InfoWindow.prototype.opened = false;
-				google.maps.Marker.prototype.id = i;
-				toggleInfoWindow(infoWindow, map, marker);
-			}
+			return setInfoWindowContent(well, infoWindow, map, marker, i, false);
 		})(marker, i));
+		google.maps.event.addListener(markerTop, 'click', (function (markerTop, i) {
+			return setInfoWindowContent(well, infoWindow, map, markerTop, i, true);
+		})(markerTop, i));
+		google.maps.event.addListener(deviation, 'click', (function (marker, i) {
+			return setInfoWindowContent(well, infoWindow, map, marker, i, false);
+		})(markers[i], i));
 
+		/*
+		 * Right click event listeners (markers and lines)
+		 */
 		google.maps.event.addListener(marker, 'rightclick', (function (marker, i) {
-			return function () {
-				// Toggles the selection
-				if(marker.isHighlighted) {
-					self.deselectMarker(i, true, marker.id);
-				} else {
-					self.selectMarker(i, true, marker.id);
-				}
-
-				// Making sure to control the info window behaviour
-				if(infoWindow.opened === true) {
-					infoWindow.opened = false;
-					infoWindow.close();
-					toggleInfoWindow(infoWindow, map, marker);
-				}
-			}
+			return highlightAction(infoWindow, map, marker, i, false);
 		})(marker, i));
+		google.maps.event.addListener(markerTop, 'rightclick', (function (marker, i) {
+			return highlightAction(infoWindow, map, marker, i, true);
+		})(markerTop, i));
+		google.maps.event.addListener(deviation, 'rightclick', (function (marker, i) {
+			return highlightAction(infoWindow, map, marker, i, false);
+		})(markers[i], i));
 
 		// Used to change the opened property when the user closes the info window by pressing the top right x.
 		google.maps.event.addListener(infoWindow,'closeclick',function(){
 			infoWindow.opened = false;
 		});
 
-		setTimeout(function() { $("body").trigger("mapInfoChanged") }, 200);
+		setTimeout(function() { $("body").trigger("mapInfoChanged") }, 100);
 		if(polygonMarkers.length > 0) {
-			setTimeout(function() { $("body").trigger("polygonChangedPosition") }, 200);
+			setTimeout(function() { $("body").trigger("polygonChangedPosition") }, 100);
+		}
+	}
+
+	function setInfoWindowContent(well, infoWindow, map, marker, i, isTop) {
+		return function () {
+			var content = "<b>Unique Well Identifier</b><br>" + well["w_uwi"] + "<br><br>"
+				+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
+				+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><hr>";
+
+			// Set the content of the infoWindow
+			infoWindow.setContent("<p>" + content + "</p>");
+
+			// Defining new property to the info window to know when it's opened or closed
+			google.maps.InfoWindow.prototype.opened = false;
+			google.maps.Marker.prototype.id = well["w_uwi"];
+			toggleInfoWindow(infoWindow, map, marker, isTop);
+		}
+	}
+
+	function highlightAction(infoWindow, map, marker, i, isTop) {
+		return function () {
+			// Toggles the selection
+			if(marker.isHighlighted) {
+				self.deselectMarker(i, true, marker.id);
+			} else {
+				self.selectMarker(i, true, marker.id);
+			}
+
+			// Making sure to control the info window behaviour
+			if(infoWindow.opened === true) {
+				infoWindow.opened = false;
+				infoWindow.close();
+				toggleInfoWindow(infoWindow, map, marker, isTop);
+			}
 		}
 	}
 
@@ -438,8 +582,8 @@
 	 * Allow the infoWindow to be opened and closed by clicking on the pin
 	 */
 	// Last info window opened to control the toggle of opening and closing window. Array contains marker id and InfoWindow
-	var lastInfoWindowOpened = [-1, null];
-	function toggleInfoWindow(infoWindow, map, marker) {
+	var lastInfoWindowOpened = [-1, null, false];
+	function toggleInfoWindow(infoWindow, map, marker, isTop) {
 		if(infoWindow.opened) {
 			if(lastInfoWindowOpened[0] != -1 && marker.id != lastInfoWindowOpened[0]) {
 				/*
@@ -452,19 +596,28 @@
 				lastInfoWindowOpened[1].close();
 				infoWindow.opened = true;
 				infoWindow.open(map, marker);
-				lastInfoWindowOpened = [marker.id, infoWindow];
+				lastInfoWindowOpened = [marker.id, infoWindow, isTop];
 			} else {
-				// Closing the opened info window and set the last info window opened as none
-				infoWindow.opened = false;
-				infoWindow.close();
-				lastInfoWindowOpened = [-1, null];
+				if(lastInfoWindowOpened[2] === isTop) {
+					// If the last window opened is directly related to the open one..
+					// Close the opened info window and set the last info window opened as none
+					infoWindow.opened = false;
+					infoWindow.close();
+					lastInfoWindowOpened = [-1, null, false];
+				} else {
+					// If the last window opened is related to a different marker with same ID (top - bottom)
+					// Open the same window on the other marker (top -> bottom, bottom -> top)
+					infoWindow.opened = true;
+					infoWindow.open(map, marker);
+					lastInfoWindowOpened = [marker.id, infoWindow, isTop];
+				}
 			}
 		}
 		else {
 			// Opening the info window clicked and setting it as the last info window opened
 			infoWindow.opened = true;
 			infoWindow.open(map, marker);
-			lastInfoWindowOpened = [marker.id, infoWindow];
+			lastInfoWindowOpened = [marker.id, infoWindow, isTop];
 		}
 	}
 
@@ -561,13 +714,21 @@
 	/*
 	 * Returns all the markers that are inside the defined polygon
 	 */
-	MapCanvasController.prototype.getMarkersIdInsidePolygon = function() {
+	MapCanvasController.prototype.getMarkersIdInsidePolygon = function(selectionCriterion) {
 		// Checking how many markers are inside the polygon
 		var markersInside = [];
+		var selectionGroup = [];
+
+		if(selectionCriterion === "bottom") {
+			selectionGroup = markers;
+		} else if(selectionCriterion === "top") {
+			selectionGroup = markersTop;
+		}
+
 		for(var i=0; i<markers.length; i++)
 		{
-			if (google.maps.geometry.poly.containsLocation(markers[i]["position"], poly)) {
-				markersInside.push([markers[i]["id"], i]);
+			if (google.maps.geometry.poly.containsLocation(selectionGroup[i]["position"], poly)) {
+				markersInside.push([selectionGroup[i]["id"], i]);
 			}
 		}
 		return markersInside;

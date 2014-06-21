@@ -68,3 +68,18 @@ Polygon selection
 #polygon-reset-markers-button {
 	margin-bottom: 0.5em;
 }
+
+input{
+	&[type="radio"] {
+		width: auto;
+	}
+}
+
+#selectionTable {
+	width: 80%;
+	text-align: center;
+	font-size: 0.9em;
+	td {
+		width: 50%;
+	}
+}

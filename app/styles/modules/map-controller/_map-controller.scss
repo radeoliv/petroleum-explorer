@@ -10,7 +10,8 @@
 
 #map-info-control{
 	padding: 0.5em;
-	z-index: 1;
+	left: 7.3em !important;
+	width: 13.45em;
 
 	#map-info-controlUI {
 		background-color: white;
@@ -26,5 +27,35 @@
 			text-align: right;
 			color: rgb(127,127,127);
 		}
+	}
+}
+
+#map-layers-control{
+	padding: 0.5em;
+	left: 7.3em !important;
+	top: 4.5em !important;
+	width: 13.45em;
+
+	#map-layers-controlUI {
+		background-color: white;
+		box-shadow: 0em 0em 0em 0.18em rgba(127,127,127,0.3);
+		border-radius: 0.4em;
+		cursor: default;
+
+		#map-layers-control-content {
+			font-family: "Arial", "sans-serif";
+			font-size: 1.3em;
+			padding-left: 0.3em;
+			padding-right: 0.3em;
+			color: rgb(127,127,127);
+		}
+	}
+}
+
+#layerTable {
+	text-align: center;
+
+	#bla {
+		text-align: left;
 	}
 }

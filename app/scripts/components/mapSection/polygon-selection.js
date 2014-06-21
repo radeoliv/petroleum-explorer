@@ -20,6 +20,7 @@
 	var $polygonSelectMarkersButton = $('#polygon-select-markers-button');
 	var $polygonRemoveMarkersButton = $('#polygon-remove-markers-button');
 	var $polygonResetMarkersButton = $('#polygon-reset-markers-button');
+	var $polygonRadioButtons = $($("#selectionTable").find("input[type='radio']"));
 
 	var PolygonSelection;
 	PolygonSelection = function (MapCanvasController, SearchController){
@@ -27,6 +28,7 @@
 		this.SearchController = SearchController;
 
 		self = this;
+		createRadioButtonsChangeEventListeners();
 	};
 
 	function setDisableButtons(isDisabled) {
@@ -36,6 +38,12 @@
 		$polygonRemoveMarkersButton[0].disabled = isDisabled;
 	}
 
+	function setDisableCheckbox(isDisabled) {
+		for(var i=0; i<$polygonRadioButtons.length; i++) {
+			$polygonRadioButtons[i].disabled = isDisabled;
+		}
+	}
+
 	$myOnOffSwitch.on("change", function() {
 		var isChecked = $myOnOffSwitch[0].checked;
 		if(isChecked === false) {
@@ -43,11 +51,29 @@
 			$(".info-msg").remove();
 			setDisableButtons(true);
 		}
+		setDisableCheckbox(!isChecked);
 	});
+
+	function createRadioButtonsChangeEventListeners() {
+		for(var i=0; i<$polygonRadioButtons.length; i++) {
+			$polygonRadioButtons[i].onclick = function() { $("body").trigger("polygonChangedPosition"); };
+		}
+	}
+
+	function getMarkersIdInsidePolygon() {
+		var selectionCriterion = "";
+		if($polygonRadioButtons[0].checked) {
+			selectionCriterion = "bottom";
+		} else if($polygonRadioButtons[1].checked) {
+			selectionCriterion = "top";
+		}
+
+		return self.MapCanvasController.getMarkersIdInsidePolygon(selectionCriterion);
+	}
 
 	$polygonHighlightMarkersButton.on("click", function() {
 		// markersId contains the ids of the markers as well as their indices
-		var markersId = self.MapCanvasController.getMarkersIdInsidePolygon();
+		var markersId = getMarkersIdInsidePolygon();
 		var highlightedMarkers = self.MapCanvasController.getHighlightedMarkers().slice();
 
 		if(markersId != undefined && markersId != null && markersId.length > 0) {
@@ -70,7 +96,7 @@
 
 	$polygonClearHighlightedMarkersButton.on("click", function() {
 		// markersId contains the ids of the markers as well as their indices
-		var markersId = self.MapCanvasController.getMarkersIdInsidePolygon();
+		var markersId = getMarkersIdInsidePolygon();
 
 		for(var i=0; i<markersId.length; i++) {
 			self.MapCanvasController.deselectMarker(markersId[i][1], true, markersId[i][0]);
@@ -81,7 +107,7 @@
 		saveLastResultSet();
 
 		// markersId contains the ids of the markers as well as their indices
-		var markersId = self.MapCanvasController.getMarkersIdInsidePolygon();
+		var markersId = getMarkersIdInsidePolygon();
 		if(markersId != undefined && markersId != null && markersId.length > 0) {
 			var temp = [];
 			for(var i=0; i<markersId.length; i++) {
@@ -102,7 +128,7 @@
 		var currentWells = self.MapCanvasController.getCurrentWells().concat();
 
 		// markersId contains the ids of the markers as well as their indices
-		var markersId = self.MapCanvasController.getMarkersIdInsidePolygon();
+		var markersId = getMarkersIdInsidePolygon();
 		if(markersId != undefined && markersId != null && markersId.length > 0) {
 			var temp = [];
 			for(var i=0; i<markersId.length; i++) {
@@ -119,7 +145,7 @@
 	$polygonResetMarkersButton.on("click", function() {
 		// Which one is the best? To always reset the result set or to make it the same as it was before?
 		// Inconsistency can happen in both cases..
-		self.SearchController.resetResultSet()
+		self.SearchController.resetResultSet();
 		//self.SearchController.setResultSet(lastResultSet);
 
 		self.MapCanvasController.plotResults(self.SearchController.getResultSet());
@@ -129,7 +155,7 @@
 	});
 
 	$("body").on("polygonChangedPosition", (function () {
-		var markers = self.MapCanvasController.getMarkersIdInsidePolygon();
+		var markers = getMarkersIdInsidePolygon();
 		appendInfo(markers.length);
 
 		if(markers === undefined || markers === null || markers.length === 0) {

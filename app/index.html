@@ -136,27 +136,27 @@
 										<td>
 											<input type = "search" name = "prefix" id = "prefix" maxlength = "2" pattern = "{d}2" autosave = "prefix">
 										</td>
-										<td><span>/</span></td>
+										<td><label>/</label></td>
 										<td>
 											<input type = "search" name = "lsd" id = "lsd" results = "10" maxlength = "2" pattern = "{d}2" autosave = "lsd">
 										</td>
-										<td><span>-</span></td>
+										<td><label>-</label></td>
 										<td>
 											<input type = "search" name = "section" id = "section" results = "10" maxlength = "2" pattern = "{d}2" autosave = "section">
 										</td>
-										<td><span>-</span></td>
+										<td><label>-</label></td>
 										<td>
 											<input type = "search" name = "township" id = "township" results = "10" maxlength = "3" pattern = "{d}3" autosave = "township">
 										</td>
-										<td><span>-</span></td>
+										<td><label>-</label></td>
 										<td>
 											<input type = "search" name = "range" id = "range" results = "10" maxlength = "2" pattern = "{d}2" autosave = "range">
 										</td>
-										<td><span>W</span></td>
+										<td><label>W</label></td>
 										<td>
 											<input type = "search" id = "meridian" name = "meridian" results = "10" maxlength = "1" pattern = "{d}1" autosave = "meridian">
 										</td>
-										<td><span>/</span></td>
+										<td><label>/</label></td>
 										<td>
 											<input type = "search" name = "event" id = "event" maxlength = "1" pattern = "{d}1" autosave = "event">
 										</td>
@@ -205,6 +205,28 @@
 									<span class="onoffswitch-switch"></span>
 								</label>
 							</div>
+
+							<table id="selectionTable">
+								<tr>
+									<td>
+										<img src="./resources/red-pin-smaller.png">
+										<img src="./resources/blue-pin-smaller.png">
+									</td>
+									<td>
+										<img src="./resources/top-red-marker.png">
+										<img src="./resources/top-blue-marker.png">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="radio" name="selection" value="bottom" checked="true" disabled="true">Underground
+									</td>
+									<td>
+										<input type="radio" name="selection" value="top" disabled="true">Surface
+									</td>
+								</tr>
+							</table>
+							<hr>
 
 							<input type = "button" id = "polygon-highlight-markers-button" value = "Highlight wells" disabled="true"/>
 							<input type = "button" id = "polygon-clear-highlighted-markers-button" value = "Clear highlighted wells" disabled="true"/>
