@@ -26,6 +26,8 @@
 	var infoWindow = new google.maps.InfoWindow({ maxwidth: 200 });
 	// Auxiliar variable to store the highlighted markers
 	var highlightedMarkers = [];
+	// Auxiliar variable to store the last 'layer' checkboxes configuration
+	var lastLayerCheckboxes = [true,true,true];
 
 	// Create options for the map
 	var mapOptions = {
@@ -118,8 +120,6 @@
 		});
 	}
 
-	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
 	function AddMapLayerControl(controlDiv, map) {
 		var controlUI = document.createElement('div');
 		controlUI.id = "map-layers-controlUI";
@@ -129,63 +129,120 @@
 		controlContent.id = "map-layers-control-content";
 		controlUI.appendChild(controlContent);
 
-		var a1 = "<input type=\"checkbox\" name=\"layer-selection\" value=\"surface\" checked=\"true\">";
-		var t1 = "Surface";
-;		var a2 = "<input type=\"checkbox\" name=\"layer-selection\" value=\"bottom\" checked=\"true\">";
-		var t2 = "Underground";
-		var a3 = "<input type=\"checkbox\" name=\"layer-selection\" value=\"deviation\" checked=\"true\">";
-		var t3 = "Deviation";
-		var i2 = "<img src=\"./resources/red-pin-smaller.png\">";
-		var i1 = "<img src=\"./resources/top-red-marker.png\">";
-		var i3 = "<img src=\"./resources/line.png\">";
+		/*
+		 * Creating all the elements for the 'layer' control
+		 */
+		// Creating all checkboxes
+		var checkboxSurface = "<input id=\"layer-surface-checkbox\" class=\"layer-selection\" type=\"checkbox\" name=\"surface\" checked=\"true\">";
+		var checkboxUnderground = "<input id=\"layer-underground-checkbox\" class=\"layer-selection\" type=\"checkbox\" name=\"underground\" checked=\"true\">";
+		var checkboxDeviation = "<input id=\"layer-deviation-checkbox\" class=\"layer-selection\" type=\"checkbox\" name=\"deviation\" checked=\"true\">";
+		// Creating all labels
+		var surfaceLabel = "Surface";
+		var undergroundLabel = "Underground";
+		var deviationLabel = "Deviation";
+		// Creating all images
+		var surfaceSymbol = "<img src=\"./resources/top-red-marker.png\">";
+		var undergroundSymbol = "<img src=\"./resources/red-pin-smaller.png\">";
+		var deviationSymbol = "<img src=\"./resources/line.png\">";
 
-		var table = "<table id=\"layerTable\">";
-		var endTable = "</table>";
-		var tr = "<tr>";
-		var endTr = "</tr>";
-		var td = "<td>";
-		var endTd = "</td>";
-		var sTd = "<td id=\"bla\">";
+		// Definition of variables to help the construction of a table
+		var tableBegin = "<table id=\"layer-table\">";
+		var tableEnd = "</table>";
+		var trBegin = "<tr>";
+		var trEnd = "</tr>";
+		var tdBegin = "<td>";
+		var tdEnd = "</td>";
+		var tdBeginCustom = "<td id=\"column-left-align\">";
 
+		// The table itself
 		controlContent.innerHTML =
-			table +
-				tr+
-					td+
-						a1+
-					endTd +
-					td +
-						i1+
-					endTd+
-					sTd +
-						t1+
-					endTd+
-				endTr +
-				tr +
-					td+
-						a2+
-					endTd +
-					td+
-						i2+
-					endTd+
-					sTd+
-						t2+
-					endTd+
-				endTr +
-				tr +
-					td+
-						a3 +
-					endTd +
-					td+
-						i3+
-					endTd+
-					sTd+
-						t3+
-					endTd+
-				endTr+
-			endTable;
+			tableBegin +
+				trBegin +
+					tdBegin +
+						checkboxSurface +
+					tdEnd +
+					tdBegin +
+						surfaceSymbol +
+					tdEnd +
+					tdBeginCustom +
+						surfaceLabel +
+					tdEnd +
+				trEnd +
+				trBegin +
+					tdBegin +
+						checkboxUnderground +
+					tdEnd +
+					tdBegin +
+						undergroundSymbol +
+					tdEnd +
+					tdBeginCustom +
+						undergroundLabel +
+					tdEnd +
+				trEnd +
+				trBegin +
+					tdBegin +
+						checkboxDeviation +
+					tdEnd +
+					tdBegin +
+						deviationSymbol +
+					tdEnd +
+					tdBeginCustom +
+						deviationLabel +
+					tdEnd +
+				trEnd +
+			tableEnd;
+
+		google.maps.event.addDomListener(controlContent, 'click', function() {
+			var checkboxes = $(this).find("input[class='layer-selection']");
+			var modifiedCheckboxes = [];
+
+			if(checkboxes[0].checked != lastLayerCheckboxes[0]) {
+				modifiedCheckboxes.push(0);
+			}
+			if(checkboxes[1].checked != lastLayerCheckboxes[1]) {
+				modifiedCheckboxes.push(1);
+			}
+			if(checkboxes[2].checked != lastLayerCheckboxes[2]) {
+				modifiedCheckboxes.push(2);
+			}
+
+			if(modifiedCheckboxes.length > 0) {
+				lastLayerCheckboxes = [checkboxes[0].checked, checkboxes[1].checked, checkboxes[2].checked];
+				updateLayers(modifiedCheckboxes, lastLayerCheckboxes);
+			}
+		});
 	}
 
-	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	function updateLayers(modifiedCheckboxes, currentCheckboxesState) {
+
+		for(var i=0; i<modifiedCheckboxes.length; i++) {
+			var opacity = currentCheckboxesState[modifiedCheckboxes[i]] ? 1.0 : 0.0;
+
+			switch(modifiedCheckboxes[i]) {
+				// Surface
+				case 0:
+					for(var j=0; j<markersTop.length; j++) {
+						markersTop[j].setOpacity(opacity);
+					}
+					break;
+
+				// Underground
+				case 1:
+					for(var j=0; j<markers.length; j++) {
+						markers[j].setOpacity(opacity);
+					}
+					break;
+
+				// Deviation
+				case 2:
+					var options = { strokeOpacity: opacity };
+					for(var j=0; j<deviations.length; j++) {
+						deviations[j].setOptions(options);
+					}
+					break;
+			}
+		}
+	}
 
 	/*
 	 * Store the full table to link the markers in the future
@@ -454,7 +511,7 @@
 			new google.maps.Point(0, 0),
 			new google.maps.Point(6, 7));
 
-		// Create markers for bottom and top of well
+		// Creating markers for surface location of well
 		var markerTop = new google.maps.Marker({
 			position: new google.maps.LatLng(well["w_top_lat"], well["w_top_lng"]),
 			map: map,
@@ -463,11 +520,11 @@
 			animation: null,
 			zIndex: zIndex,
 			icon: topMarkerImage
-			/*{
-				path: google.maps.SymbolPath.CIRCLE,
-				scale: 2
-			}*/
 		});
+		// Defining opacity of marker based on the checkbox selected for different 'layers'
+		markerTop.setOpacity(lastLayerCheckboxes[0] ? 1.0 : 0.0);
+
+		// Creating markers for underground location of well
 		var marker = new google.maps.Marker({
 			position: new google.maps.LatLng(well["w_bottom_lat"], well["w_bottom_lng"]),
 			map: map,
@@ -477,6 +534,9 @@
 			zIndex: zIndex,
 			icon: iconUrl
 		});
+		// Defining opacity of marker based on the checkbox selected for different 'layers'
+		marker.setOpacity(lastLayerCheckboxes[1] ? 1.0 : 0.0);
+
 		marker.id = well["w_uwi"];
 		markerTop.id = well["w_uwi"];
 
@@ -485,10 +545,11 @@
 			map: map,
 			path: [ marker["position"], markerTop["position"] ],
 			strokeColor: lineColor,
-			strokeOpacity: 1,
 			strokeWeight: lineWeight,
 			zIndex: zIndex
 		});
+		// Defining opacity of line based on the checkbox selected for different 'layers'
+		deviation.setOptions({ strokeOpacity: lastLayerCheckboxes[2] ? 1.0 : 0.0 });
 
 		/* Adding the new marker on the array of markers.
 		 * If the marker is supposed to be highlighted, it is being replaced in the array of markers,
@@ -549,6 +610,13 @@
 			var content = "<b>Unique Well Identifier</b><br>" + well["w_uwi"] + "<br><br>"
 				+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
 				+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><hr>";
+
+			// Adding information about surface/underground location
+			if(isTop === true) {
+				content += "<b>Surface location</b>";
+			} else {
+				content += "<b>Underground location</b>";
+			}
 
 			// Set the content of the infoWindow
 			infoWindow.setContent("<p>" + content + "</p>");

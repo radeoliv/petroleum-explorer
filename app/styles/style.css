@@ -273,9 +273,9 @@ table {
       padding-right: 0.3em;
       color: #7f7f7f; }
 
-#layerTable {
+#layer-table {
   text-align: center; }
-  #layerTable #bla {
+  #layer-table #column-left-align {
     text-align: left; }
 
 /* =============================================================================
