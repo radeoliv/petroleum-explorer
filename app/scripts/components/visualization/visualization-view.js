@@ -80,8 +80,13 @@
 			case 2:
 				if($timeSeriesSelection[0].value != "none") {
 					generateTitle();
-					// Generate the chart
-					self.visualizationCharts.generateTimeSeriesChart("");
+
+					if($timeSeriesSelection[0].value === "testing_status") {
+						self.visualizationCharts.generateTimelineChart();
+					} else {
+						// Generate the chart
+						self.visualizationCharts.generateTimeSeriesChart("");
+					}
 				} else {
 					self.clearVisualization();
 				}

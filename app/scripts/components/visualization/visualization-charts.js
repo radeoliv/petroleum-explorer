@@ -82,7 +82,7 @@
 				//.ticks(10, "%");
 
 			this.removeCurrentChart();
-			$('<div id=\"canvas-svg\"</div>').appendTo($visualizationContainer);
+			$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
 
 			var svg = d3.select("#canvas-svg").append("svg")
 				.attr("width", "100%")//width + margin.left + margin.right)
@@ -343,7 +343,7 @@
 				.value(function(d) { return d[DATA]; });
 
 			this.removeCurrentChart();
-			$('<div id=\"canvas-svg\"</div>').appendTo($visualizationContainer);
+			$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
 
 			var svg = d3.select("#canvas-svg").append("svg")
 				.attr("width", "100%")
@@ -490,7 +490,7 @@
 
 		/* TESTING STUFF */
 		this.removeCurrentChart();
-		$('<div id=\"canvas-svg\"</div>').appendTo($visualizationContainer);
+		$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
 		/* TESTING STUFF */
 		/* Testing stuff ^^^^^^^^ */
 
@@ -597,6 +597,116 @@
 			return d;
 		}
 	};
+
+	VisualizationCharts.prototype.generateTimelineChart = function() {
+		this.removeCurrentChart();
+		$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
+
+		var width = 800,
+			height = 600,
+			radius = Math.min(width, height) / 2.5;
+
+		var t1 = new Date(2005, 08, 01, 0, 0, 0, 0);
+		var t2 = new Date(2005, 09, 01, 0, 0, 0, 0);
+
+		var t3 = new Date(2005, 10, 01, 0, 0, 0, 0);
+		var t4 = new Date(2005, 11, 01, 0, 0, 0, 0);
+
+		var t5 = new Date(2007, 01, 01, 0, 0, 0, 0);
+		var t6 = new Date(2007, 03, 01, 0, 0, 0, 0);
+		var t7 = new Date(2007, 04, 01, 0, 0, 0, 0);
+		var t8 = new Date(2007, 05, 01, 0, 0, 0, 0);
+
+		var testData = [
+			{
+				label: "person a",
+				times: [
+					{"starting_time": t1, "ending_time": t2},
+					{"starting_time": t3, "ending_time": t4}
+				]
+			},
+			{
+				label: "person b",
+				times: [
+					{"starting_time": t5, "ending_time": t6}
+				]
+			},
+			{
+				label: "person c",
+				times: [
+					{"starting_time": t7, "ending_time": t8}
+				]
+			}
+		];
+
+		/*var testData = [
+			{label: "person a", times: [
+				{"starting_time": 1355752800000, "ending_time": 1355759900000},
+				{"starting_time": 1355767900000, "ending_time": 1355774400000}]
+			},
+			{label: "person b", times: [
+				{"starting_time": 1355759910000, "ending_time": 1355761900000}]
+			},
+			{label: "person c", times: [
+				{"starting_time": 1355761910000, "ending_time": 1355763910000}]
+			}
+		];*/
+
+
+
+		var width = 900;
+		var height = 400;
+		var itemHeight = 20;
+		var itemMargin = 5;
+		var marginTop = height / 5;
+
+		var chart = d3.timeline()
+			.width(width)
+			.stack()
+			.margin({left:70,right:30,top:marginTop,bottom:0})
+			.itemMargin(itemMargin)
+			.itemHeight(itemHeight)
+			.tickFormat({
+				format: d3.time.format("%b %Y"),
+				tickTime: d3.time.month,
+				tickInterval: 3,
+				tickSize: 10
+			})
+			.rotateTicks(30)
+			.hover(function (d, i, datum) {
+				// d is the current rendering object
+				// i is the index during d3 rendering
+				// datum is the data object
+				console.log(d.starting_time);
+				console.log(d.ending_time);
+			});
+
+		var svg = d3.select("#canvas-svg").append("svg")
+			.attr("width", "100%")
+			.attr("height", "98%")
+			.attr("viewBox", "0 0 " + (width) + " " + (height/2))
+			.datum(testData).call(chart);
+
+		// Fixing the labels position (don't do this again)
+		var auxCount = 1;
+		d3.selectAll(".timeline-label")
+			.attr("transform", function() {
+				return "translate("+ 0 +","+ (itemHeight/2 + marginTop + itemMargin + (itemHeight + itemMargin) * auxCount++)+")";
+			});
+
+
+
+		// Fixing margin when window is resized
+		window.onresize = function() {
+
+			var container = $("#canvas-svg");
+			var clientHeight = container[0].clientHeight;
+			var clientWidth = container[0].clientWidth;
+
+			console.log(clientHeight + " " + clientWidth);
+
+		}
+	}
 
 	VisualizationCharts.prototype.removeCurrentChart = function() {
 		$("#canvas-svg").remove();
