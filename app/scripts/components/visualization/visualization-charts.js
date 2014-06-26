@@ -628,39 +628,6 @@
 			height = 600,
 			radius = Math.min(width, height) / 2.5;
 
-		var t1 = new Date(2005, 08, 01, 0, 0, 0, 0);
-		var t2 = new Date(2005, 09, 01, 0, 0, 0, 0);
-
-		var t3 = new Date(2005, 10, 01, 0, 0, 0, 0);
-		var t4 = new Date(2005, 11, 01, 0, 0, 0, 0);
-
-		var t5 = new Date(2007, 01, 01, 0, 0, 0, 0);
-		var t6 = new Date(2007, 03, 01, 0, 0, 0, 0);
-		var t7 = new Date(2007, 04, 01, 0, 0, 0, 0);
-		var t8 = new Date(2007, 05, 01, 0, 0, 0, 0);
-
-		var testData = [
-			{
-				label: "person a",
-				times: [
-					{"starting_time": t1, "ending_time": t2},
-					{"starting_time": t3, "ending_time": t4}
-				]
-			},
-			{
-				label: "person b",
-				times: [
-					{"starting_time": t5, "ending_time": t6}
-				]
-			},
-			{
-				label: "person c",
-				times: [
-					{"starting_time": t7, "ending_time": t8}
-				]
-			}
-		];
-
 		var data = [];
 		for(var i=0; i<statusInfo.length; i++) {
 			var auxStartDate = statusInfo[i]["s_date"].split("-");
@@ -677,8 +644,6 @@
 			var tempData = { label:statusInfo[i]["s_status"], times: [times] };
 			data.push(tempData);
 		}
-
-		console.log(data);
 
 		var width = 900;
 		var height = 400;
@@ -730,6 +695,13 @@
 			"ABANDONED & WHIPSTOCKED",
 			"OBSERVATION",
 			"UNKNOWN"];
+		var color = d3.scale.category20();
+
+		for(var i=data.length-1; i >= 0; i--){
+			statusCategory.splice($.inArray(data[i]["label"], statusCategory),1);
+			statusCategory.splice(0,0,data[i]["label"]);
+			statusCategory.join();
+		}
 
 		var legend = svg.append("g")
 			.attr("class","legend")
@@ -749,7 +721,13 @@
 					.attr("y", -100+i*15)
 					.attr("height", 10)
 					.attr("width", 30)
-					.attr("style","fill:blue");
+					.style({"fill":function() {
+						if(i < data.length) {
+							return color(i);
+						} else {
+							return "grey";
+						}
+					}});
 				g.append("svg:text")
 					.attr("x", 55)
 					.attr("y", -91+i*15)
@@ -758,6 +736,7 @@
 					.attr("font-size",10)
 					.text(statusCategory[i]);
 			});
+
 
 		// Fixing margin when window is resized
 		window.onresize = function() {
