@@ -415,6 +415,16 @@ Visualization
     #info-visualization #control-panel-container #control-panel {
       padding: 0.5em 0.5em 0.5em 0.5em;
       width: 19.9em; }
+    #info-visualization #control-panel-container #time-series-accordion-content {
+      text-align: left; }
+    #info-visualization #control-panel-container #time-series-uwi-label {
+      font-size: 0.8em; }
+    #info-visualization #control-panel-container #time-series-uwi {
+      width: 67%;
+      padding-left: 0.2em;
+      padding-right: 0.2em; }
+    #info-visualization #control-panel-container #time-series-attributes {
+      width: 70%; }
   #info-visualization #visualization-container {
     position: absolute;
     border-left-color: black;

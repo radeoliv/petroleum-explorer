@@ -54,7 +54,11 @@
 							</div>
 
 							<h5>Time Series</h5>
-							<div class = "time-series accordion-content">
+							<div id="time-series-accordion-content" class = "time-series accordion-content">
+								<label id="time-series-uwi-label"><b>Unique Well Identifier</b></label>
+								<br>
+								<input type="text" id="time-series-uwi" placeholder="xx/xx-xx-xxx-xxWx/x" name="time-series-uwi" maxlength = "19">
+								<hr>
 								<select id = "time-series-attributes" placeholder = "Time Series" name = "attributes" results = "10" autosave = "Attributes">
 									<option value="none"></option>
 									<option value="testing">Testing</option>

@@ -34,6 +34,22 @@ Visualization
 			padding: 0.5em 0.5em 0.5em 0.5em;
 			width: 19.9em;
 		}
+
+		// Time series accordion content
+		#time-series-accordion-content {
+			text-align: left;
+		}
+		#time-series-uwi-label {
+			font-size: 0.8em;
+		}
+		#time-series-uwi {
+			width: 67%;
+			padding-left: 0.2em;
+			padding-right: 0.2em;
+		}
+		#time-series-attributes {
+			width: 70%;
+		}
 	}
 
 	#visualization-container {

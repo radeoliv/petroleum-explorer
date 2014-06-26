@@ -598,7 +598,29 @@
 		}
 	};
 
-	VisualizationCharts.prototype.generateTimelineChart = function() {
+	VisualizationCharts.prototype.getStatusInfoFromWell = function(uwi) {
+		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
+		var statusInfo = [];
+		$.ajax({
+			url: 'http://localhost:3000/getStatusInfoFromWell/' + encodedUWI,
+			dataType:'json',
+			async: false,
+			success: function(data){
+				statusInfo = data;
+			}
+		});
+
+		if(statusInfo != null && statusInfo.length > 0) {
+			// Ignore the time of the s_date (hours, minutes, seconds)
+			for(var i=0; i<statusInfo.length; i++) {
+				statusInfo[i]["s_date"] = statusInfo[i]["s_date"].substr(0,10);
+			}
+		}
+
+		return statusInfo;
+	};
+
+	VisualizationCharts.prototype.generateTimelineChart = function(statusInfo) {
 		this.removeCurrentChart();
 		$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
 
@@ -639,20 +661,24 @@
 			}
 		];
 
-		/*var testData = [
-			{label: "person a", times: [
-				{"starting_time": 1355752800000, "ending_time": 1355759900000},
-				{"starting_time": 1355767900000, "ending_time": 1355774400000}]
-			},
-			{label: "person b", times: [
-				{"starting_time": 1355759910000, "ending_time": 1355761900000}]
-			},
-			{label: "person c", times: [
-				{"starting_time": 1355761910000, "ending_time": 1355763910000}]
+		var data = [];
+		for(var i=0; i<statusInfo.length; i++) {
+			var auxStartDate = statusInfo[i]["s_date"].split("-");
+			var startDate = new Date(auxStartDate[0], auxStartDate[1], auxStartDate[2], 0,0,0,0);
+			var auxEndDate;
+			var endDate = new Date();
+
+			if(i < statusInfo.length - 1) {
+				auxEndDate = statusInfo[i+1]["s_date"].split("-");
+				endDate = new Date(auxEndDate[0], auxEndDate[1], auxEndDate[2], 0,0,0,0);
 			}
-		];*/
 
+			var times = {"starting_time": startDate, "ending_time": endDate};
+			var tempData = { label:statusInfo[i]["s_status"], times: [times] };
+			data.push(tempData);
+		}
 
+		console.log(data);
 
 		var width = 900;
 		var height = 400;
@@ -685,7 +711,7 @@
 			.attr("width", "100%")
 			.attr("height", "98%")
 			.attr("viewBox", "0 0 " + (width) + " " + (height/2))
-			.datum(testData).call(chart);
+			.datum(data).call(chart);
 
 		// Fixing the labels position (don't do this again)
 		var auxCount = 1;
@@ -695,6 +721,43 @@
 			});
 
 
+		var statusCategory = [
+			"DRILLED AND CASED",
+			"STEAM ASSIS GRAVITY DRAIN",
+			"SUSPENDED STEAM ASSIS GRAVITY DRAIN",
+			"ABANDONED",
+			"ABANDONED ZONE",
+			"ABANDONED & WHIPSTOCKED",
+			"OBSERVATION",
+			"UNKNOWN"];
+
+		var legend = svg.append("g")
+			.attr("class","legend")
+			.attr("x", 60)
+			.attr("y", -60)
+			.attr("height", 100)
+			.attr("width", 100);
+
+		legend.selectAll('g')
+			.data(statusCategory)
+			.enter()
+			.append('g')
+			.each(function(d,i) {
+				var g=d3.select(this);
+				g.append("svg:rect")
+					.attr("x", 20)
+					.attr("y", -100+i*15)
+					.attr("height", 10)
+					.attr("width", 30)
+					.attr("style","fill:blue");
+				g.append("svg:text")
+					.attr("x", 55)
+					.attr("y", -91+i*15)
+					.attr("height", 20)
+					.attr("width", 100)
+					.attr("font-size",10)
+					.text(statusCategory[i]);
+			});
 
 		// Fixing margin when window is resized
 		window.onresize = function() {
@@ -704,7 +767,6 @@
 			var clientWidth = container[0].clientWidth;
 
 			console.log(clientHeight + " " + clientWidth);
-
 		}
 	}
 

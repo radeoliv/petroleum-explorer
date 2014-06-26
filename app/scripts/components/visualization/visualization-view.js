@@ -26,6 +26,8 @@
 		});
 	}).call(this);
 
+	var lastUwiTyped = "";
+	var statusInfo = [];
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
 	var $applyVisualizationButton = $('#applyVisualization');
@@ -35,6 +37,7 @@
 	var $timeSeriesSelection = $('#time-series-attributes');
 	var $visualizationTitle = $("#visualization-title");
 	var $openVisualizationButton = $("#openVisualization");
+	var $timeSeriesUwi = $("#time-series-uwi");
 
 	var barChartTitle = "<i>Bar Chart</i> - ";
 	var pieChartTitle = "<i>Pie Chart</i> - ";
@@ -55,6 +58,15 @@
 		// Every time the visualization centre is opened, the visualization being shown before is reloaded.
 		// If there's none selected, nothing will be added.
 		$applyVisualizationButton.trigger("click");
+	});
+
+	$timeSeriesUwi.on("keyup", function (e) {
+		if($timeSeriesUwi[0].value != undefined && $timeSeriesUwi[0].value != null && $timeSeriesUwi[0].value.length === 19) {
+			if($timeSeriesUwi[0].value != lastUwiTyped) {
+				lastUwiTyped = $timeSeriesUwi[0].value;
+				statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
+			}
+		}
 	});
 
 	$applyVisualizationButton.on("click", function() {
@@ -82,7 +94,9 @@
 					generateTitle();
 
 					if($timeSeriesSelection[0].value === "testing_status") {
-						self.visualizationCharts.generateTimelineChart();
+						if(statusInfo != undefined && statusInfo != null) {
+							self.visualizationCharts.generateTimelineChart(statusInfo);
+						}
 					} else {
 						// Generate the chart
 						self.visualizationCharts.generateTimeSeriesChart("");
