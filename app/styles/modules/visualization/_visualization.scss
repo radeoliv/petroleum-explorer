@@ -182,3 +182,16 @@ Visualization
 	}
 
 }
+
+#tooltip-window {
+	position:absolute;
+	text-align:left;
+	width:250px;
+	height:80px;
+	padding:0.5px;
+	font:5;
+	background:lightsteelblue;
+	border:0px;
+	border-radius:8px;
+	pointer-events:none;
+}

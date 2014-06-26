@@ -651,6 +651,8 @@
 		var itemMargin = 5;
 		var marginTop = height / 5;
 
+		var div;
+
 		var chart = d3.timeline()
 			.width(width)
 			.stack()
@@ -664,13 +666,27 @@
 				tickSize: 10
 			})
 			.rotateTicks(30)
-			.hover(function (d, i, datum) {
-				// d is the current rendering object
-				// i is the index during d3 rendering
-				// datum is the data object
-				console.log(d.starting_time);
-				console.log(d.ending_time);
-			});
+			.mouseover(function (d, i, datum) {
+				div = d3.select("#canvas-svg").append("div")
+					.attr("id","tooltip-window")
+					.style("opacity",0);
+						// d is the current rendering object
+						// i is the index during d3 rendering
+						// datum is the data object
+						//console.log(d.starting_time);
+						//console.log(d.ending_time);
+						div.transition()
+							.duration(200)
+							.style("opacity",.9)
+						div.html("Starting date: "+d.starting_time+"<br>Ending date: "+d.ending_time)
+							.style("left",(d3.event.pageX-420)+"px")
+							.style("top",(d3.event.pageY-130)+"px");})
+			.mouseout(function(){
+				div.transition()
+					.duration(300)
+					.style("opacity",0);
+				$("tooltip-window").remove();
+			})
 
 		var svg = d3.select("#canvas-svg").append("svg")
 			.attr("width", "100%")
@@ -736,7 +752,6 @@
 					.attr("font-size",10)
 					.text(statusCategory[i]);
 			});
-
 
 		// Fixing margin when window is resized
 		window.onresize = function() {
