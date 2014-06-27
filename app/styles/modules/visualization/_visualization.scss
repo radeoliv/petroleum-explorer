@@ -184,14 +184,13 @@ Visualization
 }
 
 #tooltip-window {
-	position:absolute;
-	text-align:left;
-	width:250px;
-	height:80px;
-	padding:0.5px;
-	font:5;
-	background:lightsteelblue;
-	border:0px;
-	border-radius:8px;
-	pointer-events:none;
+	position: absolute;
+	text-align: left;
+	padding: 1em;
+	font-size: 0.8em;
+	background: black;
+	border: 0em;
+	border-radius: 0.7em;
+	pointer-events: none;
+	color: orange;
 }

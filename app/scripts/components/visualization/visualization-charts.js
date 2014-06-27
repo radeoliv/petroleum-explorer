@@ -223,6 +223,8 @@
 							barId = barId.replace(/^\D*/g, '');
 							// Inserting all legends
 							applyAllTextLegend(barId);
+							// Making the legend rectangle visible
+							d3.select("#legend-rectangle").style("opacity", 1.0);
 						}
 					})
 					.on("mouseout", function() {
@@ -234,6 +236,8 @@
 							// Removing all text information
 							d3.selectAll(".text-info").remove();
 							d3.selectAll("#line-separator").remove();
+							// Making the legend rectangle invisible
+							d3.select("#legend-rectangle").style("opacity", 0.0);
 						}
 					})
 					.on("click", function() {
@@ -245,6 +249,8 @@
 							});
 							d3.selectAll(".text-info").remove();
 							d3.selectAll("#line-separator").remove();
+							// Making the legend rectangle invisible
+							d3.select("#legend-rectangle").style("opacity", 0.0);
 						} else {
 							// Highlight the bar with another color
 							d3.select("#"+$(this)[0].id).style("fill", "orangered");
@@ -257,6 +263,7 @@
 					});
 
 				var rect = svg.append("rect")
+					.attr("id", "legend-rectangle")
 					.attr("x", width)
 					.attr("y", 0)
 					.attr("width", (width / 2.8))
@@ -264,7 +271,8 @@
 					.style({
 						"fill": "none",
 						"stroke": "black",
-						"stroke-width": "0.05em"
+						"stroke-width": "0.05em",
+						"opacity": 0
 					});
 			}
 			drawD3Document(data);
@@ -628,21 +636,72 @@
 			height = 600,
 			radius = Math.min(width, height) / 2.5;
 
+		var start;
+		var end = new Date();
 		var data = [];
 		for(var i=0; i<statusInfo.length; i++) {
 			var auxStartDate = statusInfo[i]["s_date"].split("-");
 			var startDate = new Date(auxStartDate[0], auxStartDate[1], auxStartDate[2], 0,0,0,0);
-			var auxEndDate;
-			var endDate = new Date();
 
+			if(i === 0) {
+				start = startDate;
+			}
+
+			var auxEndDate;
+			var endDate;
 			if(i < statusInfo.length - 1) {
 				auxEndDate = statusInfo[i+1]["s_date"].split("-");
 				endDate = new Date(auxEndDate[0], auxEndDate[1], auxEndDate[2], 0,0,0,0);
+			} else {
+				endDate = end;
 			}
 
 			var times = {"starting_time": startDate, "ending_time": endDate};
-			var tempData = { label:statusInfo[i]["s_status"], times: [times] };
-			data.push(tempData);
+			var res = false;
+			/* Checking if the current label already exists.
+			 * In positive case, only the starting and end time are added.
+			 * In negative case, a new entry is pushed to the data array.
+			 */
+			data.forEach(function(element, index, array) {
+				if(element["status"] === statusInfo[i]["s_status"]) {
+					element["times"].push(times);
+					res = true;
+					return;
+				}
+			});
+
+			if(res === false) {
+				var tempData = { status:statusInfo[i]["s_status"], times: [times] };
+				data.push(tempData);
+			}
+		}
+
+		// Getting all the different statuses present in the database
+		var statusCategory = [];
+		$.ajax({
+			url: 'http://localhost:3000/getAllDistinctStatuses/',
+			dataType:'json',
+			async: false,
+			success: function(statuses){
+				statuses.forEach(function(element, index, array) {
+					statusCategory.push(element["s_status"]);
+				});
+			}
+		});
+
+		// Reordering the statusCategory in order to have the status of data as first elements
+		for(var i=data.length-1; i >= 0; i--) {
+			statusCategory.splice($.inArray(data[i]["status"], statusCategory),1);
+			statusCategory.splice(0,0,data[i]["status"]);
+			statusCategory.join();
+
+			// Adjusting the labels of the data (first letter capital and the rest lower case)
+			data[i]["status"] = data[i]["status"][0] + data[i]["status"].substr(1).toLowerCase();
+		}
+
+		// Adjusting the strings of the statusCategory (first letter capital and the rest lower case)
+		for(var i=0; i<statusCategory.length; i++) {
+			statusCategory[i] = statusCategory[i][0] + statusCategory[i].substr(1).toLowerCase();
 		}
 
 		var width = 900;
@@ -650,43 +709,96 @@
 		var itemHeight = 20;
 		var itemMargin = 5;
 		var marginTop = height / 5;
+		var legendX = width - width/4;
+		var legendY = -height/8;
 
-		var div;
-
+		var tooltipDiv;
 		var chart = d3.timeline()
 			.width(width)
-			.stack()
 			.margin({left:70,right:30,top:marginTop,bottom:0})
 			.itemMargin(itemMargin)
 			.itemHeight(itemHeight)
 			.tickFormat({
 				format: d3.time.format("%b %Y"),
-				tickTime: d3.time.month,
-				tickInterval: 3,
+				tickTime: getTickTime(),
+				tickInterval: getTickInterval(),
 				tickSize: 10
 			})
 			.rotateTicks(30)
-			.mouseover(function (d, i, datum) {
-				div = d3.select("#canvas-svg").append("div")
-					.attr("id","tooltip-window")
-					.style("opacity",0);
-						// d is the current rendering object
-						// i is the index during d3 rendering
-						// datum is the data object
-						//console.log(d.starting_time);
-						//console.log(d.ending_time);
-						div.transition()
-							.duration(200)
-							.style("opacity",.9)
-						div.html("Starting date: "+d.starting_time+"<br>Ending date: "+d.ending_time)
-							.style("left",(d3.event.pageX-420)+"px")
-							.style("top",(d3.event.pageY-130)+"px");})
-			.mouseout(function(){
-				div.transition()
-					.duration(300)
-					.style("opacity",0);
-				$("tooltip-window").remove();
+			.mouseover(function(d, i, datum) {
+				var count = 0;
+				// First date text
+				insertHoverInformation(d, count++);
+				// First date value
+				insertHoverInformation(d, count++);
+				// Space
+				count++;
+				// Last date text
+				insertHoverInformation(d, count++);
+				// Last date value
+				insertHoverInformation(d, count++);
+
+				// Making the legend rectangle visible
+				d3.select("#legend-rectangle")
+					.style("opacity", 1.0);
 			})
+			.mouseout(function() {
+				// Removing all text information
+				d3.selectAll(".text-info").remove();
+				// Making the legend rectangle invisible
+				d3.select("#legend-rectangle")
+					.style("opacity", 0.0);
+			});
+
+		function insertHoverInformation(d,index) {
+			function getTextToAppend(d, index) {
+				switch(index) {
+					case 0:
+						return "First date";
+					case 1:
+						return d.starting_time.toDateString();
+					case 3:
+						return "Last date";
+						break;
+					case 4:
+						return d.ending_time.toDateString();
+				}
+			}
+
+			svg.append("text")
+				.attr("id", "text-info"+index)
+				.attr("class", "text-info")
+				.attr("x", (legendX + 10))
+				.attr("y", function() {
+					// Used to create spaces between the elements
+					return legendY + 20 + (15*index);
+				})
+				.style({
+					"font-size": function() { return index%3 === 0 ? "0.8em" : "0.7em"; },
+					"font-weight": function() { return index%3 === 0 ? "bold" : "normal"; }
+				})
+				.text(getTextToAppend(d,index));
+		}
+
+		function getTickTime() {
+			var diff = end.getFullYear() - start.getFullYear();
+			if(diff > 10) {
+				return d3.time.year;
+			} else {
+				return d3.time.month;
+			}
+		}
+
+		function getTickInterval() {
+			var diff = end.getFullYear() - start.getFullYear();
+			if(diff <= 5) {
+				return 3;
+			} else if(diff <= 10) {
+				return 7;
+			} else {
+				return 1;
+			}
+		}
 
 		var svg = d3.select("#canvas-svg").append("svg")
 			.attr("width", "100%")
@@ -694,30 +806,8 @@
 			.attr("viewBox", "0 0 " + (width) + " " + (height/2))
 			.datum(data).call(chart);
 
-		// Fixing the labels position (don't do this again)
-		var auxCount = 1;
-		d3.selectAll(".timeline-label")
-			.attr("transform", function() {
-				return "translate("+ 0 +","+ (itemHeight/2 + marginTop + itemMargin + (itemHeight + itemMargin) * auxCount++)+")";
-			});
-
-
-		var statusCategory = [
-			"DRILLED AND CASED",
-			"STEAM ASSIS GRAVITY DRAIN",
-			"SUSPENDED STEAM ASSIS GRAVITY DRAIN",
-			"ABANDONED",
-			"ABANDONED ZONE",
-			"ABANDONED & WHIPSTOCKED",
-			"OBSERVATION",
-			"UNKNOWN"];
+		// Loading default colors of D3
 		var color = d3.scale.category20();
-
-		for(var i=data.length-1; i >= 0; i--){
-			statusCategory.splice($.inArray(data[i]["label"], statusCategory),1);
-			statusCategory.splice(0,0,data[i]["label"]);
-			statusCategory.join();
-		}
 
 		var legend = svg.append("g")
 			.attr("class","legend")
@@ -737,20 +827,49 @@
 					.attr("y", -100+i*15)
 					.attr("height", 10)
 					.attr("width", 30)
-					.style({"fill":function() {
-						if(i < data.length) {
-							return color(i);
-						} else {
-							return "grey";
+					.style({
+						"fill":function() {
+							if(i < data.length) {
+								return color(i);
+							} else {
+								return "grey";
+							}
+						},
+						"opacity":function() {
+							if(i < data.length) {
+								return 1.0;
+							} else {
+								return 0.5;
+							}
 						}
-					}});
+					});
 				g.append("svg:text")
 					.attr("x", 55)
 					.attr("y", -91+i*15)
-					.attr("height", 20)
-					.attr("width", 100)
-					.attr("font-size",10)
+					.attr("font-size","0.8em")
+					.style({
+						"opacity":function() {
+							if(i < data.length) {
+								return 1.0;
+							} else {
+								return 0.5;
+							}
+						}
+					})
 					.text(statusCategory[i]);
+			});
+
+		var rect = svg.append("rect")
+			.attr("id", "legend-rectangle")
+			.attr("x", legendX)
+			.attr("y", legendY)
+			.attr("width", (width / 6))
+			.attr("height", (height / 4.4))
+			.style({
+				"fill": "none",
+				"stroke": "black",
+				"stroke-width": "0.05em",
+				"opacity": 1.0
 			});
 
 		// Fixing margin when window is resized

@@ -607,9 +607,11 @@
 
 	function setInfoWindowContent(well, infoWindow, map, marker, i, isTop) {
 		return function () {
+			var tempButton = "<input type=\"button\" id=\"view-time-series-button\" value=\"View time series\"/>";
+
 			var content = "<b>Unique Well Identifier</b><br>" + well["w_uwi"] + "<br><br>"
 				+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
-				+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><hr>";
+				+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br>" + tempButton + "<hr>";
 
 			// Adding information about surface/underground location
 			if(isTop === true) {
@@ -625,6 +627,16 @@
 			google.maps.InfoWindow.prototype.opened = false;
 			google.maps.Marker.prototype.id = well["w_uwi"];
 			toggleInfoWindow(infoWindow, map, marker, isTop);
+
+			// Creating listener to click event for the 'view time series' button
+			google.maps.event.addListener(infoWindow, 'domready', function() {
+				$('#view-time-series-button').on('click',function() {
+					// Copying the uwi to the searchbox in the time series visualization
+					$("#time-series-uwi")[0].value = well["w_uwi"];
+
+					$("#openVisualization").trigger("click", false);
+				});
+			});
 		}
 	}
 
