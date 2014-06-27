@@ -10,6 +10,7 @@
     "jade": "*",
     "stylus": "*",
 	"sequelize": "*",
-	"pg": "*"
+	"pg": "*",
+	"method-override": "*"
   }
 }
