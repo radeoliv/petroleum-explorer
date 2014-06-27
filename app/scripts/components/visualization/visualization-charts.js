@@ -708,14 +708,13 @@
 		var height = 400;
 		var itemHeight = 20;
 		var itemMargin = 5;
-		var marginTop = height / 5;
+		var marginTop = height / 4;
 		var legendX = width - width/4;
 		var legendY = -height/8;
 
-		var tooltipDiv;
 		var chart = d3.timeline()
 			.width(width)
-			.margin({left:70,right:30,top:marginTop,bottom:0})
+			.margin({left:55,right:60,top:marginTop,bottom:0})
 			.itemMargin(itemMargin)
 			.itemHeight(itemHeight)
 			.tickFormat({
@@ -768,7 +767,7 @@
 			svg.append("text")
 				.attr("id", "text-info"+index)
 				.attr("class", "text-info")
-				.attr("x", (legendX + 10))
+				.attr("x", (legendX + 17))
 				.attr("y", function() {
 					// Used to create spaces between the elements
 					return legendY + 20 + (15*index);
@@ -803,7 +802,7 @@
 		var svg = d3.select("#canvas-svg").append("svg")
 			.attr("width", "100%")
 			.attr("height", "98%")
-			.attr("viewBox", "0 0 " + (width) + " " + (height/2))
+			.attr("viewBox", "0 -150 " + (width) + " " + (height))
 			.datum(data).call(chart);
 
 		// Loading default colors of D3
@@ -823,10 +822,10 @@
 			.each(function(d,i) {
 				var g=d3.select(this);
 				g.append("svg:rect")
-					.attr("x", 20)
-					.attr("y", -100+i*15)
-					.attr("height", 10)
-					.attr("width", 30)
+					.attr("x", 55)
+					.attr("y", -marginTop/1.5 + i*17)
+					.attr("height", 13)
+					.attr("width", 35)
 					.style({
 						"fill":function() {
 							if(i < data.length) {
@@ -844,9 +843,9 @@
 						}
 					});
 				g.append("svg:text")
-					.attr("x", 55)
-					.attr("y", -91+i*15)
-					.attr("font-size","0.8em")
+					.attr("x", 95)
+					.attr("y", -marginTop/1.5 + 11.2 + i*17)
+					.attr("font-size","0.85em")
 					.style({
 						"opacity":function() {
 							if(i < data.length) {
@@ -861,7 +860,7 @@
 
 		var rect = svg.append("rect")
 			.attr("id", "legend-rectangle")
-			.attr("x", legendX)
+			.attr("x", legendX+5)
 			.attr("y", legendY)
 			.attr("width", (width / 6))
 			.attr("height", (height / 4.4))
@@ -869,7 +868,7 @@
 				"fill": "none",
 				"stroke": "black",
 				"stroke-width": "0.05em",
-				"opacity": 1.0
+				"opacity": 0
 			});
 
 		// Fixing margin when window is resized
