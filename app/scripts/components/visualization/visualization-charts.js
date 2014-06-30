@@ -632,10 +632,6 @@
 		this.removeCurrentChart();
 		$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
 
-		var width = 800,
-			height = 600,
-			radius = Math.min(width, height) / 2.5;
-
 		var start;
 		var end = new Date();
 		var data = [];
@@ -725,6 +721,17 @@
 			})
 			.rotateTicks(30)
 			.mouseover(function(d, i, datum) {
+				// Lowering the opacity of all legends
+				d3.selectAll(".legend")
+					.style("opacity", 0.2);
+
+				// And increasing the opacity of the status being hovered
+				var legendId = "#" + getLegendId(datum["status"]);
+				var legend = d3.select(legendId);
+				legend.style("opacity", function() {
+					return 1.0;
+				});
+
 				var count = 0;
 				// First date text
 				insertHoverInformation(d, count++);
@@ -737,16 +744,19 @@
 				// Last date value
 				insertHoverInformation(d, count++);
 
-				// Making the legend rectangle visible
+				// Making the information rectangle visible
 				d3.select("#legend-rectangle")
 					.style("opacity", 1.0);
 			})
 			.mouseout(function() {
 				// Removing all text information
 				d3.selectAll(".text-info").remove();
-				// Making the legend rectangle invisible
+				// Making the information rectangle invisible
 				d3.select("#legend-rectangle")
 					.style("opacity", 0.0);
+				// Increasing the opacity of all legends
+				d3.selectAll(".legend")
+					.style("opacity", 1.0);
 			});
 
 		function insertHoverInformation(d,index) {
@@ -779,6 +789,10 @@
 				.text(getTextToAppend(d,index));
 		}
 
+		function getLegendId(status) {
+			return "legend-" + status.replace(/ /g,'-').toLowerCase();
+		}
+
 		function getTickTime() {
 			var diff = end.getFullYear() - start.getFullYear();
 			if(diff > 10) {
@@ -809,7 +823,7 @@
 		var color = d3.scale.category20();
 
 		var legend = svg.append("g")
-			.attr("class","legend")
+			.attr("class","legends")
 			.attr("x", 60)
 			.attr("y", -60)
 			.attr("height", 100)
@@ -821,7 +835,13 @@
 			.append('g')
 			.each(function(d,i) {
 				var g=d3.select(this);
+				g.attr("id", getLegendId(statusCategory[i]));
+				g.attr("class","legend");
+
 				g.append("svg:rect")
+					.transition()
+					.delay(100)
+					.duration(700)
 					.attr("x", 55)
 					.attr("y", -marginTop/1.5 + i*17)
 					.attr("height", 13)
@@ -834,15 +854,21 @@
 								return "grey";
 							}
 						},
-						"opacity":function() {
+						"opacity": function() {
 							if(i < data.length) {
 								return 1.0;
 							} else {
-								return 0.5;
+								return 0.4;
 							}
-						}
+						},
+						"stroke": "black",
+						"stroke-width": "0.05em"
 					});
+
 				g.append("svg:text")
+					.transition()
+					.delay(300)
+					.duration(700)
 					.attr("x", 95)
 					.attr("y", -marginTop/1.5 + 11.2 + i*17)
 					.attr("font-size","0.85em")
@@ -851,7 +877,7 @@
 							if(i < data.length) {
 								return 1.0;
 							} else {
-								return 0.5;
+								return 0.4;
 							}
 						}
 					})
@@ -870,16 +896,6 @@
 				"stroke-width": "0.05em",
 				"opacity": 0
 			});
-
-		// Fixing margin when window is resized
-		window.onresize = function() {
-
-			var container = $("#canvas-svg");
-			var clientHeight = container[0].clientHeight;
-			var clientWidth = container[0].clientWidth;
-
-			console.log(clientHeight + " " + clientWidth);
-		}
 	}
 
 	VisualizationCharts.prototype.removeCurrentChart = function() {

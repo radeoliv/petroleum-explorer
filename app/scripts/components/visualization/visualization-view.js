@@ -13,7 +13,7 @@
 (function () {
 
 	// Controlling the active item of the accordion
-	var optionAccordion;	// Variable for handling accordion option
+	var optionAccordion = 0;	// Variable for handling accordion option
 	(function () {
 		$(function () {
 			var active;
@@ -55,22 +55,32 @@
 	// This error probably happens due to some incompatibility with the
 	$openVisualizationButton.on("click", function(event, param) {
 		self.fullTable.closeFullTableDialog();
+
 		if(param === undefined || param === null || param != false) {
 			// Every time the visualization centre is opened, the visualization being shown before is reloaded.
 			// If there's none selected, nothing will be added.
 			$applyVisualizationButton.trigger("click");
 		} else {
 			// Opens the time series accordion tab/panel
-			$("#visualizationAccordion").accordion("option", "active", 2);
+			optionAccordion = 2;
+			$("#visualizationAccordion").accordion("option", "active", optionAccordion);
+
+			$timeSeriesUwi.trigger("keyup");
 		}
 	});
 
-	$timeSeriesUwi.on("keyup", function (e) {
+	$timeSeriesUwi.on("propertychange change keyup paste input", function (e) {
+		if($timeSeriesUwi[0].value != lastUwiTyped) {
+			lastUwiTyped = $timeSeriesUwi[0].value;
+		}
+
 		if($timeSeriesUwi[0].value != undefined && $timeSeriesUwi[0].value != null && $timeSeriesUwi[0].value.length === 19) {
-			if($timeSeriesUwi[0].value != lastUwiTyped) {
-				lastUwiTyped = $timeSeriesUwi[0].value;
-				statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
-			}
+			statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
+
+			// Append information about result found
+			appendInfo(statusInfo);
+		} else {
+			$(".time-series-uwi-msg").remove();
 		}
 	});
 
@@ -83,7 +93,7 @@
 					var attributeText = $barChartSelection[0][$barChartSelection[0].selectedIndex].label;
 					self.visualizationCharts.generateBarChart(attribute, attributeText);
 				} else {
-					self.clearVisualization();
+					self.clearVisualization(true);
 				}
 				break;
 			case 1:
@@ -91,27 +101,27 @@
 					generateTitle();
 					self.visualizationCharts.generatePieChart($pieChartSelection[0].value);
 				} else {
-					self.clearVisualization();
+					self.clearVisualization(true);
 				}
 				break;
 			case 2:
 				if($timeSeriesSelection[0].value != "none") {
-					generateTitle();
-
-					if($timeSeriesSelection[0].value === "testing_status") {
-						if(statusInfo != undefined && statusInfo != null) {
+					if($timeSeriesSelection[0].value === "statuses") {
+						if(statusInfo != undefined && statusInfo != null && statusInfo.length > 0) {
+							generateTitle();
 							self.visualizationCharts.generateTimelineChart(statusInfo);
 						}
 					} else {
+						generateTitle();
 						// Generate the chart
 						self.visualizationCharts.generateTimeSeriesChart("");
 					}
 				} else {
-					self.clearVisualization();
+					self.clearVisualization(false);
 				}
 				break;
 			default:
-				self.clearVisualization();
+				self.clearVisualization(true);
 				break;
 		}
 	});
@@ -134,16 +144,32 @@
 	}
 
 	$clearVisualizationButton.on("click", function() {
-		self.clearVisualization();
+		self.clearVisualization(true);
 	});
 
-	VisualizationView.prototype.clearVisualization = function() {
+	VisualizationView.prototype.clearVisualization = function(removeAll) {
 		$pieChartSelection[0].value = "none";
 		$barChartSelection[0].value = "none";
-		$timeSeriesSelection[0].value = "none"
+		$timeSeriesSelection[0].value = "none";
 		$visualizationTitle[0].innerHTML = "";
+		if(removeAll === true) {
+			$timeSeriesUwi[0].value = "";
+			$(".time-series-uwi-msg").remove();
+		}
 		self.visualizationCharts.removeCurrentChart();
 	};
+
+	function appendInfo(statusInfo) {
+		$(".time-series-uwi-msg").remove();
+		var divToAppend = '#time-series-uwi-selection';
+
+		var found = statusInfo != undefined && statusInfo != null && statusInfo.length > 0;
+		var message = found ? "Well found" : "Well not found";
+		var id = found ? "uwi-found-msg" : "uwi-not-found-msg";
+
+		var label = "<label id=" + id + " class=\"time-series-uwi-msg\"><b>" + message + "</b></br></label>";
+		$(label).appendTo(divToAppend);
+	}
 
 	openVisualization = function() {
 		$(".open-visualization").magnificPopup({
