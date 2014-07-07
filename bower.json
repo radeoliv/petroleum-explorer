@@ -9,6 +9,7 @@
     "handsontable": "~0.10.5",
     "magnific-popup": "~0.9.9",
     "modernizr": "~2.7.2",
-	"d3-timeline": "~0.0.1"
+	"d3-timeline": "~0.0.1",
+	"rickshaw": "~1.4.6"
   }
 }
