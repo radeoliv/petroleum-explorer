@@ -109,12 +109,12 @@
 					if($timeSeriesSelection[0].value === "statuses") {
 						if(statusInfo != undefined && statusInfo != null && statusInfo.length > 0) {
 							generateTitle();
-							self.visualizationCharts.generateTimelineChart(statusInfo);
+							self.visualizationCharts.generateTimelineChart(statusInfo, true);
 						}
 					} else {
 						generateTitle();
 						// Generate the chart
-						self.visualizationCharts.generateTimeSeriesChart("");
+						self.visualizationCharts.generateInjectionProductionChart();
 					}
 				} else {
 					self.clearVisualization(false);
@@ -135,7 +135,7 @@
 				$visualizationTitle[0].innerHTML = pieChartTitle + "<b>" + $pieChartSelection[0][$pieChartSelection[0].selectedIndex].label + "</b>";
 				break;
 			case 2:
-				$visualizationTitle[0].innerHTML = timeSeriesTitle + "<b>" + $timeSeriesSelection[0][$timeSeriesSelection[0].selectedIndex].label + "</b>";
+				$visualizationTitle[0].innerHTML = timeSeriesTitle + "<b>" + $timeSeriesSelection[0][$timeSeriesSelection[0].selectedIndex].label + "</b>" + " - " + $timeSeriesUwi[0].value;
 				break;
 			default:
 				console.log("No option selected!");
