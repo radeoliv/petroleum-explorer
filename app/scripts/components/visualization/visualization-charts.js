@@ -65,16 +65,18 @@
 				radius = Math.min(width, height)/1.5;
 
 			var x = d3.scale.ordinal()
-				.rangeRoundBands([0, width], 0.1);
+				.rangeBands([34, width-34], 0.1);
 
 			var y = d3.scale.linear()
 				.range([height, 0]);
 
+			/*
 			var xAxis = d3.svg.axis()
 				.scale(x)
 				// tickFormat is used to not pollute the chart with a lot of information
 				.tickFormat("")
 				.orient("bottom");
+			*/
 
 			var yAxis = d3.svg.axis()
 				.scale(y)
@@ -207,10 +209,11 @@
 				var fixLegendContent = false;
 				svg.selectAll(".bar")
 					.data(data)
-					.enter().append("rect")
+					.enter()
+					.append("rect")
 					.attr("class", "bar")
-					.attr("id", function(d) { return "bar-" + (count++); })
-					.attr("x", function(d) { return x(count2++); })
+					.attr("id", function() { return "bar-" + (count++); })
+					.attr("x", function() { return x(count2++); })
 					.attr("width", x.rangeBand())
 					.on("mouseover", function() {
 						if(fixLegendContent === false) {
