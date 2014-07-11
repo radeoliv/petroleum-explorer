@@ -695,7 +695,10 @@
 		}
 
 		function getLegendId(status) {
-			return "legend-" + status.replace(/ /g,'-').toLowerCase();
+			var legend = status.replace("&",'and');
+			legend = legend.replace(/ /g,'-').toLowerCase();
+
+			return "legend-" + legend;
 		}
 
 		function getTickTime() {
