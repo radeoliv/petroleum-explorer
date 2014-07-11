@@ -805,7 +805,37 @@
 			});
 	}
 
-	VisualizationCharts.prototype.generateInjectionProductionChart = function() {
+	VisualizationCharts.prototype.getInfoFromWell = function(uwi) {
+		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
+		var wellInfo = [];
+		$.ajax({
+			url: 'http://localhost:3000/getInfoFromWell/' + encodedUWI,
+			dataType:'json',
+			async: false,
+			success: function(data){
+				wellInfo = data;
+			}
+		});
+
+		return wellInfo;
+	}
+
+	VisualizationCharts.prototype.getInjectionInfoFromWell = function(uwi) {
+		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
+		var injectionInfo = [];
+		$.ajax({
+			url: 'http://localhost:3000/getInjectionInfoFromWell/' + encodedUWI,
+			dataType:'json',
+			async: false,
+			success: function(data){
+				injectionInfo = data;
+			}
+		});
+
+		return injectionInfo;
+	}
+
+	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionInfo) {
 		this.removeCurrentChart();
 		var canvasSvg =
 			"<div id=\"canvas-svg\">" +
@@ -869,6 +899,30 @@
 
 		$(canvasSvg).appendTo($visualizationContainer);
 
+		var allSeries = [
+			{ name:"I-HOUR", data:[] },
+			{ name:"I-STEAM", data:[] },
+			{ name:"I-GAS", data:[] },
+			{ name:"PRESS", data:[] },
+			{ name:"I-WATER", data:[] }
+		];
+
+		injectionInfo.forEach(function(element, index, array) {
+			var productionType = element["i_prod_type"];
+			var temp = {
+				y:element["i_value"],
+				x:new Date(element["i_year"], element["i_month"]-1, 1, 0,0,0,0).getTime()/1000
+			};
+
+			// Adding each element to its correspondent serie
+			allSeries.forEach(function(element, index, array) {
+				if(element["name"] === productionType) {
+					element["data"].push(temp);
+					return;
+				}
+			});
+		});
+
 		// set up our data series with 150 random data points
 		var seriesData = [ [], [], [], [], [], [], [], [], [] ];
 		var random = new Rickshaw.Fixtures.RandomData(150);
@@ -876,32 +930,13 @@
 		for (var i = 0; i < 150; i++) {
 			random.addData(seriesData);
 		}
-		console.log(seriesData);
-		console.log(new Date(seriesData[0][0]["x"]));
-		console.log(new Date(seriesData[0][0]["x"]*1000));
 
 		// Loading default colors of D3
 		var color = d3.scale.category20();
 
-		/*
-		 * seriesData contains 6 arrays with 150 random elements. They are composed of { x, y };
-		 * x represents the timestamp in miliseconds(?) and y represents the actual value.
-		 */
-
 		// instantiate our graph!
 
-		var testObject = [];
-		var j= 0;
-		var k =0;
-		for(var i=0; i<36; i++) {
-			testObject.push({y:i+1, x:new Date(2014+j,k++,1,0,0,0,0).getTime()/1000});
-			if(k % 12 === 0) {
-				j++;
-				k = 0;
-			}
-		}
-		console.log(testObject);
-
+		var indexCount = 0;
 		var graph = new Rickshaw.Graph( {
 			element: document.getElementById("chart"),
 			width: 900,
@@ -911,42 +946,31 @@
 			preserve: true,
 			series: [
 				{
-					color: color(0),
-					data: testObject,
-					name: 'Testing'
+					color: color(indexCount),
+					data: allSeries[indexCount]["data"],
+					name: allSeries[indexCount++]["name"]
+				},
+				{
+					color: color(indexCount),
+					data: allSeries[indexCount]["data"],
+					name: allSeries[indexCount++]["name"]
+				},
+				{
+					color: color(indexCount),
+					data: allSeries[indexCount]["data"],
+					name: allSeries[indexCount++]["name"]
+				},
+				{
+					color: color(indexCount),
+					data: allSeries[indexCount]["data"],
+					name: allSeries[indexCount++]["name"]
+				},
+				{
+					color: color(indexCount),
+					data: allSeries[indexCount]["data"],
+					name: allSeries[indexCount++]["name"]
 				}
 			]
-			/*series: [
-				{
-					color: color(0),
-					data: seriesData[0],
-					name: 'Moscow'
-				}, {
-					color: color(1),
-					data: seriesData[1],
-					name: 'Shanghai'
-				}, {
-					color: color(2),
-					data: seriesData[2],
-					name: 'Amsterdam'
-				}, {
-					color: color(3),
-					data: seriesData[3],
-					name: 'Paris'
-				}, {
-					color: color(4),
-					data: seriesData[4],
-					name: 'Tokyo'
-				}, {
-					color: color(5),
-					data: seriesData[5],
-					name: 'London'
-				}, {
-					color: color(6),
-					data: seriesData[6],
-					name: 'New York'
-				}
-			]*/
 		} );
 
 		graph.render();

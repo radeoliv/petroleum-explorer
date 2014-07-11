@@ -28,6 +28,7 @@
 
 	var lastUwiTyped = "";
 	var statusInfo = [];
+	var injectionInfo = [];
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
 	var $applyVisualizationButton = $('#applyVisualization');
@@ -72,15 +73,22 @@
 	$timeSeriesUwi.on("propertychange change keyup paste input", function (e) {
 		if($timeSeriesUwi[0].value != lastUwiTyped) {
 			lastUwiTyped = $timeSeriesUwi[0].value;
-		}
 
-		if($timeSeriesUwi[0].value != undefined && $timeSeriesUwi[0].value != null && $timeSeriesUwi[0].value.length === 19) {
-			statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
+			if($timeSeriesUwi[0].value != undefined && $timeSeriesUwi[0].value != null && $timeSeriesUwi[0].value.length === 19) {
+				// Checking if the well exists
+				var wellInfo = self.visualizationCharts.getInfoFromWell($timeSeriesUwi[0].value);
 
-			// Append information about result found
-			appendInfo(statusInfo);
-		} else {
-			$(".time-series-uwi-msg").remove();
+				var found = wellInfo != undefined && wellInfo != null && wellInfo.length > 0;
+				// Append information about result found
+				appendInfo(wellInfo, found);
+
+				if(found === true) {
+					statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
+					injectionInfo = self.visualizationCharts.getInjectionInfoFromWell($timeSeriesUwi[0].value);
+				}
+			} else {
+				$(".time-series-uwi-msg").remove();
+			}
 		}
 	});
 
@@ -114,7 +122,7 @@
 					} else {
 						generateTitle();
 						// Generate the chart
-						self.visualizationCharts.generateInjectionProductionChart();
+						self.visualizationCharts.generateInjectionProductionChart(injectionInfo);
 					}
 				} else {
 					self.clearVisualization(false);
@@ -159,11 +167,10 @@
 		self.visualizationCharts.removeCurrentChart();
 	};
 
-	function appendInfo(statusInfo) {
+	function appendInfo(wellInfo, found) {
 		$(".time-series-uwi-msg").remove();
 		var divToAppend = '#time-series-uwi-selection';
 
-		var found = statusInfo != undefined && statusInfo != null && statusInfo.length > 0;
 		var message = found ? "Well found" : "Well not found";
 		var id = found ? "uwi-found-msg" : "uwi-not-found-msg";
 

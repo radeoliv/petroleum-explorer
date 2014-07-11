@@ -54,7 +54,7 @@ app.get('/getAllWells', function(req, res) {
 	});
 });
 
-app.get('/getInfoFromWell/:id', function(req, res) {
+app.get('/getInfoFromWell/:uwi', function(req, res) {
 	res.header("Access-Control-Allow-Origin", "*");
 	
 	pg.connect(conString, function(err, client, done) {
@@ -62,9 +62,9 @@ app.get('/getInfoFromWell/:id', function(req, res) {
 			return console.error('error fetching client from pool', err);
 		}
 		
-		var id = req.params.id;
+		var dbuwi = req.params.uwi;
 		
-		client.query("SELECT * FROM wells WHERE w_id = " + id, function(err, result) {
+		client.query("SELECT * FROM wells WHERE w_uwi = '" + dbuwi + "'", function(err, result) {
 			//call `done()` to release the client back to the pool
 			done();
 
@@ -86,8 +86,8 @@ app.get('/getStatusInfoFromWell/:uwi', function(req, res) {
 		}
 		
 		var dbuwi = req.params.uwi;
-		
-		client.query("SELECT s_status, s_date FROM STATUS WHERE status.w_id in (SELECT w_id FROM wells WHERE w_uwi = '" + dbuwi + "') order by s_date", function(err, result) {
+		var query = "SELECT s_status, s_date FROM STATUS WHERE status.w_id in (SELECT w_id FROM wells WHERE w_uwi = '" + dbuwi + "') order by s_date";
+		client.query(query, function(err, result) {
 			//call `done()` to release the client back to the pool
 			done();
 
@@ -108,6 +108,30 @@ app.get('/getAllDistinctStatuses', function(req, res) {
 		}
 		
 		client.query("SELECT distinct(s_status) FROM STATUS order by s_status", function(err, result) {
+			//call `done()` to release the client back to the pool
+			done();
+
+			if(err) {
+				return console.error('error running query', err);
+			}
+			res.send(result.rows);
+		});
+	});
+});
+
+app.get('/getInjectionInfoFromWell/:uwi', function(req, res) {
+	res.header("Access-Control-Allow-Origin", "*");
+
+	pg.connect(conString, function(err, client, done) {
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+
+		var dbuwi = req.params.uwi;
+
+		var query = "SELECT i_month, i_year, i_prod_type, i_value FROM injection WHERE injection.w_id IN (SELECT w_id FROM wells WHERE w_uwi = '" + dbuwi + "') ORDER BY i_year, i_month;";
+
+		client.query(query, function(err, result) {
 			//call `done()` to release the client back to the pool
 			done();
 

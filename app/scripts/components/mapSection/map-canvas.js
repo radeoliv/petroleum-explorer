@@ -709,13 +709,23 @@
 		var bounds = new google.maps.LatLngBounds();
 
 		// Expand the visualization bound considering each marker/pin
-		for (var i = 0; i < markers.length; i++) {
-			bounds.extend(markers[i]["position"]);
+		if(markers != undefined && markers != null) {
+			markers.forEach(function(element,index,array) {
+				bounds.extend(element["position"]);
+			});
+		}
+
+		if(markersTop != undefined && markersTop != null) {
+			markersTop.forEach(function(element,index,array) {
+				bounds.extend(element["position"]);
+			});
 		}
 
 		// Expand the visualization bound considering each polygon marker
-		for(var i = 0; i < polygonMarkers.length; i++) {
-			bounds.extend(polygonMarkers[i]["position"]);
+		if(polygonMarkers != undefined && polygonMarkers != null) {
+			polygonMarkers.forEach(function(element,index,array) {
+				bounds.extend(element["position"]);
+			});
 		}
 
 		// Fit these bounds to the map
