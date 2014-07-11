@@ -211,7 +211,6 @@
 					.attr("class", "bar")
 					.attr("id", function(d) { return "bar-" + (count++); })
 					.attr("x", function(d) { return x(count2++); })
-					.attr("y", function(d) { return y(d); })
 					.attr("width", x.rangeBand())
 					.on("mouseover", function() {
 						if(fixLegendContent === false) {
@@ -256,7 +255,10 @@
 							d3.select("#"+$(this)[0].id).style("fill", "orangered");
 						}
 					})
-					.transition().delay(function (d,i){ return i * 15;}).duration(200)
+					.attr("height", 0)
+					.attr("y", height)
+					.transition().duration(1000).ease("bounce-in")
+					.attr("y", function(d) { return y(d); })
 					.attr("height", function(d) { return height - y(d); })
 					.style("fill", function(d,i) {
 						return getRightBarFillColor(i);
@@ -460,22 +462,42 @@
 						return percentage + " " + numberOfWells;
 					});
 
+				// Three seconds to load the entire chart
+				var baseLoadingTime = 1000;
+				var lastLoadTime = 0;
+
 				count = 0;
 				g.append("path")
 					.attr("d", arc)
 					.attr("id", function(d) { return "arc-" + (count++); })
 					.style("opacity", 0)
-					.transition().delay(function(d, i) { return i * 400; }).duration(400)
+					.transition()
+					.delay(function(d, i) {
+						var delayTime = Math.log(1.3 + (d["value"] / totalEntries)) * baseLoadingTime;
+
+						if(i === 0) {
+							lastLoadTime += delayTime;
+							return 0;
+						} else {
+							lastLoadTime += delayTime;
+						}
+
+						return lastLoadTime - delayTime;
+					})
+					.duration(function(d, i) {
+						return Math.log(1.3 + (d["value"] / totalEntries)) * baseLoadingTime;
+					})
+					.ease("sin-out")
+					.style({
+						"fill": function(d,i) { return color(i); },
+						"opacity": function(d) { return 1; }
+					})
 					.attrTween('d', function(d) {
 						var i = d3.interpolate(d.startAngle, d.endAngle);
 						return function(t) {
 							d.endAngle = i(t);
 							return arc(d);
 						}
-					})
-					.style({
-						"fill": function(d,i) { return color(i); },
-						"opacity": function(d) { return 1; }
 					});
 			};
 			drawD3Document(data);
@@ -909,24 +931,67 @@
 
 	VisualizationCharts.prototype.generateInjectionProductionChart = function() {
 		this.removeCurrentChart();
-		$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
+		var canvasSvg =
+			"<div id=\"canvas-svg\">" +
+			"	<form id=\"side_panel\">" +
+			"		<h1>Random Data in the Future</h1>" +
+			"		<section><div id=\"legend\"></div></section>" +
+			"		<section>" +
+			"			<div id=\"renderer_form\" class=\"toggler\">" +
+			"				<input type=\"radio\" name=\"renderer\" id=\"area\" value=\"area\" checked>" +
+			"				<label for=\"area\">area</label>" +
+			"				<input type=\"radio\" name=\"renderer\" id=\"bar\" value=\"bar\">" +
+			"				<label for=\"bar\">bar</label>" +
+			"				<input type=\"radio\" name=\"renderer\" id=\"line\" value=\"line\">" +
+			"				<label for=\"line\">line</label>" +
+			"				<input type=\"radio\" name=\"renderer\" id=\"scatter\" value=\"scatterplot\">" +
+			"				<label for=\"scatter\">scatter</label>" +
+			"			</div>" +
+			"		</section>" +
+			"		<section>" +
+			"			<div id=\"offset_form\">" +
+			"				<label for=\"stack\">" +
+			"					<input type=\"radio\" name=\"offset\" id=\"stack\" value=\"zero\" checked>" +
+			"					<span>stack</span>" +
+			"				</label>" +
+			"				<label for=\"stream\">" +
+			"					<input type=\"radio\" name=\"offset\" id=\"stream\" value=\"wiggle\">" +
+			"					<span>stream</span>" +
+			"				</label>" +
+			"				<label for=\"pct\">" +
+			"					<input type=\"radio\" name=\"offset\" id=\"pct\" value=\"expand\">" +
+			"					<span>pct</span>" +
+			"				</label>" +
+			"				<label for=\"value\">" +
+			"					<input type=\"radio\" name=\"offset\" id=\"value\" value=\"value\">" +
+			"					<span>value</span>" +
+			"				</label>" +
+			"			</div>" +
+			"			<div id=\"interpolation_form\">" +
+			"				<label for=\"cardinal\">" +
+			"					<input type=\"radio\" name=\"interpolation\" id=\"cardinal\" value=\"cardinal\" checked>" +
+			"					<span>cardinal</span>" +
+			"				</label>" +
+			"				<label for=\"linear\">" +
+			"					<input type=\"radio\" name=\"interpolation\" id=\"linear\" value=\"linear\">" +
+			"					<span>linear</span>" +
+			"				</label>" +
+			"				<label for=\"step\">" +
+			"					<input type=\"radio\" name=\"interpolation\" id=\"step\" value=\"step-after\">" +
+			"					<span>step</span>" +
+			"				</label>" +
+			"			</div>" +
+			"		</section>" +
+			"		<section></section>" +
+			"	</form>" +
+			"	<div id=\"chart_container\">" +
+			"		<div id=\"chart\"></div>" +
+			"		<div id=\"timeline\"></div>" +
+			"		<div id=\"preview\"></div>" +
+			"	</div>" +
+			"</div>";
 
-		/*
-		var graph = new Rickshaw.Graph( {
-			element: document.querySelector('#canvas-svg'),
-			series: [
-				{
-					color: 'steelblue',
-					data: [ { x: 0, y: 23}, { x: 1, y: 15 }, { x: 2, y: 79 } ]
-				}, {
-					color: 'lightblue',
-					data: [ { x: 0, y: 30}, { x: 1, y: 20 }, { x: 2, y: 64 } ]
-				}
-			]
-		} );
-
-		graph.render();
-		*/
+		$(canvasSvg).appendTo($visualizationContainer);
 
 		// set up our data series with 150 random data points
 		var seriesData = [ [], [], [], [], [], [], [], [], [] ];
@@ -935,10 +1000,31 @@
 		for (var i = 0; i < 150; i++) {
 			random.addData(seriesData);
 		}
+		console.log(seriesData);
+		console.log(new Date(seriesData[0][0]["x"]));
+		console.log(new Date(seriesData[0][0]["x"]*1000));
 
-		var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
+		// Loading default colors of D3
+		var color = d3.scale.category20();
+
+		/*
+		 * seriesData contains 6 arrays with 150 random elements. They are composed of { x, y };
+		 * x represents the timestamp in miliseconds(?) and y represents the actual value.
+		 */
 
 		// instantiate our graph!
+
+		var testObject = [];
+		var j= 0;
+		var k =0;
+		for(var i=0; i<36; i++) {
+			testObject.push({y:i+1, x:new Date(2014+j,k++,1,0,0,0,0).getTime()/1000});
+			if(k % 12 === 0) {
+				j++;
+				k = 0;
+			}
+		}
+		console.log(testObject);
 
 		var graph = new Rickshaw.Graph( {
 			element: document.getElementById("chart"),
@@ -949,35 +1035,42 @@
 			preserve: true,
 			series: [
 				{
-					color: palette.color(),
+					color: color(0),
+					data: testObject,
+					name: 'Testing'
+				}
+			]
+			/*series: [
+				{
+					color: color(0),
 					data: seriesData[0],
 					name: 'Moscow'
 				}, {
-					color: palette.color(),
+					color: color(1),
 					data: seriesData[1],
 					name: 'Shanghai'
 				}, {
-					color: palette.color(),
+					color: color(2),
 					data: seriesData[2],
 					name: 'Amsterdam'
 				}, {
-					color: palette.color(),
+					color: color(3),
 					data: seriesData[3],
 					name: 'Paris'
 				}, {
-					color: palette.color(),
+					color: color(4),
 					data: seriesData[4],
 					name: 'Tokyo'
 				}, {
-					color: palette.color(),
+					color: color(5),
 					data: seriesData[5],
 					name: 'London'
 				}, {
-					color: palette.color(),
+					color: color(6),
 					data: seriesData[6],
 					name: 'New York'
 				}
-			]
+			]*/
 		} );
 
 		graph.render();
@@ -990,8 +1083,11 @@
 		var hoverDetail = new Rickshaw.Graph.HoverDetail( {
 			graph: graph,
 			xFormatter: function(x) {
-				return new Date(x * 1000).toString();
+				return d3.time.format("%B %Y")(new Date(x*1000));
 			}
+			/*xFormatter: function(x) {
+				return new Date(x * 1000).toString();
+			}*/
 		} );
 
 		var annotator = new Rickshaw.Graph.Annotate( {
@@ -1002,7 +1098,6 @@
 		var legend = new Rickshaw.Graph.Legend( {
 			graph: graph,
 			element: document.getElementById('legend')
-
 		} );
 
 		var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
@@ -1062,12 +1157,11 @@
 			"Added documentation for new methods"
 		];
 
-		setInterval( function() {
+		/*setInterval( function() {
 			random.removeData(seriesData);
 			random.addData(seriesData);
 			graph.update();
-
-		}, 3000 );
+		}, 3000 );*/
 
 		function addAnnotation(force) {
 			if (messages.length > 0 && (force || Math.random() >= 0.95)) {
@@ -1086,6 +1180,16 @@
 		});
 
 		previewXAxis.render();
+
+		var resize = function() {
+			graph.configure({
+				width: $("#canvas-svg").width() * 0.6,
+				height: $("#canvas-svg").height() * 0.6
+			});
+			graph.render();
+		}
+		window.addEventListener('resize', resize);
+		resize();
 	}
 
 	VisualizationCharts.prototype.removeCurrentChart = function() {
