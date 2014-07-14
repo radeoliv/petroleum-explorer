@@ -120,9 +120,22 @@
 							self.visualizationCharts.generateTimelineChart(statusInfo, true);
 						}
 					} else {
-						generateTitle();
-						// Generate the chart
-						self.visualizationCharts.generateInjectionProductionChart(injectionInfo);
+						if(injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0) {
+							generateTitle();
+							// Generate the chart
+							self.visualizationCharts.generateInjectionProductionChart(injectionInfo);
+						} else {
+							// Show message of no data for injection/production
+							self.clearVisualization(false);
+
+							var alertMessage =
+								"<div id=\"canvas-svg\">" +
+									"<label id=\"no-data-message\">No data available for this well - <b>" + $timeSeriesUwi[0].value + "</b></label>" +
+								"</div>";
+
+							$(alertMessage).appendTo($("#visualization-container"));
+							//alert("No data available for this well (" + $timeSeriesUwi[0].value + ")");
+						}
 					}
 				} else {
 					self.clearVisualization(false);

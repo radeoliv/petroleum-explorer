@@ -533,6 +533,13 @@ Visualization
 #legend {
   background-color: gainsboro; }
 
+#no-data-message {
+  top: 47%;
+  left: 30%;
+  position: absolute;
+  color: red;
+  font-size: 1.5em; }
+
 /* =============================================================================
 Variables
 ============================================================================= */

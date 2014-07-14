@@ -742,7 +742,7 @@
 			.enter()
 			.append('g')
 			.each(function(d,i) {
-				var g=d3.select(this);
+				var g = d3.select(this);
 				g.attr("id", getLegendId(statusCategory[i]));
 				g.attr("class","legend");
 
@@ -758,8 +758,6 @@
 					.attr("height", 13)
 					.attr("width", 0)
 					.transition()
-					.delay(100)
-					.duration(700)
 					.attr("width", 35)
 					.style({
 						"fill":function() {
@@ -780,8 +778,6 @@
 
 				g.append("svg:text")
 					.transition()
-					.delay(300)
-					.duration(700)
 					.attr("x", 95)
 					.attr("y", -marginTop/1.5 + 11.2 + i*17)
 					.attr("font-size","0.85em")
@@ -850,9 +846,9 @@
 			"		<section><div id=\"legend\"></div></section>" +
 			"		<section>" +
 			"			<div id=\"renderer_form\" class=\"toggler\">" +
-			"				<input type=\"radio\" name=\"renderer\" id=\"area\" value=\"area\" checked>" +
+			"				<input type=\"radio\" name=\"renderer\" id=\"area\" value=\"area\">" +
 			"				<label for=\"area\">area</label>" +
-			"				<input type=\"radio\" name=\"renderer\" id=\"bar\" value=\"bar\">" +
+			"				<input type=\"radio\" name=\"renderer\" id=\"bar\" value=\"bar\" checked>" +
 			"				<label for=\"bar\">bar</label>" +
 			"				<input type=\"radio\" name=\"renderer\" id=\"line\" value=\"line\">" +
 			"				<label for=\"line\">line</label>" +
@@ -929,25 +925,16 @@
 			});
 		});
 
-		// set up our data series with 150 random data points
-		var seriesData = [ [], [], [], [], [], [], [], [], [] ];
-		var random = new Rickshaw.Fixtures.RandomData(150);
-
-		for (var i = 0; i < 150; i++) {
-			random.addData(seriesData);
-		}
-
 		// Loading default colors of D3
 		var color = d3.scale.category20();
 
 		// instantiate our graph!
-
 		var indexCount = 0;
 		var graph = new Rickshaw.Graph( {
 			element: document.getElementById("chart"),
 			width: 900,
 			height: 500,
-			renderer: 'area',
+			renderer: 'bar',
 			stroke: true,
 			preserve: true,
 			series: [
@@ -1063,11 +1050,12 @@
 			"Added documentation for new methods"
 		];
 
-		/*setInterval( function() {
+		/*
+		setInterval( function() {
 			random.removeData(seriesData);
 			random.addData(seriesData);
 			graph.update();
-		}, 3000 );*/
+		}, 3000 );
 
 		function addAnnotation(force) {
 			if (messages.length > 0 && (force || Math.random() >= 0.95)) {
@@ -1078,6 +1066,7 @@
 
 		addAnnotation(true);
 		setTimeout( function() { setInterval( addAnnotation, 6000 ) }, 6000 );
+		*/
 
 		var previewXAxis = new Rickshaw.Graph.Axis.Time({
 			graph: preview.previews[0],
@@ -1096,6 +1085,11 @@
 		}
 		window.addEventListener('resize', resize);
 		resize();
+
+		// Changing default selection of offset and interpolation
+		document.getElementById("value").checked = true;
+		// How to trigger the event?!
+		$('#side_panel').trigger("change");
 	}
 
 	VisualizationCharts.prototype.removeCurrentChart = function() {
