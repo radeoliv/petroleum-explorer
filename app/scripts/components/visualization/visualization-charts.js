@@ -842,7 +842,6 @@
 		var canvasSvg =
 			"<div id=\"canvas-svg\">" +
 			"	<form id=\"side_panel\">" +
-			"		<h1>Random Data in the Future</h1>" +
 			"		<section><div id=\"legend\"></div></section>" +
 			"		<section>" +
 			"			<div id=\"renderer_form\" class=\"toggler\">" +

@@ -28,6 +28,7 @@ div, span, p, td {
 #chart_container {
 	position: relative;
 	display: inline-block;
+	margin-top:80px;
 }
 #smoother {
 	margin: 0 0 10px 16px;
@@ -40,10 +41,12 @@ div, span, p, td {
 	border: 1px solid #f0f0f0;
 }
 #side_panel {
+	text-align: left;
 	padding: 0 20px 20px 0;
 	width: 240px;
-	display: inline-block;
-	vertical-align: top;
+	display: block;
+	margin-left:70px;
+	margin-top:80px;
 }
 #side_panel section {
 	color: #505050;
@@ -189,3 +192,8 @@ label[for=step] {
 	left: 0em !important;
 	top: 0em !important;
 }
+
+#canvas-svg{
+	display:-webkit-inline-box;
+}
+
