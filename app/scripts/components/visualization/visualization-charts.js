@@ -773,7 +773,7 @@
 							if(i < data.length) {
 								return 1.0;
 							} else {
-								return 0.4;
+								return 0.3;
 							}
 						}
 					});
@@ -790,7 +790,7 @@
 							if(i < data.length) {
 								return 1.0;
 							} else {
-								return 0.4;
+								return 0.3;
 							}
 						}
 					})
@@ -980,6 +980,11 @@
 		} );
 
 		graph.render();
+
+		console.log($(".action"));
+		console.log(d3.selectAll(".action"));
+		console.log($(".line"));
+		console.log(d3.selectAll(".line"));
 
 		var preview = new Rickshaw.Graph.RangeSlider.Preview( {
 			graph: graph,

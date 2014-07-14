@@ -12,6 +12,7 @@ div, span, p, td {
 }
 #preview {
 	margin-top: 10px;
+	position: relative;
 }
 #legend {
 	display: inline-block;
