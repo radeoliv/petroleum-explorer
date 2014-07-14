@@ -183,3 +183,9 @@ label[for=linear] {
 label[for=step] {
 	background-image: url(../../resources/rickshaw/interp_step.png);
 }
+
+.rickshaw_range_slider_preview {
+	position: absolute !important;
+	left: 0em !important;
+	top: 0em !important;
+}
