@@ -981,11 +981,6 @@
 
 		graph.render();
 
-		console.log($(".action"));
-		console.log(d3.selectAll(".action"));
-		console.log($(".line"));
-		console.log(d3.selectAll(".line"));
-
 		var preview = new Rickshaw.Graph.RangeSlider.Preview( {
 			graph: graph,
 			element: document.getElementById('preview')
