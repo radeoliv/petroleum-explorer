@@ -125,9 +125,9 @@
 						if(injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, 0);
+							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, $timeSeriesSelection[0].value);
 						} else {
-							// Show message of no data for injection/production
+							// Show message of no data for injection
 							self.clearVisualization(false);
 							// Setting the option that the user selected
 							$timeSeriesSelection[0].value = "injection";
@@ -138,15 +138,14 @@
 								"</div>";
 
 							$(alertMessage).appendTo($("#visualization-container"));
-							//alert("No data available for this well (" + $timeSeriesUwi[0].value + ")");
 						}
 					} else if($timeSeriesSelection[0].value === "production"){
 						if(productionInfo != undefined && productionInfo != null && productionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(productionInfo, 1);
+							self.visualizationCharts.generateInjectionProductionChart(productionInfo, $timeSeriesSelection[0].value);
 						} else {
-							// Show message of no data for injection/production
+							// Show message of no data for production
 							self.clearVisualization(false);
 							// Setting the option that the user selected
 							$timeSeriesSelection[0].value = "production";
@@ -157,7 +156,6 @@
 									"</div>";
 
 							$(alertMessage).appendTo($("#visualization-container"));
-							//alert("No data available for this well (" + $timeSeriesUwi[0].value + ")");
 						}
 					}
 				} else {

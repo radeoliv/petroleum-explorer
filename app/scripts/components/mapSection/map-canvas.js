@@ -710,22 +710,22 @@
 
 		// Expand the visualization bound considering each marker/pin
 		if(markers != undefined && markers != null) {
-			markers.forEach(function(element,index,array) {
-				bounds.extend(element["position"]);
-			});
+			for(var i=0; i<markers.length; i++) {
+				bounds.extend(markers[i]["position"]);
+			}
 		}
 
 		if(markersTop != undefined && markersTop != null) {
-			markersTop.forEach(function(element,index,array) {
-				bounds.extend(element["position"]);
-			});
+			for(var i=0; i<markersTop.length; i++) {
+				bounds.extend(markersTop[i]["position"]);
+			}
 		}
 
 		// Expand the visualization bound considering each polygon marker
 		if(polygonMarkers != undefined && polygonMarkers != null) {
-			polygonMarkers.forEach(function(element,index,array) {
-				bounds.extend(element["position"]);
-			});
+			for(var i=0; i<polygonMarkers.length; i++) {
+				bounds.extend(polygonMarkers[i]["position"]);
+			}
 		}
 
 		// Fit these bounds to the map

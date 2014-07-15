@@ -97,9 +97,9 @@
 
 			var drawD3Document = function(data) {
 				// Making sure that the value is a double
-				data.forEach(function(d) {
-					d = +d;
-				});
+				for(var i=0; i<data.length; i++) {
+					data[i] = +data[i];
+				}
 
 				var count = 0;
 				x.domain(data.map(function(d) { return count++; }));
@@ -366,9 +366,9 @@
 
 			var drawD3Document = function(data) {
 				// Making sure that the value is a double
-				data.forEach(function(d) {
-					d[DATA] = +d[DATA];
-				});
+				for(var i=0; i<data.length; i++) {
+					data[i][DATA] = +data[i][DATA];
+				}
 
 				var g = svg.selectAll(".arc")
 					.data(pie(data))
@@ -562,13 +562,13 @@
 			 * In positive case, only the starting and end time are added.
 			 * In negative case, a new entry is pushed to the data array.
 			 */
-			data.forEach(function(element, index, array) {
-				if(element["status"] === statusInfo[i]["s_status"]) {
-					element["times"].push(times);
+			for(var j=0; j<data.length; i++) {
+				if(data[j]["status"] === statusInfo[i]["s_status"]) {
+					data[j]["times"].push(times);
 					res = true;
 					return;
 				}
-			});
+			}
 
 			if(res === false) {
 				var tempData = { status:statusInfo[i]["s_status"], times: [times] };
@@ -583,9 +583,9 @@
 			dataType:'json',
 			async: false,
 			success: function(statuses){
-				statuses.forEach(function(element, index, array) {
-					statusCategory.push(element["s_status"]);
-				});
+				for(var i=0; i<statuses.length; i++) {
+					statusCategory.push(statuses[i]["s_status"]);
+				}
 			}
 		});
 
@@ -856,7 +856,6 @@
 	};
 
 	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionProductionInfo, type) {
-		//if type = 0, it is injection; if type = 1, it is production.
 
 		this.removeCurrentChart();
 		var canvasSvg =
@@ -933,7 +932,7 @@
 		var allSeries = [];
 		var data = [];
 
-		if (type === 0) {	//it is injection
+		if (type === "injection") {	// In case we are dealing with INJECTION data..
 			allSeries = [
 				{ attr:"I-HOUR", name:"Hours", data:[] },
 				{ attr:"I-STEAM", name:"Steam", data:[] },
@@ -942,24 +941,25 @@
 				{ attr:"I-WATER", name:"Water", data:[] }
 			];
 
-			injectionProductionInfo.forEach(function(element, index, array) {
-				var productionType = element["i_prod_type"];
-				var temp = {
-					y: element["i_value"],
-					x: new Date( element["i_year"], element["i_month"]-1, 1, 0,0,0,0 ).getTime() / 1000
-				};
-
-				// Adding each element to its correspondent serie
-				allSeries.forEach(function(element, index, array) {
-					if(element["attr"] === productionType) {
-						element["data"].push(temp);
-						return;
+			for(var i=0; i<injectionProductionInfo.length; i++) {
+				// Adding each element to its correspondent series
+				for(var j=0; j<allSeries.length; j++) {
+					if(allSeries[j]["attr"] === injectionProductionInfo[i]["i_prod_type"]) {
+						allSeries[j]["data"].push(
+							{
+								y: injectionProductionInfo[i]["i_value"],
+								x: new Date( injectionProductionInfo[i]["i_year"], injectionProductionInfo[i]["i_month"]-1,
+									1, 0,0,0,0 ).getTime() / 1000
+							}
+						);
+						break;
 					}
-				});
-			});
+				}
+			}
 
-		} else if (type === 1) { //it is production
+		} else if (type === "production") {	// In case we are dealing with PRODUCTION data..
 
+			// All the production attributes
 			var attributeNames = [
 				{ attr: "p_gas", name: "Gas (e³m³)" },
 				{ attr: "p_gas_act_day", name: "Gas Actual Day (e³m³/day)" },
@@ -986,37 +986,38 @@
 				{ attr: "p_cml_hours", name: "Cumulative Hours" }
 			];
 
-			attributeNames.forEach(function(element) {
-				allSeries.push({ attr: element["attr"], name: element["name"], data: [] });
-			});
+			// Filling allSeries with the attribute names defined in attributeNames array
+			for(var i=0; i<attributeNames.length; i++) {
+				allSeries.push({ attr: attributeNames[i]["attr"], name: attributeNames[i]["name"], data: [] });
+			}
 
-			injectionProductionInfo.forEach(function(injProdElement) {
-
-				attributeNames.forEach(function(nameElement) {
-					var temp = {
-						y: injProdElement[nameElement["attr"]],
-						x: new Date( injProdElement["p_year"], injProdElement["p_month"]-1, 1, 0,0,0,0 ).getTime() / 1000
-					};
-
-					// Adding each element to its correspondent serie
-					allSeries.forEach(function(seriesElement) {
-						if(seriesElement["attr"] === nameElement["attr"]) {
-							seriesElement["data"].push(temp);
-							return;
+			/*
+			 * Going through all the production data and for each attribute name we push the data to the specific
+			 * series of allSeries array.
+			 */
+			for(var i=0; i<injectionProductionInfo.length; i++) {
+				for(var j=0; j<attributeNames.length; j++) {
+					for(var k=0; k<allSeries.length; k++) {
+						if(allSeries[k]["attr"] === attributeNames[j]["attr"]) {
+							allSeries[k]["data"].push(
+								{
+									y: injectionProductionInfo[i][ attributeNames[j]["attr"] ],
+									x: new Date( injectionProductionInfo[i]["p_year"], injectionProductionInfo[i]["p_month"]-1,
+										1, 0,0,0,0 ).getTime() / 1000
+								}
+							);
+							break;
 						}
-					});
-				});
-			});
+					}
+				}
+			}
+
 		}
 
 		// Putting all data together to give it to the chart
-		allSeries.forEach(function(element, index) {
-			data.push({
-				color: color(index),
-				data: element["data"],
-				name: element["name"]
-			});
-		});
+		for(var i=0; i<allSeries.length; i++) {
+			data.push( { color: color(i), data: allSeries[i]["data"], name: allSeries[i]["name"] } );
+		}
 
 		// instantiate our graph!
 		var graph = new Rickshaw.Graph( {
