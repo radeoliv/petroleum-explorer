@@ -88,7 +88,7 @@
 
 			var svg = d3.select("#canvas-svg").append("svg")
 				.attr("width", "100%")//width + margin.left + margin.right)
-				.attr("height", "98%")//height + margin.top + margin.bottom)
+				.attr("height", "100%")//height + margin.top + margin.bottom)
 				.attr("viewBox", "0 0 " + (2*radius+width/2) + " " + (2*radius))
 				.append("g")
 				.attr("width", (width + (width/3)))
@@ -286,6 +286,7 @@
 
 	VisualizationCharts.prototype.calculatePieChartValues = function(attribute) {
 		var currentWells = this.MapController.getCurrentWells();
+		console.log(currentWells);
 
 		if(currentWells != undefined && currentWells != null) {
 			var attributeValues = [];
@@ -322,7 +323,6 @@
 	};
 
 	VisualizationCharts.prototype.generatePieChart = function(attribute) {
-
 		// Calculate the data distribution
 		var data = this.calculatePieChartValues(attribute);
 
@@ -360,7 +360,7 @@
 
 			var svg = d3.select("#canvas-svg").append("svg")
 				.attr("width", "100%")
-				.attr("height", "98%")
+				.attr("height", "100%")
 				.attr("viewBox", "0 0 " + (2*radius+width/2) + " " + (2*radius+width/20))
 				.append("g")
 				.attr("transform", "translate(" + (radius) + "," + (radius + radius/6) + ")");
@@ -723,7 +723,7 @@
 
 		var svg = d3.select("#canvas-svg").append("svg")
 			.attr("width", "100%")
-			.attr("height", "98%")
+			.attr("height", "100%")
 			.attr("viewBox", "0 -150 " + (width) + " " + (height))
 			.datum(data).call(chart);
 
@@ -758,6 +758,7 @@
 					.attr("height", 13)
 					.attr("width", 0)
 					.transition()
+					.duration(800)
 					.attr("width", 35)
 					.style({
 						"fill":function() {
@@ -777,7 +778,11 @@
 					});
 
 				g.append("svg:text")
+					.style({ "opacity": 0 })
+					.text(statusCategory[i])
 					.transition()
+					.delay(400)
+					.duration(700)
 					.attr("x", 95)
 					.attr("y", -marginTop/1.5 + 11.2 + i*17)
 					.attr("font-size","0.85em")
@@ -789,8 +794,7 @@
 								return 0.3;
 							}
 						}
-					})
-					.text(statusCategory[i]);
+					});
 			});
 
 		var rect = svg.append("rect")
@@ -841,61 +845,69 @@
 		this.removeCurrentChart();
 		var canvasSvg =
 			"<div id=\"canvas-svg\">" +
-			"	<form id=\"side_panel\">" +
-			"		<section><div id=\"legend\"></div></section>" +
-			"		<section>" +
-			"			<div id=\"renderer_form\" class=\"toggler\">" +
-			"				<input type=\"radio\" name=\"renderer\" id=\"area\" value=\"area\">" +
-			"				<label for=\"area\">area</label>" +
-			"				<input type=\"radio\" name=\"renderer\" id=\"bar\" value=\"bar\" checked>" +
-			"				<label for=\"bar\">bar</label>" +
-			"				<input type=\"radio\" name=\"renderer\" id=\"line\" value=\"line\">" +
-			"				<label for=\"line\">line</label>" +
-			"				<input type=\"radio\" name=\"renderer\" id=\"scatter\" value=\"scatterplot\">" +
-			"				<label for=\"scatter\">scatter</label>" +
+			"	<table id=\"side_panel_table\">" +
+			"		<tr>" +
+			"			<td>" +
+			"				<form id=\"side_panel\">" +
+			"					<section><div id=\"legend\"></div></section>" +
+			"					<section>" +
+			"						<div id=\"renderer_form\" class=\"toggler\">" +
+			"							<input type=\"radio\" name=\"renderer\" id=\"area\" value=\"area\">" +
+			"							<label for=\"area\">area</label>" +
+			"							<input type=\"radio\" name=\"renderer\" id=\"bar\" value=\"bar\">" +
+			"							<label for=\"bar\">bar</label>" +
+			"							<input type=\"radio\" name=\"renderer\" id=\"line\" value=\"line\" checked>" +
+			"							<label for=\"line\">line</label>" +
+			"							<input type=\"radio\" name=\"renderer\" id=\"scatter\" value=\"scatterplot\">" +
+			"							<label for=\"scatter\">scatter</label>" +
+			"						</div>" +
+			"					</section>" +
+			"					<section>" +
+			"						<div id=\"offset_form\">" +
+			"							<label for=\"stack\" class=\"disabled\">" +
+			"								<input type=\"radio\" name=\"offset\" id=\"stack\" value=\"zero\" disabled>" +
+			"								<span>stack</span>" +
+			"							</label>" +
+			"							<label for=\"stream\" class=\"disabled\">" +
+			"								<input type=\"radio\" name=\"offset\" id=\"stream\" value=\"wiggle\" disabled>" +
+			"								<span>stream</span>" +
+			"							</label>" +
+			"							<label for=\"pct\">" +
+			"								<input type=\"radio\" name=\"offset\" id=\"pct\" value=\"expand\">" +
+			"								<span>pct</span>" +
+			"							</label>" +
+			"							<label for=\"value\">" +
+			"								<input type=\"radio\" name=\"offset\" id=\"value\" value=\"value\" checked>" +
+			"								<span>value</span>" +
+			"							</label>" +
+			"						</div>" +
+			"						<div id=\"interpolation_form\">" +
+			"							<label for=\"cardinal\">" +
+			"								<input type=\"radio\" name=\"interpolation\" id=\"cardinal\" value=\"cardinal\" checked>" +
+			"								<span>cardinal</span>" +
+			"							</label>" +
+			"							<label for=\"linear\">" +
+			"								<input type=\"radio\" name=\"interpolation\" id=\"linear\" value=\"linear\">" +
+			"								<span>linear</span>" +
+			"							</label>" +
+			"							<label for=\"step\">" +
+			"								<input type=\"radio\" name=\"interpolation\" id=\"step\" value=\"step-after\">" +
+			"								<span>step</span>" +
+			"							</label>" +
+			"						</div>" +
+			"					</section>" +
+			"					<section></section>" +
+			"				</form>" +
+			"			</td>" +
+			"			<td id=\"chart_column\">" +
+			"			<div id=\"chart_container\">" +
+			"				<div id=\"chart\"></div>" +
+			"				<div id=\"timeline\"></div>" +
+			"				<div id=\"preview\"></div>" +
 			"			</div>" +
-			"		</section>" +
-			"		<section>" +
-			"			<div id=\"offset_form\">" +
-			"				<label for=\"stack\">" +
-			"					<input type=\"radio\" name=\"offset\" id=\"stack\" value=\"zero\" checked>" +
-			"					<span>stack</span>" +
-			"				</label>" +
-			"				<label for=\"stream\">" +
-			"					<input type=\"radio\" name=\"offset\" id=\"stream\" value=\"wiggle\">" +
-			"					<span>stream</span>" +
-			"				</label>" +
-			"				<label for=\"pct\">" +
-			"					<input type=\"radio\" name=\"offset\" id=\"pct\" value=\"expand\">" +
-			"					<span>pct</span>" +
-			"				</label>" +
-			"				<label for=\"value\">" +
-			"					<input type=\"radio\" name=\"offset\" id=\"value\" value=\"value\">" +
-			"					<span>value</span>" +
-			"				</label>" +
-			"			</div>" +
-			"			<div id=\"interpolation_form\">" +
-			"				<label for=\"cardinal\">" +
-			"					<input type=\"radio\" name=\"interpolation\" id=\"cardinal\" value=\"cardinal\" checked>" +
-			"					<span>cardinal</span>" +
-			"				</label>" +
-			"				<label for=\"linear\">" +
-			"					<input type=\"radio\" name=\"interpolation\" id=\"linear\" value=\"linear\">" +
-			"					<span>linear</span>" +
-			"				</label>" +
-			"				<label for=\"step\">" +
-			"					<input type=\"radio\" name=\"interpolation\" id=\"step\" value=\"step-after\">" +
-			"					<span>step</span>" +
-			"				</label>" +
-			"			</div>" +
-			"		</section>" +
-			"		<section></section>" +
-			"	</form>" +
-			"	<div id=\"chart_container\">" +
-			"		<div id=\"chart\"></div>" +
-			"		<div id=\"timeline\"></div>" +
-			"		<div id=\"preview\"></div>" +
-			"	</div>" +
+			"			</td>" +
+			"		</tr>" +
+			"	</table>" +
 			"</div>";
 
 		$(canvasSvg).appendTo($visualizationContainer);
@@ -911,8 +923,8 @@
 		injectionInfo.forEach(function(element, index, array) {
 			var productionType = element["i_prod_type"];
 			var temp = {
-				y:element["i_value"],
-				x:new Date(element["i_year"], element["i_month"]-1, 1, 0,0,0,0).getTime()/1000
+				y: element["i_value"],
+				x: new Date( element["i_year"], element["i_month"]-1, 1, 0,0,0,0 ).getTime() / 1000
 			};
 
 			// Adding each element to its correspondent serie
@@ -933,7 +945,7 @@
 			element: document.getElementById("chart"),
 			width: 900,
 			height: 500,
-			renderer: 'bar',
+			renderer: 'line',
 			stroke: true,
 			preserve: true,
 			series: [
@@ -1084,11 +1096,6 @@
 		}
 		window.addEventListener('resize', resize);
 		resize();
-
-		// Changing default selection of offset and interpolation
-		document.getElementById("value").checked = true;
-		// How to trigger the event?!
-		$('#side_panel').trigger("change");
 	}
 
 	VisualizationCharts.prototype.removeCurrentChart = function() {

@@ -121,7 +121,7 @@ var RenderControls = function(args) {
 		bar: {
 			interpolation: false,
 			offset: ['zero', 'wiggle', 'expand', 'value'],
-			defaults: { offset: 'zero' }
+			defaults: { offset: 'value' }
 		},
 		scatterplot: {
 			interpolation: false,

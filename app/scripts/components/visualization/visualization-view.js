@@ -119,7 +119,7 @@
 							generateTitle();
 							self.visualizationCharts.generateTimelineChart(statusInfo, true);
 						}
-					} else {
+					} else if($timeSeriesSelection[0].value === "injection"){
 						if(injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
@@ -127,10 +127,12 @@
 						} else {
 							// Show message of no data for injection/production
 							self.clearVisualization(false);
+							// Setting the option that the user selected
+							$timeSeriesSelection[0].value = "injection";
 
 							var alertMessage =
 								"<div id=\"canvas-svg\">" +
-									"<label id=\"no-data-message\">No data available for this well - <b>" + $timeSeriesUwi[0].value + "</b></label>" +
+									"<label id=\"no-data-message\">No injection data available for this well - <b>" + $timeSeriesUwi[0].value + "</b></label>" +
 								"</div>";
 
 							$(alertMessage).appendTo($("#visualization-container"));

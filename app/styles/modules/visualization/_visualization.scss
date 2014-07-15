@@ -61,7 +61,7 @@ Visualization
 		right: $outsideContainerMargin;
 		top: $outsideContainerMargin;
 		bottom: $outsideContainerMargin;
-		overflow: auto;
+		overflow: hidden;
 		text-align: center;
 
 		#visualization-header {
@@ -201,7 +201,7 @@ Visualization
 
 #no-data-message {
 	top: 47%;
-	left: 30%;
+	left: 25%;
 	position: absolute;
 	color: red;
 	font-size: 1.5em;

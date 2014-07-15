@@ -438,7 +438,7 @@ Visualization
     right: 0.3em;
     top: 0.3em;
     bottom: 0.3em;
-    overflow: auto;
+    overflow: hidden;
     text-align: center; }
     #info-visualization #visualization-container #visualization-header {
       height: 1.5em;
@@ -532,7 +532,7 @@ Visualization
 
 #no-data-message {
   top: 47%;
-  left: 30%;
+  left: 25%;
   position: absolute;
   color: red;
   font-size: 1.5em; }
