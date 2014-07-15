@@ -28,7 +28,7 @@ div, span, p, td {
 #chart_container {
 	position: relative;
 	display: inline-block;
-	margin-top:80px;
+	/* margin-top:80px; */
 }
 #smoother {
 	margin: 0 0 10px 16px;
@@ -42,14 +42,19 @@ div, span, p, td {
 }
 #chart_column {
 	text-align: left;
+	padding-top: 5em;
+	vertical-align: top;
+}
+#side_panel_table {
+	height: 100%;
 }
 #side_panel {
 	text-align: left;
-	padding: 0 0 58px 0;
 	width: 240px;
 	display: inline-block;
 	margin-right: 3em;
-	margin-top: 5em;
+	padding-top: 5em;
+	height: 100%;
 }
 #side_panel section {
 	color: #505050;

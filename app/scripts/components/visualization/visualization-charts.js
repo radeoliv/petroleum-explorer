@@ -286,7 +286,6 @@
 
 	VisualizationCharts.prototype.calculatePieChartValues = function(attribute) {
 		var currentWells = this.MapController.getCurrentWells();
-		console.log(currentWells);
 
 		if(currentWells != undefined && currentWells != null) {
 			var attributeValues = [];
@@ -824,7 +823,7 @@
 		});
 
 		return wellInfo;
-	}
+	};
 
 	VisualizationCharts.prototype.getInjectionInfoFromWell = function(uwi) {
 		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
@@ -839,9 +838,26 @@
 		});
 
 		return injectionInfo;
-	}
+	};
 
-	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionInfo) {
+	VisualizationCharts.prototype.getProductionInfoFromWell = function(uwi) {
+		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
+		var productionInfo = [];
+		$.ajax({
+			url: 'http://localhost:3000/getProductionInfoFromWell/' + encodedUWI,
+			dataType:'json',
+			async: false,
+			success: function(data){
+				productionInfo = data;
+			}
+		});
+
+		return productionInfo;
+	};
+
+	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionProductionInfo, type) {
+		//if type = 0, it is injection; if type = 1, it is production.
+
 		this.removeCurrentChart();
 		var canvasSvg =
 			"<div id=\"canvas-svg\">" +
@@ -912,35 +928,97 @@
 
 		$(canvasSvg).appendTo($visualizationContainer);
 
-		var allSeries = [
-			{ name:"I-HOUR", data:[] },
-			{ name:"I-STEAM", data:[] },
-			{ name:"I-GAS", data:[] },
-			{ name:"PRESS", data:[] },
-			{ name:"I-WATER", data:[] }
-		];
+		// Loading default colors of D3
+		var color = d3.scale.category20();
+		var allSeries = [];
+		var data = [];
 
-		injectionInfo.forEach(function(element, index, array) {
-			var productionType = element["i_prod_type"];
-			var temp = {
-				y: element["i_value"],
-				x: new Date( element["i_year"], element["i_month"]-1, 1, 0,0,0,0 ).getTime() / 1000
-			};
+		if (type === 0) {	//it is injection
+			allSeries = [
+				{ attr:"I-HOUR", name:"Hours", data:[] },
+				{ attr:"I-STEAM", name:"Steam", data:[] },
+				{ attr:"I-GAS", name:"Gas", data:[] },
+				{ attr:"PRESS", name:"Pressure", data:[] },
+				{ attr:"I-WATER", name:"Water", data:[] }
+			];
 
-			// Adding each element to its correspondent serie
-			allSeries.forEach(function(element, index, array) {
-				if(element["name"] === productionType) {
-					element["data"].push(temp);
-					return;
-				}
+			injectionProductionInfo.forEach(function(element, index, array) {
+				var productionType = element["i_prod_type"];
+				var temp = {
+					y: element["i_value"],
+					x: new Date( element["i_year"], element["i_month"]-1, 1, 0,0,0,0 ).getTime() / 1000
+				};
+
+				// Adding each element to its correspondent serie
+				allSeries.forEach(function(element, index, array) {
+					if(element["attr"] === productionType) {
+						element["data"].push(temp);
+						return;
+					}
+				});
+			});
+
+		} else if (type === 1) { //it is production
+
+			var attributeNames = [
+				{ attr: "p_gas", name: "Gas (e³m³)" },
+				{ attr: "p_gas_act_day", name: "Gas Actual Day (e³m³/day)" },
+				{ attr: "p_gas_cal_day", name: "Gas Calendar Day (e³m³/day)" },
+				{ attr: "p_oil", name: "Oil (m³)" },
+				{ attr: "p_oil_act_day", name: "Oil Actual Day (m³/day)" },
+				{ attr: "p_oil_cal_day", name: "Oil Calendar Day (m³/day)" },
+				{ attr: "p_oil_cut", name: "Oil Cut (%)" },
+				{ attr: "p_water", name: "Water (m³)" },
+				{ attr: "p_water_act_day", name: "Water Actual Day (m³/day)" },
+				{ attr: "p_water_cal_day", name: "Water Calendar Day (m³/day)" },
+				{ attr: "p_water_cut", name: "Water Cut (%)" },
+				{ attr: "p_hours", name: "Hours" },
+				{ attr: "p_total_fluid", name: "Total Fluid (m³)" },
+				{ attr: "p_total_fluid_act_day", name: "Total Fluid Actual Day (m³/day)" },
+				{ attr: "p_total_fluid_cal_day", name: "Total Fluid Calendar Day (m³/day)" },
+				{ attr: "p_gas_fluid_ratio", name: "Gas Fluid Ratio" },
+				{ attr: "p_gas_oil_ratio", name: "Gas Oil Ratio" },
+				{ attr: "p_water_gas_ratio", name: "Water Gas Ratio" },
+				{ attr: "p_water_oil_ratio", name: "Water Oil Ratio" },
+				{ attr: "p_cml_gas", name: "Cumulative Gas (e³m³)" },
+				{ attr: "p_cml_oil_bitu", name: "Cumulative Oil Bitumen (m³)" },
+				{ attr: "p_cml_water", name: "Cumulative Water (m³)" },
+				{ attr: "p_cml_hours", name: "Cumulative Hours" }
+			];
+
+			attributeNames.forEach(function(element) {
+				allSeries.push({ attr: element["attr"], name: element["name"], data: [] });
+			});
+
+			injectionProductionInfo.forEach(function(injProdElement) {
+
+				attributeNames.forEach(function(nameElement) {
+					var temp = {
+						y: injProdElement[nameElement["attr"]],
+						x: new Date( injProdElement["p_year"], injProdElement["p_month"]-1, 1, 0,0,0,0 ).getTime() / 1000
+					};
+
+					// Adding each element to its correspondent serie
+					allSeries.forEach(function(seriesElement) {
+						if(seriesElement["attr"] === nameElement["attr"]) {
+							seriesElement["data"].push(temp);
+							return;
+						}
+					});
+				});
+			});
+		}
+
+		// Putting all data together to give it to the chart
+		allSeries.forEach(function(element, index) {
+			data.push({
+				color: color(index),
+				data: element["data"],
+				name: element["name"]
 			});
 		});
 
-		// Loading default colors of D3
-		var color = d3.scale.category20();
-
 		// instantiate our graph!
-		var indexCount = 0;
 		var graph = new Rickshaw.Graph( {
 			element: document.getElementById("chart"),
 			width: 900,
@@ -948,33 +1026,7 @@
 			renderer: 'line',
 			stroke: true,
 			preserve: true,
-			series: [
-				{
-					color: color(indexCount),
-					data: allSeries[indexCount]["data"],
-					name: allSeries[indexCount++]["name"]
-				},
-				{
-					color: color(indexCount),
-					data: allSeries[indexCount]["data"],
-					name: allSeries[indexCount++]["name"]
-				},
-				{
-					color: color(indexCount),
-					data: allSeries[indexCount]["data"],
-					name: allSeries[indexCount++]["name"]
-				},
-				{
-					color: color(indexCount),
-					data: allSeries[indexCount]["data"],
-					name: allSeries[indexCount++]["name"]
-				},
-				{
-					color: color(indexCount),
-					data: allSeries[indexCount]["data"],
-					name: allSeries[indexCount++]["name"]
-				}
-			]
+			series: data
 		} );
 
 		graph.render();

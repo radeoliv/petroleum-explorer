@@ -143,6 +143,30 @@ app.get('/getInjectionInfoFromWell/:uwi', function(req, res) {
 	});
 });
 
+app.get('/getProductionInfoFromWell/:uwi', function(req, res) {
+	res.header("Access-Control-Allow-Origin", "*");
+
+	pg.connect(conString, function(err, client, done) {
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+
+		var dbuwi = req.params.uwi;
+
+		var query = "SELECT * FROM production WHERE production.w_id IN (SELECT w_id FROM wells WHERE w_uwi = '" + dbuwi + "') ORDER BY p_year, p_month;";
+
+		client.query(query, function(err, result) {
+			//call `done()` to release the client back to the pool
+			done();
+
+			if(err) {
+				return console.error('error running query', err);
+			}
+			res.send(result.rows);
+		});
+	});
+});
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

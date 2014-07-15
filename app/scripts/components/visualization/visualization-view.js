@@ -29,6 +29,7 @@
 	var lastUwiTyped = "";
 	var statusInfo = [];
 	var injectionInfo = [];
+	var productionInfo= [];
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
 	var $applyVisualizationButton = $('#applyVisualization');
@@ -85,6 +86,7 @@
 				if(found === true) {
 					statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
 					injectionInfo = self.visualizationCharts.getInjectionInfoFromWell($timeSeriesUwi[0].value);
+					productionInfo = self.visualizationCharts.getProductionInfoFromWell($timeSeriesUwi[0].value);
 				}
 			} else {
 				$(".time-series-uwi-msg").remove();
@@ -123,7 +125,7 @@
 						if(injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(injectionInfo);
+							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, 0);
 						} else {
 							// Show message of no data for injection/production
 							self.clearVisualization(false);
@@ -134,6 +136,25 @@
 								"<div id=\"canvas-svg\">" +
 									"<label id=\"no-data-message\">No injection data available for this well - <b>" + $timeSeriesUwi[0].value + "</b></label>" +
 								"</div>";
+
+							$(alertMessage).appendTo($("#visualization-container"));
+							//alert("No data available for this well (" + $timeSeriesUwi[0].value + ")");
+						}
+					} else if($timeSeriesSelection[0].value === "production"){
+						if(productionInfo != undefined && productionInfo != null && productionInfo.length > 0) {
+							generateTitle();
+							// Generate the chart
+							self.visualizationCharts.generateInjectionProductionChart(productionInfo, 1);
+						} else {
+							// Show message of no data for injection/production
+							self.clearVisualization(false);
+							// Setting the option that the user selected
+							$timeSeriesSelection[0].value = "production";
+
+							var alertMessage =
+								"<div id=\"canvas-svg\">" +
+									"<label id=\"no-data-message\">No production data available for this well - <b>" + $timeSeriesUwi[0].value + "</b></label>" +
+									"</div>";
 
 							$(alertMessage).appendTo($("#visualization-container"));
 							//alert("No data available for this well (" + $timeSeriesUwi[0].value + ")");
