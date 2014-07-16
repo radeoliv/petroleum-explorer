@@ -121,11 +121,11 @@
 							generateTitle();
 							self.visualizationCharts.generateTimelineChart(statusInfo, true);
 						}
-					} else if($timeSeriesSelection[0].value === "injection"){
+					} else if($timeSeriesSelection[0].value === "injection") {
 						if(injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, $timeSeriesSelection[0].value);
+							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for injection
 							self.clearVisualization(false);
@@ -139,11 +139,11 @@
 
 							$(alertMessage).appendTo($("#visualization-container"));
 						}
-					} else if($timeSeriesSelection[0].value === "production"){
+					} else if($timeSeriesSelection[0].value === "production") {
 						if(productionInfo != undefined && productionInfo != null && productionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(productionInfo, $timeSeriesSelection[0].value);
+							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for production
 							self.clearVisualization(false);
@@ -157,6 +157,19 @@
 
 							$(alertMessage).appendTo($("#visualization-container"));
 						}
+					} else if($timeSeriesSelection[0].value === "sor") {
+						var hasInjection = injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0;
+						var hasProduction = productionInfo != undefined && productionInfo != null && productionInfo.length > 0;
+
+						if(hasInjection && hasProduction) {
+							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
+						} else {
+							// Show message of no data for production
+							self.clearVisualization(false);
+							// Setting the option that the user selected
+							$timeSeriesSelection[0].value = "sor";
+						}
+
 					}
 				} else {
 					self.clearVisualization(false);

@@ -562,7 +562,7 @@
 			 * In positive case, only the starting and end time are added.
 			 * In negative case, a new entry is pushed to the data array.
 			 */
-			for(var j=0; j<data.length; i++) {
+			for(var j=0; j<data.length; j++) {
 				if(data[j]["status"] === statusInfo[i]["s_status"]) {
 					data[j]["times"].push(times);
 					res = true;
@@ -855,7 +855,65 @@
 		return productionInfo;
 	};
 
-	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionProductionInfo, type) {
+	VisualizationCharts.prototype.getInjectionProductionIntersection = function(injectionInfo, productionInfo) {
+		var injectionDates = [];
+		var productionDates = [];
+
+		for(var i=0; i<injectionInfo.length; i++) {
+			if(injectionInfo[i]["i_prod_type"] === "I-STEAM") {
+				injectionDates.push(
+					{
+						year: injectionInfo[i]["i_year"],
+						month: injectionInfo[i]["i_month"],
+						value: injectionInfo[i]["i_value"]
+					});
+			}
+		}
+
+		for(var i=0; i<productionInfo.length; i++) {
+			productionDates.push(
+				{
+					year: productionInfo[i]["p_year"],
+					month: productionInfo[i]["p_month"],
+					value: productionInfo[i]["p_oil"]
+				});
+		}
+
+		var matchDates = [];
+		for(var i=0; i<injectionDates.length; i++) {
+			for(var j=0; j<productionDates.length; j++) {
+				if(injectionDates[i]["year"] === productionDates[j]["year"] &&
+					injectionDates[i]["month"] === productionDates[j]["month"]) {
+					var zeroValues = injectionDates[i]["value"] === 0 || productionDates[j]["value"] === 0;
+					matchDates.push(
+						{
+							year: injectionDates[i]["year"],
+							month: injectionDates[i]["month"],
+							steam: injectionDates[i]["value"],
+							oil: productionDates[j]["value"],
+							sor: zeroValues === true ? 0 : injectionDates[i]["value"]/productionDates[j]["value"]
+						});
+					break;
+				}
+			}
+		}
+
+//		console.log("Injection");
+//		console.log(injectionInfo);
+//		console.log(injectionDates);
+//		console.log("Production");
+//		console.log(productionInfo);
+//		console.log(productionDates);
+
+		console.log("Injection - months not in use: " + ((injectionInfo.length / 5) - matchDates.length) + " out of " + (injectionInfo.length / 5));
+		console.log("Production - months not in use: " + (productionInfo.length - matchDates.length) + " out of " + (productionInfo.length));
+		console.log("Match dates - " + matchDates.length);
+		console.log(matchDates);
+
+		return { steam: injectionDates, oil: productionDates, sor: matchDates };
+	};
+
+	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionInfo, productionInfo, type) {
 
 		this.removeCurrentChart();
 		var canvasSvg =
@@ -941,14 +999,14 @@
 				{ attr:"I-WATER", name:"Water", data:[] }
 			];
 
-			for(var i=0; i<injectionProductionInfo.length; i++) {
+			for(var i=0; i<injectionInfo.length; i++) {
 				// Adding each element to its correspondent series
 				for(var j=0; j<allSeries.length; j++) {
-					if(allSeries[j]["attr"] === injectionProductionInfo[i]["i_prod_type"]) {
+					if(allSeries[j]["attr"] === injectionInfo[i]["i_prod_type"]) {
 						allSeries[j]["data"].push(
 							{
-								y: injectionProductionInfo[i]["i_value"],
-								x: new Date( injectionProductionInfo[i]["i_year"], injectionProductionInfo[i]["i_month"]-1,
+								y: injectionInfo[i]["i_value"],
+								x: new Date( injectionInfo[i]["i_year"], injectionInfo[i]["i_month"]-1,
 									1, 0,0,0,0 ).getTime() / 1000
 							}
 						);
@@ -995,14 +1053,14 @@
 			 * Going through all the production data and for each attribute name we push the data to the specific
 			 * series of allSeries array.
 			 */
-			for(var i=0; i<injectionProductionInfo.length; i++) {
+			for(var i=0; i<productionInfo.length; i++) {
 				for(var j=0; j<attributeNames.length; j++) {
 					for(var k=0; k<allSeries.length; k++) {
 						if(allSeries[k]["attr"] === attributeNames[j]["attr"]) {
 							allSeries[k]["data"].push(
 								{
-									y: injectionProductionInfo[i][ attributeNames[j]["attr"] ],
-									x: new Date( injectionProductionInfo[i]["p_year"], injectionProductionInfo[i]["p_month"]-1,
+									y: productionInfo[i][ attributeNames[j]["attr"] ],
+									x: new Date( productionInfo[i]["p_year"], productionInfo[i]["p_month"]-1,
 										1, 0,0,0,0 ).getTime() / 1000
 								}
 							);
@@ -1012,6 +1070,28 @@
 				}
 			}
 
+		} else if(type === "sor") {
+			var sorInfo = self.getInjectionProductionIntersection(injectionInfo, productionInfo);
+
+			allSeries = [
+				{ series:sorInfo["steam"], attr:"value", name:"Steam", data:[] },
+				{ series:sorInfo["oil"], attr:"value", name:"Oil", data:[] },
+				{ series:sorInfo["sor"], attr:"sor", name:"SOR", data:[] }
+			];
+
+			for(var i=0; i<allSeries.length; i++) {
+				for(var j=0; j<allSeries[i]["series"].length; j++) {
+					allSeries[i]["data"].push(
+						{
+							y: allSeries[i]["series"][j][allSeries[i]["attr"]],
+							x: new Date( allSeries[i]["series"][j]["year"], allSeries[i]["series"][j]["month"]-1,
+							1, 0,0,0,0 ).getTime() / 1000
+						}
+					);
+				}
+			}
+
+			// Fill missing values with Y = NULL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}
 
 		// Putting all data together to give it to the chart
