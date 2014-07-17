@@ -859,6 +859,7 @@
 		var injectionDates = [];
 		var productionDates = [];
 
+		console.log("1");
 		for(var i=0; i<injectionInfo.length; i++) {
 			if(injectionInfo[i]["i_prod_type"] === "I-STEAM") {
 				injectionDates.push(
@@ -867,8 +868,22 @@
 						month: injectionInfo[i]["i_month"],
 						value: injectionInfo[i]["i_value"]
 					});
+
+				// Checking if the next steam value exists
+				if(i + 5 < injectionInfo.length) {
+					var nextYear = injectionInfo[i+5]["i_year"];
+					var nextMonth = injectionInfo[i+5]["i_month"];
+					var currentYear = injectionInfo[i]["i_year"];
+					var currentMonth = injectionInfo[i]["i_month"];
+
+					var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
+					if(filling != undefined && filling != null && filling.length > 0) {
+						injectionDates.push(filling);
+					}
+				}
 			}
 		}
+		console.log("2");
 
 		for(var i=0; i<productionInfo.length; i++) {
 			productionDates.push(
@@ -877,27 +892,52 @@
 					month: productionInfo[i]["p_month"],
 					value: productionInfo[i]["p_oil"]
 				});
-		}
 
-		var matchDates = [];
+			// Checking if the next production value exists
+			if(i + 1 < productionInfo.length) {
+				var nextYear = productionInfo[i+1]["i_year"];
+				var nextMonth = productionInfo[i+1]["i_month"];
+				var currentYear = productionInfo[i]["i_year"];
+				var currentMonth = productionInfo[i]["i_month"];
+
+				var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
+				if(filling != undefined && filling != null && filling.length > 0) {
+					productionDates.push(filling);
+				}
+			}
+		}
+		console.log("3");
+
+		var sorDates = [];
 		for(var i=0; i<injectionDates.length; i++) {
 			for(var j=0; j<productionDates.length; j++) {
 				if(injectionDates[i]["year"] === productionDates[j]["year"] &&
 					injectionDates[i]["month"] === productionDates[j]["month"]) {
+
+					if(sorDates.length > 0) {
+						var nextYear = injectionDates[i]["year"];
+						var nextMonth = injectionDates[i]["month"];
+						var currentYear = sorDates[sorDates.length - 1]["year"];
+						var currentMonth = sorDates[sorDates.length - 1]["month"];
+
+						var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
+						sorDates.push(filling);
+					}
+
 					var zeroValues = injectionDates[i]["value"] === 0 || productionDates[j]["value"] === 0;
-					matchDates.push(
+					sorDates.push(
 						{
 							year: injectionDates[i]["year"],
 							month: injectionDates[i]["month"],
 							steam: injectionDates[i]["value"],
 							oil: productionDates[j]["value"],
-							sor: zeroValues === true ? 0 : injectionDates[i]["value"]/productionDates[j]["value"]
+							value: zeroValues === true ? 0 : injectionDates[i]["value"]/productionDates[j]["value"]
 						});
 					break;
 				}
 			}
 		}
-
+		console.log("4");
 //		console.log("Injection");
 //		console.log(injectionInfo);
 //		console.log(injectionDates);
@@ -905,13 +945,40 @@
 //		console.log(productionInfo);
 //		console.log(productionDates);
 
-		console.log("Injection - months not in use: " + ((injectionInfo.length / 5) - matchDates.length) + " out of " + (injectionInfo.length / 5));
-		console.log("Production - months not in use: " + (productionInfo.length - matchDates.length) + " out of " + (productionInfo.length));
-		console.log("Match dates - " + matchDates.length);
-		console.log(matchDates);
+		console.log("Injection - months not in use: " + ((injectionInfo.length / 5) - sorDates.length) + " out of " + (injectionInfo.length / 5));
+		console.log("Production - months not in use: " + (productionInfo.length - sorDates.length) + " out of " + (productionInfo.length));
+		console.log("Match dates - " + sorDates.length);
+		console.log(sorDates);
 
-		return { steam: injectionDates, oil: productionDates, sor: matchDates };
+		return { steam: injectionDates, oil: productionDates, sor: sorDates };
 	};
+
+	function fillGap(currentMonth, currentYear, nextMonth, nextYear) {
+
+		var filling = [];
+
+		// Add 1 month to the currentMonth
+		currentMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+		// If the month is 1, we know the year must increase 1
+		currentYear = currentMonth === 1 ? currentYear + 1 : currentYear;
+
+		while(currentYear != nextYear || currentMonth != nextMonth) {
+			// Adding null value
+			filling.push(
+				{
+					year: currentYear,
+					month: currentMonth,
+					value: null
+				});
+
+			// Add 1 month to the currentMonth
+			currentMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+			// If the month is 1, we know the year must increase 1
+			currentYear = currentMonth === 1 ? currentYear + 1 : currentYear;
+		}
+
+		return filling;
+	}
 
 	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionInfo, productionInfo, type) {
 
@@ -1071,19 +1138,22 @@
 			}
 
 		} else if(type === "sor") {
+			console.log("begin");
 			var sorInfo = self.getInjectionProductionIntersection(injectionInfo, productionInfo);
 
+			console.log(sorInfo);
+
 			allSeries = [
-				{ series:sorInfo["steam"], attr:"value", name:"Steam", data:[] },
-				{ series:sorInfo["oil"], attr:"value", name:"Oil", data:[] },
-				{ series:sorInfo["sor"], attr:"sor", name:"SOR", data:[] }
+				{ series:sorInfo["steam"], name:"Steam", data:[] },
+				{ series:sorInfo["oil"], name:"Oil", data:[] },
+				{ series:sorInfo["sor"], name:"SOR", data:[] }
 			];
 
 			for(var i=0; i<allSeries.length; i++) {
 				for(var j=0; j<allSeries[i]["series"].length; j++) {
 					allSeries[i]["data"].push(
 						{
-							y: allSeries[i]["series"][j][allSeries[i]["attr"]],
+							y: allSeries[i]["series"][j]["value"],
 							x: new Date( allSeries[i]["series"][j]["year"], allSeries[i]["series"][j]["month"]-1,
 							1, 0,0,0,0 ).getTime() / 1000
 						}
