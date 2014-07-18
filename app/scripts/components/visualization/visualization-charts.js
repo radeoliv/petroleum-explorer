@@ -859,7 +859,6 @@
 		var injectionDates = [];
 		var productionDates = [];
 
-		console.log("1");
 		for(var i=0; i<injectionInfo.length; i++) {
 			if(injectionInfo[i]["i_prod_type"] === "I-STEAM") {
 				injectionDates.push(
@@ -878,12 +877,14 @@
 
 					var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
 					if(filling != undefined && filling != null && filling.length > 0) {
-						injectionDates.push(filling);
+						injectionDates.splice.apply(injectionDates, [injectionDates.length - 1,0].concat(filling));
 					}
 				}
 			}
 		}
-		console.log("2");
+
+		console.log("Injection!");
+		console.log(injectionDates);
 
 		for(var i=0; i<productionInfo.length; i++) {
 			productionDates.push(
@@ -895,18 +896,20 @@
 
 			// Checking if the next production value exists
 			if(i + 1 < productionInfo.length) {
-				var nextYear = productionInfo[i+1]["i_year"];
-				var nextMonth = productionInfo[i+1]["i_month"];
-				var currentYear = productionInfo[i]["i_year"];
-				var currentMonth = productionInfo[i]["i_month"];
+				var nextYear = productionInfo[i+1]["p_year"];
+				var nextMonth = productionInfo[i+1]["p_month"];
+				var currentYear = productionInfo[i]["p_year"];
+				var currentMonth = productionInfo[i]["p_month"];
 
 				var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
 				if(filling != undefined && filling != null && filling.length > 0) {
-					productionDates.push(filling);
+					productionDates.splice.apply(productionDates, [productionDates.length - 1,0].concat(filling));
 				}
 			}
 		}
-		console.log("3");
+
+		console.log("Production!");
+		console.log(productionDates);
 
 		var sorDates = [];
 		for(var i=0; i<injectionDates.length; i++) {
@@ -921,7 +924,7 @@
 						var currentMonth = sorDates[sorDates.length - 1]["month"];
 
 						var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
-						sorDates.push(filling);
+						sorDates.splice.apply(sorDates, [sorDates.length - 1,0].concat(filling));
 					}
 
 					var zeroValues = injectionDates[i]["value"] === 0 || productionDates[j]["value"] === 0;
@@ -937,7 +940,10 @@
 				}
 			}
 		}
-		console.log("4");
+
+		console.log("SOR!");
+		console.log(sorDates);
+
 //		console.log("Injection");
 //		console.log(injectionInfo);
 //		console.log(injectionDates);
@@ -945,10 +951,94 @@
 //		console.log(productionInfo);
 //		console.log(productionDates);
 
-		console.log("Injection - months not in use: " + ((injectionInfo.length / 5) - sorDates.length) + " out of " + (injectionInfo.length / 5));
-		console.log("Production - months not in use: " + (productionInfo.length - sorDates.length) + " out of " + (productionInfo.length));
-		console.log("Match dates - " + sorDates.length);
-		console.log(sorDates);
+//		console.log("Injection - months not in use: " + ((injectionInfo.length / 5) - sorDates.length) + " out of " + (injectionInfo.length / 5));
+//		console.log("Production - months not in use: " + (productionInfo.length - sorDates.length) + " out of " + (productionInfo.length));
+//		console.log("Match dates - " + sorDates.length);
+//		console.log(sorDates);
+
+		/*
+		 * Getting minimum and maximum dates to fill steam, oil, and sor series intervals (with null values)
+		 * to make them have the same number of date records.
+		 */
+		var minMaxDates = getMinimumAndMaximumDates(injectionDates, productionDates);
+		console.log("minMaxDates");
+		console.log(minMaxDates);
+		/*
+		 * Injection
+		 */
+		var missingDatesMinInj = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
+			injectionDates[0]["month"], injectionDates[0]["year"], true);
+		if(missingDatesMinInj != undefined && missingDatesMinInj != null && missingDatesMinInj.length > 0) {
+			// Adding dates to the beginning...
+			injectionDates.splice.apply(injectionDates, [0,0].concat(missingDatesMinInj));
+		}
+
+		// Making sure that the first value will be in the array
+		if(injectionDates[0]["month"] != minMaxDates["minMonth"] || injectionDates[0]["year"] != minMaxDates["minYear"]) {
+			injectionDates.splice(0, 0, {year: minMaxDates["minYear"], month: minMaxDates["minMonth"], value: null });
+		}
+
+		var lastInjIndex = injectionDates.length - 1;
+		var missingDatesMaxInj = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
+			injectionDates[lastInjIndex]["month"], injectionDates[lastInjIndex]["year"], false);
+		if(missingDatesMaxInj != undefined && missingDatesMaxInj != null && missingDatesMaxInj.length > 0) {
+			// Adding dates to the end...
+			injectionDates.splice.apply(injectionDates, [injectionDates.length,0].concat(missingDatesMaxInj));
+		}
+
+		/*
+		 * Production
+		 */
+		var missingDatesMinProd = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
+			productionDates[0]["month"], productionDates[0]["year"], true);
+		if(missingDatesMinProd != undefined && missingDatesMinProd != null && missingDatesMinProd.length > 0) {
+			// Adding dates to the beginning...
+			productionDates.splice.apply(productionDates, [0,0].concat(missingDatesMinProd));
+		}
+
+		// Making sure that the first value will be in the array
+		if(productionDates[0]["month"] != minMaxDates["minMonth"] || productionDates[0]["year"] != minMaxDates["minYear"]) {
+			productionDates.splice(0, 0, {year: minMaxDates["minYear"], month: minMaxDates["minMonth"], value: null });
+		}
+
+		var lastProdIndex = productionDates.length - 1;
+		var missingDatesMaxProduction = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
+			productionDates[lastProdIndex]["month"], productionDates[lastProdIndex]["year"], false);
+		console.log("missingDatesMaxProduction");
+		console.log(missingDatesMaxProduction);
+		if(missingDatesMaxProduction != undefined && missingDatesMaxProduction != null && missingDatesMaxProduction.length > 0) {
+			// Adding dates to the end...
+
+			productionDates.splice.apply(productionDates, [productionDates.length,0].concat(missingDatesMaxProduction));
+		}
+
+		/*
+		 * SOR
+		 */
+		var missingDatesMinSOR = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
+			sorDates[0]["month"], sorDates[0]["year"], true);
+		console.log(minMaxDates["minMonth"] + " " + minMaxDates["minYear"] + " " + sorDates[0]["month"] + " " + sorDates[0]["year"]);
+		console.log("missingDatesMinSOR");
+		console.log(missingDatesMinSOR);
+		if(missingDatesMinSOR != undefined && missingDatesMinSOR != null && missingDatesMinSOR.length > 0) {
+			// Adding dates to the beginning...
+			sorDates.splice.apply(sorDates, [0,0].concat(missingDatesMinSOR));
+		}
+
+		// Making sure that the first value will be in the array
+		if(sorDates[0]["month"] != minMaxDates["minMonth"] || sorDates[0]["year"] != minMaxDates["minYear"]) {
+			sorDates.splice(0, 0, {year: minMaxDates["minYear"], month: minMaxDates["minMonth"], value: null });
+		}
+
+		var lastSORIndex = sorDates.length - 1;
+		var missingDatesMaxSOR = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
+			sorDates[lastSORIndex]["month"], sorDates[lastSORIndex]["year"], false);
+		if(missingDatesMaxSOR != undefined && missingDatesMaxSOR != null && missingDatesMaxSOR.length > 0) {
+			// Adding dates to the end...
+			console.log("missingDatesMaxSOR");
+			console.log(missingDatesMaxSOR);
+			sorDates.splice.apply(sorDates, [sorDates.length,0].concat(missingDatesMaxSOR));
+		}
 
 		return { steam: injectionDates, oil: productionDates, sor: sorDates };
 	};
@@ -975,6 +1065,80 @@
 			currentMonth = currentMonth === 12 ? 1 : currentMonth + 1;
 			// If the month is 1, we know the year must increase 1
 			currentYear = currentMonth === 1 ? currentYear + 1 : currentYear;
+		}
+
+		return filling;
+	}
+
+	function getMinimumAndMaximumDates(injectionDates, productionDates) {
+		var minYear, minMonth, maxYear, maxMonth = -1;
+
+		var minInjYear = injectionDates[0]["year"];
+		var minInjMonth = injectionDates[0]["month"];
+		var minProdYear = productionDates[0]["year"];
+		var minProdMonth = productionDates[0]["month"];
+
+		var maxInjYear = injectionDates[injectionDates.length - 1]["year"];
+		var maxInjMonth = injectionDates[injectionDates.length - 1]["month"];
+		var maxProdYear = productionDates[productionDates.length - 1]["year"];
+		var maxProdMonth = productionDates[productionDates.length - 1]["month"];
+
+		var injectionIsSmaller = true;
+		if(minInjYear < minProdYear) {
+			// Injection is smaller
+		} else if(minInjYear > minProdYear) {
+			// Production is smaller
+			injectionIsSmaller = false;
+		} else if(minInjYear === minProdYear) {
+			// If the year is the same, we must check the months
+			if(minInjMonth <= minProdMonth) {
+				// Injection is smaller
+			} else if(minInjMonth > minProdMonth) {
+				// Production is smaller
+				injectionIsSmaller = false;
+			}
+		}
+		minYear = injectionIsSmaller === true ? minInjYear : minProdYear;
+		minMonth = injectionIsSmaller === true ? minInjMonth: minProdMonth;
+
+		var injectionIsGreater = true;
+		if(maxInjYear > maxProdYear) {
+			// Injection is greater
+		} else if(maxInjYear < maxProdYear) {
+			// Production is greater
+			injectionIsGreater = false;
+		} else if(maxInjYear === maxProdYear) {
+			// If the year is the same, we must check the months
+			if(maxInjMonth >= maxProdMonth) {
+				// Injection is greater
+			} else if(maxInjMonth < maxProdMonth) {
+				// Production is greater
+				injectionIsGreater = false;
+			}
+		}
+		maxYear = injectionIsGreater === true ? maxInjYear : maxProdYear;
+		maxMonth = injectionIsGreater === true ? maxInjMonth: maxProdMonth;
+
+		return { minMonth: minMonth, minYear: minYear, maxMonth: maxMonth, maxYear: maxYear };
+	}
+
+	function getMissingDates(minMaxMonth, minMaxYear, month, year, isMinimum) {
+		var filling = [];
+
+		if(minMaxMonth != month || minMaxYear != year) {
+			if(isMinimum === true) {
+				filling = fillGap(minMaxMonth, minMaxYear, month, year);
+			} else {
+				filling = fillGap(month, year, minMaxMonth, minMaxYear);
+			}
+
+			if(filling != undefined && filling != null && filling.length > 0) {
+				if(isMinimum === true) {
+					filling.splice(0, 0, { year: minMaxYear, month: minMaxMonth, value: null });
+				} else {
+					filling.push({ year: minMaxYear, month: minMaxMonth, value: null });
+				}
+			}
 		}
 
 		return filling;
