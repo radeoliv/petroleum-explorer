@@ -146,6 +146,9 @@ label.disabled {
 	display: inline-block;
 	width: 45%;
 }
+#offset_form {
+	width: 52%;
+}
 #interpolation_form label,
 #offset_form label {
 	display: block;

@@ -1158,7 +1158,7 @@
 			"	<div id=\"missing_values_form\">" +
 			"		<label for=\"interpolate\">" +
 			"			<input type=\"checkbox\" name=\"missing_values\" id=\"interpolate\" value=\"interpolate\" checked=\"true\">" +
-			"			<span>interpolate missing values</span>" +
+			"			<span>Interpolate missing values</span>" +
 			"		</label>" +
 			"	</div>" +
 			"</section>";
@@ -1173,46 +1173,46 @@
 			"					<section>" +
 			"						<div id=\"renderer_form\" class=\"toggler\">" +
 			"							<input type=\"radio\" name=\"renderer\" id=\"area\" value=\"area\">" +
-			"							<label for=\"area\">area</label>" +
+			"							<label for=\"area\">Area</label>" +
 			"							<input type=\"radio\" name=\"renderer\" id=\"bar\" value=\"bar\">" +
-			"							<label for=\"bar\">bar</label>" +
+			"							<label for=\"bar\">Bar</label>" +
 			"							<input type=\"radio\" name=\"renderer\" id=\"line\" value=\"line\" checked>" +
-			"							<label for=\"line\">line</label>" +
+			"							<label for=\"line\">Line</label>" +
 			"							<input type=\"radio\" name=\"renderer\" id=\"scatter\" value=\"scatterplot\">" +
-			"							<label for=\"scatter\">scatter</label>" +
+			"							<label for=\"scatter\">Scatter</label>" +
 			"						</div>" +
 			"					</section>" +
 			"					<section>" +
 			"						<div id=\"offset_form\">" +
 			"							<label for=\"stack\" class=\"disabled\">" +
 			"								<input type=\"radio\" name=\"offset\" id=\"stack\" value=\"zero\" disabled>" +
-			"								<span>stack</span>" +
+			"								<span>Stack</span>" +
 			"							</label>" +
 			"							<label for=\"stream\" class=\"disabled\">" +
 			"								<input type=\"radio\" name=\"offset\" id=\"stream\" value=\"wiggle\" disabled>" +
-			"								<span>stream</span>" +
+			"								<span>Stream</span>" +
 			"							</label>" +
 			"							<label for=\"pct\">" +
 			"								<input type=\"radio\" name=\"offset\" id=\"pct\" value=\"expand\">" +
-			"								<span>pct</span>" +
+			"								<span>Percentage</span>" +
 			"							</label>" +
 			"							<label for=\"value\">" +
 			"								<input type=\"radio\" name=\"offset\" id=\"value\" value=\"value\" checked>" +
-			"								<span>value</span>" +
+			"								<span>Value</span>" +
 			"							</label>" +
 			"						</div>" +
 			"						<div id=\"interpolation_form\">" +
 			"							<label for=\"cardinal\">" +
 			"								<input type=\"radio\" name=\"interpolation\" id=\"cardinal\" value=\"cardinal\" checked>" +
-			"								<span>cardinal</span>" +
+			"								<span>Cardinal</span>" +
 			"							</label>" +
 			"							<label for=\"linear\">" +
 			"								<input type=\"radio\" name=\"interpolation\" id=\"linear\" value=\"linear\">" +
-			"								<span>linear</span>" +
+			"								<span>Linear</span>" +
 			"							</label>" +
 			"							<label for=\"step\">" +
 			"								<input type=\"radio\" name=\"interpolation\" id=\"step\" value=\"step-after\">" +
-			"								<span>step</span>" +
+			"								<span>Step</span>" +
 			"							</label>" +
 			"						</div>" +
 			"					</section>" +
@@ -1240,11 +1240,11 @@
 
 		if (type === "injection") {	// In case we are dealing with INJECTION data..
 			allSeries = [
-				{ attr:"I-HOUR", name:"Hours", data:[] },
+				{ attr:"I-WATER", name:"Water", data:[] },
 				{ attr:"I-STEAM", name:"Steam", data:[] },
-				{ attr:"I-GAS", name:"Gas", data:[] },
 				{ attr:"PRESS", name:"Pressure", data:[] },
-				{ attr:"I-WATER", name:"Water", data:[] }
+				{ attr:"I-HOUR", name:"Hours", data:[] },
+				{ attr:"I-GAS", name:"Gas", data:[] }
 			];
 
 			function processInjectionInfo(interpolate) {
@@ -1294,29 +1294,29 @@
 
 			// All the production attributes
 			var attributeNames = [
-				{ attr: "p_gas", name: "Gas (e³m³)" },
-				{ attr: "p_gas_act_day", name: "Gas Actual Day (e³m³/day)" },
-				{ attr: "p_gas_cal_day", name: "Gas Calendar Day (e³m³/day)" },
-				{ attr: "p_oil", name: "Oil (m³)" },
-				{ attr: "p_oil_act_day", name: "Oil Actual Day (m³/day)" },
-				{ attr: "p_oil_cal_day", name: "Oil Calendar Day (m³/day)" },
-				{ attr: "p_oil_cut", name: "Oil Cut (%)" },
-				{ attr: "p_water", name: "Water (m³)" },
-				{ attr: "p_water_act_day", name: "Water Actual Day (m³/day)" },
-				{ attr: "p_water_cal_day", name: "Water Calendar Day (m³/day)" },
-				{ attr: "p_water_cut", name: "Water Cut (%)" },
-				{ attr: "p_hours", name: "Hours" },
-				{ attr: "p_total_fluid", name: "Total Fluid (m³)" },
-				{ attr: "p_total_fluid_act_day", name: "Total Fluid Actual Day (m³/day)" },
-				{ attr: "p_total_fluid_cal_day", name: "Total Fluid Calendar Day (m³/day)" },
-				{ attr: "p_gas_fluid_ratio", name: "Gas Fluid Ratio" },
-				{ attr: "p_gas_oil_ratio", name: "Gas Oil Ratio" },
-				{ attr: "p_water_gas_ratio", name: "Water Gas Ratio" },
 				{ attr: "p_water_oil_ratio", name: "Water Oil Ratio" },
-				{ attr: "p_cml_gas", name: "Cumulative Gas (e³m³)" },
-				{ attr: "p_cml_oil_bitu", name: "Cumulative Oil Bitumen (m³)" },
+				{ attr: "p_water_gas_ratio", name: "Water Gas Ratio" },
+				{ attr: "p_water_cut", name: "Water Cut (%)" },
+				{ attr: "p_water_cal_day", name: "Water Calendar Day (m³/day)" },
+				{ attr: "p_water_act_day", name: "Water Actual Day (m³/day)" },
+				{ attr: "p_water", name: "Water (m³)" },
+				{ attr: "p_total_fluid_cal_day", name: "Total Fluid Calendar Day (m³/day)" },
+				{ attr: "p_total_fluid_act_day", name: "Total Fluid Actual Day (m³/day)" },
+				{ attr: "p_total_fluid", name: "Total Fluid (m³)" },
+				{ attr: "p_oil_cut", name: "Oil Cut (%)" },
+				{ attr: "p_oil_cal_day", name: "Oil Calendar Day (m³/day)" },
+				{ attr: "p_oil_act_day", name: "Oil Actual Day (m³/day)" },
+				{ attr: "p_oil", name: "Oil (m³)" },
+				{ attr: "p_hours", name: "Hours" },
+				{ attr: "p_gas_oil_ratio", name: "Gas Oil Ratio" },
+				{ attr: "p_gas_fluid_ratio", name: "Gas Fluid Ratio" },
+				{ attr: "p_gas_cal_day", name: "Gas Calendar Day (e³m³/day)" },
+				{ attr: "p_gas_act_day", name: "Gas Actual Day (e³m³/day)" },
+				{ attr: "p_gas", name: "Gas (e³m³)" },
 				{ attr: "p_cml_water", name: "Cumulative Water (m³)" },
-				{ attr: "p_cml_hours", name: "Cumulative Hours" }
+				{ attr: "p_cml_oil_bitu", name: "Cumulative Oil Bitumen (m³)" },
+				{ attr: "p_cml_hours", name: "Cumulative Hours" },
+				{ attr: "p_cml_gas", name: "Cumulative Gas (e³m³)" }
 			];
 
 			// Filling allSeries with the attribute names defined in attributeNames array
@@ -1380,8 +1380,8 @@
 			//console.log(sorInfo);
 			allSeries = [
 				{ series:sorInfo["steam"], name:"Steam", data:[] },
-				{ series:sorInfo["oil"], name:"Oil", data:[] },
-				{ series:sorInfo["sor"], name:"SOR", data:[] }
+				{ series:sorInfo["sor"], name:"SOR", data:[] },
+				{ series:sorInfo["oil"], name:"Oil", data:[] }
 			];
 
 			for(var i=0; i<allSeries.length; i++) {
