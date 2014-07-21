@@ -13,6 +13,11 @@
 		 * @type {*|jQuery|HTMLElement}
 		 */
 		mapToolbar = $(".mapToolbar");
+		/* Making the toolbar visible after everything is loaded.
+		 * This avoids having the entire toolbar opened while loading the website.
+		 */
+		mapToolbar[0].style.display = "inline";
+
 		toolbarToggle = mapToolbar.find(".show-toolbar");
 		mapToolbarIcon = toolbarToggle.find("i");
 		mapToolbarButtons = mapToolbar.find(".toolbar-buttons button");
@@ -42,7 +47,7 @@
 			mapToolbarButtons.hide();
 			return toolbarToggle.on("click", function () {
 				mapToolbarButtons.toggle();
-				mapToolbarContent.slideUp("normal");
+				mapToolbarContent.slideUp(400);
 				mapToolbarButtons.removeClass("active");
 				return mapToolbarIcon.toggleClass("icon-expand icon-contract");
 			});
@@ -59,10 +64,10 @@
 			return mapToolbarButtons.on("click", function () {
 
 				mapToolbarButtons.removeClass("active");
-				mapToolbarContent.slideUp("slow");
+				mapToolbarContent.slideUp(400);
 
 				var targetSelector = $(this).attr("data-target");
-				var target = $("."+targetSelector).slideDown("slow");
+				var target = $("."+targetSelector).slideDown(400);
 				$(this).toggleClass("active");
 			});
 		};

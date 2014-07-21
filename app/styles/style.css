@@ -116,7 +116,7 @@ Map Toolbar
   z-index: 5;
   background: #f2f2f2;
   top: 3em;
-  display: inline;
+  display: none;
   padding: 0.07692em 0.07692em 0.07692em 0.07692em; }
   .mapToolbar button {
     padding: 0.5em 0.5em 0.5em 0.5em;

@@ -877,14 +877,14 @@
 
 					var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
 					if(filling != undefined && filling != null && filling.length > 0) {
-						injectionDates.splice.apply(injectionDates, [injectionDates.length - 1,0].concat(filling));
+						injectionDates.push.apply(injectionDates, filling);
 					}
 				}
 			}
 		}
 
-		console.log("Injection!");
-		console.log(injectionDates);
+//		console.log("Injection!");
+//		console.log(injectionDates);
 
 		for(var i=0; i<productionInfo.length; i++) {
 			productionDates.push(
@@ -903,13 +903,13 @@
 
 				var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
 				if(filling != undefined && filling != null && filling.length > 0) {
-					productionDates.splice.apply(productionDates, [productionDates.length - 1,0].concat(filling));
+					productionDates.push.apply(productionDates, filling);
 				}
 			}
 		}
 
-		console.log("Production!");
-		console.log(productionDates);
+//		console.log("Production!");
+//		console.log(productionDates);
 
 		var sorDates = [];
 		for(var i=0; i<injectionDates.length; i++) {
@@ -924,7 +924,9 @@
 						var currentMonth = sorDates[sorDates.length - 1]["month"];
 
 						var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
-						sorDates.splice.apply(sorDates, [sorDates.length - 1,0].concat(filling));
+						if(filling != undefined && filling != null && filling.length > 0) {
+							sorDates.push.apply(sorDates, filling);
+						}
 					}
 
 					var zeroValues = injectionDates[i]["value"] === 0 || productionDates[j]["value"] === 0;
@@ -941,8 +943,8 @@
 			}
 		}
 
-		console.log("SOR!");
-		console.log(sorDates);
+//		console.log("SOR!");
+//		console.log(sorDates);
 
 //		console.log("Injection");
 //		console.log(injectionInfo);
@@ -961,8 +963,8 @@
 		 * to make them have the same number of date records.
 		 */
 		var minMaxDates = getMinimumAndMaximumDates(injectionDates, productionDates);
-		console.log("minMaxDates");
-		console.log(minMaxDates);
+//		console.log("minMaxDates");
+//		console.log(minMaxDates);
 		/*
 		 * Injection
 		 */
@@ -973,17 +975,12 @@
 			injectionDates.splice.apply(injectionDates, [0,0].concat(missingDatesMinInj));
 		}
 
-		// Making sure that the first value will be in the array
-		if(injectionDates[0]["month"] != minMaxDates["minMonth"] || injectionDates[0]["year"] != minMaxDates["minYear"]) {
-			injectionDates.splice(0, 0, {year: minMaxDates["minYear"], month: minMaxDates["minMonth"], value: null });
-		}
-
 		var lastInjIndex = injectionDates.length - 1;
 		var missingDatesMaxInj = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
 			injectionDates[lastInjIndex]["month"], injectionDates[lastInjIndex]["year"], false);
 		if(missingDatesMaxInj != undefined && missingDatesMaxInj != null && missingDatesMaxInj.length > 0) {
 			// Adding dates to the end...
-			injectionDates.splice.apply(injectionDates, [injectionDates.length,0].concat(missingDatesMaxInj));
+			injectionDates.push.apply(injectionDates, missingDatesMaxInj);
 		}
 
 		/*
@@ -996,20 +993,14 @@
 			productionDates.splice.apply(productionDates, [0,0].concat(missingDatesMinProd));
 		}
 
-		// Making sure that the first value will be in the array
-		if(productionDates[0]["month"] != minMaxDates["minMonth"] || productionDates[0]["year"] != minMaxDates["minYear"]) {
-			productionDates.splice(0, 0, {year: minMaxDates["minYear"], month: minMaxDates["minMonth"], value: null });
-		}
-
 		var lastProdIndex = productionDates.length - 1;
 		var missingDatesMaxProduction = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
 			productionDates[lastProdIndex]["month"], productionDates[lastProdIndex]["year"], false);
-		console.log("missingDatesMaxProduction");
-		console.log(missingDatesMaxProduction);
+//		console.log("missingDatesMaxProduction");
+//		console.log(missingDatesMaxProduction);
 		if(missingDatesMaxProduction != undefined && missingDatesMaxProduction != null && missingDatesMaxProduction.length > 0) {
 			// Adding dates to the end...
-
-			productionDates.splice.apply(productionDates, [productionDates.length,0].concat(missingDatesMaxProduction));
+			productionDates.push.apply(productionDates, missingDatesMaxProduction);
 		}
 
 		/*
@@ -1017,17 +1008,12 @@
 		 */
 		var missingDatesMinSOR = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
 			sorDates[0]["month"], sorDates[0]["year"], true);
-		console.log(minMaxDates["minMonth"] + " " + minMaxDates["minYear"] + " " + sorDates[0]["month"] + " " + sorDates[0]["year"]);
-		console.log("missingDatesMinSOR");
-		console.log(missingDatesMinSOR);
+//		console.log(minMaxDates["minMonth"] + " " + minMaxDates["minYear"] + " " + sorDates[0]["month"] + " " + sorDates[0]["year"]);
+//		console.log("missingDatesMinSOR");
+//		console.log(missingDatesMinSOR);
 		if(missingDatesMinSOR != undefined && missingDatesMinSOR != null && missingDatesMinSOR.length > 0) {
 			// Adding dates to the beginning...
 			sorDates.splice.apply(sorDates, [0,0].concat(missingDatesMinSOR));
-		}
-
-		// Making sure that the first value will be in the array
-		if(sorDates[0]["month"] != minMaxDates["minMonth"] || sorDates[0]["year"] != minMaxDates["minYear"]) {
-			sorDates.splice(0, 0, {year: minMaxDates["minYear"], month: minMaxDates["minMonth"], value: null });
 		}
 
 		var lastSORIndex = sorDates.length - 1;
@@ -1035,9 +1021,9 @@
 			sorDates[lastSORIndex]["month"], sorDates[lastSORIndex]["year"], false);
 		if(missingDatesMaxSOR != undefined && missingDatesMaxSOR != null && missingDatesMaxSOR.length > 0) {
 			// Adding dates to the end...
-			console.log("missingDatesMaxSOR");
-			console.log(missingDatesMaxSOR);
-			sorDates.splice.apply(sorDates, [sorDates.length,0].concat(missingDatesMaxSOR));
+//			console.log("missingDatesMaxSOR");
+//			console.log(missingDatesMaxSOR);
+			sorDates.push.apply(sorDates, missingDatesMaxSOR);
 		}
 
 		return { steam: injectionDates, oil: productionDates, sor: sorDates };
@@ -1052,7 +1038,7 @@
 		// If the month is 1, we know the year must increase 1
 		currentYear = currentMonth === 1 ? currentYear + 1 : currentYear;
 
-		while(currentYear != nextYear || currentMonth != nextMonth) {
+		while(currentYear < nextYear || currentMonth < nextMonth) {
 			// Adding null value
 			filling.push(
 				{
@@ -1132,21 +1118,51 @@
 				filling = fillGap(month, year, minMaxMonth, minMaxYear);
 			}
 
-			if(filling != undefined && filling != null && filling.length > 0) {
-				if(isMinimum === true) {
-					filling.splice(0, 0, { year: minMaxYear, month: minMaxMonth, value: null });
-				} else {
-					filling.push({ year: minMaxYear, month: minMaxMonth, value: null });
-				}
+			var temp = { year: minMaxYear, month: minMaxMonth, value: null };
+
+			if(isMinimum === true) {
+				// Adding to the first position of the array
+				filling.splice(0, 0, temp);
+			} else {
+				// Adding to the last position of the array
+				filling.push(temp);
 			}
 		}
 
 		return filling;
 	}
 
+	function convertToRickshawObjectFormat(array) {
+		if(array != undefined && array != null) {
+			var convertedArray = [];
+			for(var i=0; i<array.length; i++) {
+				convertedArray.push(
+					{
+						y: array[i]["value"],
+						x: new Date( array[i]["year"], array[i]["month"]-1,
+							1, 0,0,0,0 ).getTime() / 1000
+					}
+				);
+			}
+			return convertedArray;
+		}
+		return;
+	}
+
 	VisualizationCharts.prototype.generateInjectionProductionChart = function(injectionInfo, productionInfo, type) {
 
 		this.removeCurrentChart();
+
+		var interpolationSection = type === "sor" ? "" :
+			"<section id=\"missing_values_section\">" +
+			"	<div id=\"missing_values_form\">" +
+			"		<label for=\"interpolate\">" +
+			"			<input type=\"checkbox\" name=\"missing_values\" id=\"interpolate\" value=\"interpolate\" checked=\"true\">" +
+			"			<span>interpolate missing values</span>" +
+			"		</label>" +
+			"	</div>" +
+			"</section>";
+
 		var canvasSvg =
 			"<div id=\"canvas-svg\">" +
 			"	<table id=\"side_panel_table\">" +
@@ -1200,6 +1216,7 @@
 			"							</label>" +
 			"						</div>" +
 			"					</section>" +
+								interpolationSection +
 			"					<section></section>" +
 			"				</form>" +
 			"			</td>" +
@@ -1230,21 +1247,48 @@
 				{ attr:"I-WATER", name:"Water", data:[] }
 			];
 
-			for(var i=0; i<injectionInfo.length; i++) {
-				// Adding each element to its correspondent series
-				for(var j=0; j<allSeries.length; j++) {
-					if(allSeries[j]["attr"] === injectionInfo[i]["i_prod_type"]) {
-						allSeries[j]["data"].push(
-							{
-								y: injectionInfo[i]["i_value"],
-								x: new Date( injectionInfo[i]["i_year"], injectionInfo[i]["i_month"]-1,
-									1, 0,0,0,0 ).getTime() / 1000
+			function processInjectionInfo(interpolate) {
+				// Clearing data
+				for(var i=0; i<allSeries.length; i++) {
+					allSeries[i]["data"] = [];
+				}
+
+				for(var i=0; i<injectionInfo.length; i++) {
+					// Adding each element to its correspondent series
+					for(var j=0; j<allSeries.length; j++) {
+						if(allSeries[j]["attr"] === injectionInfo[i]["i_prod_type"]) {
+							allSeries[j]["data"].push(
+								{
+									y: injectionInfo[i]["i_value"],
+									x: new Date( injectionInfo[i]["i_year"], injectionInfo[i]["i_month"]-1,
+										1, 0,0,0,0 ).getTime() / 1000
+								}
+							);
+
+							if(interpolate === false) {
+								// Checking if the next value exists
+								if(i + 5 < injectionInfo.length) {
+									var nextYear = injectionInfo[i+5]["i_year"];
+									var nextMonth = injectionInfo[i+5]["i_month"];
+									var currentYear = injectionInfo[i]["i_year"];
+									var currentMonth = injectionInfo[i]["i_month"];
+
+									var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
+									if(filling != undefined && filling != null && filling.length > 0) {
+										var converted = convertToRickshawObjectFormat(filling);
+										if(converted != undefined && converted != null && converted.length > 0) {
+											allSeries[j]["data"].push.apply(allSeries[j]["data"], converted);
+										}
+									}
+								}
 							}
-						);
-						break;
+							break;
+						}
 					}
 				}
 			}
+			// Process values with interpolation
+			processInjectionInfo(true);
 
 		} else if (type === "production") {	// In case we are dealing with PRODUCTION data..
 
@@ -1280,33 +1324,60 @@
 				allSeries.push({ attr: attributeNames[i]["attr"], name: attributeNames[i]["name"], data: [] });
 			}
 
-			/*
-			 * Going through all the production data and for each attribute name we push the data to the specific
-			 * series of allSeries array.
-			 */
-			for(var i=0; i<productionInfo.length; i++) {
-				for(var j=0; j<attributeNames.length; j++) {
-					for(var k=0; k<allSeries.length; k++) {
-						if(allSeries[k]["attr"] === attributeNames[j]["attr"]) {
-							allSeries[k]["data"].push(
-								{
-									y: productionInfo[i][ attributeNames[j]["attr"] ],
-									x: new Date( productionInfo[i]["p_year"], productionInfo[i]["p_month"]-1,
-										1, 0,0,0,0 ).getTime() / 1000
+			function processProductionInfo(interpolate) {
+				/*
+				 * Going through all the production data and for each attribute name we push the data to the specific
+				 * series of allSeries array.
+				 */
+
+				// Clearing data
+				for(var i=0; i<allSeries.length; i++) {
+					allSeries[i]["data"] = [];
+				}
+
+				for(var i=0; i<productionInfo.length; i++) {
+					for(var j=0; j<attributeNames.length; j++) {
+						for(var k=0; k<allSeries.length; k++) {
+							if(allSeries[k]["attr"] === attributeNames[j]["attr"]) {
+								allSeries[k]["data"].push(
+									{
+										y: productionInfo[i][ attributeNames[j]["attr"] ],
+										x: new Date( productionInfo[i]["p_year"], productionInfo[i]["p_month"]-1,
+											1, 0,0,0,0 ).getTime() / 1000
+									}
+								);
+
+								if(interpolate === false) {
+									// Checking if the next production value exists
+									if(i + 1 < productionInfo.length) {
+										var nextYear = productionInfo[i+1]["p_year"];
+										var nextMonth = productionInfo[i+1]["p_month"];
+										var currentYear = productionInfo[i]["p_year"];
+										var currentMonth = productionInfo[i]["p_month"];
+
+										var filling = fillGap(currentMonth, currentYear, nextMonth, nextYear);
+										if(filling != undefined && filling != null && filling.length > 0) {
+											var converted = convertToRickshawObjectFormat(filling);
+											if(converted != undefined && converted != null && converted.length > 0) {
+												allSeries[k]["data"].push.apply(allSeries[k]["data"], converted);
+											}
+										}
+									}
 								}
-							);
-							break;
+								break;
+							}
 						}
 					}
 				}
 			}
+			// Process values with interpolation
+			processProductionInfo(true);
 
 		} else if(type === "sor") {
-			console.log("begin");
+			//console.log("begin");
 			var sorInfo = self.getInjectionProductionIntersection(injectionInfo, productionInfo);
 
-			console.log(sorInfo);
-
+			//console.log(sorInfo);
 			allSeries = [
 				{ series:sorInfo["steam"], name:"Steam", data:[] },
 				{ series:sorInfo["oil"], name:"Oil", data:[] },
@@ -1324,14 +1395,20 @@
 					);
 				}
 			}
-
-			// Fill missing values with Y = NULL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}
 
-		// Putting all data together to give it to the chart
-		for(var i=0; i<allSeries.length; i++) {
-			data.push( { color: color(i), data: allSeries[i]["data"], name: allSeries[i]["name"] } );
+		function prepareDataToChart() {
+			var dataSize = data.length;
+			for(var i=0; i<dataSize; i++) {
+				data.splice(0,1);
+			}
+
+			// Putting all data together to give it to the chart
+			for(var i=0; i<allSeries.length; i++) {
+				data.push( { color: color(i), data: allSeries[i]["data"], name: allSeries[i]["name"] } );
+			}
 		}
+		prepareDataToChart();
 
 		// instantiate our graph!
 		var graph = new Rickshaw.Graph( {
@@ -1345,6 +1422,24 @@
 		} );
 
 		graph.render();
+
+		/*
+		 * If the chart for injection or production, we must create an event to control the interpolation selection
+		 */
+		if(type != "sor") {
+			$("#interpolate").on("change", function(event) {
+				var interpolate = event["target"]["checked"];
+
+				if(type === "injection") {
+					processInjectionInfo(interpolate);
+				} else if(type === "production") {
+					processProductionInfo(interpolate);
+				}
+
+				prepareDataToChart();
+				graph.update();
+			});
+		}
 
 		var preview = new Rickshaw.Graph.RangeSlider.Preview( {
 			graph: graph,

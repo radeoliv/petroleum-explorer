@@ -162,12 +162,20 @@
 						var hasProduction = productionInfo != undefined && productionInfo != null && productionInfo.length > 0;
 
 						if(hasInjection && hasProduction) {
+							generateTitle();
 							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for production
 							self.clearVisualization(false);
 							// Setting the option that the user selected
 							$timeSeriesSelection[0].value = "sor";
+
+							var alertMessage =
+								"<div id=\"canvas-svg\">" +
+									"<label id=\"no-data-message\">No SOR data available for this well - <b>" + $timeSeriesUwi[0].value + "</b></label>" +
+									"</div>";
+
+							$(alertMessage).appendTo($("#visualization-container"));
 						}
 
 					}

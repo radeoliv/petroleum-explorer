@@ -16,7 +16,8 @@ Map Toolbar
 	@extend %border-box;
 	background: darken($body-background, 5);
 	top: ($margin * 3);
-	display: inline;
+	//display: inline;
+	display: none;
 	padding: ($padding-small / 10) ($padding-small / 10) ($padding-small / 10) ($padding-small / 10);
 	button{
 		padding: 0.5em 0.5em 0.5em 0.5em;
