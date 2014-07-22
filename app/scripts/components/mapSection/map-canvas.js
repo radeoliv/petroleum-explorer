@@ -39,6 +39,9 @@
 	// Define the map itself
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
+	// Define the array of category colors
+	var pinColors = ["black","blue","green","orange","pink","purple","red","yellow"];
+
 	/*
 	 * Variables to control the polygon selection
 	 */
@@ -477,6 +480,41 @@
 		}
 	}
 
+	MapCanvasController.prototype.createClassifiedMarkers = function(categories) {
+		for(var i = 0; i < currentWells.length; i++){
+			for(var j=0; j < categories.length; j++){
+				var found = false;
+				for(var k = 0; k <categories[j]["indexes"].length; k++){
+					if (i === categories[j]["indexes"][k]){
+						//we create the marker in color j
+						// Remove the older markers and line
+						// Bottom
+						markers[i].setMap(null);
+						markers[i] = null;
+						// Top
+						markersTop[i].setMap(null);
+						markersTop[i] = null;
+						// Line (deviation)
+						deviations[i].setMap(null);
+						deviations[i] = null;
+
+						createMarker(currentWells[i], i, false, pinColors[j]);
+
+						found = true;
+						break;
+					} else if(i < categories[j]["indexes"][k]){
+						break;
+					}
+
+				}
+				if (found === true){
+					break;
+				}
+			}
+
+		}
+	};
+
 	/*
 	 * Be careful with the 3 different situations that this function can be called:
 	 *  - Creating a marker for the first time (isHighlighted must be null)
@@ -484,7 +522,7 @@
 	 *    - Highlight it (isHighlighted must be true)
 	 *    - ! Highlight it (isHighlighted must be false)
 	 */
-	function createMarker(well, i, isHighlighted) {
+	function createMarker(well, i, isHighlighted, pinColor) {
 
 		var iconUrl = 'resources/red-pin-small.png';
 		var topIconUrl = 'resources/top-red-marker.png';
@@ -524,6 +562,9 @@
 		// Defining opacity of marker based on the checkbox selected for different 'layers'
 		markerTop.setOpacity(lastLayerCheckboxes[0] ? 1.0 : 0.0);
 
+		if (pinColor != undefined && pinColor != null){
+			iconUrl = 'resources/'+pinColor+'-pin.png';
+		}
 		// Creating markers for underground location of well
 		var marker = new google.maps.Marker({
 			position: new google.maps.LatLng(well["w_bottom_lat"], well["w_bottom_lng"]),
