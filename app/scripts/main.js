@@ -59,4 +59,7 @@ jQuery(document).ready(function ($) {
 	var myVisualizationView = new VisualizationView(myVisualizationCharts, myTableController);
 
 	var myPolygonSelection = new PolygonSelection(myMapCanvasController, mySearchController);
+
+	var myClassificationController = new ClassificationController(myMapCanvasController);
+	var myClassificationView = new ClassificationView(myClassificationController);
 });

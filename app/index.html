@@ -101,7 +101,10 @@
 				<i class = "icon-search"></i>
 			</button>
 			<button title = "Polygon selection" data-target = "selection-form" class = "show-selection">
-				<i class = "icon-share"></i>
+			<i class = "icon-share"></i>
+	 		</button>
+			<button title = "Classification" data-target = "classification-form" class = "show-classification">
+				<i class = "icon-tree"></i>
 			</button>
 			<button title = "Data visualization" data-target = "visualization-form" class = "show-visualization">
 				<i class = "icon-pie"></i>
@@ -255,6 +258,43 @@
 				</form>
 			</section>
 
+			<section class = "classification-form">
+				<form action = "/classification">
+					<fieldset class="fieldset-class">
+						<hr>
+						<h4>Classification</h4>
+
+						<div id="classificationContent">
+							<div id="classification-switch" class="onoffswitch">
+								<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+									   id="myclassificationonoffswitch">
+								<label class="onoffswitch-label" for="myclassificationonoffswitch">
+									<span class="onoffswitch-inner"></span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>
+
+							<div id = "classificationAccordion">
+								<h5>Categorical fields</h5>
+								<div class = "classification-categorical accordion-content">
+									<select id = "classification-categorical-fields" placeholder = "Classification" name ="attributes" results ="10" autosave = "Attributes" disabled="true">
+										<option value = "none"></option>
+										<option value = "w_class">Well Class</option>
+										<option value = "w_current_status">Well Current Status</option>
+									</select>
+								</div>
+
+								<h5>Numerical fields</h5>
+								<div>
+
+								</div>
+							</div>
+						</div>
+						<hr>
+					</fieldset>
+				</form>
+			</section>
+
 			<section class = "visualization-form">
 				<form action = "/visualization">
 					<fieldset class="fieldset-class">
@@ -378,6 +418,8 @@
 		<script src="scripts/components/visualization/visualization-view.js"></script>
 		<script src="scripts/components/export/export-controller.js"></script>
 		<script src="scripts/components/export/export-view.js"></script>
+		<script src="scripts/components/classification/classification-controller.js"></script>
+		<script src="scripts/components/classification/classification-view.js"></script>
 		<script src="scripts/main.js"></script>
 		<!-- endbuild -->
 	</footer>
