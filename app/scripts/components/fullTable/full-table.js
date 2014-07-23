@@ -64,9 +64,13 @@
 			this.$contentContainer = $fullTableResultsContainer.find(".full-table-content");
 			this.$columnFilter = this.$contentContainer.find(".filter-form");
 			this.toggleButton = $fullTableResultsContainer.find(".toggle-table");
-
 			this.$filterParameter = $fullTableResultsContainer.find("#tableColumnFilter");
 			this.$addConstraint = $fullTableResultsContainer.find("#add-constraint");
+
+			/* Making the full table toggle button visible after everything is loaded.
+			 * This avoids viewing the button while the website is being loaded.
+			 */
+			this.toggleButton[0].style.display = "inline";
 
 			this.initSearchResults = this.SearchController.resultSet;
 

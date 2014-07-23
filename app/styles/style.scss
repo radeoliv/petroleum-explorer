@@ -6,6 +6,7 @@
 @import "modules/visualization/_visualization.scss";
 @import "modules/export/_export.scss";
 @import "modules/polygon-selection/_polygon-selection.scss";
+@import "modules/classification/_classification.scss";
 
 /*
 =============================================================================
@@ -24,6 +25,7 @@ body {
 
 html {
 	height: 100%;
+	overflow: hidden;
 }
 
 button {

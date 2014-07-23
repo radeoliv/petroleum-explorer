@@ -5,12 +5,13 @@
 	petroleum-explorer
 
 	=============================================================================
-	Filename:  
+	Filename: classification-controller.js
 	=============================================================================
-	//TODO: file description
+ 	Controller class of the classification module.
 -------------------------------------------------------------------------------*/
 
 (function () {
+
 	var ClassificationController;
 	ClassificationController = function (MapController){
 		this.MapController = MapController;

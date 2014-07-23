@@ -43,11 +43,14 @@ Full Table
 	left: 48.65%;
 	bottom: 0;
 	z-index: 5;
-	padding: $padding-small;
 	@extend %margin-none;
 	outline: none;
 	font-size: 1.2em;
 	color: $mapToolbarButtonTextColour;
+	border: 2px outset buttonface;
+	font-size: 1.2em;
+	padding: 0.6em 0.6em 0.5em 0.6em;
+	display: none;
 	&:active, &.active, &:hover {
 		background: darken($mapToolbarButtonColour, 15);
 	}

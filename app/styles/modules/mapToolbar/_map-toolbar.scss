@@ -73,27 +73,7 @@ Map Toolbar
 		padding-bottom: 0em;
 	}
 
-	.search-form {
-		@extend %wide;
-	}
-
-	.selection-form {
-		@extend %wide;
-	}
-
-	.filter-form {
-		@extend %wide;
-	}
-
-	.export-form {
-		@extend %wide;
-	}
-
-	.graph-form {
-		@extend %wide;
-	}
-
-	.visualization-form {
+	.search-form, .selection-form, .classification-form, .filter-form, .export-form, .graph-form,.visualization-form {
 		@extend %wide;
 	}
 

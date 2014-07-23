@@ -138,7 +138,7 @@ Map Toolbar
     display: inline; }
   .mapToolbar .sidebar-content-container {
     display: inline; }
-  .mapToolbar .search-form, .mapToolbar .selection-form, .mapToolbar .filter-form, .mapToolbar .export-form, .mapToolbar .graph-form, .mapToolbar .visualization-form {
+  .mapToolbar .search-form, .mapToolbar .selection-form, .mapToolbar .classification-form, .mapToolbar .filter-form, .mapToolbar .export-form, .mapToolbar .graph-form, .mapToolbar .visualization-form {
     width: 20em; }
   .mapToolbar .fieldset-class {
     padding-top: 0em;
@@ -310,10 +310,13 @@ Full Table
   left: 48.65%;
   bottom: 0;
   z-index: 5;
-  padding: 0.76923em;
   outline: none;
   font-size: 1.2em;
-  color: black; }
+  color: black;
+  border: 2px outset buttonface;
+  font-size: 1.2em;
+  padding: 0.6em 0.6em 0.5em 0.6em;
+  display: none; }
   .toggle-table:active, .toggle-table.active, .toggle-table:hover {
     background: #b6b6b6; }
 
@@ -659,6 +662,19 @@ input[type="radio"] {
   #selectionTable td {
     width: 50%; }
 
+/* =============================================================================
+Variables
+========================================================================== */
+/* =============================================================================
+Classification
+========================================================================== */
+#classification-switch {
+  float: right;
+  top: -2.5em; }
+
+#classificationAccordion {
+  padding-top: 0.001em; }
+
 /*
 =============================================================================
 Main Styles
@@ -671,7 +687,8 @@ body {
   height: 100%; }
 
 html {
-  height: 100%; }
+  height: 100%;
+  overflow: hidden; }
 
 button {
   cursor: pointer; }

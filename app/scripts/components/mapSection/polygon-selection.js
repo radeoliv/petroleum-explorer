@@ -48,7 +48,6 @@
 	$myOnOffSwitch.on("change", function() {
 		var isChecked = $myOnOffSwitch[0].checked;
 		if(isChecked === false) {
-			console.log(self.MapCanvasController);
 			self.MapCanvasController.removePolygon();
 			$(".info-msg").remove();
 			setDisableButtons(true);
