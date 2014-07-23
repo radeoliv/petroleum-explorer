@@ -40,7 +40,7 @@
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
 	// Define the array of category colors
-	var pinColors = ["black","blue","green","orange","pink","purple","red","yellow"];
+	var pinColors = ["light-green", "yellow", "light-blue", "purple", "orange", "pink", "turquoise", "black"];
 
 	/*
 	 * Variables to control the polygon selection
@@ -543,6 +543,11 @@
 		google.maps.Marker.prototype.isHighlighted = false;
 		google.maps.Marker.prototype.id = "";
 
+		if (pinColor != undefined && pinColor != null){
+			iconUrl = 'resources/' + pinColor + '-pin-small.png';
+			topIconUrl = 'resources/top-' + pinColor + '-marker.png';
+		}
+
 		// Creating image variable to center the circle marker of the well top position
 		var topMarkerImage = new google.maps.MarkerImage(topIconUrl,
 			new google.maps.Size(12, 12),
@@ -562,9 +567,6 @@
 		// Defining opacity of marker based on the checkbox selected for different 'layers'
 		markerTop.setOpacity(lastLayerCheckboxes[0] ? 1.0 : 0.0);
 
-		if (pinColor != undefined && pinColor != null){
-			iconUrl = 'resources/'+pinColor+'-pin.png';
-		}
 		// Creating markers for underground location of well
 		var marker = new google.maps.Marker({
 			position: new google.maps.LatLng(well["w_bottom_lat"], well["w_bottom_lng"]),
