@@ -62,7 +62,7 @@
 			var category = legends[i]["category"][0] + legends[i]["category"].substr(1).toLowerCase();
 			append += '<tr>';
 			append += '<td id = \"pin-column\">';
-			append += '<img src=\"./resources/'+legends[i]["color"]+'-pin-small.png\">';
+			append += '<img src=\"./resources/'+legends[i]["color"]+'-pin-smaller.png\">';
 			append += '</td>';
 			append += '<td>';
 			append += '<label class = \"legend\">'+category+'</label>';

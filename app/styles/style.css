@@ -679,7 +679,8 @@ Classification
   padding-left: 0.8em; }
 
 #pin-column {
-  width: 1.6em; }
+  width: 1.063em;
+  padding-right: 0.2em; }
 
 /*
 =============================================================================
