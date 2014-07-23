@@ -85,6 +85,10 @@
 		map.controls[google.maps.ControlPosition.TOP_LEFT].push(layersControlDiv);
 	};
 
+	MapCanvasController.prototype.getPinColors = function() {
+		return pinColors;
+	};
+
 	function AddMapInfoControl(controlDiv) {
 		// Set CSS for the control border
 		var controlUI = document.createElement('div');
@@ -505,7 +509,6 @@
 					} else if(i < categories[j]["indexes"][k]){
 						break;
 					}
-
 				}
 				if (found === true){
 					break;

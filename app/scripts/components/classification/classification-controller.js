@@ -11,17 +11,19 @@
 -------------------------------------------------------------------------------*/
 
 (function () {
-
+	var categories = [];
 	var ClassificationController;
+	var self;
+
 	ClassificationController = function (MapController){
 		this.MapController = MapController;
 		self = this;
 	};
 
 	ClassificationController.prototype.generateCategoricalPins = function(selectedValue){
+		categories = [];
 		var wells = self.MapController.getCurrentWells();
 
-		var categories = [];
 		for(var i = 0; i < wells.length; i++){
 			var inserted = false;
 			for(var j =0; j < categories.length; j++){
@@ -37,6 +39,15 @@
 		}
 
 		self.MapController.createClassifiedMarkers(categories);
+	};
+
+	ClassificationController.prototype.getClassificationLegend = function() {
+		var legendColors = self.MapController.getPinColors();
+		var legends = [];
+		for (var i=0; i < categories.length; i++){
+			legends.push({category: categories[i]["category"], color: legendColors[i]});
+		}
+		return legends;
 	};
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationController = ClassificationController;
