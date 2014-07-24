@@ -27,9 +27,7 @@
 	myClassificationOnOffSwitch.on("change", function() {
 		var isChecked = myClassificationOnOffSwitch[0].checked;
 		setDisableFields(!isChecked);
-		$("#classification-legend").remove();
-		categoricalSelection[0].value = '';
-		numericalSelection[0].value = '';
+		clearAllOptions();
 	});
 
 	function setDisableFields(isDisabled) {
@@ -37,10 +35,15 @@
 		numericalSelection[0].disabled = isDisabled;
 	}
 
+	function clearAllOptions() {
+		$("#classification-legend").remove();
+		categoricalSelection[0].value = '';
+		numericalSelection[0].value = '';
+	}
+
 	categoricalSelection.on("change",function(){
 		self.classificationController.generateCategoricalPins(categoricalSelection[0].value);
 		appendLegend();
-		console.log(categoricalSelection[0].value);
 	});
 
 	/*
@@ -62,7 +65,7 @@
 			var category = legends[i]["category"][0] + legends[i]["category"].substr(1).toLowerCase();
 			append += '<tr>';
 			append += '<td id = \"pin-column\">';
-			append += '<img src=\"./resources/'+legends[i]["color"]+'-pin-smaller.png\">';
+			append += '<input type=\"image\" src=\"./resources/'+legends[i]["color"]+'-pin-smaller.png\" id=\"legend-pin-' + i + '\" class=\"legend-pin\">';
 			append += '</td>';
 			append += '<td>';
 			append += '<label class = \"legend\">'+category+'</label>';
@@ -72,6 +75,13 @@
 
 		append += "</table></div>";
 		$(append).appendTo(divToAppend);
+
+		$(".legend-pin").on("click", function(event) {
+			// Getting the index of the pin clicked
+			var legendIndex = event["currentTarget"]["id"].substr(11);
+
+			self.classificationController.bounceMarkersOfCategory(legendIndex);
+		});
 	}
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationView = ClassificationView;

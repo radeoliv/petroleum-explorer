@@ -22,4 +22,11 @@ Classification
 #pin-column {
 	width: 1.063em;
 	padding-right: 0.2em;
+
+	input {
+		&[type="image"] {
+			border: none;
+			width: 100%;
+		}
+	}
 }

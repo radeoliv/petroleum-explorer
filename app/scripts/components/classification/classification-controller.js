@@ -41,6 +41,13 @@
 		self.MapController.createClassifiedMarkers(categories);
 	};
 
+	ClassificationController.prototype.bounceMarkersOfCategory = function(legendIndex) {
+		// Getting all the indexes of the category clicked
+		var markersIndexes = categories[legendIndex]["indexes"];
+		// Point out markers in the map
+		self.MapController.emphasizeMarkers(markersIndexes, 2000);
+	};
+
 	ClassificationController.prototype.getClassificationLegend = function() {
 		var legendColors = self.MapController.getPinColors();
 		var legends = [];

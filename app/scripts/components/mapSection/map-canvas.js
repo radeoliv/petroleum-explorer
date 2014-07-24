@@ -28,6 +28,12 @@
 	var highlightedMarkers = [];
 	// Auxiliar variable to store the last 'layer' checkboxes configuration
 	var lastLayerCheckboxes = [true,true,true];
+	// Define the array of category colors
+	var pinColors = ["light-green", "yellow", "light-blue", "purple", "orange", "pink", "turquoise", "black"];
+	// Auxiliar variable to control the pins colors
+	var wellColors = [];
+	// Auxiliar variable to know if the classification is used
+	var usedClassification = false;
 
 	// Create options for the map
 	var mapOptions = {
@@ -38,9 +44,6 @@
 
 	// Define the map itself
 	var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-
-	// Define the array of category colors
-	var pinColors = ["light-green", "yellow", "light-blue", "purple", "orange", "pink", "turquoise", "black"];
 
 	/*
 	 * Variables to control the polygon selection
@@ -416,7 +419,9 @@
 	 * Deselects a marker on the map
 	 */
 	MapCanvasController.prototype.deselectMarker = function(i, hasToUpdateTable, id) {
-		toggleMarkerSelection(false, i, hasToUpdateTable);
+		if(usedClassification === false) {
+			toggleMarkerSelection(false, i, hasToUpdateTable);
+		}
 
 		for(var i=0; i<highlightedMarkers.length; i++) {
 			if(highlightedMarkers[i][0] === id) {
@@ -430,7 +435,9 @@
 	 * Selects a marker on the map
 	 */
 	MapCanvasController.prototype.selectMarker = function(i, hasToUpdateTable, id) {
-		toggleMarkerSelection(true, i, hasToUpdateTable);
+		if(usedClassification === false) {
+			toggleMarkerSelection(true, i, hasToUpdateTable);
+		}
 
 		var tempIds = [];
 		for(var j=0; j<highlightedMarkers.length; j++) {
@@ -485,12 +492,15 @@
 	}
 
 	MapCanvasController.prototype.createClassifiedMarkers = function(categories) {
+		usedClassification = true;
+
 		for(var i = 0; i < currentWells.length; i++){
 			for(var j=0; j < categories.length; j++){
 				var found = false;
 				for(var k = 0; k <categories[j]["indexes"].length; k++){
 					if (i === categories[j]["indexes"][k]){
-						//we create the marker in color j
+						wellColors[i] = { well: currentWells[i], color: pinColors[i], category: categories[j]["category"] };
+						// We create the marker in color j
 						// Remove the older markers and line
 						// Bottom
 						markers[i].setMap(null);
@@ -546,7 +556,11 @@
 		google.maps.Marker.prototype.isHighlighted = false;
 		google.maps.Marker.prototype.id = "";
 
-		if (pinColor != undefined && pinColor != null){
+		/*
+		 * If the pinColor is defined, we disconsider all highlight attributes and put the specified color
+		 * to the top and underground markers.
+		 */
+		if (usedClassification === true && pinColor != undefined && pinColor != null){
 			iconUrl = 'resources/' + pinColor + '-pin-small.png';
 			topIconUrl = 'resources/top-' + pinColor + '-marker.png';
 		}
@@ -630,15 +644,17 @@
 		/*
 		 * Right click event listeners (markers and lines)
 		 */
-		google.maps.event.addListener(marker, 'rightclick', (function (marker, i) {
-			return highlightAction(infoWindow, map, marker, i, false);
-		})(marker, i));
-		google.maps.event.addListener(markerTop, 'rightclick', (function (marker, i) {
-			return highlightAction(infoWindow, map, marker, i, true);
-		})(markerTop, i));
-		google.maps.event.addListener(deviation, 'rightclick', (function (marker, i) {
-			return highlightAction(infoWindow, map, marker, i, false);
-		})(markers[i], i));
+		if(usedClassification === false) {
+			google.maps.event.addListener(marker, 'rightclick', (function (marker, i) {
+				return highlightAction(infoWindow, map, marker, i, false);
+			})(marker, i));
+			google.maps.event.addListener(markerTop, 'rightclick', (function (marker, i) {
+				return highlightAction(infoWindow, map, marker, i, true);
+			})(markerTop, i));
+			google.maps.event.addListener(deviation, 'rightclick', (function (marker, i) {
+				return highlightAction(infoWindow, map, marker, i, false);
+			})(markers[i], i));
+		}
 
 		// Used to change the opened property when the user closes the info window by pressing the top right x.
 		google.maps.event.addListener(infoWindow,'closeclick',function(){
@@ -650,6 +666,58 @@
 			setTimeout(function() { $("body").trigger("polygonChangedPosition") }, 100);
 		}
 	}
+
+	MapCanvasController.prototype.emphasizeMarkers = function(indexes, duration) {
+		if(indexes != undefined && indexes != null && indexes.length > 0) {
+			// 0 - top, 1 - underground, 2 - deviation
+			lastLayerCheckboxes[0] ? 1.0 : 0.0;
+
+
+			// First, lower the opacity of all markers not present in the indexes list
+			var tempIndex = 0;
+			for(var i=0; i<markers.length; i++) {
+				if(i != indexes[tempIndex]) {
+					// Surface
+					if(lastLayerCheckboxes[0] === true) {
+						markersTop[i].setOpacity(0.07);
+					}
+					// Underground
+					if(lastLayerCheckboxes[1] === true) {
+						markers[i].setOpacity(0.07);
+					}
+					// Deviations
+					if(lastLayerCheckboxes[2] === true) {
+						deviations[i].setOptions({ strokeOpacity: 0.07 });
+					}
+				} else {
+					tempIndex++;
+				}
+			}
+
+			// Then, after the duration, make everything back to normal
+			tempIndex = 0;
+			setTimeout(function() {
+				for(var i=0; i<markers.length; i++) {
+					if(i != indexes[tempIndex]) {
+						// Surface
+						if(lastLayerCheckboxes[0] === true) {
+							markersTop[i].setOpacity(1);
+						}
+						// Underground
+						if(lastLayerCheckboxes[1] === true) {
+							markers[i].setOpacity(1);
+						}
+						// Deviations
+						if(lastLayerCheckboxes[2] === true) {
+							deviations[i].setOptions({ strokeOpacity: 1 });
+						}
+					} else {
+						tempIndex++;
+					}
+				}
+			}, duration);
+		}
+	};
 
 	function setInfoWindowContent(well, infoWindow, map, marker, i, isTop) {
 		return function () {
