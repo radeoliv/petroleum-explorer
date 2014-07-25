@@ -20,7 +20,7 @@
 		self = this;
 	};
 
-	ClassificationController.prototype.generateCategoricalPins = function(selectedValue){
+	ClassificationController.prototype.classifyWellsByCategory = function(selectedValue){
 		categories = [];
 		var wells = self.MapController.getCurrentWells();
 

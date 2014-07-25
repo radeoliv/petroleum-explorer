@@ -287,19 +287,41 @@
 		/*
 		 * Goes through all defined filters, generate the filter query and filter results.
 		 */
+		var filterQueryArray = [];
 		function getAndFilterQueries() {
-			var filterQueryArray = [];
+			var tempFilterQueryArray = [];
 			var filterParameters = self.$columnFilter.find(".filterParameter");
-			for(var i = 0; i < filterParameters.length; i++){
+			for(var i=0; i<filterParameters.length; i++) {
 
 				var labelValue = filterParameters.find("label")[i].getAttribute("value");
 				var constraintValue = filterParameters.find("select")[i].value;
 				var inputValue = filterParameters.find("input")[i].value;
 
-				filterQueryArray.push([labelValue, constraintValue, inputValue]);
+				tempFilterQueryArray.push([labelValue, constraintValue, inputValue]);
 			}
 
-			self.findFilterQuery(filterQueryArray);
+			var areEqual = true;
+			if(filterQueryArray.length === tempFilterQueryArray.length) {
+				for(var i=0; i<filterQueryArray.length; i++) {
+					for(var j=0; j<filterQueryArray[i].length; j++) {
+						if(filterQueryArray[i][j] != tempFilterQueryArray[i][j]) {
+							areEqual = false;
+							break;
+						}
+					}
+
+					if(areEqual === false) {
+						break;
+					}
+				}
+			} else {
+				areEqual = false;
+			}
+
+			if(areEqual === false) {
+				filterQueryArray = tempFilterQueryArray;
+				self.findFilterQuery(filterQueryArray);
+			}
 		}
 
 		FullTable.prototype.findFilterQuery = function(query) {
@@ -351,6 +373,8 @@
 			this.initSearchResults = filterResultSet;
 			this.MapController.plotResults(filterResultSet);
 			$("body").trigger("FilterUpdated");
+			// Update classification (if on)
+			$("body").trigger("WellsUpdated");
 		};
 
 		FullTable.prototype.displayHandsOnTable = function() {

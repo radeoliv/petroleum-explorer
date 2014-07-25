@@ -271,7 +271,10 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			lastResultSet = self.searchController.getResultSet();
 			// Plot results on map
 			self.mapCanvasController.plotResults(results);
+			// Update full table
 			$("body").trigger("ResultsUpdated");
+			// Update classification (if on)
+			$("body").trigger("WellsUpdated");
 		}
 	}
 

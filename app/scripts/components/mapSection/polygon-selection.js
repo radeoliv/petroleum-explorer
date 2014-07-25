@@ -33,10 +33,10 @@
 	};
 
 	function setDisableButtons(isDisabled) {
-		var isClassificated = self.MapCanvasController.getUsedClassification();
+		var isClassified = self.MapCanvasController.getUsedClassification();
 
-		$polygonHighlightMarkersButton[0].disabled = isDisabled || isClassificated;
-		$polygonClearHighlightedMarkersButton[0].disabled = isDisabled || isClassificated;
+		$polygonHighlightMarkersButton[0].disabled = isDisabled || isClassified;
+		$polygonClearHighlightedMarkersButton[0].disabled = isDisabled || isClassified;
 
 		$polygonSelectMarkersButton[0].disabled = isDisabled;
 		$polygonRemoveMarkersButton[0].disabled = isDisabled;
@@ -118,10 +118,11 @@
 				temp.push(markersId[i][0]);
 			}
 
-			// Update result set, map and full table
+			// Update result set, map, full table, and the classification
 			self.SearchController.setResultSetByIds(temp);
 			self.MapCanvasController.plotResults(self.SearchController.getResultSet());
 			$("body").trigger("ResultsUpdated");
+			$("body").trigger("WellsUpdated");
 		}
 	});
 

@@ -11,6 +11,20 @@
 -------------------------------------------------------------------------------*/
 (function () {
 
+	// Controlling the active item of the accordion
+	var optionAccordion = 0;	// Variable for handling accordion option
+	(function () {
+		$(function () {
+			var active;
+			active = function () {
+				return classificationAccordion.on("click", function () {
+					optionAccordion = $("#classificationAccordion").accordion( "option", "active" );
+				});
+			};
+			active();
+		});
+	}).call(this);
+
 	var content = $("#classificationContent");
 	var classificationAccordion = content.find("#classificationAccordion");
 	var myClassificationOnOffSwitch = $('#myclassificationonoffswitch');
@@ -46,20 +60,37 @@
 		numericalSelection[0].value = '';
 	}
 
-	categoricalSelection.on("change",function(){
-		self.classificationController.generateCategoricalPins(categoricalSelection[0].value);
-		appendLegend();
+	function classifyWells() {
+		switch(optionAccordion) {
+			case 0:
+				self.classificationController.classifyWellsByCategory(categoricalSelection[0].value);
+				appendCategoricalLegend();
+				break;
+			case 1:
+				//self.classificationController.classifyWellsByNumericalValues(categoricalSelection[0].value);
+				//appendNumericalLegend();
+				break;
+			default:
+				console.log("No option selected!");
+				break;
+		}
+	}
+
+	categoricalSelection.on("change", function() {
+		classifyWells();
 	});
 
-	/*
-	 * Allows the accordion in the control panel to be collapsible.
-	 */
-	classificationAccordion.accordion({
-		collapsible: true,
-		heightStyle: "content"
+	numericalSelection.on("change", function() {
+		classifyWells();
 	});
 
-	function appendLegend(){
+	$("body").on("WellsUpdated", function() {
+		if(myClassificationOnOffSwitch[0].checked === true) {
+			classifyWells();
+		}
+	});
+
+	function appendCategoricalLegend(){
 		$("#classification-legend").remove();
 		var divToAppend = '.classification-form';
 		var legends = self.classificationController.getClassificationLegend();
@@ -88,6 +119,14 @@
 			self.classificationController.bounceMarkersOfCategory(legendIndex);
 		});
 	}
+
+	/*
+	 * Allows the accordion in the control panel to be collapsible.
+	 */
+	classificationAccordion.accordion({
+		collapsible: true,
+		heightStyle: "content"
+	});
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationView = ClassificationView;
 }).call(this);
