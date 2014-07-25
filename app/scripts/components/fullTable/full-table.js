@@ -480,7 +480,7 @@
 			ref.selectedRows = currentlySelectedRows;
 
 			if(ref.MapController != undefined && ref.MapController != null) {
-				ref.MapController.highlightWells(ref.selectedRows);
+				ref.MapController.highlightWells(ref.selectedRows, false);
 			}
 		}
 

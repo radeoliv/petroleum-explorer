@@ -92,6 +92,10 @@
 		return pinColors;
 	};
 
+	MapCanvasController.prototype.getUsedClassification = function() {
+		return usedClassification;
+	};
+
 	function AddMapInfoControl(controlDiv) {
 		// Set CSS for the control border
 		var controlUI = document.createElement('div');
@@ -388,6 +392,18 @@
 	}
 	initializeMap();
 
+	MapCanvasController.prototype.resetPins = function() {
+		usedClassification = false;
+
+		clearAllMarkers();
+		initializeMap();
+
+		// Highlight all the pins that were highlighted before
+		for(var i=0; i<highlightedMarkers.length; i++) {
+			toggleMarkerSelection(true, highlightedMarkers[i][1], false);
+		}
+	}
+
 	/*
 	 * Highlight specific pins on the map
 	 */
@@ -465,7 +481,7 @@
 			deviations[i].setMap(null);
 			deviations[i] = null;
 
-			createMarker(currentWells[i], i, isSelected);
+			createMarker(currentWells[i], i, isSelected, null);
 
 			if(selectedByPolygon === true) {
 				// Update the full table with the selection
@@ -487,7 +503,7 @@
 	function plotPoints() {
 		// Go through all wells and create markers for them
 		for (var i = 0; i < currentWells.length; i++) {
-			createMarker(currentWells[i], i, false);
+			createMarker(currentWells[i], i, false, null);
 		}
 	}
 
@@ -499,7 +515,10 @@
 				var found = false;
 				for(var k = 0; k <categories[j]["indexes"].length; k++){
 					if (i === categories[j]["indexes"][k]){
+
+						// Add new entry to wellColors in case a search/filter/selection is executed.
 						wellColors[i] = { well: currentWells[i], color: pinColors[i], category: categories[j]["category"] };
+
 						// We create the marker in color j
 						// Remove the older markers and line
 						// Bottom

@@ -27,7 +27,12 @@
 	myClassificationOnOffSwitch.on("change", function() {
 		var isChecked = myClassificationOnOffSwitch[0].checked;
 		setDisableFields(!isChecked);
-		clearAllOptions();
+		if(isChecked === false) {
+			clearAllOptions();
+
+			// Reset the pins on the map
+			self.classificationController.resetPins();
+		}
 	});
 
 	function setDisableFields(isDisabled) {

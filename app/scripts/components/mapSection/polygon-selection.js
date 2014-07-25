@@ -33,8 +33,11 @@
 	};
 
 	function setDisableButtons(isDisabled) {
-		$polygonHighlightMarkersButton[0].disabled = isDisabled;
-		$polygonClearHighlightedMarkersButton[0].disabled = isDisabled;
+		var isClassificated = self.MapCanvasController.getUsedClassification();
+
+		$polygonHighlightMarkersButton[0].disabled = isDisabled || isClassificated;
+		$polygonClearHighlightedMarkersButton[0].disabled = isDisabled || isClassificated;
+
 		$polygonSelectMarkersButton[0].disabled = isDisabled;
 		$polygonRemoveMarkersButton[0].disabled = isDisabled;
 	}

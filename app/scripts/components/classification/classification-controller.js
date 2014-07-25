@@ -57,5 +57,9 @@
 		return legends;
 	};
 
+	ClassificationController.prototype.resetPins = function() {
+		self.MapController.resetPins();
+	};
+
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationController = ClassificationController;
 }).call(this);
