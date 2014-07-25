@@ -64,7 +64,7 @@
 		switch(optionAccordion) {
 			case 0:
 				self.classificationController.classifyWellsByCategory(categoricalSelection[0].value);
-				appendCategoricalLegend();
+				createCategoricalLegendEvent();
 				break;
 			case 1:
 				//self.classificationController.classifyWellsByNumericalValues(categoricalSelection[0].value);
@@ -90,33 +90,12 @@
 		}
 	});
 
-	function appendCategoricalLegend(){
-		$("#classification-legend").remove();
-		var divToAppend = '.classification-form';
-		var legends = self.classificationController.getClassificationLegend();
-
-		var append = "<div id = \"classification-legend\"><table id =\"legend-table\">";
-
-		for(var i=0; i < legends.length; i++){
-			var category = legends[i]["category"][0] + legends[i]["category"].substr(1).toLowerCase();
-			append += '<tr>';
-			append += '<td id = \"pin-column\">';
-			append += '<input type=\"image\" src=\"./resources/'+legends[i]["color"]+'-pin-smaller.png\" id=\"legend-pin-' + i + '\" class=\"legend-pin\">';
-			append += '</td>';
-			append += '<td>';
-			append += '<label class = \"legend\">'+category+'</label>';
-			append += '</td>';
-			append += '</tr>';
-		}
-
-		append += "</table></div>";
-		$(append).appendTo(divToAppend);
-
+	function createCategoricalLegendEvent() {
 		$(".legend-pin").on("click", function(event) {
 			// Getting the index of the pin clicked
 			var legendIndex = event["currentTarget"]["id"].substr(11);
 
-			self.classificationController.bounceMarkersOfCategory(legendIndex);
+			self.classificationController.emphasizeMarkersOfCategory(legendIndex);
 		});
 	}
 

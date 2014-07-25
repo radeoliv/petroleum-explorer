@@ -88,6 +88,49 @@
 		map.controls[google.maps.ControlPosition.TOP_LEFT].push(layersControlDiv);
 	};
 
+	MapCanvasController.prototype.addClassificationLegend = function(legends) {
+		$("#classification-legend-control").remove();
+
+		var classificationLegendDiv = document.createElement('div');
+		classificationLegendDiv.id = "classification-legend-control";
+
+		var controlUI = document.createElement('div');
+		controlUI.id = "classification-legend-controlUI";
+		classificationLegendDiv.appendChild(controlUI);
+
+		var controlContent = document.createElement('div');
+		controlContent.id = "classification-legend-content";
+		controlUI.appendChild(controlContent);
+
+		var append = "<button title=\"Collapse legend\" id=\"toggle-legend\"><i class=\"icon-arrow-down3\"></i></button>";
+
+		append += "<table id =\"legend-table\">";
+
+		for(var i=0; i < legends.length; i++){
+			var category = legends[i]["category"][0] + legends[i]["category"].substr(1).toLowerCase();
+			append += '<tr>';
+			append += '<td id = \"pin-column\">';
+			append += '<input type=\"image\" src=\"./resources/'+legends[i]["color"]+'-pin-smaller.png\" id=\"legend-pin-' + i + '\" class=\"legend-pin\">';
+			append += '</td>';
+			append += '<td>';
+			append += '<label class = \"legend\">'+category+'</label>';
+			append += '</td>';
+			append += '</tr>';
+		}
+		append += "</table>";
+
+		controlContent.innerHTML = append;
+
+		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(classificationLegendDiv);
+
+		$("#toggle-legend").on("click", function() {
+			//TODO: All below
+			// Hide the legend
+			// Change the icon for arrow-up3
+			// Change the title to Expand/Show legend
+		});
+	};
+
 	MapCanvasController.prototype.getPinColors = function() {
 		return pinColors;
 	};

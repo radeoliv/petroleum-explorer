@@ -39,9 +39,10 @@
 		}
 
 		self.MapController.createClassifiedMarkers(categories);
+		self.MapController.addClassificationLegend(self.getClassificationLegend());
 	};
 
-	ClassificationController.prototype.bounceMarkersOfCategory = function(legendIndex) {
+	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
 		// Getting all the indexes of the category clicked
 		var markersIndexes = categories[legendIndex]["indexes"];
 		// Point out markers in the map
