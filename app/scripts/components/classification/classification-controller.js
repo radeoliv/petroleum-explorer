@@ -42,6 +42,11 @@
 		self.MapController.addClassificationLegend(self.getClassificationLegend());
 	};
 
+	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber){
+
+		var wells = self.MapController.getCurrentWells();
+		//get the minimum and maximum value
+	}
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
 		// Getting all the indexes of the category clicked
 		var markersIndexes = categories[legendIndex]["indexes"];
@@ -60,6 +65,11 @@
 
 	ClassificationController.prototype.resetPins = function() {
 		self.MapController.resetPins();
+	};
+
+	ClassificationController.prototype.getMap = function() {
+		var map = self.MapController.getMap();
+		return map;
 	};
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationController = ClassificationController;

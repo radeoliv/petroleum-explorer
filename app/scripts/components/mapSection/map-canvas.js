@@ -147,6 +147,10 @@
 		return usedClassification;
 	};
 
+	MapCanvasController.prototype.getMap = function() {
+		return map;
+	};
+
 	function AddMapInfoControl(controlDiv) {
 		// Set CSS for the control border
 		var controlUI = document.createElement('div');

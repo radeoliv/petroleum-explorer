@@ -30,6 +30,7 @@
 	var myClassificationOnOffSwitch = $('#myclassificationonoffswitch');
 	var categoricalSelection = $('#classification-categorical-fields');
 	var numericalSelection = $('#classification-numerical-fields');
+	var equalIntervalClassSelection= $("#equal-interval-classes");
 	var ClassificationView;
 	var self;
 
@@ -52,12 +53,14 @@
 	function setDisableFields(isDisabled) {
 		categoricalSelection[0].disabled = isDisabled;
 		numericalSelection[0].disabled = isDisabled;
+		equalIntervalClassSelection[0].disabled = isDisabled;
 	}
 
 	function clearAllOptions() {
 		$("#classification-legend-control").remove();
 		categoricalSelection[0].value = '';
 		numericalSelection[0].value = '';
+		equalIntervalClassSelection[0].value = '';
 	}
 
 	function classifyWells() {
@@ -67,7 +70,7 @@
 				createCategoricalLegendEvent();
 				break;
 			case 1:
-				//self.classificationController.classifyWellsByNumericalValues(categoricalSelection[0].value);
+				self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value);
 				//appendNumericalLegend();
 				break;
 			default:
