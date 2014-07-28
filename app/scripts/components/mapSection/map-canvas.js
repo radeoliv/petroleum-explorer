@@ -102,9 +102,9 @@
 		controlContent.id = "classification-legend-content";
 		controlUI.appendChild(controlContent);
 
-		var append = "<button title=\"Collapse legend\" id=\"toggle-legend\"><i class=\"icon-arrow-down3\"></i></button>";
+		var append = "<button title=\"Collapse legend\" id=\"toggle-legend\" class=\"icon-arrow-down3\"></button>";
 
-		append += "<table id =\"legend-table\">";
+		append += "<div id=\"classification-legend\"><table id =\"legend-table\">";
 
 		for(var i=0; i < legends.length; i++){
 			var category = legends[i]["category"][0] + legends[i]["category"].substr(1).toLowerCase();
@@ -117,17 +117,25 @@
 			append += '</td>';
 			append += '</tr>';
 		}
-		append += "</table>";
+		append += "</table></div>";
 
 		controlContent.innerHTML = append;
 
 		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(classificationLegendDiv);
 
 		$("#toggle-legend").on("click", function() {
-			//TODO: All below
-			// Hide the legend
-			// Change the icon for arrow-up3
-			// Change the title to Expand/Show legend
+			// Change the icon of the button
+			$("#toggle-legend").toggleClass("icon-arrow-down3 icon-arrow-up2");
+
+			if($("#toggle-legend")[0].className === "icon-arrow-up2") {
+				$("#toggle-legend")[0].title = "Expand legend";
+				// Hide the legends
+				$("#classification-legend").slideUp("slow");
+			} else {
+				$("#toggle-legend")[0].title = "Collapse legend";
+				// Show the legends
+				$("#classification-legend").slideDown("slow");
+			}
 		});
 	};
 

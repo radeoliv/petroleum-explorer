@@ -55,7 +55,7 @@
 	}
 
 	function clearAllOptions() {
-		$("#classification-legend").remove();
+		$("#classification-legend-control").remove();
 		categoricalSelection[0].value = '';
 		numericalSelection[0].value = '';
 	}
