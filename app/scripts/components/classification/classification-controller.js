@@ -43,9 +43,35 @@
 	};
 
 	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber){
-
+		categories = [];
 		var wells = self.MapController.getCurrentWells();
+		var numericalValues = [];
 		//get the minimum and maximum value
+		for(var i = 0; i < wells.length; i++){
+			numericalValues.push(wells[i][selectedField]);
+		}
+		var min = Math.min.apply(Math, numericalValues);
+		var max = Math.max.apply(Math, numericalValues);
+		if (classNumber !== "undefined" && classNumber !== null){
+			var equalInterval = (max - min)/classNumber;
+		}
+		console.log(equalInterval);
+
+		for (var i = 0; i < classNumber; i++){
+			intervalMin = min + i*equalInterval;
+			intervalMax = min + (i+1)*equalInterval;
+			categories[i]["category"] = intervalMin +" - " + intervalMax;
+			console.log(categories[i]["category"]);
+			for (var j = 0; j < wells.length; j++){
+				if (wells[j][selectedField] >= intervalMin && wells[j][selectedField] < intervalMax){
+					categories[j]["indexes"].push(j);
+				}else{
+					break;
+				}
+			}
+
+		}
+		self.MapController.createClassifiedMarkers(categories);
 	}
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
 		// Getting all the indexes of the category clicked
