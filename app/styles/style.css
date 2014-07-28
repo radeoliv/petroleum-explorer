@@ -112,12 +112,15 @@ Variables
 Map Toolbar
 ========================================================================== */
 .mapToolbar {
-  right: 1em;
+  right: 0.4em;
   z-index: 5;
   background: #f2f2f2;
   top: 3em;
   display: none;
-  padding: 0.07692em 0.07692em 0.07692em 0.07692em; }
+  padding: 0.07em;
+  box-shadow: 0em 0em 0em 0.1em rgba(127, 127, 127, 0.3);
+  border-radius: 0.2em;
+  background-color: white; }
   .mapToolbar button {
     padding: 0.5em 0.5em 0.5em 0.5em;
     outline: none;
@@ -143,6 +146,8 @@ Map Toolbar
   .mapToolbar .fieldset-class {
     padding-top: 0em;
     padding-bottom: 0em; }
+  .mapToolbar .search-form, .mapToolbar .selection-form, .mapToolbar .classification-form, .mapToolbar .filter-form, .mapToolbar .export-form, .mapToolbar .graph-form, .mapToolbar .visualization-form {
+    padding-top: 0em; }
   .mapToolbar .grouped-search {
     align-content: center;
     text-align: center; }
@@ -702,6 +707,12 @@ Classification
   border: none;
   color: #7f7f7f;
   border-radius: 0.4em; }
+
+#legend-table {
+  padding-top: 0.5em; }
+
+#legend-name {
+  padding-left: 0.2em; }
 
 /*
 =============================================================================

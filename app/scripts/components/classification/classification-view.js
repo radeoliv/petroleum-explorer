@@ -72,8 +72,7 @@
 				break;
 			case 1:
 				self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value, numericalSelection[0]["selectedOptions"][0]["innerText"]);
-				//equalIntervalClassSelection[0].value
-				//appendNumericalLegend();
+				createCategoricalLegendEvent();
 				break;
 			default:
 				console.log("No option selected!");
@@ -108,6 +107,7 @@
 		$(".legend-pin").on("click", function(event) {
 			// Getting the index of the pin clicked
 			var legendIndex = event["currentTarget"]["id"].substr(11);
+			console.log(legendIndex);
 
 			self.classificationController.emphasizeMarkersOfCategory(legendIndex);
 		});

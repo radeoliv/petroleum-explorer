@@ -53,23 +53,23 @@
 		var max = Math.max.apply(Math, numericalValues);
 		var equalInterval = (max - min)/classNumber;
 
-		var intervals = [];
+		categories = [];
 		for (var i = 0; i < classNumber; i++){
 			var intervalMin = min + i*equalInterval;
 			var intervalMax = min + (i+1)*equalInterval;
-			intervals.push({intervalMinimum: intervalMin, intervalMaximum: intervalMax, category:intervalMin+" - "+intervalMax, indexes:[]});
+			categories.push({intervalMinimum: intervalMin, intervalMaximum: intervalMax, category:"&#8805 "+intervalMin+"< "+intervalMax, indexes:[]});
 		}
 
 		for (var i = 0; i < wells.length; i++){
-			for (var j=0; j < intervals.length; j++){
-				if ((wells[i][selectedField] >= intervals[j]["intervalMinimum"] && wells[i][selectedField] < intervals[j]["intervalMaximum"])|| wells[i][selectedField] === intervals[j]["intervalMaximum"]){
-					intervals[j]["indexes"].push(i);
+			for (var j=0; j < categories.length; j++){
+				if ((wells[i][selectedField] >= categories[j]["intervalMinimum"] && wells[i][selectedField] < categories[j]["intervalMaximum"])|| wells[i][selectedField] === categories[j]["intervalMaximum"]){
+					categories[j]["indexes"].push(i);
  					break;
 				}
 			}
 		}
-		self.MapController.createClassifiedMarkers(intervals);
-		self.MapController.addClassificationLegend(self.getClassificationLegend(intervals),legendName);
+		self.MapController.createClassifiedMarkers(categories);
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName);
 	};
 
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
