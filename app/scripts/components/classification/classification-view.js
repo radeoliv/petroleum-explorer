@@ -66,11 +66,13 @@
 	function classifyWells() {
 		switch(optionAccordion) {
 			case 0:
-				self.classificationController.classifyWellsByCategory(categoricalSelection[0].value);
+				self.classificationController.classifyWellsByCategory(categoricalSelection[0].value, categoricalSelection[0]["selectedOptions"][0]["innerText"]);
 				createCategoricalLegendEvent();
+
 				break;
 			case 1:
-				self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value);
+				self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value, numericalSelection[0]["selectedOptions"][0]["innerText"]);
+				//equalIntervalClassSelection[0].value
 				//appendNumericalLegend();
 				break;
 			default:
@@ -84,8 +86,17 @@
 	});
 
 	numericalSelection.on("change", function() {
-		classifyWells();
+		checkNumericalClassificationInputs();
 	});
+	equalIntervalClassSelection.on("change", function() {
+		checkNumericalClassificationInputs();
+	});
+
+	function checkNumericalClassificationInputs(){
+		if (numericalSelection[0].value != 'none' && equalIntervalClassSelection[0].value!= 'none'){
+			classifyWells();
+		}
+	}
 
 	$("body").on("WellsUpdated", function() {
 		if(myClassificationOnOffSwitch[0].checked === true) {

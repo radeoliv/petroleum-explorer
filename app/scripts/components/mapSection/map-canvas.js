@@ -88,7 +88,7 @@
 		map.controls[google.maps.ControlPosition.TOP_LEFT].push(layersControlDiv);
 	};
 
-	MapCanvasController.prototype.addClassificationLegend = function(legends) {
+	MapCanvasController.prototype.addClassificationLegend = function(legends, name) {
 		$("#classification-legend-control").remove();
 
 		var classificationLegendDiv = document.createElement('div');
@@ -104,7 +104,7 @@
 
 		var append = "<button title=\"Collapse legend\" id=\"toggle-legend\" class=\"icon-arrow-down3\"></button>";
 
-		append += "<div id=\"classification-legend\"><table id =\"legend-table\">";
+		append += "<div id=\"classification-legend\"><label id=\"legend-name\"><b>"+name+"</b></label><table id =\"legend-table\">";
 
 		for(var i=0; i < legends.length; i++){
 			var category = legends[i]["category"][0] + legends[i]["category"].substr(1).toLowerCase();

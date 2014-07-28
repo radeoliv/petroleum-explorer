@@ -1,14 +1,14 @@
 
 /*--------------------------------------------------------------------------------
-	Author: Bingjie Wei
+ Author: Bingjie Wei
 
-	petroleum-explorer
+ petroleum-explorer
 
-	=============================================================================
-	Filename: classification-controller.js
-	=============================================================================
- 	Controller class of the classification module.
--------------------------------------------------------------------------------*/
+ =============================================================================
+ Filename: classification-controller.js
+ =============================================================================
+ Controller class of the classification module.
+ -------------------------------------------------------------------------------*/
 
 (function () {
 	var categories = [];
@@ -20,7 +20,7 @@
 		self = this;
 	};
 
-	ClassificationController.prototype.classifyWellsByCategory = function(selectedValue){
+	ClassificationController.prototype.classifyWellsByCategory = function(selectedValue, legendName){
 		categories = [];
 		var wells = self.MapController.getCurrentWells();
 
@@ -39,11 +39,10 @@
 		}
 
 		self.MapController.createClassifiedMarkers(categories);
-		self.MapController.addClassificationLegend(self.getClassificationLegend());
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName);
 	};
 
-	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber){
-		categories = [];
+	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber, legendName){
 		var wells = self.MapController.getCurrentWells();
 		var numericalValues = [];
 		//get the minimum and maximum value
@@ -52,27 +51,27 @@
 		}
 		var min = Math.min.apply(Math, numericalValues);
 		var max = Math.max.apply(Math, numericalValues);
-		if (classNumber !== "undefined" && classNumber !== null){
-			var equalInterval = (max - min)/classNumber;
-		}
-		console.log(equalInterval);
+		var equalInterval = (max - min)/classNumber;
 
+		var intervals = [];
 		for (var i = 0; i < classNumber; i++){
-			intervalMin = min + i*equalInterval;
-			intervalMax = min + (i+1)*equalInterval;
-			categories[i]["category"] = intervalMin +" - " + intervalMax;
-			console.log(categories[i]["category"]);
-			for (var j = 0; j < wells.length; j++){
-				if (wells[j][selectedField] >= intervalMin && wells[j][selectedField] < intervalMax){
-					categories[j]["indexes"].push(j);
-				}else{
-					break;
+			var intervalMin = min + i*equalInterval;
+			var intervalMax = min + (i+1)*equalInterval;
+			intervals.push({intervalMinimum: intervalMin, intervalMaximum: intervalMax, category:intervalMin+" - "+intervalMax, indexes:[]});
+		}
+
+		for (var i = 0; i < wells.length; i++){
+			for (var j=0; j < intervals.length; j++){
+				if ((wells[i][selectedField] >= intervals[j]["intervalMinimum"] && wells[i][selectedField] < intervals[j]["intervalMaximum"])|| wells[i][selectedField] === intervals[j]["intervalMaximum"]){
+					intervals[j]["indexes"].push(i);
+ 					break;
 				}
 			}
-
 		}
-		self.MapController.createClassifiedMarkers(categories);
-	}
+		self.MapController.createClassifiedMarkers(intervals);
+		self.MapController.addClassificationLegend(self.getClassificationLegend(intervals),legendName);
+	};
+
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
 		// Getting all the indexes of the category clicked
 		var markersIndexes = categories[legendIndex]["indexes"];
@@ -80,11 +79,11 @@
 		self.MapController.emphasizeMarkers(markersIndexes, 2000);
 	};
 
-	ClassificationController.prototype.getClassificationLegend = function() {
+	ClassificationController.prototype.getClassificationLegend = function(classificationList) {
 		var legendColors = self.MapController.getPinColors();
 		var legends = [];
-		for (var i=0; i < categories.length; i++){
-			legends.push({category: categories[i]["category"], color: legendColors[i]});
+		for (var i=0; i < classificationList.length; i++){
+			legends.push({category: classificationList[i]["category"], color: legendColors[i]});
 		}
 		return legends;
 	};
