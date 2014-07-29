@@ -28,8 +28,10 @@
 	var highlightedMarkers = [];
 	// Auxiliar variable to store the last 'layer' checkboxes configuration
 	var lastLayerCheckboxes = [true,true,true];
-	// Define the array of category colors
+	// Array of categoric classification colors
 	var pinColors = ["light-green", "yellow", "light-blue", "purple", "orange", "pink", "turquoise", "black"];
+	// Array of numerical classification colors
+	var numericPinColors = ["yellow", "orange", "red", "pink", "purple", "blue", "light-blue", "turquoise", "light-green", "black"];
 	// Auxiliar variable to control the pins colors
 	var wellColors = [];
 	// Auxiliar variable to know if the classification is used
@@ -113,6 +115,10 @@
 			append += '<input type=\"image\" src=\"./resources/'+legends[i]["color"]+'-pin-smaller.png\" id=\"legend-pin-' + i + '\" class=\"legend-pin\">';
 			append += '</td>';
 			append += '<td>';
+
+			// Cross out legend if category has no wells in this category
+			category = legends[i]["indexesCount"] === 0 ? "<del>"+category+"</del>" : category;
+
 			append += '<label class = \"legend\">'+category+'</label>';
 			append += '</td>';
 			append += '</tr>';
@@ -139,8 +145,8 @@
 		});
 	};
 
-	MapCanvasController.prototype.getPinColors = function() {
-		return pinColors;
+	MapCanvasController.prototype.getPinColors = function(isCategorical) {
+		return isCategorical ? pinColors : numericPinColors;
 	};
 
 	MapCanvasController.prototype.getUsedClassification = function() {
@@ -562,8 +568,10 @@
 		}
 	}
 
-	MapCanvasController.prototype.createClassifiedMarkers = function(categories) {
+	MapCanvasController.prototype.createClassifiedMarkers = function(categories, isCategorical) {
 		usedClassification = true;
+
+		var tempPinColors = isCategorical ? pinColors : numericPinColors;
 
 		for(var i = 0; i < currentWells.length; i++){
 			for(var j=0; j < categories.length; j++){
@@ -572,7 +580,7 @@
 					if (i === categories[j]["indexes"][k]){
 
 						// Add new entry to wellColors in case a search/filter/selection is executed.
-						wellColors[i] = { well: currentWells[i], color: pinColors[i], category: categories[j]["category"] };
+						wellColors[i] = { well: currentWells[i], color: tempPinColors[i], category: categories[j]["category"] };
 
 						// We create the marker in color j
 						// Remove the older markers and line
@@ -586,7 +594,7 @@
 						deviations[i].setMap(null);
 						deviations[i] = null;
 
-						createMarker(currentWells[i], i, false, pinColors[j]);
+						createMarker(currentWells[i], i, false, tempPinColors[j]);
 
 						found = true;
 						break;

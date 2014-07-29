@@ -38,8 +38,8 @@
 			}
 		}
 
-		self.MapController.createClassifiedMarkers(categories);
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName);
+		self.MapController.createClassifiedMarkers(categories, true);
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, true), legendName);
 	};
 
 	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber, legendName){
@@ -57,7 +57,7 @@
 		for (var i = 0; i < classNumber; i++){
 			var intervalMin = min + i*equalInterval;
 			var intervalMax = min + (i+1)*equalInterval;
-			categories.push({intervalMinimum: intervalMin, intervalMaximum: intervalMax, category:"&#8805 "+intervalMin+"< "+intervalMax, indexes:[]});
+			categories.push({intervalMinimum: intervalMin, intervalMaximum: intervalMax, category:intervalMin.toFixed(2)+" - "+intervalMax.toFixed(2), indexes:[]});
 		}
 
 		for (var i = 0; i < wells.length; i++){
@@ -68,8 +68,8 @@
 				}
 			}
 		}
-		self.MapController.createClassifiedMarkers(categories);
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName);
+		self.MapController.createClassifiedMarkers(categories, false);
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, false), legendName);
 	};
 
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
@@ -79,11 +79,11 @@
 		self.MapController.emphasizeMarkers(markersIndexes, 2000);
 	};
 
-	ClassificationController.prototype.getClassificationLegend = function(classificationList) {
-		var legendColors = self.MapController.getPinColors();
+	ClassificationController.prototype.getClassificationLegend = function(classificationList, isCategorical) {
+		var legendColors = self.MapController.getPinColors(isCategorical);
 		var legends = [];
 		for (var i=0; i < classificationList.length; i++){
-			legends.push({category: classificationList[i]["category"], color: legendColors[i]});
+			legends.push({category: classificationList[i]["category"], indexesCount:classificationList[i]["indexes"].length, color: legendColors[i]});
 		}
 		return legends;
 	};

@@ -44,9 +44,6 @@
 		setDisableFields(!isChecked);
 		if(isChecked === false) {
 			clearAllOptions();
-
-			// Reset the pins on the map
-			self.classificationController.resetPins();
 		}
 	});
 
@@ -58,24 +55,56 @@
 
 	function clearAllOptions() {
 		$("#classification-legend-control").remove();
-		categoricalSelection[0].value = '';
-		numericalSelection[0].value = '';
-		equalIntervalClassSelection[0].value = '';
+		categoricalSelection[0].value = 'none';
+		numericalSelection[0].value = 'none';
+		equalIntervalClassSelection[0].value = 'none';
+
+		// Reset the pins on the map
+		self.classificationController.resetPins();
 	}
 
 	function classifyWells() {
 		switch(optionAccordion) {
 			case 0:
-				self.classificationController.classifyWellsByCategory(categoricalSelection[0].value, categoricalSelection[0]["selectedOptions"][0]["innerText"]);
-				createCategoricalLegendEvent();
+				if(categoricalSelection[0].value != 'none') {
+					self.classificationController.classifyWellsByCategory(categoricalSelection[0].value, categoricalSelection[0]["selectedOptions"][0]["innerText"]);
+					createCategoricalLegendEvent();
 
+					clearOtherFields();
+				} else {
+					clearAllOptions();
+				}
 				break;
 			case 1:
-				self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value, numericalSelection[0]["selectedOptions"][0]["innerText"]);
-				createCategoricalLegendEvent();
+				if(numericalSelection[0].value != 'none') {
+					self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value, numericalSelection[0]["selectedOptions"][0]["innerText"]);
+					createCategoricalLegendEvent();
+
+					clearOtherFields();
+				} else {
+					clearAllOptions();
+				}
 				break;
 			default:
 				console.log("No option selected!");
+				clearAllOptions();
+				break;
+		}
+	}
+
+	function clearOtherFields() {
+		switch(optionAccordion) {
+			case 0:
+				// Clear the other fields
+				numericalSelection[0].value = 'none';
+				equalIntervalClassSelection[0].value = 'none';
+				break;
+			case 1:
+				categoricalSelection[0].value = 'none';
+				break;
+			default:
+				console.log("No option selected!");
+				clearAllOptions();
 				break;
 		}
 	}
@@ -85,14 +114,18 @@
 	});
 
 	numericalSelection.on("change", function() {
-		checkNumericalClassificationInputs();
+		if(numericalSelection[0].value === 'none') {
+			clearAllOptions();
+		} else {
+			checkNumericalClassificationInputs();
+		}
 	});
 	equalIntervalClassSelection.on("change", function() {
 		checkNumericalClassificationInputs();
 	});
 
-	function checkNumericalClassificationInputs(){
-		if (numericalSelection[0].value != 'none' && equalIntervalClassSelection[0].value!= 'none'){
+	function checkNumericalClassificationInputs() {
+		if (numericalSelection[0].value != 'none' && equalIntervalClassSelection[0].value != 'none'){
 			classifyWells();
 		}
 	}
@@ -107,7 +140,6 @@
 		$(".legend-pin").on("click", function(event) {
 			// Getting the index of the pin clicked
 			var legendIndex = event["currentTarget"]["id"].substr(11);
-			console.log(legendIndex);
 
 			self.classificationController.emphasizeMarkersOfCategory(legendIndex);
 		});
