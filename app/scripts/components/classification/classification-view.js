@@ -30,7 +30,8 @@
 	var myClassificationOnOffSwitch = $('#myclassificationonoffswitch');
 	var categoricalSelection = $('#classification-categorical-fields');
 	var numericalSelection = $('#classification-numerical-fields');
-	var equalIntervalClassSelection= $("#equal-interval-classes");
+	var classificationMethods = $("input[name=classification-method]:radio");
+	var classesNumberSelection = $("#classes-number");
 	var ClassificationView;
 	var self;
 
@@ -50,14 +51,26 @@
 	function setDisableFields(isDisabled) {
 		categoricalSelection[0].disabled = isDisabled;
 		numericalSelection[0].disabled = isDisabled;
-		equalIntervalClassSelection[0].disabled = isDisabled;
+		classesNumberSelection[0].disabled = isDisabled;
+
+		for(var i=0; i<classificationMethods.length; i++) {
+			classificationMethods[i].checked = false;
+			classificationMethods[i].disabled = isDisabled;
+		}
 	}
 
 	function clearAllOptions() {
 		$("#classification-legend-control").remove();
 		categoricalSelection[0].value = 'none';
 		numericalSelection[0].value = 'none';
-		equalIntervalClassSelection[0].value = 'none';
+		classesNumberSelection[0].value = 'none';
+
+		for(var i=0; i<classificationMethods.length; i++) {
+			if(classificationMethods[i].checked === true) {
+				classificationMethods[i].checked = false;
+				break;
+			}
+		}
 
 		// Reset the pins on the map
 		self.classificationController.resetPins();
@@ -68,22 +81,33 @@
 			case 0:
 				if(categoricalSelection[0].value != 'none') {
 					self.classificationController.classifyWellsByCategory(categoricalSelection[0].value, categoricalSelection[0]["selectedOptions"][0]["innerText"]);
-					createCategoricalLegendEvent();
 
+					createCategoricalLegendEvent();
 					clearOtherFields();
 				} else {
 					clearAllOptions();
 				}
 				break;
 			case 1:
-				if(numericalSelection[0].value != 'none') {
-					self.classificationController.classifyWellsByNumericalValues(numericalSelection[0].value, equalIntervalClassSelection[0].value, numericalSelection[0]["selectedOptions"][0]["innerText"]);
-					createCategoricalLegendEvent();
+				/*
+				 * We check if the numericalSelection is different than 'none' before calling this function.
+				 * Therefore, there's no need to check it again.
+				 */
+				var attrSelection = numericalSelection[0].value;
+				var classesNumber = classesNumberSelection[0].value;
+				var attrName = numericalSelection[0]["selectedOptions"][0]["innerText"];
 
-					clearOtherFields();
-				} else {
-					clearAllOptions();
+				var method = '';
+				for(var i=0; i<classificationMethods.length; i++) {
+					if(classificationMethods[i].checked === true) {
+						method = classificationMethods[i].value;
+						break;
+					}
 				}
+				self.classificationController.classifyWellsByNumericalValues(attrSelection, classesNumber, attrName, method);
+
+				createCategoricalLegendEvent();
+				clearOtherFields();
 				break;
 			default:
 				console.log("No option selected!");
@@ -97,7 +121,13 @@
 			case 0:
 				// Clear the other fields
 				numericalSelection[0].value = 'none';
-				equalIntervalClassSelection[0].value = 'none';
+				classesNumberSelection[0].value = 'none';
+				for(var i=0; i<classificationMethods.length; i++) {
+					if(classificationMethods[i].checked === true) {
+						classificationMethods[i].checked = false;
+						break;
+					}
+				}
 				break;
 			case 1:
 				categoricalSelection[0].value = 'none';
@@ -120,12 +150,27 @@
 			checkNumericalClassificationInputs();
 		}
 	});
-	equalIntervalClassSelection.on("change", function() {
+	classesNumberSelection.on("change", function() {
+		if(classesNumberSelection[0].value === 'none') {
+			clearAllOptions();
+		} else {
+			checkNumericalClassificationInputs();
+		}
+	});
+	classificationMethods.on("change", function() {
 		checkNumericalClassificationInputs();
 	});
 
 	function checkNumericalClassificationInputs() {
-		if (numericalSelection[0].value != 'none' && equalIntervalClassSelection[0].value != 'none'){
+		var radioButtonChecked = false;
+		for(var i=0; i<classificationMethods.length; i++) {
+			if(classificationMethods[i].checked === true) {
+				radioButtonChecked = true;
+				break;
+			}
+		}
+
+		if (numericalSelection[0].value != 'none' && radioButtonChecked && classesNumberSelection[0].value != 'none'){
 			classifyWells();
 		}
 	}

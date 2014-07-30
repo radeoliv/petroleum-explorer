@@ -454,14 +454,16 @@
 	initializeMap();
 
 	MapCanvasController.prototype.resetPins = function() {
-		usedClassification = false;
+		if(usedClassification === true) {
+			usedClassification = false;
 
-		clearAllMarkers();
-		initializeMap();
+			clearAllMarkers();
+			initializeMap();
 
-		// Highlight all the pins that were highlighted before
-		for(var i=0; i<highlightedMarkers.length; i++) {
-			toggleMarkerSelection(true, highlightedMarkers[i][1], false);
+			// Highlight all the pins that were highlighted before
+			for(var i=0; i<highlightedMarkers.length; i++) {
+				toggleMarkerSelection(true, highlightedMarkers[i][1], false);
+			}
 		}
 	}
 
@@ -606,7 +608,6 @@
 					break;
 				}
 			}
-
 		}
 	};
 
@@ -751,10 +752,9 @@
 
 	MapCanvasController.prototype.emphasizeMarkers = function(indexes, duration) {
 		if(indexes != undefined && indexes != null && indexes.length > 0) {
-			// 0 - top, 1 - underground, 2 - deviation
-			lastLayerCheckboxes[0] ? 1.0 : 0.0;
+			// lastLayerCheckboxes -> 0 - top, 1 - underground, 2 - deviation
 
-
+			var zIndex = google.maps.Marker.MAX_ZINDEX - 2;
 			// First, lower the opacity of all markers not present in the indexes list
 			var tempIndex = 0;
 			for(var i=0; i<markers.length; i++) {
@@ -762,10 +762,12 @@
 					// Surface
 					if(lastLayerCheckboxes[0] === true) {
 						markersTop[i].setOpacity(0.07);
+						markersTop[i].setZIndex(zIndex);
 					}
 					// Underground
 					if(lastLayerCheckboxes[1] === true) {
 						markers[i].setOpacity(0.07);
+						markers[i].setZIndex(zIndex);
 					}
 					// Deviations
 					if(lastLayerCheckboxes[2] === true) {
@@ -777,6 +779,7 @@
 			}
 
 			// Then, after the duration, make everything back to normal
+			zIndex = google.maps.Marker.MAX_ZINDEX - 1;
 			tempIndex = 0;
 			setTimeout(function() {
 				for(var i=0; i<markers.length; i++) {
@@ -784,10 +787,12 @@
 						// Surface
 						if(lastLayerCheckboxes[0] === true) {
 							markersTop[i].setOpacity(1);
+							markersTop[i].setZIndex(zIndex);
 						}
 						// Underground
 						if(lastLayerCheckboxes[1] === true) {
 							markers[i].setOpacity(1);
+							markers[i].setZIndex(zIndex);
 						}
 						// Deviations
 						if(lastLayerCheckboxes[2] === true) {
