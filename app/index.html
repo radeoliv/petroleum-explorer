@@ -293,12 +293,13 @@
 									<hr>
 
 									<div id="classification-numeric-parameters">
-										<input type="radio" id="equal-method" name="classification-method" value="equal">
+										<input type="radio" id="equal-method" name="classification-method" value="equal" disabled="true">
 										<label id="equal-interval-label" for="equal-method">Equal Interval</label>
 										<br>
-										<input type="radio" id="quantile-method" name="classification-method" value="quantile">
+										<input type="radio" id="quantile-method" name="classification-method" value="quantile" disabled="true">
 										<label id="quantile-label" for="quantile-method">Quantile</label>
 
+										<label id="classes-number-label" for="classes-number">Classes</label>
 										<select id="classes-number" placeholder = "Classification" name="attributes" results ="10" autosave = "Attributes" disabled="true">
 											<option value = "none"></option>
 											<option value = "2">2</option>

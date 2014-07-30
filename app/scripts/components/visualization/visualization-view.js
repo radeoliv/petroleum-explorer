@@ -61,7 +61,10 @@
 		if(param === undefined || param === null || param != false) {
 			// Every time the visualization centre is opened, the visualization being shown before is reloaded.
 			// If there's none selected, nothing will be added.
-			$applyVisualizationButton.trigger("click");
+			// The timeout is used as safety margin time for the window to totally load before rendering the graph again.
+			setTimeout(function() {
+				return $applyVisualizationButton.trigger("click");
+			}, 300);
 		} else {
 			// Opens the time series accordion tab/panel
 			optionAccordion = 2;

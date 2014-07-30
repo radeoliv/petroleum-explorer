@@ -17,10 +17,19 @@ Classification
 
 #classification-numeric-parameters {
 	text-align: left;
+	position: relative;
 }
 
 #classes-number {
-	float: right;
+	position: absolute;
+	right: 0em;
+	width: 3.7em;
+}
+
+#classes-number-label {
+	position: absolute;
+	right: 0em;
+	top: 0em;
 }
 
 #pin-column {
@@ -66,6 +75,6 @@ Classification
 	padding-top: 0.5em;
 }
 
-#legend-name {
+.legend-header {
 	padding-left: 0.2em;
 }

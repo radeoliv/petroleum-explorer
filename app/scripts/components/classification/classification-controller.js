@@ -39,7 +39,8 @@
 		}
 
 		self.MapController.createClassifiedMarkers(categories, true);
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, true), legendName);
+		var headers = ["Categorical Classification"];
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, true), legendName, headers);
 	};
 
 	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber, legendName, method) {
@@ -55,8 +56,21 @@
 		}
 
 		self.MapController.createClassifiedMarkers(categories, false);
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, false), legendName);
+		var headers = ["Numerical Classification", getNumericalClassificationMethod(method)];
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, false), legendName, headers);
 	};
+
+	function getNumericalClassificationMethod(method) {
+		var result = "";
+		if(method != undefined && method != null && method.length > 0) {
+			if(method === 'equal') {
+				result = "Equal Interval";
+			} else if(method === 'quantile') {
+				result = "Quantile";
+			}
+		}
+		return result;
+	}
 
 	function classifyEqualInterval(selectedField, classNumber, wells) {
 		var result = [];
