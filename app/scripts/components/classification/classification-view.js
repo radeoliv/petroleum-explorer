@@ -32,6 +32,8 @@
 	var numericalSelection = $('#classification-numerical-fields');
 	var classificationMethods = $("input[name=classification-method]:radio");
 	var classesNumberSelection = $("#classes-number");
+	var clustersNumberSelection = $("#clusters-number");
+	var clusterizationFieldsSelection = $("#clusterization-fields");
 	var ClassificationView;
 	var self;
 
@@ -52,6 +54,8 @@
 		categoricalSelection[0].disabled = isDisabled;
 		numericalSelection[0].disabled = isDisabled;
 		classesNumberSelection[0].disabled = isDisabled;
+		clusterizationFieldsSelection[0].disabled = isDisabled;
+		clustersNumberSelection[0].disabled = isDisabled;
 
 		for(var i=0; i<classificationMethods.length; i++) {
 			classificationMethods[i].checked = false;
@@ -64,6 +68,8 @@
 		categoricalSelection[0].value = 'none';
 		numericalSelection[0].value = 'none';
 		classesNumberSelection[0].value = 'none';
+		clusterizationFieldsSelection[0].value = 'none';
+		clustersNumberSelection[0].value = 'none';
 
 		for(var i=0; i<classificationMethods.length; i++) {
 			if(classificationMethods[i].checked === true) {
@@ -80,7 +86,9 @@
 		switch(optionAccordion) {
 			case 0:
 				if(categoricalSelection[0].value != 'none') {
-					self.classificationController.classifyWellsByCategory(categoricalSelection[0].value, categoricalSelection[0]["selectedOptions"][0]["innerText"]);
+					var attrSelection = categoricalSelection[0].value;
+					var attrName = categoricalSelection[0]["selectedOptions"][0]["innerText"];
+					self.classificationController.classifyWellsByCategory(attrSelection, attrName);
 
 					createCategoricalLegendEvent();
 					clearOtherFields();
@@ -90,8 +98,8 @@
 				break;
 			case 1:
 				/*
-				 * We check if the numericalSelection is different than 'none' before calling this function.
-				 * Therefore, there's no need to check it again.
+				 * We check if the inputs are different than 'none' before calling this function.
+				 * Therefore, there's no need to check them again.
 				 */
 				var attrSelection = numericalSelection[0].value;
 				var classesNumber = classesNumberSelection[0].value;
@@ -109,6 +117,16 @@
 				createCategoricalLegendEvent();
 				clearOtherFields();
 				break;
+			case 2:
+				/*
+				 * We check if the inputs are different than 'none' before calling this function.
+				 * Therefore, there's no need to check them again.
+				 */
+				self.classificationController.clusterKMeans(clusterizationFieldsSelection[0].value, clustersNumberSelection[0].value);
+
+				createCategoricalLegendEvent();
+				clearOtherFields();
+				break;
 			default:
 				console.log("No option selected!");
 				clearAllOptions();
@@ -119,23 +137,38 @@
 	function clearOtherFields() {
 		switch(optionAccordion) {
 			case 0:
-				// Clear the other fields
-				numericalSelection[0].value = 'none';
-				classesNumberSelection[0].value = 'none';
-				for(var i=0; i<classificationMethods.length; i++) {
-					if(classificationMethods[i].checked === true) {
-						classificationMethods[i].checked = false;
-						break;
-					}
-				}
+				clearNumericalClassification();
+				clearKMeans();
 				break;
 			case 1:
-				categoricalSelection[0].value = 'none';
+				clearCategoricalClassification();
+				clearKMeans();
 				break;
+			case 2:
+				clearCategoricalClassification();
+				clearNumericalClassification();
 			default:
 				console.log("No option selected!");
 				clearAllOptions();
 				break;
+		}
+
+		function clearCategoricalClassification() {
+			categoricalSelection[0].value = 'none';
+		}
+
+		function clearNumericalClassification() {
+			classesNumberSelection[0].value = 'none';
+			for(var i=0; i<classificationMethods.length; i++) {
+				if(classificationMethods[i].checked === true) {
+					classificationMethods[i].checked = false;
+					break;
+				}
+			}
+		}
+
+		function clearKMeans() {
+			clustersNumberSelection[0].value = 'none';
 		}
 	}
 
@@ -150,6 +183,7 @@
 			checkNumericalClassificationInputs();
 		}
 	});
+
 	classesNumberSelection.on("change", function() {
 		if(classesNumberSelection[0].value === 'none') {
 			clearAllOptions();
@@ -157,8 +191,21 @@
 			checkNumericalClassificationInputs();
 		}
 	});
+
 	classificationMethods.on("change", function() {
 		checkNumericalClassificationInputs();
+	});
+
+	clusterizationFieldsSelection.on("change", function() {
+		if(clusterizationFieldsSelection[0].value === 'none') {
+			clearAllOptions();
+		} else {
+			checkClusterizationInputs();
+		}
+	});
+
+	clustersNumberSelection.on("change", function() {
+		checkClusterizationInputs();
 	});
 
 	function checkNumericalClassificationInputs() {
@@ -171,6 +218,12 @@
 		}
 
 		if (numericalSelection[0].value != 'none' && radioButtonChecked && classesNumberSelection[0].value != 'none'){
+			classifyWells();
+		}
+	}
+
+	function checkClusterizationInputs() {
+		if(clusterizationFieldsSelection[0].value != 'none' && clustersNumberSelection[0].value != 'none') {
 			classifyWells();
 		}
 	}

@@ -15,6 +15,75 @@ var conString = "postgres://postgres:admin123@localhost/dbpetroleum";
 
 var app = express();
 
+
+var clusterfck = require("clusterfck");
+
+var colors = [
+	[20, 20, 80],
+	[22, 22, 90],
+	[250, 255, 253],
+	[0, 30, 70],
+	[200, 0, 23],
+	[100, 54, 100],
+	[255, 13, 8]
+];
+var test =
+	[
+		[1],
+		[2],
+		[3],
+		[4],
+		[9],
+		[10],
+		[11],
+		[12],
+		[16],
+		[17],
+		[18],
+		[19],
+		[50],
+		[51],
+		[80],
+		[85],
+		[90],
+		[95],
+		[150],
+		[151],
+		[152],
+		[153],
+		[154]
+	];
+
+//var test =
+//	[
+//		[1,1,23],
+//		[2,2,22],
+//		[3,3,21],
+//		[4,4,20],
+//		[5,9,19],
+//		[6,10,18],
+//		[7,11,17],
+//		[8,12,16],
+//		[9,16,15],
+//		[10,17,14],
+//		[11,18,13],
+//		[12,19,12],
+//		[13,50,11],
+//		[14,51,10],
+//		[15,80,9],
+//		[16,85,8],
+//		[17,90,7],
+//		[18,95,6],
+//		[19,150,5],
+//		[20,151,4],
+//		[21,152,3],
+//		[22,153,2],
+//		[23,154,1]
+//	];
+
+var clusters = clusterfck.kmeans(test, 6);
+console.log(clusters);
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -146,6 +215,30 @@ app.get('/getInjectionInfoFromWell/:uwi', function(req, res) {
 app.get('/getProductionInfoFromWell/:uwi', function(req, res) {
 	res.header("Access-Control-Allow-Origin", "*");
 
+	pg.connect(conString, function(err, client, done) {
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+
+		var dbuwi = req.params.uwi;
+
+		var query = "SELECT * FROM production WHERE production.w_id IN (SELECT w_id FROM wells WHERE w_uwi = '" + dbuwi + "') ORDER BY p_year, p_month;";
+
+		client.query(query, function(err, result) {
+			//call `done()` to release the client back to the pool
+			done();
+
+			if(err) {
+				return console.error('error running query', err);
+			}
+			res.send(result.rows);
+		});
+	});
+});
+
+app.get('/applyKmeansToWells/:params', function(req, res) {
+	res.header("Access-Control-Allow-Origin", "*");
+	// TODO: everything here will change!
 	pg.connect(conString, function(err, client, done) {
 		if(err) {
 			return console.error('error fetching client from pool', err);

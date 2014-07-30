@@ -45,7 +45,9 @@
 		 */
 		initMapToggle = function () {
 			mapToolbarButtons.hide();
+			var titles = ["Show toolbar", "Hide toolbar"];
 			return toolbarToggle.on("click", function () {
+				toolbarToggle[0].title = toolbarToggle[0].title === titles[0] ? titles[1] : titles[0];
 				mapToolbarButtons.toggle();
 				mapToolbarContent.slideUp(400);
 				mapToolbarButtons.removeClass("active");

@@ -166,6 +166,15 @@
 		return result;
 	}
 
+	ClassificationController.prototype.clusterKMeans = function(selectedField, clusterNumber) {
+		// TODO: Calculate stuff and do the rest!
+		var wells = self.MapController.getCurrentWells();
+
+		for(var i=0; i<wells.length; i++) {
+
+		}
+	};
+
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
 		// Getting all the indexes of the category clicked
 		var markersIndexes = categories[legendIndex]["indexes"];

@@ -10,30 +10,6 @@
  -------------------------------------------------------------------------------*/
 
 jQuery(document).ready(function ($) {
-
-	function testingConnection() {
-		// Example to retrieve data about all wells
-		$.ajax({
-			url: 'http://localhost:3000/getAllWells',
-			dataType:'json',
-			async: false,
-			success: function(data){
-				console.log(data);
-			}
-		});
-
-		// Example to retrieve data about a specific well (in this case well '1')
-		$.ajax({
-			url: 'http://localhost:3000/getInfoFromWell/1',
-			dataType:'json',
-			async: false,
-			success: function(data){
-				console.log(data);
-			}
-		});
-	}
-	//testingConnection();
-
 	/*
 	 * The data set is retrieved from the database from the map-canvas script.
 	 * It can be used in the other parts of the system, avoiding having to reload everything.

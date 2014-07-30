@@ -94,7 +94,7 @@
 	</div>
 
 	<aside class = "mapToolbar">
-		<button title = "Show Toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
+		<button title = "Show toolbar" class = "show-toolbar"><i class = "icon-expand"></i></button>
 
 		<div class = "toolbar-buttons">
 			<button title = "Search" data-target = "search-form" class = "show-search">
@@ -103,7 +103,7 @@
 			<button title = "Polygon selection" data-target = "selection-form" class = "show-selection">
 			<i class = "icon-share"></i>
 	 		</button>
-			<button title = "Classification" data-target = "classification-form" class = "show-classification">
+			<button title = "Data mining" data-target = "classification-form" class = "show-classification">
 				<i class = "icon-tree"></i>
 			</button>
 			<button title = "Data visualization" data-target = "visualization-form" class = "show-visualization">
@@ -262,7 +262,7 @@
 				<form action = "/classification">
 					<fieldset class="fieldset-class">
 						<hr>
-						<h4>Classification</h4>
+						<h4>Data mining</h4>
 
 						<div id="classificationContent">
 							<div id="classification-switch" class="onoffswitch">
@@ -275,7 +275,7 @@
 							</div>
 
 							<div id = "classificationAccordion">
-								<h5>Categorical fields</h5>
+								<h5>Categorical classification</h5>
 								<div class="classification-categorical accordion-content">
 									<select id="classification-categorical-fields" placeholder="Classification" name="attributes" results ="10" autosave="Attributes" disabled="true">
 										<option value = "none"></option>
@@ -284,7 +284,7 @@
 									</select>
 								</div>
 
-								<h5>Numerical fields</h5>
+								<h5>Numerical classification</h5>
 								<div class="classification-numerical accordion-content">
 									<select id = "classification-numerical-fields" placeholder = "Classification" name ="attributes" results ="10" autosave = "Attributes" disabled="true">
 										<option value = "none"></option>
@@ -312,6 +312,28 @@
 											<option value = "9">9</option>
 										</select>
 									</div>
+								</div>
+
+								<h5>K-means clustering</h5>
+								<div class="classification-numerical accordion-content">
+									<select id="clusterization-fields" placeholder = "Clusterization" name ="attributes" results ="10" autosave = "Attributes" disabled="true">
+										<option value = "none"></option>
+										<option value = "w_drillers_total_depth">Well Drillers Total Depth</option>
+									</select>
+
+									<label id="clusters-number-label" for="classes-number">Number of clusters</label>
+									<select id="clusters-number" placeholder = "Classification" name="attributes" results ="10" autosave = "Attributes" disabled="true">
+										<option value = "none"></option>
+										<!--<option value = "auto">Auto</option>-->
+										<option value = "2">2</option>
+										<option value = "3">3</option>
+										<option value = "4">4</option>
+										<option value = "5">5</option>
+										<option value = "6">6</option>
+										<option value = "7">7</option>
+										<option value = "8">8</option>
+										<option value = "9">9</option>
+									</select>
 								</div>
 							</div>
 						</div>
