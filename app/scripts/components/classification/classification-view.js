@@ -147,6 +147,7 @@
 			case 2:
 				clearCategoricalClassification();
 				clearNumericalClassification();
+				break;
 			default:
 				console.log("No option selected!");
 				clearAllOptions();

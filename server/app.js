@@ -8,81 +8,13 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var clusterfck = require("clusterfck");
 var methodOverride = require('method-override');
 
 var pg = require('pg');
 var conString = "postgres://postgres:admin123@localhost/dbpetroleum";
 
 var app = express();
-
-
-var clusterfck = require("clusterfck");
-
-var colors = [
-	[20, 20, 80],
-	[22, 22, 90],
-	[250, 255, 253],
-	[0, 30, 70],
-	[200, 0, 23],
-	[100, 54, 100],
-	[255, 13, 8]
-];
-var test =
-	[
-		[1],
-		[2],
-		[3],
-		[4],
-		[9],
-		[10],
-		[11],
-		[12],
-		[16],
-		[17],
-		[18],
-		[19],
-		[50],
-		[51],
-		[80],
-		[85],
-		[90],
-		[95],
-		[150],
-		[151],
-		[152],
-		[153],
-		[154]
-	];
-
-//var test =
-//	[
-//		[1,1,23],
-//		[2,2,22],
-//		[3,3,21],
-//		[4,4,20],
-//		[5,9,19],
-//		[6,10,18],
-//		[7,11,17],
-//		[8,12,16],
-//		[9,16,15],
-//		[10,17,14],
-//		[11,18,13],
-//		[12,19,12],
-//		[13,50,11],
-//		[14,51,10],
-//		[15,80,9],
-//		[16,85,8],
-//		[17,90,7],
-//		[18,95,6],
-//		[19,150,5],
-//		[20,151,4],
-//		[21,152,3],
-//		[22,153,2],
-//		[23,154,1]
-//	];
-
-var clusters = clusterfck.kmeans(test, 6);
-console.log(clusters);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -238,15 +170,40 @@ app.get('/getProductionInfoFromWell/:uwi', function(req, res) {
 
 app.get('/applyKmeansToWells/:params', function(req, res) {
 	res.header("Access-Control-Allow-Origin", "*");
-	// TODO: everything here will change!
+
+	var params = req.params.params;
+
+	var tempParams = params.split("&");
+	var field = tempParams[0];
+	var clusterNumber = tempParams[1];
+	var uwis = tempParams[2];
+	uwis = uwis.split(",");
+
+	// The UWIs are in the same order as the client (we must save the index to increase client performance)
+	var cleanUWIs = [];
+	for(var i=0; i<uwis.length; i++) {
+		cleanUWIs.push({ index: i, uwi:uwis[i] });
+	}
+
+	cleanUWIs.sort(function(a, b) {
+		return sortAlphabetically(a["uwi"], b["uwi"]);
+	});
+
+	uwis.sort(function(a, b) {
+		return sortAlphabetically(a, b);
+	});
+
+	for(var i=0; i<uwis.length; i++) {
+		uwis[i] = "'" + uwis[i] + "'";
+	}
+	uwis = uwis.join();
+
 	pg.connect(conString, function(err, client, done) {
 		if(err) {
 			return console.error('error fetching client from pool', err);
 		}
 
-		var dbuwi = req.params.uwi;
-
-		var query = "SELECT * FROM production WHERE production.w_id IN (SELECT w_id FROM wells WHERE w_uwi = '" + dbuwi + "') ORDER BY p_year, p_month;";
+		var query = "SELECT w_uwi," + field + " FROM wells WHERE w_uwi in (" + uwis + ") order by w_uwi";
 
 		client.query(query, function(err, result) {
 			//call `done()` to release the client back to the pool
@@ -255,10 +212,44 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 			if(err) {
 				return console.error('error running query', err);
 			}
-			res.send(result.rows);
+
+			var rows = result.rows;
+			var formattedRows = [];
+			for(var i=0; i<rows.length; i++) {
+				formattedRows.push([ rows[i][field] ]);
+				formattedRows[i].uwi = rows[i]["w_uwi"];
+				if(formattedRows[i].uwi === cleanUWIs[i]["uwi"]) {
+					formattedRows[i].index = cleanUWIs[i]["index"];
+				}
+			}
+
+			// Execute the k-means clustering
+			var clusters = clusterfck.kmeans(formattedRows, clusterNumber);
+
+			// Setting the index to the result array
+			var resultValues = [];
+			for(var i=0; i<clusters.length; i++) {
+				var tempCluster = [];
+				for(var j=0; j<clusters[i].length; j++) {
+					tempCluster.push({ index: clusters[i][j].index, value: clusters[i][j] })
+				}
+				resultValues.push(tempCluster);
+			}
+
+			res.send(resultValues);
 		});
 	});
 });
+
+function sortAlphabetically(a, b) {
+	if(a === b) {
+		return 0;
+	} else if(a < b) {
+		return -1;
+	} else {
+		return 1;
+	}
+}
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

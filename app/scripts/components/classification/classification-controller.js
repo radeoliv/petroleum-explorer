@@ -167,12 +167,34 @@
 	}
 
 	ClassificationController.prototype.clusterKMeans = function(selectedField, clusterNumber) {
-		// TODO: Calculate stuff and do the rest!
 		var wells = self.MapController.getCurrentWells();
 
+		var uwis = '';
 		for(var i=0; i<wells.length; i++) {
-
+			uwis += (i === wells.length - 1) ? (wells[i]["w_uwi"]) : (wells[i]["w_uwi"]) + ",";
 		}
+		var encodedParams = encodeURIComponent(selectedField + "&" + clusterNumber + "&" + uwis);
+
+		var result = [];
+		$.ajax({
+			url: 'http://localhost:3000/applyKmeansToWells/' + encodedParams,
+			dataType:'json',
+			async: false,
+			success: function(data) {
+				result = data;
+			}
+		});
+
+		console.log(result);
+
+		// TODO: Fill up the category variable with the right values!!!
+		result.push(
+			{
+				intervalMinimum: -1,
+				intervalMaximum: -1,
+				category: '',
+				indexes:[]
+			});
 	};
 
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
