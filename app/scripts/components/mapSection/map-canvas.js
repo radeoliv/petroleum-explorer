@@ -28,10 +28,8 @@
 	var highlightedMarkers = [];
 	// Auxiliar variable to store the last 'layer' checkboxes configuration
 	var lastLayerCheckboxes = [true,true,true];
-	// Array of categoric classification colors
-	var pinColors = ["light-green", "yellow", "light-blue", "purple", "orange", "pink", "turquoise", "black"];
-	// Array of numerical classification colors
-	var numericPinColors = ["yellow", "orange", "red", "pink", "purple", "blue", "light-blue", "turquoise", "light-green", "black"];
+	// Array of classification colors
+	var pinColors = ["yellow", "orange", "red", "pink", "purple", "blue", "light-blue", "turquoise", "light-green", "black"];
 	// Auxiliar variable to control the pins colors
 	var wellColors = [];
 	// Auxiliar variable to know if the classification is used
@@ -160,8 +158,8 @@
 		});
 	};
 
-	MapCanvasController.prototype.getPinColors = function(isCategorical) {
-		return isCategorical ? pinColors : numericPinColors;
+	MapCanvasController.prototype.getPinColors = function() {
+		return pinColors;
 	};
 
 	MapCanvasController.prototype.getUsedClassification = function() {
@@ -585,10 +583,8 @@
 		}
 	}
 
-	MapCanvasController.prototype.createClassifiedMarkers = function(categories, isCategorical) {
+	MapCanvasController.prototype.createClassifiedMarkers = function(categories) {
 		usedClassification = true;
-
-		var tempPinColors = isCategorical ? pinColors : numericPinColors;
 
 		for(var i = 0; i < currentWells.length; i++){
 			for(var j=0; j < categories.length; j++){
@@ -597,7 +593,7 @@
 					if (i === categories[j]["indexes"][k]){
 
 						// Add new entry to wellColors in case a search/filter/selection is executed.
-						wellColors[i] = { well: currentWells[i], color: tempPinColors[i], category: categories[j]["category"] };
+						wellColors[i] = { well: currentWells[i], color: pinColors[i], category: categories[j]["category"] };
 
 						// We create the marker in color j
 						// Remove the older markers and line
@@ -611,7 +607,7 @@
 						deviations[i].setMap(null);
 						deviations[i] = null;
 
-						createMarker(currentWells[i], i, false, tempPinColors[j]);
+						createMarker(currentWells[i], i, false, pinColors[j]);
 
 						found = true;
 						break;

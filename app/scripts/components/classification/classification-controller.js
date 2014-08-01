@@ -38,9 +38,9 @@
 			}
 		}
 
-		self.MapController.createClassifiedMarkers(categories, true);
+		self.MapController.createClassifiedMarkers(categories);
 		var headers = ["Categorical Classification"];
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, true), legendName, headers);
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName, headers);
 	};
 
 	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber, legendName, method) {
@@ -55,9 +55,9 @@
 			categories = classifyQuantile(selectedField, classNumber, wells);
 		}
 
-		self.MapController.createClassifiedMarkers(categories, false);
+		self.MapController.createClassifiedMarkers(categories);
 		var headers = ["Numerical Classification", getNumericalClassificationMethod(method)];
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories, false), legendName, headers);
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName, headers);
 	};
 
 	function getNumericalClassificationMethod(method) {
@@ -166,7 +166,7 @@
 		return result;
 	}
 
-	ClassificationController.prototype.clusterKMeans = function(selectedField, clusterNumber) {
+	ClassificationController.prototype.clusterKMeans = function(selectedField, clusterNumber, attrName) {
 		var wells = self.MapController.getCurrentWells();
 
 		var uwis = '';
@@ -187,14 +187,29 @@
 
 		console.log(result);
 
-		// TODO: Fill up the category variable with the right values!!!
-		result.push(
-			{
+		// Clearing the previous categories
+		categories = [];
+
+		for(var i=0; i<result.length; i++) {
+			categories.push( {
 				intervalMinimum: -1,
 				intervalMaximum: -1,
-				category: '',
+				category: 'Cluster ' + (i+1),
 				indexes:[]
 			});
+			for(var j=0; j<result[i].length; j++) {
+				categories[i]["indexes"].push(result[i][j]["index"]);
+			}
+		}
+
+		// Sorting the indexes of each category
+		for(var i=0; i<categories.length; i++) {
+			categories[i]["indexes"].sort(function(a, b) { return a - b; });
+		}
+
+		self.MapController.createClassifiedMarkers(categories);
+		var headers = ["K-means Clustering"];
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), attrName, headers);
 	};
 
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
@@ -204,8 +219,8 @@
 		self.MapController.emphasizeMarkers(markersIndexes, 2000);
 	};
 
-	ClassificationController.prototype.getClassificationLegend = function(classificationList, isCategorical) {
-		var legendColors = self.MapController.getPinColors(isCategorical);
+	ClassificationController.prototype.getClassificationLegend = function(classificationList) {
+		var legendColors = self.MapController.getPinColors();
 		var legends = [];
 		for (var i=0; i < classificationList.length; i++){
 			legends.push({category: classificationList[i]["category"], indexesCount:classificationList[i]["indexes"].length, color: legendColors[i]});

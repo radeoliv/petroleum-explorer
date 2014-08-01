@@ -122,7 +122,10 @@
 				 * We check if the inputs are different than 'none' before calling this function.
 				 * Therefore, there's no need to check them again.
 				 */
-				self.classificationController.clusterKMeans(clusterizationFieldsSelection[0].value, clustersNumberSelection[0].value);
+				var attrSelection = clusterizationFieldsSelection[0].value;
+				var clustersNumber = clustersNumberSelection[0].value;
+				var attrName = clusterizationFieldsSelection[0]["selectedOptions"][0]["innerText"];
+				self.classificationController.clusterKMeans(attrSelection, clustersNumber, attrName);
 
 				createCategoricalLegendEvent();
 				clearOtherFields();
