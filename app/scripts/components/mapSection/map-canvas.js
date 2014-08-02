@@ -118,7 +118,10 @@
 			}
 		}
 
-		append += "<label class=\"legend-header\">"+name+"</label>";
+		if(name != undefined && name != null && name.length > 0) {
+			append += "<label class=\"legend-header\">"+name+"</label>";
+		}
+
 		append += "<table id =\"legend-table\">";
 
 		for(var i=0; i < legends.length; i++){

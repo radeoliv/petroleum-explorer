@@ -33,7 +33,8 @@
 	var classificationMethods = $("input[name=classification-method]:radio");
 	var classesNumberSelection = $("#classes-number");
 	var clustersNumberSelection = $("#clusters-number");
-	var clusterizationFieldsSelection = $("#clusterization-fields");
+	var clusterCheckboxesGrid = $(".checkbox-grid");
+	var clusterCheckboxes = clusterCheckboxesGrid.find("input[type=\"checkbox\"]");
 	var ClassificationView;
 	var self;
 
@@ -54,12 +55,16 @@
 		categoricalSelection[0].disabled = isDisabled;
 		numericalSelection[0].disabled = isDisabled;
 		classesNumberSelection[0].disabled = isDisabled;
-		clusterizationFieldsSelection[0].disabled = isDisabled;
 		clustersNumberSelection[0].disabled = isDisabled;
 
 		for(var i=0; i<classificationMethods.length; i++) {
 			classificationMethods[i].checked = false;
 			classificationMethods[i].disabled = isDisabled;
+		}
+
+		for(var i=0; i<clusterCheckboxes.length; i++) {
+			clusterCheckboxes[i].checked = false;
+			clusterCheckboxes[i].disabled = isDisabled;
 		}
 	}
 
@@ -68,7 +73,6 @@
 		categoricalSelection[0].value = 'none';
 		numericalSelection[0].value = 'none';
 		classesNumberSelection[0].value = 'none';
-		clusterizationFieldsSelection[0].value = 'none';
 		clustersNumberSelection[0].value = 'none';
 
 		for(var i=0; i<classificationMethods.length; i++) {
@@ -76,6 +80,10 @@
 				classificationMethods[i].checked = false;
 				break;
 			}
+		}
+
+		for(var i=0; i<clusterCheckboxes.length; i++) {
+			clusterCheckboxes[i].checked = false;
 		}
 
 		// Reset the pins on the map
@@ -122,10 +130,17 @@
 				 * We check if the inputs are different than 'none' before calling this function.
 				 * Therefore, there's no need to check them again.
 				 */
-				var attrSelection = clusterizationFieldsSelection[0].value;
-				var clustersNumber = clustersNumberSelection[0].value;
-				var attrName = clusterizationFieldsSelection[0]["selectedOptions"][0]["innerText"];
-				self.classificationController.clusterKMeans(attrSelection, clustersNumber, attrName);
+				var checkedAttributes = [];
+				for(var i=0; i<clusterCheckboxes.length; i++) {
+					if(clusterCheckboxes[i].checked === true) {
+						checkedAttributes.push({
+							value: clusterCheckboxes[i].value,
+							name: clusterCheckboxes[i].name
+						});
+					}
+				}
+
+				self.classificationController.clusterKMeans(checkedAttributes, clustersNumberSelection[0].value);
 
 				createCategoricalLegendEvent();
 				clearOtherFields();
@@ -200,18 +215,6 @@
 		checkNumericalClassificationInputs();
 	});
 
-	clusterizationFieldsSelection.on("change", function() {
-		if(clusterizationFieldsSelection[0].value === 'none') {
-			clearAllOptions();
-		} else {
-			checkClusterizationInputs();
-		}
-	});
-
-	clustersNumberSelection.on("change", function() {
-		checkClusterizationInputs();
-	});
-
 	function checkNumericalClassificationInputs() {
 		var radioButtonChecked = false;
 		for(var i=0; i<classificationMethods.length; i++) {
@@ -226,8 +229,37 @@
 		}
 	}
 
+	clusterCheckboxes.on("change", function() {
+		// Clear the number of clusters to avoid waste of processing when selecting all attributes
+		clustersNumberSelection[0].value = 'none';
+
+		var isChecked = false;
+		for(var i=0; i<clusterCheckboxes.length; i++) {
+			if(clusterCheckboxes[i].checked === true) {
+				isChecked = true;
+				break;
+			}
+		}
+
+		if(isChecked === false) {
+			clearAllOptions();
+		}
+	})
+
+	clustersNumberSelection.on("change", function() {
+		checkClusterizationInputs();
+	});
+
 	function checkClusterizationInputs() {
-		if(clusterizationFieldsSelection[0].value != 'none' && clustersNumberSelection[0].value != 'none') {
+		var isChecked = false;
+		for(var i=0; i<clusterCheckboxes.length; i++) {
+			if(clusterCheckboxes[i].checked === true) {
+				isChecked = true;
+				break;
+			}
+		}
+
+		if(isChecked && clustersNumberSelection[0].value != 'none') {
 			classifyWells();
 		}
 	}

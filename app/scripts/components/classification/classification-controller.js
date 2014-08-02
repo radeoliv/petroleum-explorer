@@ -166,14 +166,21 @@
 		return result;
 	}
 
-	ClassificationController.prototype.clusterKMeans = function(selectedField, clusterNumber, attrName) {
+	ClassificationController.prototype.clusterKMeans = function(attributesValues, clusterNumber) {
 		var wells = self.MapController.getCurrentWells();
 
 		var uwis = '';
 		for(var i=0; i<wells.length; i++) {
 			uwis += (i === wells.length - 1) ? (wells[i]["w_uwi"]) : (wells[i]["w_uwi"]) + ",";
 		}
-		var encodedParams = encodeURIComponent(selectedField + "&" + clusterNumber + "&" + uwis);
+
+		var attributes = [];
+		for(var i=0; i<attributesValues.length; i++) {
+			attributes.push(attributesValues[i].value);
+		}
+		attributes = attributes.join();
+
+		var encodedParams = encodeURIComponent(attributes + "&" + clusterNumber + "&" + uwis);
 
 		var result = [];
 		$.ajax({
@@ -185,7 +192,7 @@
 			}
 		});
 
-		console.log(result);
+		//console.log(result);
 
 		// Clearing the previous categories
 		categories = [];
@@ -209,7 +216,12 @@
 
 		self.MapController.createClassifiedMarkers(categories);
 		var headers = ["K-means Clustering"];
-		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), attrName, headers);
+		var tempName = [];
+		for(var i=0; i<attributesValues.length; i++) {
+			tempName.push(attributesValues[i].name);
+		}
+		headers.push(tempName.join(", "));
+		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), null, headers);
 	};
 
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {

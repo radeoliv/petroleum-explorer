@@ -49,7 +49,7 @@ app.get('/getAllWells', function(req, res) {
 			if(err) {
 				return console.error('error running query', err);
 			}
-			console.log(result.rows);
+
 			res.send(result.rows);
 		});
 	});
@@ -72,7 +72,7 @@ app.get('/getInfoFromWell/:uwi', function(req, res) {
 			if(err) {
 				return console.error('error running query', err);
 			}
-			console.log(result.rows);
+
 			res.send(result.rows);
 		});
 	});
@@ -174,7 +174,7 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 	var params = req.params.params;
 
 	var tempParams = params.split("&");
-	var field = tempParams[0];
+	var fields = tempParams[0].split(",");
 	var clusterNumber = tempParams[1];
 	var uwis = tempParams[2];
 	uwis = uwis.split(",");
@@ -203,7 +203,29 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 			return console.error('error fetching client from pool', err);
 		}
 
-		var query = "SELECT w_uwi," + field + " FROM wells WHERE w_uwi in (" + uwis + ") order by w_uwi";
+		var wellQueryAttr = [];
+		var otherQueryAttr = [];
+		for(var i=0; i<fields.length; i++) {
+			if(fields[i] === "w_location") {
+				wellQueryAttr.push("w_bottom_lng");
+				wellQueryAttr.push("w_bottom_lat");
+				wellQueryAttr.push("w_top_lng");
+				wellQueryAttr.push("w_top_lat");
+			} else {
+				// Fields from the 'wells' table
+				if(fields[i][0] === 'w') {
+					wellQueryAttr.push(fields[i]);
+				} else {
+					// Fields from other table (not being used for now)
+					// TODO: update comments and names when the table has been defined.
+					otherQueryAttr.push(fields[i]);
+				}
+			}
+		}
+		var wellQueryAttrString = wellQueryAttr.join();
+		var otherQueryAttrString = otherQueryAttr.join();
+
+		var query = "SELECT w_uwi," + wellQueryAttrString + " FROM wells WHERE w_uwi in (" + uwis + ") order by w_uwi";
 
 		client.query(query, function(err, result) {
 			//call `done()` to release the client back to the pool
@@ -216,12 +238,21 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 			var rows = result.rows;
 			var formattedRows = [];
 			for(var i=0; i<rows.length; i++) {
-				formattedRows.push([ rows[i][field] ]);
+				var temp = [];
+				for(var j=0; j<wellQueryAttr.length; j++) {
+					temp.push(rows[i][wellQueryAttr[j]]);
+				}
+//				for(var j=0; j<otherQueryAttr.length; j++) {
+//					temp.push(rows[i][otherQueryAttr[j]]);
+//				}
+				formattedRows.push(temp);
 				formattedRows[i].uwi = rows[i]["w_uwi"];
 				if(formattedRows[i].uwi === cleanUWIs[i]["uwi"]) {
 					formattedRows[i].index = cleanUWIs[i]["index"];
 				}
 			}
+
+			//console.log(formattedRows);
 
 			// Execute the k-means clustering
 			var clusters = clusterfck.kmeans(formattedRows, clusterNumber);

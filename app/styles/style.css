@@ -728,6 +728,21 @@ Classification
 .legend-header {
   padding-left: 0.2em; }
 
+.checkbox-grid {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  margin-top: 0em;
+  height: 3.7em; }
+  .checkbox-grid li {
+    display: block;
+    float: left;
+    width: 50%;
+    text-align: left; }
+    .checkbox-grid li input[type="checkbox"] {
+      margin: 0em;
+      width: auto; }
+
 /*
 =============================================================================
 Main Styles

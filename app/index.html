@@ -14,7 +14,6 @@
 	<link type="text/css" rel="stylesheet" href="bower_components/rickshaw/src/css/detail.css">
 	<link type="text/css" rel="stylesheet" href="bower_components/rickshaw/src/css/legend.css">
 	<link type="text/css" rel="stylesheet" href="styles/extensions/extensions.css?v=2">
-
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -316,12 +315,42 @@
 
 								<h5>K-means clustering</h5>
 								<div class="clustering accordion-content">
-									<select id="clusterization-fields" placeholder = "Clusterization" name ="attributes" results ="10" autosave = "Attributes" disabled="true">
-										<option value = "none"></option>
-										<option value = "w_drillers_total_depth">Well Drillers Total Depth</option>
-									</select>
+									<ul class="checkbox-grid">
+										<li>
+											<input type="checkbox" name="Well Drillers Total Depth" id="chk-drillers-depth" value="w_drillers_total_depth" disabled="true"/>
+											<label for="chk-drillers-depth">Drillers Depth</label>
+										</li>
+										<li>
+											<input type="checkbox" name="Location" id="chk-location" value="w_location" disabled="true"/>
+											<label for="chk-location">Location</label>
+										</li>
+										<li>
+											<input type="checkbox" name="text3" id="text3" value="value3" disabled="true"/>
+											<label for="text3">Text 3</label>
+										</li>
+										<li>
+											<input type="checkbox" name="text4" id="text4" value="value4" disabled="true"/>
+											<label for="text4">Text 4</label>
+										</li>
+										<li>
+											<input type="checkbox" name="text5" id="text5" value="value5" disabled="true"/>
+											<label for="text5">Text 5</label>
+										</li>
+										<li>
+											<input type="checkbox" name="text6" id="text6" value="value6" disabled="true"/>
+											<label for="text6">Text 6</label>
+										</li>
+										<li>
+											<input type="checkbox" name="text7" id="text7" value="value7" disabled="true"/>
+											<label for="text7">Text 7</label>
+										</li>
+										<li>
+											<input type="checkbox" name="text8" id="text8" value="value8" disabled="true"/>
+											<label for="text8">Text 8</label>
+										</li>
+									</ul>
 
-									<br>
+									<hr>
 									<label id="clusters-number-label" for="classes-number">Number of clusters</label>
 									<select id="clusters-number" placeholder = "Classification" name="attributes" results ="10" autosave = "Attributes" disabled="true">
 										<option value = "none"></option>
