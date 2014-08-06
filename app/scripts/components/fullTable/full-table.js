@@ -169,6 +169,14 @@
 						format: "0.000"
 					},
 					{
+						data: "WellType"
+						//simple text, no special options
+					},
+					{
+						data: "Pad"
+						//simple text, no special options
+					},
+					{
 						data: "BottomLongitude"
 						//number, but precision is important in coordinates
 					},
@@ -203,6 +211,8 @@
 					"Well Province",
 					"Well Class",
 					"Well Drillers Total Depth",
+					"Well Type",
+					"Pad",
 					"Bottom Longitude",
 					"Bottom Latitude",
 					"Top Longitude",
@@ -229,6 +239,8 @@
 						WellProvince: searchResults[i]["w_province"],
 						WellClass: searchResults[i]["w_class"],
 						WellDrillersTotalDepth: searchResults[i]["w_drillers_total_depth"],
+						WellType: searchResults[i]["w_type"],
+						Pad: searchResults[i]["w_pad"],
 						BottomLongitude: searchResults[i]["w_bottom_lng"],
 						BottomLatitude: searchResults[i]["w_bottom_lat"],
 						TopLongitude: searchResults[i]["w_top_lng"],
@@ -610,6 +622,8 @@
 						case "w_current_status":
 						case "w_province":
 						case "w_class":
+						case "w_type":
+						case "w_pad":
 							i++;
 							addParameterOption.call($columnSelectFilter, i, "String");
 							break;
