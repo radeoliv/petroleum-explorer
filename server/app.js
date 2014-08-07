@@ -78,6 +78,30 @@ app.get('/getInfoFromWell/:uwi', function(req, res) {
 	});
 });
 
+app.get('/getPairOfWell/:uwi', function(req, res) {
+	res.header("Access-Control-Allow-Origin", "*");
+
+	pg.connect(conString, function(err, client, done) {
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+
+		var dbuwi = req.params.uwi;
+		var query = "SELECT wells.* FROM wells INNER JOIN (SELECT w_id, w_pad, w_number_in_pad, w_type FROM wells WHERE w_uwi = '" + dbuwi + "') AS base ON (wells.w_id <> base.w_id AND wells.w_pad = base.w_pad AND wells.w_number_in_pad = base.w_number_in_pad)";
+
+		client.query(query, function(err, result) {
+			//call `done()` to release the client back to the pool
+			done();
+
+			if(err) {
+				return console.error('error running query', err);
+			}
+
+			res.send(result.rows);
+		});
+	});
+});
+
 app.get('/getStatusInfoFromWell/:uwi', function(req, res) {
 	res.header("Access-Control-Allow-Origin", "*");
 	

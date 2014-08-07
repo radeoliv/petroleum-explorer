@@ -522,14 +522,13 @@ Visualization
   pointer-events: none;
   color: orange; }
 
-.time-series-uwi-msg {
-  font-size: 0.78em; }
-
 #uwi-found-msg {
-  color: forestgreen; }
+  color: forestgreen;
+  top: 1.6em; }
 
 #uwi-not-found-msg {
-  color: red; }
+  color: red;
+  top: 2em; }
 
 .mfp-close {
   right: 0.8em;
@@ -544,6 +543,17 @@ Visualization
   position: absolute;
   color: red;
   font-size: 1.5em; }
+
+#time-series-uwi-selection {
+  position: relative; }
+
+.time-series-uwi-msg {
+  font-size: 0.78em;
+  position: absolute;
+  left: 17.2em; }
+
+#well-type-msg {
+  top: 2.45em; }
 
 /* =============================================================================
 Variables

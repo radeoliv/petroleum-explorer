@@ -31,8 +31,8 @@ jQuery(document).ready(function ($) {
 	var myExportController = new ExportController(myTableController);
 	var myExportView = new ExportView(myExportController);
 
-	var myVisualizationCharts = new VisualizationCharts(myMapCanvasController);
-	var myVisualizationView = new VisualizationView(myVisualizationCharts, myTableController);
+	var myVisualizationController = new VisualizationController(myMapCanvasController);
+	var myVisualizationView = new VisualizationView(myVisualizationController, myTableController);
 
 	var myPolygonSelection = new PolygonSelection(myMapCanvasController, mySearchController);
 

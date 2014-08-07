@@ -26,10 +26,14 @@
 		});
 	}).call(this);
 
-	var lastUwiTyped = "";
 	var statusInfo = [];
 	var injectionInfo = [];
-	var productionInfo= [];
+	var productionInfo = [];
+	var pairsInfo = [];
+	var pairInjectionInfo = [];
+	var pairProductionInfo = [];
+
+	var lastUwiTyped = "";
 	var controlPanel = $("#control-panel");
 	var visualizationAccordion = controlPanel.find("#visualizationAccordion");
 	var $applyVisualizationButton = $('#applyVisualization');
@@ -47,8 +51,8 @@
 	var self;
 
 	var VisualizationView;
-	VisualizationView = function (visualizationCharts, fullTable){
-		this.visualizationCharts = visualizationCharts;
+	VisualizationView = function (visualizationController, fullTable){
+		this.visualizationController = visualizationController;
 		this.fullTable = fullTable;
 		self = this;
 	};
@@ -80,16 +84,14 @@
 
 			if($timeSeriesUwi[0].value != undefined && $timeSeriesUwi[0].value != null && $timeSeriesUwi[0].value.length === 19) {
 				// Checking if the well exists
-				var wellInfo = self.visualizationCharts.getInfoFromWell($timeSeriesUwi[0].value);
+				var wellInfo = self.visualizationController.getInfoFromWell($timeSeriesUwi[0].value);
 
-				var found = wellInfo != undefined && wellInfo != null && wellInfo.length > 0;
 				// Append information about result found
-				appendInfo(wellInfo, found);
-
-				if(found === true) {
-					statusInfo = self.visualizationCharts.getStatusInfoFromWell($timeSeriesUwi[0].value);
-					injectionInfo = self.visualizationCharts.getInjectionInfoFromWell($timeSeriesUwi[0].value);
-					productionInfo = self.visualizationCharts.getProductionInfoFromWell($timeSeriesUwi[0].value);
+				if(appendInfo(wellInfo) === true) {
+					statusInfo = self.visualizationController.getStatusInfoFromWell($timeSeriesUwi[0].value);
+					injectionInfo = self.visualizationController.getInjectionInfoFromWell($timeSeriesUwi[0].value);
+					productionInfo = self.visualizationController.getProductionInfoFromWell($timeSeriesUwi[0].value);
+					pairsInfo = self.visualizationController.getPairOfWell($timeSeriesUwi[0].value);
 				}
 			} else {
 				$(".time-series-uwi-msg").remove();
@@ -104,7 +106,7 @@
 					generateTitle();
 					var attribute = $barChartSelection[0].value;
 					var attributeText = $barChartSelection[0][$barChartSelection[0].selectedIndex].label;
-					self.visualizationCharts.generateBarChart(attribute, attributeText);
+					self.visualizationController.generateBarChart(attribute, attributeText);
 				} else {
 					self.clearVisualization(true);
 				}
@@ -112,7 +114,7 @@
 			case 1:
 				if($pieChartSelection[0].value != "none") {
 					generateTitle();
-					self.visualizationCharts.generatePieChart($pieChartSelection[0].value);
+					self.visualizationController.generatePieChart($pieChartSelection[0].value);
 				} else {
 					self.clearVisualization(true);
 				}
@@ -122,13 +124,13 @@
 					if($timeSeriesSelection[0].value === "statuses") {
 						if(statusInfo != undefined && statusInfo != null && statusInfo.length > 0) {
 							generateTitle();
-							self.visualizationCharts.generateTimelineChart(statusInfo, true);
+							self.visualizationController.generateTimelineChart(statusInfo, true);
 						}
 					} else if($timeSeriesSelection[0].value === "injection") {
 						if(injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
+							self.visualizationController.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for injection
 							self.clearVisualization(false);
@@ -146,7 +148,7 @@
 						if(productionInfo != undefined && productionInfo != null && productionInfo.length > 0) {
 							generateTitle();
 							// Generate the chart
-							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
+							self.visualizationController.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for production
 							self.clearVisualization(false);
@@ -166,7 +168,7 @@
 
 						if(hasInjection && hasProduction) {
 							generateTitle();
-							self.visualizationCharts.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
+							self.visualizationController.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for production
 							self.clearVisualization(false);
@@ -222,18 +224,34 @@
 			$timeSeriesUwi[0].value = "";
 			$(".time-series-uwi-msg").remove();
 		}
-		self.visualizationCharts.removeCurrentChart();
+		self.visualizationController.removeCurrentChart();
 	};
 
-	function appendInfo(wellInfo, found) {
+	function appendInfo(wellInfo) {
+		var found = wellInfo != undefined && wellInfo != null && wellInfo.length > 0;
+
 		$(".time-series-uwi-msg").remove();
 		var divToAppend = '#time-series-uwi-selection';
 
 		var message = found ? "Well found" : "Well not found";
 		var id = found ? "uwi-found-msg" : "uwi-not-found-msg";
 
-		var label = "<label id=" + id + " class=\"time-series-uwi-msg\"><b>" + message + "</b></br></label>";
-		$(label).appendTo(divToAppend);
+		var typeLabel = "";
+		if(wellInfo != undefined && wellInfo != null && wellInfo[0] != null) {
+			var typeValue = wellInfo[0]["w_type"] === "N" ? "Not defined" : wellInfo[0]["w_type"][0] + wellInfo[0]["w_type"].substr(1).toLowerCase();
+			typeLabel = "<label id=\"well-type-msg\" class=\"time-series-uwi-msg\">" + typeValue + "</label>";
+
+			// TODO: Add information about its pair!
+			// What to put? Do we have to?!
+//			if(wellInfo[0]["w_type"] != "N") {
+//
+//			}
+		}
+
+		var label = "<label id=" + id + " class=\"time-series-uwi-msg\"><b>" + message + "</b></label>";
+		$(label + typeLabel).appendTo(divToAppend);
+
+		return found;
 	}
 
 	openVisualization = function() {

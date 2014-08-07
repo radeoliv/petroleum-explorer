@@ -429,6 +429,7 @@
 	 * Plot the wells' locations
 	 * Center the map based on the markers present on the map
 	 */
+	var firstTimeLoading = true;
 	function initializeMap() {
 		/* The points should only be plotted if there's something to be plotted.
 		 * This avoids the error of moving the map to a random position (probably the origin) and just makes
@@ -436,7 +437,10 @@
 		 */
 		if(currentWells != undefined && currentWells.length > 0) {
 			// Don't know why, but setting this properties when creating the mapOptions does not work
-			map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+			if(firstTimeLoading  === true) {
+				map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+				firstTimeLoading = false;
+			}
 			map.set('disableDoubleClickZoom', true);
 
 			// Remove the highlighted markers that are not supposed to exist
