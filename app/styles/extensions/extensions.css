@@ -42,7 +42,7 @@ div, span, p, td {
 }
 #chart_column {
 	text-align: left;
-	padding-top: 5em;
+	padding-top: 6em;
 	vertical-align: top;
 }
 #side_panel_table {
@@ -53,7 +53,7 @@ div, span, p, td {
 	width: 240px;
 	display: inline-block;
 	margin-right: 3em;
-	padding-top: 5em;
+	padding-top: 6em;
 	height: 100%;
 }
 #side_panel section {

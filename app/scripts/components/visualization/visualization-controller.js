@@ -761,10 +761,10 @@
 			svg.append("text")
 				.attr("id", "text-info"+index)
 				.attr("class", "text-info")
-				.attr("x", (legendX + 17))
+				.attr("x", (legendX + 25))
 				.attr("y", function() {
 					// Used to create spaces between the elements
-					return legendY + 20 + (15*index);
+					return legendY + (15*index);
 				})
 				.style({
 					"font-size": function() { return index%3 === 0 ? "0.8em" : "0.7em"; },
@@ -878,8 +878,8 @@
 
 		var rect = svg.append("rect")
 			.attr("id", "legend-rectangle")
-			.attr("x", legendX+5)
-			.attr("y", legendY)
+			.attr("x", legendX + 15)
+			.attr("y", legendY - 20)
 			.attr("width", (width / 6))
 			.attr("height", (height / 4.4))
 			.style({

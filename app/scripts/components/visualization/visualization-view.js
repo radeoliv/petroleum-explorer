@@ -26,10 +26,11 @@
 		});
 	}).call(this);
 
+	var wellInfo = [];
 	var statusInfo = [];
 	var injectionInfo = [];
 	var productionInfo = [];
-	var pairsInfo = [];
+	var validPairInfo = [];
 	var pairInjectionInfo = [];
 	var pairProductionInfo = [];
 
@@ -42,6 +43,7 @@
 	var $barChartSelection = $('#bar-chart-attributes');
 	var $timeSeriesSelection = $('#time-series-attributes');
 	var $visualizationTitle = $("#visualization-title");
+	var $visualizationSubtitle = $("#visualization-subtitle");
 	var $openVisualizationButton = $("#openVisualization");
 	var $timeSeriesUwi = $("#time-series-uwi");
 
@@ -84,14 +86,43 @@
 
 			if($timeSeriesUwi[0].value != undefined && $timeSeriesUwi[0].value != null && $timeSeriesUwi[0].value.length === 19) {
 				// Checking if the well exists
-				var wellInfo = self.visualizationController.getInfoFromWell($timeSeriesUwi[0].value);
+				wellInfo = self.visualizationController.getInfoFromWell($timeSeriesUwi[0].value);
 
 				// Append information about result found
 				if(appendInfo(wellInfo) === true) {
 					statusInfo = self.visualizationController.getStatusInfoFromWell($timeSeriesUwi[0].value);
 					injectionInfo = self.visualizationController.getInjectionInfoFromWell($timeSeriesUwi[0].value);
 					productionInfo = self.visualizationController.getProductionInfoFromWell($timeSeriesUwi[0].value);
-					pairsInfo = self.visualizationController.getPairOfWell($timeSeriesUwi[0].value);
+
+					/*
+					 * If the well is a producer or injector and its status is Steam Assis Gravity Drain
+					 * it has a valid pair. Therefore, for the SOR calculation, the pair must be used.
+					 */
+					if(wellInfo[0]["w_type"] != "N" && wellInfo[0]["w_current_status"] === "STEAM ASSIS GRAVITY DRAIN") {
+						var pairsInfo = [];
+						pairsInfo = self.visualizationController.getPairOfWell($timeSeriesUwi[0].value);
+
+						var pairType = wellInfo[0]["w_type"] === "PRODUCER" ? "INJECTOR" : "PRODUCER";
+						for(var i=0; i<pairsInfo.length; i++) {
+							if(pairsInfo[i]["w_type"] === pairType) {
+								validPairInfo = pairsInfo[i];
+								break;
+							}
+						}
+
+						if(pairType === "PRODUCER") {
+							pairProductionInfo = self.visualizationController.getProductionInfoFromWell(validPairInfo["w_uwi"]);
+							pairInjectionInfo = [];
+						} else if(pairType === "INJECTOR") {
+							pairInjectionInfo = self.visualizationController.getInjectionInfoFromWell(validPairInfo["w_uwi"]);
+							pairProductionInfo = [];
+						}
+
+					} else {
+						validPairInfo = [];
+						pairInjectionInfo = [];
+						pairProductionInfo = [];
+					}
 				}
 			} else {
 				$(".time-series-uwi-msg").remove();
@@ -163,12 +194,25 @@
 							$(alertMessage).appendTo($("#visualization-container"));
 						}
 					} else if($timeSeriesSelection[0].value === "sor") {
-						var hasInjection = injectionInfo != undefined && injectionInfo != null && injectionInfo.length > 0;
-						var hasProduction = productionInfo != undefined && productionInfo != null && productionInfo.length > 0;
+
+						var hasPair = validPairInfo != undefined && validPairInfo != null && validPairInfo.length > 0;
+						var injectionValues = [];
+						var productionValues = [];
+
+						if(wellInfo[0]["w_type"] === "PRODUCER") {
+							productionValues = productionInfo;
+							injectionValues = pairInjectionInfo;
+						} else if(wellInfo[0]["w_type"] === "INJECTOR") {
+							productionValues = pairProductionInfo;
+							injectionValues = injectionInfo;
+						}
+
+						var hasInjection = injectionValues != undefined && injectionValues != null && injectionValues.length > 0;
+						var hasProduction = productionValues != undefined && productionValues != null && productionValues.length > 0;
 
 						if(hasInjection && hasProduction) {
 							generateTitle();
-							self.visualizationController.generateInjectionProductionChart(injectionInfo, productionInfo, $timeSeriesSelection[0].value);
+							self.visualizationController.generateInjectionProductionChart(injectionValues, productionValues, $timeSeriesSelection[0].value);
 						} else {
 							// Show message of no data for production
 							self.clearVisualization(false);
@@ -196,14 +240,33 @@
 
 	function generateTitle() {
 		switch(optionAccordion) {
+			// Bar chart
 			case 0:
 				$visualizationTitle[0].innerHTML = barChartTitle + "<b>" + $barChartSelection[0][$barChartSelection[0].selectedIndex].label + "</b>";
 				break;
+			// Pie chart
 			case 1:
 				$visualizationTitle[0].innerHTML = pieChartTitle + "<b>" + $pieChartSelection[0][$pieChartSelection[0].selectedIndex].label + "</b>";
 				break;
+			// Time series
 			case 2:
-				$visualizationTitle[0].innerHTML = timeSeriesTitle + "<b>" + $timeSeriesSelection[0][$timeSeriesSelection[0].selectedIndex].label + "</b>" + " - " + $timeSeriesUwi[0].value;
+				var type = "";
+				if(wellInfo[0]["w_type"] != "N") {
+					type = " <i>(";
+					type += wellInfo[0]["w_type"] === "PRODUCER" ? "Producer" : "Injector";
+					type += ")</i>";
+				}
+
+				$visualizationTitle[0].innerHTML = timeSeriesTitle + "<b>" + $timeSeriesSelection[0][$timeSeriesSelection[0].selectedIndex].label + "</b>" + " - " + $timeSeriesUwi[0].value + type;
+
+				$visualizationSubtitle[0].innerHTML = "";
+
+				if($timeSeriesSelection[0].value === "sor") {
+					var pairType = wellInfo[0]["w_type"] === "PRODUCER" ? "Injector" : "Producer";
+					var pairUwi = validPairInfo["w_uwi"];
+
+					$visualizationSubtitle[0].innerHTML = "<i>Pair " + pairType + " - " + pairUwi + "</i>";
+				}
 				break;
 			default:
 				console.log("No option selected!");
@@ -220,6 +283,7 @@
 		$barChartSelection[0].value = "none";
 		$timeSeriesSelection[0].value = "none";
 		$visualizationTitle[0].innerHTML = "";
+		$visualizationSubtitle[0].innerHTML = "";
 		if(removeAll === true) {
 			$timeSeriesUwi[0].value = "";
 			$(".time-series-uwi-msg").remove();
