@@ -304,12 +304,6 @@
 		if(wellInfo != undefined && wellInfo != null && wellInfo[0] != null) {
 			var typeValue = wellInfo[0]["w_type"] === "N" ? "Not defined" : wellInfo[0]["w_type"][0] + wellInfo[0]["w_type"].substr(1).toLowerCase();
 			typeLabel = "<label id=\"well-type-msg\" class=\"time-series-uwi-msg\">" + typeValue + "</label>";
-
-			// TODO: Add information about its pair!
-			// What to put? Do we have to?!
-//			if(wellInfo[0]["w_type"] != "N") {
-//
-//			}
 		}
 
 		var label = "<label id=" + id + " class=\"time-series-uwi-msg\"><b>" + message + "</b></label>";
@@ -318,7 +312,7 @@
 		return found;
 	}
 
-	openVisualization = function() {
+	var openVisualization = function() {
 		$(".open-visualization").magnificPopup({
 			type:'inline',
 			midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.

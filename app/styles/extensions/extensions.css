@@ -9,6 +9,7 @@ div, span, p, td {
 }
 #chart path {
 	-webkit-transition: opacity 0.2s linear;
+	stroke-width: 0.2em;
 }
 #preview {
 	margin-top: 10px;

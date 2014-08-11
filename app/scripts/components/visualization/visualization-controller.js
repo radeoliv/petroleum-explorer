@@ -893,6 +893,8 @@
 	VisualizationController.prototype.getInjectionProductionIntersection = function(injectionInfo, productionInfo) {
 		var injectionDates = [];
 		var productionDates = [];
+		var sorDates = [];
+		var csorDates = [];
 
 		for(var i=0; i<injectionInfo.length; i++) {
 			if(injectionInfo[i]["i_prod_type"] === "I-STEAM") {
@@ -918,9 +920,6 @@
 			}
 		}
 
-//		console.log("Injection!");
-//		console.log(injectionDates);
-
 		for(var i=0; i<productionInfo.length; i++) {
 			productionDates.push(
 				{
@@ -943,10 +942,6 @@
 			}
 		}
 
-//		console.log("Production!");
-//		console.log(productionDates);
-
-		var sorDates = [];
 		for(var i=0; i<injectionDates.length; i++) {
 			for(var j=0; j<productionDates.length; j++) {
 				if(injectionDates[i]["year"] === productionDates[j]["year"] &&
@@ -971,40 +966,89 @@
 							month: injectionDates[i]["month"],
 							steam: injectionDates[i]["value"],
 							oil: productionDates[j]["value"],
-							value: zeroValues === true ? 0 : injectionDates[i]["value"]/productionDates[j]["value"]
+							value: zeroValues === true ? null : injectionDates[i]["value"]/productionDates[j]["value"]
 						});
 					break;
 				}
 			}
 		}
 
-//		console.log("SOR!");
-//		console.log(sorDates);
-
-//		console.log("Injection");
-//		console.log(injectionInfo);
-//		console.log(injectionDates);
-//		console.log("Production");
-//		console.log(productionInfo);
-//		console.log(productionDates);
-
-//		console.log("Injection - months not in use: " + ((injectionInfo.length / 5) - sorDates.length) + " out of " + (injectionInfo.length / 5));
-//		console.log("Production - months not in use: " + (productionInfo.length - sorDates.length) + " out of " + (productionInfo.length));
-//		console.log("Match dates - " + sorDates.length);
-//		console.log(sorDates);
-
 		/*
 		 * Getting minimum and maximum dates to fill steam, oil, and sor series intervals (with null values)
 		 * to make them have the same number of date records.
 		 */
 		var minMaxDates = getMinimumAndMaximumDates(injectionDates, productionDates);
-//		console.log("minMaxDates");
-//		console.log(minMaxDates);
+
+		var currentMonth = minMaxDates["minMonth"];
+		var currentYear = minMaxDates["minYear"];
+		var cumulativeSteam = 0;
+		var cumulativeOil = 0;
+		var injIndex = 0;
+		var prodIndex = 0;
+		var isInjValid = true;
+		var isProdValid = true;
+
+		while(compareDates(currentMonth, currentYear, minMaxDates["maxMonth"], minMaxDates["maxYear"]) != 1) {
+			if(isInjValid === true) {
+				var injectionDate = injectionDates[injIndex];
+				var injectionComparison = compareDates(currentMonth, currentYear, injectionDate["month"], injectionDate["year"]);
+
+				/*
+				 * If the date matches, we add the value. Otherwise we ignore it.
+				 */
+				if(injectionComparison === 0) {
+					cumulativeSteam += injectionDate["value"];
+
+					injIndex++;
+					if(injIndex >= injectionDates.length) {
+						isInjValid = false;
+					}
+				}
+			}
+
+			if(isProdValid === true) {
+				var productionDate = productionDates[prodIndex];
+				var productionComparison = compareDates(currentMonth, currentYear, productionDate["month"], productionDate["year"]);
+
+				/*
+				 * If the date matches, we add the value. Otherwise we ignore it.
+				 */
+				if(productionComparison === 0) {
+					cumulativeOil += productionDate["value"];
+
+					prodIndex++;
+					if(prodIndex >= productionDates.length) {
+						isProdValid = false;
+					}
+				}
+			}
+
+			var zeroValues = cumulativeSteam === 0 || cumulativeOil === 0;
+			csorDates.push(
+				{
+					year: currentYear,
+					month: currentMonth,
+					cumulativeSteam: cumulativeSteam,
+					cumulativeOil: cumulativeOil,
+					value: zeroValues === true ? null : cumulativeSteam/cumulativeOil
+				});
+
+			// Get the next month/year and proceed
+			var nextDate = getNextDate(currentMonth, currentYear);
+			currentMonth = nextDate["month"];
+			currentYear = nextDate["year"];
+		}
+
+		/*
+		 * Adding to injection, production and SOR null value in order to make them with the same number of records.
+		 */
+
 		/*
 		 * Injection
 		 */
 		var missingDatesMinInj = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
 			injectionDates[0]["month"], injectionDates[0]["year"], true);
+
 		if(missingDatesMinInj != undefined && missingDatesMinInj != null && missingDatesMinInj.length > 0) {
 			// Adding dates to the beginning...
 			injectionDates.splice.apply(injectionDates, [0,0].concat(missingDatesMinInj));
@@ -1013,6 +1057,7 @@
 		var lastInjIndex = injectionDates.length - 1;
 		var missingDatesMaxInj = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
 			injectionDates[lastInjIndex]["month"], injectionDates[lastInjIndex]["year"], false);
+
 		if(missingDatesMaxInj != undefined && missingDatesMaxInj != null && missingDatesMaxInj.length > 0) {
 			// Adding dates to the end...
 			injectionDates.push.apply(injectionDates, missingDatesMaxInj);
@@ -1023,6 +1068,7 @@
 		 */
 		var missingDatesMinProd = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
 			productionDates[0]["month"], productionDates[0]["year"], true);
+
 		if(missingDatesMinProd != undefined && missingDatesMinProd != null && missingDatesMinProd.length > 0) {
 			// Adding dates to the beginning...
 			productionDates.splice.apply(productionDates, [0,0].concat(missingDatesMinProd));
@@ -1031,8 +1077,7 @@
 		var lastProdIndex = productionDates.length - 1;
 		var missingDatesMaxProduction = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
 			productionDates[lastProdIndex]["month"], productionDates[lastProdIndex]["year"], false);
-//		console.log("missingDatesMaxProduction");
-//		console.log(missingDatesMaxProduction);
+
 		if(missingDatesMaxProduction != undefined && missingDatesMaxProduction != null && missingDatesMaxProduction.length > 0) {
 			// Adding dates to the end...
 			productionDates.push.apply(productionDates, missingDatesMaxProduction);
@@ -1043,9 +1088,7 @@
 		 */
 		var missingDatesMinSOR = getMissingDates(minMaxDates["minMonth"], minMaxDates["minYear"],
 			sorDates[0]["month"], sorDates[0]["year"], true);
-//		console.log(minMaxDates["minMonth"] + " " + minMaxDates["minYear"] + " " + sorDates[0]["month"] + " " + sorDates[0]["year"]);
-//		console.log("missingDatesMinSOR");
-//		console.log(missingDatesMinSOR);
+
 		if(missingDatesMinSOR != undefined && missingDatesMinSOR != null && missingDatesMinSOR.length > 0) {
 			// Adding dates to the beginning...
 			sorDates.splice.apply(sorDates, [0,0].concat(missingDatesMinSOR));
@@ -1054,14 +1097,13 @@
 		var lastSORIndex = sorDates.length - 1;
 		var missingDatesMaxSOR = getMissingDates(minMaxDates["maxMonth"], minMaxDates["maxYear"],
 			sorDates[lastSORIndex]["month"], sorDates[lastSORIndex]["year"], false);
+
 		if(missingDatesMaxSOR != undefined && missingDatesMaxSOR != null && missingDatesMaxSOR.length > 0) {
 			// Adding dates to the end...
-//			console.log("missingDatesMaxSOR");
-//			console.log(missingDatesMaxSOR);
 			sorDates.push.apply(sorDates, missingDatesMaxSOR);
 		}
 
-		return { steam: injectionDates, oil: productionDates, sor: sorDates };
+		return { steam: injectionDates, oil: productionDates, sor: sorDates, csor: csorDates };
 	};
 
 	function fillGap(currentMonth, currentYear, nextMonth, nextYear) {
@@ -1165,6 +1207,31 @@
 		}
 
 		return filling;
+	}
+
+	function compareDates(month1, year1, month2, year2) {
+		if(year1 < year2) {
+			return -1;
+		} else if(year1 > year2) {
+			return 1;
+		} else {
+			if(month1 < month2) {
+				return -1;
+			} else if(month1 > month2) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+
+	function getNextDate(month, year) {
+		// Add 1 month to the currentMonth
+		var nextMonth = month === 12 ? 1 : month + 1;
+		// If the month is 1, we know the year must increase 1
+		var nextYear = nextMonth === 1 ? year + 1 : year;
+
+		return { month: nextMonth, year: nextYear };
 	}
 
 	function convertToRickshawObjectFormat(array) {
@@ -1416,7 +1483,8 @@
 			allSeries = [
 				{ series:sorInfo["steam"], name:"Steam", data:[] },
 				{ series:sorInfo["sor"], name:"SOR", data:[] },
-				{ series:sorInfo["oil"], name:"Oil", data:[] }
+				{ series:sorInfo["oil"], name:"Oil", data:[] },
+				{ series:sorInfo["csor"], name:"CSOR", data:[] }
 			];
 
 			for(var i=0; i<allSeries.length; i++) {
