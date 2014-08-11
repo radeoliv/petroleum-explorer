@@ -1508,7 +1508,8 @@
 
 			// Putting all data together to give it to the chart
 			for(var i=0; i<allSeries.length; i++) {
-				data.push( { color: color(i), data: allSeries[i]["data"], name: allSeries[i]["name"] } );
+				// The color trick is being used to allow additional '20 different colors' to be used, as only 20 is not enough.
+				data.push( { color: i/20 < 1 ? color(i) : d3.rgb(color(i)).darker(0.7), data: allSeries[i]["data"], name: allSeries[i]["name"] } );
 			}
 		}
 		prepareDataToChart();
