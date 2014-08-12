@@ -228,6 +228,7 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 		}
 
 		var wellQueryAttr = [];
+		var statisticsQueryAttr = [];
 		var otherQueryAttr = [];
 		for(var i=0; i<fields.length; i++) {
 			if(fields[i] === "w_location") {
@@ -239,17 +240,26 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 				// Fields from the 'wells' table
 				if(fields[i][0] === 'w') {
 					wellQueryAttr.push(fields[i]);
+				} else if(fields[i].substr(0,2) === 'st') {
+					// Fields from statistics table
+					statisticsQueryAttr.push(fields[i]);
 				} else {
 					// Fields from other table (not being used for now)
-					// TODO: update comments and names when the table has been defined.
 					otherQueryAttr.push(fields[i]);
 				}
 			}
 		}
 		var wellQueryAttrString = wellQueryAttr.join();
+		var statisticsQueryAttrString = statisticsQueryAttr.join();
 		var otherQueryAttrString = otherQueryAttr.join();
 
-		var query = "SELECT w_uwi," + wellQueryAttrString + " FROM wells WHERE w_uwi in (" + uwis + ") order by w_uwi";
+		var separator = wellQueryAttrString.length > 0 && statisticsQueryAttrString.length > 0 ? "," : "";
+		console.log(statisticsQueryAttrString);
+
+		var query = "SELECT w_uwi," + wellQueryAttrString + separator + statisticsQueryAttrString + " FROM wells LEFT JOIN statistics ON (wells.w_id = statistics.st_injector_w_id OR wells.w_id = statistics.st_producer_w_id) WHERE w_uwi in (" + uwis + ") order by w_uwi" ;
+		//var query = "SELECT w_uwi," + wellQueryAttrString + " FROM wells WHERE w_uwi in (" + uwis + ") order by w_uwi";
+
+		console.log(query);
 
 		client.query(query, function(err, result) {
 			//call `done()` to release the client back to the pool
@@ -263,12 +273,21 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 			var formattedRows = [];
 			for(var i=0; i<rows.length; i++) {
 				var temp = [];
+
 				for(var j=0; j<wellQueryAttr.length; j++) {
 					temp.push(rows[i][wellQueryAttr[j]]);
 				}
-//				for(var j=0; j<otherQueryAttr.length; j++) {
+
+				for(var j=0; j<statisticsQueryAttr.length; j++) {
+					// TODO: What value to put when the wells don't have the data?!
+					var aux = rows[i][statisticsQueryAttr[j]] === null ? -9999 : rows[i][statisticsQueryAttr[j]];
+					temp.push(aux);
+				}
+
+				//for(var j=0; j<otherQueryAttr.length; j++) {
 //					temp.push(rows[i][otherQueryAttr[j]]);
 //				}
+
 				formattedRows.push(temp);
 				formattedRows[i].uwi = rows[i]["w_uwi"];
 				if(formattedRows[i].uwi === cleanUWIs[i]["uwi"]) {
@@ -276,13 +295,14 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 				}
 			}
 
-			//console.log(formattedRows);
-
 			// Execute the k-means clustering
 			var clusters = clusterfck.kmeans(formattedRows, clusterNumber);
 
+			console.log(clusters);
+
 			// Setting the index to the result array
 			var resultValues = [];
+
 			for(var i=0; i<clusters.length; i++) {
 				var tempCluster = [];
 				for(var j=0; j<clusters[i].length; j++) {
