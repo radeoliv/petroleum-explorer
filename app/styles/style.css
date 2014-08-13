@@ -874,3 +874,12 @@ button {
   border-top: none;
   overflow: auto;
   outline: none; }
+
+#group-logo {
+  border: 0em;
+  opacity: 0.8;
+  position: absolute;
+  bottom: 1.1em;
+  left: 0.1em;
+  width: 8em;
+  height: auto; }
