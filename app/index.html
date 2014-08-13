@@ -293,6 +293,10 @@
 								<div class="classification-numerical accordion-content">
 									<select id = "classification-numerical-fields" placeholder = "Classification" name ="attributes" results ="10" autosave = "Attributes" disabled="true">
 										<option value = "none"></option>
+										<option value = "st_avg_injection_hour">Average Injection Hours</option>
+										<option value = "st_avg_production_oil">Average Oil Production</option>
+										<option value = "st_avg_sor">Average SOR</option>
+										<option value = "st_avg_injection_steam">Average Steam Injection</option>
 										<option value = "w_drillers_total_depth">Well Drillers Total Depth</option>
 									</select>
 									<hr>
@@ -327,16 +331,12 @@
 											<label for="chk-drillers-depth">Drillers Depth</label>
 										</li>
 										<li>
-											<input type="checkbox" name="Location" id="chk-location" value="w_location" disabled="true"/>
-											<label for="chk-location">Location</label>
-										</li>
-										<li>
 											<input type="checkbox" name="Average Injection Hours" id="chk-avg-inj-hours" value="st_avg_injection_hour" disabled="true"/>
 											<label for="chk-avg-inj-hours">Injection Hours</label>
 										</li>
 										<li>
-											<input type="checkbox" name="Average Injection Steam" id="chk-avg-inj-steam" value="st_avg_injection_steam" disabled="true"/>
-											<label for="chk-avg-inj-steam">Steam Injection</label>
+											<input type="checkbox" name="Location" id="chk-location" value="w_location" disabled="true"/>
+											<label for="chk-location">Location</label>
 										</li>
 										<li>
 											<input type="checkbox" name="Average Oil Production" id="chk-avg-oil-prod" value="st_avg_production_oil" disabled="true"/>
@@ -345,6 +345,10 @@
 										<li>
 											<input type="checkbox" name="Average SOR" id="chk-avg-sor" value="st_avg_sor" disabled="true"/>
 											<label for="chk-avg-sor">SOR</label>
+										</li>
+										<li>
+											<input type="checkbox" name="Average Injection Steam" id="chk-avg-inj-steam" value="st_avg_injection_steam" disabled="true"/>
+											<label for="chk-avg-inj-steam">Steam Injection</label>
 										</li>
 									</ul>
 

@@ -11,6 +11,7 @@
  -------------------------------------------------------------------------------*/
 
 (function () {
+	var wellsWithStatistics = [];
 	var categories = [];
 	var ClassificationController;
 	var self;
@@ -18,7 +19,21 @@
 	ClassificationController = function (MapController){
 		this.MapController = MapController;
 		self = this;
+
+		// Load the wells with average statistics
+		getWellsWithStatistics();
 	};
+
+	function getWellsWithStatistics() {
+		$.ajax({
+			url: 'http://localhost:3000/getAllWellsWithAverageStatistics/',
+			dataType:'json',
+			async: false,
+			success: function(data) {
+				wellsWithStatistics = data;
+			}
+		});
+	}
 
 	ClassificationController.prototype.classifyWellsByCategory = function(selectedValue, legendName){
 		categories = [];
@@ -44,15 +59,20 @@
 	};
 
 	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber, legendName, method) {
+		var currentWellsWithStatistics = [];
 		var wells = self.MapController.getCurrentWells();
+
+		for(var i=0; i<wells.length; i++) {
+			currentWellsWithStatistics.push(wellsWithStatistics[wells[i]["w_id"] - 1]);
+		}
 
 		// Clear the categories
 		categories = [];
 		// Execute the selected classification method
 		if(method === 'equal') {
-			categories = classifyEqualInterval(selectedField, classNumber, wells);
+			categories = classifyEqualInterval(selectedField, classNumber, currentWellsWithStatistics);
 		} else if(method === 'quantile') {
-			categories = classifyQuantile(selectedField, classNumber, wells);
+			categories = classifyQuantile(selectedField, classNumber, currentWellsWithStatistics);
 		}
 
 		self.MapController.createClassifiedMarkers(categories);
@@ -74,12 +94,18 @@
 
 	function classifyEqualInterval(selectedField, classNumber, wells) {
 		var result = [];
-
 		var numericalValues = [];
-		//get the minimum and maximum value
-		for(var i = 0; i < wells.length; i++){
-			numericalValues.push(wells[i][selectedField]);
+		var hasNullValues = false;
+
+		// Get the minimum and maximum value
+		for(var i = 0; i < wells.length; i++) {
+			if(wells[i][selectedField] != null ) {
+				numericalValues.push(wells[i][selectedField]);
+			} else {
+				hasNullValues = true;
+			}
 		}
+
 		var min = Math.min.apply(Math, numericalValues);
 		var max = Math.max.apply(Math, numericalValues);
 		var equalInterval = (max - min)/classNumber;
@@ -96,9 +122,24 @@
 				});
 		}
 
+		if(hasNullValues === true) {
+			result.push(
+				{
+					intervalMinimum: null,
+					intervalMaximum: null,
+					category: "Invalid",
+					indexes:[]
+				});
+		}
+
 		for (var i = 0; i < wells.length; i++) {
 			for (var j=0; j < result.length; j++) {
-				if ((wells[i][selectedField] >= result[j]["intervalMinimum"] && wells[i][selectedField] < result[j]["intervalMaximum"])|| wells[i][selectedField] === result[j]["intervalMaximum"]){
+				if(wells[i][selectedField] != null && result[j]["category"] != "Invalid") {
+					if ((wells[i][selectedField] >= result[j]["intervalMinimum"] && wells[i][selectedField] < result[j]["intervalMaximum"])|| wells[i][selectedField] === result[j]["intervalMaximum"]){
+						result[j]["indexes"].push(i);
+						break;
+					}
+				} else if(wells[i][selectedField] === null && result[j]["category"] === "Invalid") {
 					result[j]["indexes"].push(i);
 					break;
 				}
@@ -235,7 +276,12 @@
 		var legendColors = self.MapController.getPinColors();
 		var legends = [];
 		for (var i=0; i < classificationList.length; i++){
-			legends.push({category: classificationList[i]["category"], indexesCount:classificationList[i]["indexes"].length, color: legendColors[i]});
+			var auxColor = classificationList[i]["category"] === "Invalid" ? "black": legendColors[i];
+			legends.push({
+				category: classificationList[i]["category"],
+				indexesCount:classificationList[i]["indexes"].length,
+				color: auxColor
+			});
 		}
 		return legends;
 	};

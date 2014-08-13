@@ -598,9 +598,10 @@
 				var found = false;
 				for(var k = 0; k <categories[j]["indexes"].length; k++){
 					if (i === categories[j]["indexes"][k]){
+						var auxColor = categories[j]["category"] === "Invalid" ? "black" : pinColors[j];
 
 						// Add new entry to wellColors in case a search/filter/selection is executed.
-						wellColors[i] = { well: currentWells[i], color: pinColors[i], category: categories[j]["category"] };
+						wellColors[i] = { well: currentWells[i], color: auxColor, category: categories[j]["category"] };
 
 						// We create the marker in color j
 						// Remove the older markers and line
@@ -614,7 +615,7 @@
 						deviations[i].setMap(null);
 						deviations[i] = null;
 
-						createMarker(currentWells[i], i, false, pinColors[j]);
+						createMarker(currentWells[i], i, false, auxColor);
 
 						found = true;
 						break;

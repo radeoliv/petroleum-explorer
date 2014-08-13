@@ -192,6 +192,29 @@ app.get('/getProductionInfoFromWell/:uwi', function(req, res) {
 	});
 });
 
+app.get('/getAllWellsWithAverageStatistics', function(req, res) {
+	res.header("Access-Control-Allow-Origin", "*");
+
+	pg.connect(conString, function(err, client, done) {
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+
+		var query = "SELECT wells.*, st_avg_injection_hour, st_avg_injection_steam, st_avg_production_oil, st_avg_sor FROM wells LEFT JOIN statistics ON (wells.w_id = statistics.st_injector_w_id OR wells.w_id = statistics.st_producer_w_id)" ;
+
+		client.query(query, function(err, result) {
+			//call `done()` to release the client back to the pool
+			done();
+
+			if(err) {
+				return console.error('error running query', err);
+			}
+
+			res.send(result.rows);
+		});
+	});
+});
+
 app.get('/applyKmeansToWells/:params', function(req, res) {
 	res.header("Access-Control-Allow-Origin", "*");
 
