@@ -97,7 +97,6 @@
 		var numericalValues = [];
 		var hasNullValues = false;
 
-		// Get the minimum and maximum value
 		for(var i = 0; i < wells.length; i++) {
 			if(wells[i][selectedField] != null ) {
 				numericalValues.push(wells[i][selectedField]);
@@ -106,6 +105,7 @@
 			}
 		}
 
+		// Get the minimum and maximum value
 		var min = Math.min.apply(Math, numericalValues);
 		var max = Math.max.apply(Math, numericalValues);
 		var equalInterval = (max - min)/classNumber;
@@ -151,14 +151,24 @@
 
 	function classifyQuantile(selectedField, classNumber, wells) {
 		var result = [];
+		var validWells = [];
+		var invalidWells = [];
 
-		var totalWells = wells.length;
+		for(var i=0; i<wells.length; i++) {
+			if(wells[i][selectedField] != null) {
+				validWells.push({ well: wells[i], index: i });
+			} else {
+				invalidWells.push(i);
+			}
+		}
+
+		var totalWells = validWells.length;
 		var intervalSize = Math.ceil(totalWells / classNumber);
 		var tempCategories = [];
 
 		var values = [];
 		for(var i = 0; i<totalWells; i++) {
-			values.push({ value: wells[i][selectedField], index: i });
+			values.push({ value: validWells[i]["well"][selectedField], index: validWells[i]["index"] });
 		}
 		values.sort(function(a, b) { return a.value - b.value; });
 
@@ -202,6 +212,16 @@
 		// Sorting the indexes of each category
 		for(var i=0; i<result.length; i++) {
 			result[i]["indexes"].sort(function(a, b) { return a - b; });
+		}
+
+		// Adding the invalid wells
+		if(invalidWells.length > 0) {
+			result.push({
+				intervalMinimum: null,
+				intervalMaximum: null,
+				category: "Invalid",
+				indexes: invalidWells
+			});
 		}
 
 		return result;
