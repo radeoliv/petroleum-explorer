@@ -755,6 +755,9 @@ Classification
       margin: 0em;
       width: auto; }
 
+#association-rule-button {
+  margin-left: 2.5em; }
+
 /*
 =============================================================================
 Main Styles

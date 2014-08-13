@@ -161,6 +161,14 @@
 		});
 	};
 
+	MapCanvasController.prototype.addAssociationRules = function() {
+		$("#association-rule-box").remove();
+		var associationRuleDiv = document.createElement('div');
+		associationRuleDiv.id = "association-rule-box";
+		var append = "<label class=\"association-rule\">Rule 1</label>";
+		associationRuleDiv.innerHTML = append;
+	};
+
 	MapCanvasController.prototype.getPinColors = function() {
 		return pinColors;
 	};

@@ -287,5 +287,9 @@
 		heightStyle: "content"
 	});
 
+	$('#association-rule-button').on("click",function(){
+		self.classificationController.addAssociationRules();
+	});
+
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationView = ClassificationView;
 }).call(this);

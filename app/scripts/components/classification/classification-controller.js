@@ -317,5 +317,11 @@
 		return map;
 	};
 
+	ClassificationController.prototype.addAssociationRules = function(){
+
+		self.MapController.addAssociationRules();
+	};
+
+
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationController = ClassificationController;
 }).call(this);
