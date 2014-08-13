@@ -295,10 +295,12 @@
 	ClassificationController.prototype.getClassificationLegend = function(classificationList) {
 		var legendColors = self.MapController.getPinColors();
 		var legends = [];
+
 		for (var i=0; i < classificationList.length; i++){
 			var auxColor = classificationList[i]["category"] === "Invalid" ? "black": legendColors[i];
+			var auxCategory = classificationList[i]["category"] === "N" ? "Not defined" : classificationList[i]["category"];
 			legends.push({
-				category: classificationList[i]["category"],
+				category: auxCategory,
 				indexesCount:classificationList[i]["indexes"].length,
 				color: auxColor
 			});

@@ -829,15 +829,19 @@
 		return function () {
 			var tempButton = "<input type=\"button\" id=\"view-time-series-button\" value=\"View time series\"/>";
 
+			var wellType = well["w_type"] === "N" ? "NOT DEFINED" : well["w_type"];
+
 			var content = "<b>Unique Well Identifier</b><br>" + well["w_uwi"] + "<br><br>"
 				+ "<b>Well Operator</b><br>" + well["w_operator"] + "<br><br>"
-				+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br>" + tempButton + "<hr>";
+				+ "<b>Well Status</b><br>" + well["w_current_status"] + "<br><br>"
+				+ "<b>Well Type</b><br>" + wellType + "<br>"
+				+ tempButton + "<hr>";
 
 			// Adding information about surface/underground location
 			if(isTop === true) {
-				content += "<b>Surface location</b>";
+				content += "<b>Surface location - <i>heel</i></b>";
 			} else {
-				content += "<b>Underground location</b>";
+				content += "<b>Underground location - <i>toe</i></b>";
 			}
 
 			// Set the content of the infoWindow
