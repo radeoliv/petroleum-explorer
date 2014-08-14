@@ -35,6 +35,8 @@
 	var clustersNumberSelection = $("#clusters-number");
 	var clusterCheckboxesGrid = $(".checkbox-grid");
 	var clusterCheckboxes = clusterCheckboxesGrid.find("input[type=\"checkbox\"]");
+	var associationRuleButton = $("#association-rule-button");
+
 	var ClassificationView;
 	var self;
 
@@ -56,7 +58,7 @@
 		numericalSelection[0].disabled = isDisabled;
 		classesNumberSelection[0].disabled = isDisabled;
 		clustersNumberSelection[0].disabled = isDisabled;
-		$('#association-rule-button')[0].disabled = isDisabled;
+		associationRuleButton[0].disabled = isDisabled;
 
 		for(var i=0; i<classificationMethods.length; i++) {
 			classificationMethods[i].checked = false;
@@ -89,6 +91,7 @@
 
 		// Reset the pins on the map
 		self.classificationController.resetPins();
+		// Remove the created rules
 		self.classificationController.removeAssociationRules();
 	}
 
@@ -156,21 +159,22 @@
 
 	function clearOtherFields() {
 		switch(optionAccordion) {
+			// Categorical classification
 			case 0:
 				clearNumericalClassification();
 				clearKMeans();
-				clearAssociationRule();
 				break;
+			// Numerical classification
 			case 1:
 				clearCategoricalClassification();
 				clearKMeans();
-				clearAssociationRule();
 				break;
+			// K-means
 			case 2:
 				clearCategoricalClassification();
 				clearNumericalClassification();
-				clearAssociationRule();
 				break;
+			// Association Rule Mining
 			case 3:
 				clearCategoricalClassification();
 				clearNumericalClassification();
@@ -198,10 +202,6 @@
 
 		function clearKMeans() {
 			clustersNumberSelection[0].value = 'none';
-		}
-
-		function clearAssociationRule(){
-			$('#association-rule-button')[0].disabled = true;
 		}
 	}
 

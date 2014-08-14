@@ -161,8 +161,11 @@
 		});
 	};
 
+	// Association rule begin @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 	MapCanvasController.prototype.addAssociationRules = function() {
-		$("#association-rule-box").remove();
+		self.removeAssociationRules();
+
 		var associationRuleDiv = document.createElement('div');
 		associationRuleDiv.id = "association-rule-box";
 		var append = "<table id=\"association-rule-table\">";
@@ -175,7 +178,6 @@
 		append += "</table>";
 		associationRuleDiv.innerHTML = append;
 		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(associationRuleDiv);
-		$("#association-rule-box").slideDown("slow");
 
 		$("#association-rule-1").on("click",function() {
 			console.log("rule1wells");
@@ -185,6 +187,8 @@
 	MapCanvasController.prototype.removeAssociationRules = function() {
 		$("#association-rule-box").remove();
 	};
+
+	// Association rule end @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	MapCanvasController.prototype.getPinColors = function() {
 		return pinColors;
