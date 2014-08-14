@@ -56,6 +56,7 @@
 		numericalSelection[0].disabled = isDisabled;
 		classesNumberSelection[0].disabled = isDisabled;
 		clustersNumberSelection[0].disabled = isDisabled;
+		$('#association-rule-button')[0].disabled = isDisabled;
 
 		for(var i=0; i<classificationMethods.length; i++) {
 			classificationMethods[i].checked = false;
@@ -88,6 +89,7 @@
 
 		// Reset the pins on the map
 		self.classificationController.resetPins();
+		self.classificationController.removeAssociationRules();
 	}
 
 	function classifyWells() {
@@ -157,14 +159,22 @@
 			case 0:
 				clearNumericalClassification();
 				clearKMeans();
+				clearAssociationRule();
 				break;
 			case 1:
 				clearCategoricalClassification();
 				clearKMeans();
+				clearAssociationRule();
 				break;
 			case 2:
 				clearCategoricalClassification();
 				clearNumericalClassification();
+				clearAssociationRule();
+				break;
+			case 3:
+				clearCategoricalClassification();
+				clearNumericalClassification();
+				clearKMeans();
 				break;
 			default:
 				console.log("No option selected!");
@@ -188,6 +198,10 @@
 
 		function clearKMeans() {
 			clustersNumberSelection[0].value = 'none';
+		}
+
+		function clearAssociationRule(){
+			$('#association-rule-button')[0].disabled = true;
 		}
 	}
 

@@ -318,10 +318,12 @@
 	};
 
 	ClassificationController.prototype.addAssociationRules = function(){
-
 		self.MapController.addAssociationRules();
 	};
 
+	ClassificationController.prototype.removeAssociationRules = function(){
+		self.MapController.removeAssociationRules();
+	};
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationController = ClassificationController;
 }).call(this);

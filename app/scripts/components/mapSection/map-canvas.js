@@ -165,8 +165,25 @@
 		$("#association-rule-box").remove();
 		var associationRuleDiv = document.createElement('div');
 		associationRuleDiv.id = "association-rule-box";
-		var append = "<label class=\"association-rule\">Rule 1</label>";
+		var append = "<table id=\"association-rule-table\">";
+		append += "<tr style=\"background-color:#CCCCCC\"><th><label><b>Rule</b></label></th><th><label><b>Expression</b></label></th><th><label><b>Configuration</b></label></th></tr>"
+		append += "<tr style=\"background-color:#EEEEEE\"><td width=\"15%\"><button id=\"association-rule-1\"><i><b>Rule 1</b></i></button></td><td width=\"55%\"><label><i><b>IF</b></i> injection_hour_cluster=cluster0 injection_steam_cluster=cluster1<br><i><b>THEN</b></i> sor_cluster=cluster2</label></td><td width=\"30%\"><label>0.9<br>(18 out of 20 wells)</label></td></tr>";
+		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-2\"><i><b>Rule 2</b></i></button></td><td><label><i><b>IF</b></i> injection_hour_cluster=cluster2<br><i><b>THEN</b></i> production_oil_cluster=cluster0</label></td><td><label>0.86<br>(18 out of 21 wells)</label></td></tr>";
+		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-3\"><i><b>Rule 3</b></i></button></td><td><label><i><b>IF</b></i> injection_steam_cluster=cluster2<br><i><b>THEN</b></i> production_oil_cluster=cluster0</label></td><td><label>0.85<br>(47 out of 55 wells)</label></td></tr>";
+		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-4\"><i><b>Rule 4</b></i></button></td><td><label><i><b>IF</b></i> injection_hour_cluster=cluster1 injection_steam_cluster=cluster2<br><i><b>THEN</b></i> production_oil_cluster=cluster0</label></td><td><label>0.83<br>(19 out of 23 wells)</label></td></tr>";
+		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-5\"><i><b>Rule 5</b></i></button></td><td><label><i><b>IF</b></i> injection_steam_cluster=cluster1<br><i><b>THEN</b></i> sor_cluster=cluster2</label></td><td><label>0.8<br>(24 out of 30 wells)</label></td></tr>";
+		append += "</table>";
 		associationRuleDiv.innerHTML = append;
+		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(associationRuleDiv);
+		$("#association-rule-box").slideDown("slow");
+
+		$("#association-rule-1").on("click",function() {
+			console.log("rule1wells");
+		});
+	};
+
+	MapCanvasController.prototype.removeAssociationRules = function() {
+		$("#association-rule-box").remove();
 	};
 
 	MapCanvasController.prototype.getPinColors = function() {
