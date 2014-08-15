@@ -9,7 +9,24 @@
  Creates all the used classes (controllers and views).
  -------------------------------------------------------------------------------*/
 
+function getAllWellsWithAverageStatistics() {
+	var result = [];
+	$.ajax({
+		url: 'http://localhost:3000/getAllWellsWithAverageStatistics/',
+		dataType:'json',
+		async: false,
+		success: function(data) {
+			result = data;
+		}
+	});
+
+	return result;
+}
+
 jQuery(document).ready(function ($) {
+	// Load the wells with average statistics
+	var wellsWithStatistics = getAllWellsWithAverageStatistics();
+
 	/*
 	 * The data set is retrieved from the database from the map-canvas script.
 	 * It can be used in the other parts of the system, avoiding having to reload everything.
@@ -31,11 +48,25 @@ jQuery(document).ready(function ($) {
 	var myExportController = new ExportController(myTableController);
 	var myExportView = new ExportView(myExportController);
 
-	var myVisualizationController = new VisualizationController(myMapCanvasController);
+	var myVisualizationController = new VisualizationController(myMapCanvasController, wellsWithStatistics);
 	var myVisualizationView = new VisualizationView(myVisualizationController, myTableController);
 
 	var myPolygonSelection = new PolygonSelection(myMapCanvasController, mySearchController);
 
-	var myClassificationController = new ClassificationController(myMapCanvasController);
+	var myClassificationController = new ClassificationController(myMapCanvasController, wellsWithStatistics);
 	var myClassificationView = new ClassificationView(myClassificationController);
+
+	// Hovering effect on logo
+	var groupLogoLink = $("#group-logo-link");
+	var groupLogo = $("#group-logo");
+	groupLogo.hover(
+		function() {
+			// Mouse enter
+			groupLogo[0].style.opacity = 1.0;
+		},
+		function() {
+			// Mouse leave
+			groupLogo[0].style.opacity = 0.5;
+		}
+	);
 });

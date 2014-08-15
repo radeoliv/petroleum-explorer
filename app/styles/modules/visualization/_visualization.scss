@@ -210,6 +210,14 @@ Visualization
 	font-size: 1.5em;
 }
 
+#missing-data-message {
+	position: absolute;
+	color: red;
+	font-size: 1.5em;
+	top: 47%;
+	left: 43%;
+}
+
 #time-series-uwi-selection {
 	position: relative;
 }

@@ -137,7 +137,18 @@
 					generateTitle();
 					var attribute = $barChartSelection[0].value;
 					var attributeText = $barChartSelection[0][$barChartSelection[0].selectedIndex].label;
-					self.visualizationController.generateBarChart(attribute, attributeText);
+					var response = self.visualizationController.generateBarChart(attribute, attributeText);
+
+					if(response === 1) {
+						$visualizationTitle[0].innerHTML = "";
+
+						var alertMessage =
+							"<div id=\"canvas-svg\">" +
+								"<label id=\"missing-data-message\">No data available</label>" +
+							"</div>";
+
+						$(alertMessage).appendTo($("#visualization-container"));
+					}
 				} else {
 					self.clearVisualization(true);
 				}

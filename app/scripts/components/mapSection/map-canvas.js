@@ -181,8 +181,8 @@
 
 		$("#association-rule-1").on("click",function() {
 			//console.log("rule1wells");
-			self.highlightWells("03/02-08-095-06W4/0",true);
-			console.log("rule1");
+			//self.highlightWells("03/02-08-095-06W4/0",true);
+			//console.log("rule1");
 		});
 	};
 

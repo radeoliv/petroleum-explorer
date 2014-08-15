@@ -31,10 +31,9 @@
 </head>
 <body>
 	<main id = "map-canvas"></main>
-	<a target="_blank" href="http://www.ucalgary.ca/wangx/team">
+	<a target="_blank" href="http://www.ucalgary.ca/wangx/team" id="group-logo-link">
 		<img id="group-logo" src="./resources/logo-small.png" alt="Intelligent Geospatial Data Mining Laboratory" title="Intelligent Geospatial Data Mining Laboratory">
 	</a>
-
 
 	<div id="info-visualization" class="white-popup mfp-hide mfp-with-anim">
 		<table>
@@ -51,6 +50,10 @@
 							<div class = "bar-chart accordion-content">
 								<select id = "bar-chart-attributes" placeholder = "Bar Chart" name = "attributes" results = "10" autosave = "Attributes">
 									<option value = "none"></option>
+									<option value = "st_avg_injection_hour">Average Injection Hours</option>
+									<option value = "st_avg_production_oil">Average Oil Production</option>
+									<option value = "st_avg_sor">Average SOR</option>
+									<option value = "st_avg_injection_steam">Average Steam Injection</option>
 									<option value = "w_drillers_total_depth">Well Drillers Total Depth</option>
 								</select>
 							</div>

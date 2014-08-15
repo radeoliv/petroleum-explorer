@@ -16,24 +16,13 @@
 	var ClassificationController;
 	var self;
 
-	ClassificationController = function (MapController){
+	ClassificationController = function (MapController, allWellsWithStatistics){
 		this.MapController = MapController;
 		self = this;
 
-		// Load the wells with average statistics
-		getWellsWithStatistics();
+		// Get the wells with average statistics
+		wellsWithStatistics = allWellsWithStatistics;
 	};
-
-	function getWellsWithStatistics() {
-		$.ajax({
-			url: 'http://localhost:3000/getAllWellsWithAverageStatistics/',
-			dataType:'json',
-			async: false,
-			success: function(data) {
-				wellsWithStatistics = data;
-			}
-		});
-	}
 
 	ClassificationController.prototype.classifyWellsByCategory = function(selectedValue, legendName){
 		categories = [];

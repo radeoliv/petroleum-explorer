@@ -14,11 +14,15 @@
 
 	var self;
 	var $visualizationContainer = $("#visualization-container");
+	var wellsWithStatistics = [];
 
 	var VisualizationController;
-	VisualizationController = function (MapController){
+	VisualizationController = function (MapController, allWellsWithStatistics){
 		this.MapController = MapController;
 		self = this;
+
+		// Get the wells with average statistics
+		wellsWithStatistics = allWellsWithStatistics;
 	};
 
 	VisualizationController.prototype.getStatusInfoFromWell = function(uwi) {
@@ -50,7 +54,7 @@
 			url: 'http://localhost:3000/getInfoFromWell/' + encodedUWI,
 			dataType:'json',
 			async: false,
-			success: function(data){
+			success: function(data) {
 				wellInfo = data;
 			}
 		});
@@ -122,22 +126,45 @@
 	}
 
 	VisualizationController.prototype.calculateBarChartValues = function(attribute) {
-		var currentWells = this.MapController.getCurrentWells();
+		var currentWellsWithStatistics = [];
+		var wells = self.MapController.getCurrentWells();
+		var wellsWithoutValues = 0;
 
-		if(currentWells != undefined && currentWells != null) {
+		for(var i=0; i<wells.length; i++) {
+			currentWellsWithStatistics.push(wellsWithStatistics[wells[i]["w_id"] - 1]);
+		}
+
+		if(currentWellsWithStatistics != undefined && currentWellsWithStatistics != null) {
 			var attributeValues = [];
 			// Storing all the values of the specified attribute
-			for(var i=0; i<currentWells.length; i++) {
-				attributeValues.push(currentWells[i][attribute]);
+			for(var i=0; i<currentWellsWithStatistics.length; i++) {
+				if(currentWellsWithStatistics[i][attribute] != null) {
+					attributeValues.push(currentWellsWithStatistics[i][attribute]);
+				} else {
+					wellsWithoutValues++;
+				}
 			}
-			return attributeValues;
+			return { values: attributeValues, numberOfMissingValues: wellsWithoutValues };
 		}
 	};
 
 	VisualizationController.prototype.generateBarChart = function(attribute, attributeText) {
+		this.removeCurrentChart();
+
+		// Error control
+		var error = 0;
+
 		// Calculate the data distribution
-		var data = this.calculateBarChartValues(attribute);
+		var barChartValues = this.calculateBarChartValues(attribute);
+		var data = barChartValues["values"];
+		var numberOfMissingValues = barChartValues["numberOfMissingValues"];
+
 		var currentWells = this.MapController.getCurrentWells();
+		var currentWellsWithStatistics = [];
+		for(var i=0; i<currentWells.length; i++) {
+			currentWellsWithStatistics.push(wellsWithStatistics[currentWells[i]["w_id"] - 1]);
+		}
+
 		/*
 		 * highlightedMarkers contains all the highlighted markers on the map
 		 * For each element, index 0 = UWI, index 1 = index in the array of all wells being displayed
@@ -183,7 +210,6 @@
 				.orient("left");
 				//.ticks(10, "%");
 
-			this.removeCurrentChart();
 			$('<div id=\"canvas-svg\"></div>').appendTo($visualizationContainer);
 
 			var svg = d3.select("#canvas-svg").append("svg")
@@ -267,22 +293,22 @@
 							case 0:
 								return attributeText;
 							case 1:
-								return currentWells[barId][attribute];
+								return currentWellsWithStatistics[barId][attribute];
 
 							case 3:
 								return "UWI";
 							case 4:
-								return currentWells[barId]["w_uwi"];
+								return currentWellsWithStatistics[barId]["w_uwi"];
 
 							case 6:
 								return "Well Operator";
 							case 7:
-								return currentWells[barId]["w_operator"];
+								return currentWellsWithStatistics[barId]["w_operator"];
 
 							case 9:
 								return "Well Status";
 							case 10:
-								return currentWells[barId]["w_current_status"];
+								return currentWellsWithStatistics[barId]["w_current_status"];
 
 							default:
 								return "";
@@ -379,9 +405,30 @@
 						"stroke-width": "0.05em",
 						"opacity": 0
 					});
+
+				// If some values are missing, we let the user know
+				if(numberOfMissingValues > 0) {
+					var wellText = numberOfMissingValues === 1 ? " well does" : " wells do";
+
+					svg.append("text")
+						.attr("id", "missing-values-info")
+						.attr("x", (width + 30))
+						.attr("y", (height))
+						.style({
+							"font-size": "0.8em",
+							"font-weight": "bold",
+							"fill": "red"
+						})
+						.text(numberOfMissingValues + wellText + " not have available data");
+				}
+
 			}
 			drawD3Document(data);
+		} else {
+			error = 1;
 		}
+
+		return error;
 	};
 
 	VisualizationController.prototype.calculatePieChartValues = function(attribute) {

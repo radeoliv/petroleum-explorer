@@ -547,6 +547,13 @@ Visualization
   color: red;
   font-size: 1.5em; }
 
+#missing-data-message {
+  position: absolute;
+  color: red;
+  font-size: 1.5em;
+  top: 47%;
+  left: 43%; }
+
 #time-series-uwi-selection {
   position: relative; }
 
@@ -889,7 +896,7 @@ button {
 
 #group-logo {
   border: 0em;
-  opacity: 0.8;
+  opacity: 0.5;
   position: absolute;
   bottom: 1.1em;
   left: 0.1em;

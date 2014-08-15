@@ -73,21 +73,10 @@
 
 	function clearAllOptions() {
 		$("#classification-legend-control").remove();
-		categoricalSelection[0].value = 'none';
-		numericalSelection[0].value = 'none';
-		classesNumberSelection[0].value = 'none';
-		clustersNumberSelection[0].value = 'none';
 
-		for(var i=0; i<classificationMethods.length; i++) {
-			if(classificationMethods[i].checked === true) {
-				classificationMethods[i].checked = false;
-				break;
-			}
-		}
-
-		for(var i=0; i<clusterCheckboxes.length; i++) {
-			clusterCheckboxes[i].checked = false;
-		}
+		clearCategoricalClassification();
+		clearNumericalClassification();
+		clearKMeans();
 
 		// Reset the pins on the map
 		self.classificationController.resetPins();
@@ -185,24 +174,28 @@
 				clearAllOptions();
 				break;
 		}
+	}
 
-		function clearCategoricalClassification() {
-			categoricalSelection[0].value = 'none';
-		}
+	function clearCategoricalClassification() {
+		categoricalSelection[0].value = 'none';
+	}
 
-		function clearNumericalClassification() {
-			classesNumberSelection[0].value = 'none';
-			for(var i=0; i<classificationMethods.length; i++) {
-				if(classificationMethods[i].checked === true) {
-					classificationMethods[i].checked = false;
-					break;
-				}
+	function clearNumericalClassification() {
+		classesNumberSelection[0].value = 'none';
+		numericalSelection[0].value = 'none';
+		for(var i=0; i<classificationMethods.length; i++) {
+			if(classificationMethods[i].checked === true) {
+				classificationMethods[i].checked = false;
+				break;
 			}
 		}
+	}
 
-		function clearKMeans() {
-			clustersNumberSelection[0].value = 'none';
+	function clearKMeans() {
+		for(var i=0; i<clusterCheckboxes.length; i++) {
+			clusterCheckboxes[i].checked = false;
 		}
+		clustersNumberSelection[0].value = 'none';
 	}
 
 	categoricalSelection.on("change", function() {
