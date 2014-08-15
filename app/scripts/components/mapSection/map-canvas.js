@@ -169,7 +169,7 @@
 		var associationRuleDiv = document.createElement('div');
 		associationRuleDiv.id = "association-rule-box";
 		var append = "<table id=\"association-rule-table\">";
-		append += "<tr style=\"background-color:#CCCCCC\"><th><label><b>Rule</b></label></th><th><label><b>Expression</b></label></th><th><label><b>Configuration</b></label></th></tr>"
+		append += "<tr style=\"background-color:#CCCCCC\"><th><label><b>Rule</b></label></th><th><label><b>Expression</b></label></th><th><label><b>Confidence</b></label></th></tr>"
 		append += "<tr style=\"background-color:#EEEEEE\"><td width=\"14%\"><button id=\"association-rule-1\"><i><b>Rule 1</b></i></button></td><td width=\"76%\"><label><i><b>IF</b></i> high average injection hour with low standard deviation<br> low average injection steam with low standard deviation<br><i><b>THEN</b></i> good sor average with low sor standard deviation</label></td><td width=\"10%\"><label>0.9<br>(18/20)</label></td></tr>";
 		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-2\"><i><b>Rule 2</b></i></button></td><td><label><i><b>IF</b></i> low average injection hour with high standard deviation<br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td><label>0.86<br>(18/21)</label></td></tr>";
 		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-3\"><i><b>Rule 3</b></i></button></td><td><label><i><b>IF</b></i> low average injection steam with low standard deviation <br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td><label>0.85<br>(47/55)</label></td></tr>";
