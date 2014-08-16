@@ -102,6 +102,8 @@ Classification
 	text-align: center;
 }
 
+/* Association rule begin */
+
 #association-rule-box {
 	bottom: 2em !important;
 	right: 0.7em !important;
@@ -110,4 +112,44 @@ Classification
 	box-shadow: 0em 0em 0em 0.18em rgba(127,127,127,0.3);
 	border-radius: 0.4em;
 	font-size:1.2em;
+
+	hr {
+		margin-bottom: 0.2em;
+		margin-top: 0em;
+	}
+
+	.arm-table-last-column {
+		text-align: center;
+	}
+
+	.arm-table-middle-column {
+		padding-left: 1em;
+	}
 }
+
+#association-rule-table {
+	th {
+		background-color:#CCCCCC;
+	}
+
+	td {
+		background-color:#F5F5F0;
+	}
+}
+
+#association-rule-legend {
+	display: none;
+	table-layout: fixed;
+	text-align: center;
+	background-color: #F5F5F0;
+
+	.arm-legend-pin {
+		margin-right: 0.5em;
+	}
+
+	.arm-legend-header {
+		background-color: #CCCCCC;
+	}
+}
+
+/* Association rule end */

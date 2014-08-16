@@ -152,16 +152,19 @@
 			case 0:
 				clearNumericalClassification();
 				clearKMeans();
+				clearAssociationRuleMining();
 				break;
 			// Numerical classification
 			case 1:
 				clearCategoricalClassification();
 				clearKMeans();
+				clearAssociationRuleMining();
 				break;
 			// K-means
 			case 2:
 				clearCategoricalClassification();
 				clearNumericalClassification();
+				clearAssociationRuleMining();
 				break;
 			// Association Rule Mining
 			case 3:
@@ -196,6 +199,10 @@
 			clusterCheckboxes[i].checked = false;
 		}
 		clustersNumberSelection[0].value = 'none';
+	}
+
+	function clearAssociationRuleMining() {
+		$("#association-rule-box").remove();
 	}
 
 	categoricalSelection.on("change", function() {
@@ -286,16 +293,18 @@
 		});
 	}
 
+	$('#association-rule-button').on("click",function() {
+
+		clearAllOptions();
+		self.classificationController.addAssociationRules();
+	});
+
 	/*
 	 * Allows the accordion in the control panel to be collapsible.
 	 */
 	classificationAccordion.accordion({
 		collapsible: true,
 		heightStyle: "content"
-	});
-
-	$('#association-rule-button').on("click",function(){
-		self.classificationController.addAssociationRules();
 	});
 
 	(typeof exports !== "undefined" && exports !== null ? exports : window).ClassificationView = ClassificationView;

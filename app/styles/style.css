@@ -236,6 +236,11 @@ table {
   float: right;
   top: -2em; }
 
+#polygon-icon {
+  /* Just a way to keep the image with the same size as the rest */
+  height: 18px;
+  width: 18px; }
+
 #map-canvas {
   height: 100%;
   right: 8em;
@@ -765,6 +770,7 @@ Classification
 #ui-accordion-classificationAccordion-panel-3 {
   text-align: center; }
 
+/* Association rule begin */
 #association-rule-box {
   bottom: 2em !important;
   right: 0.7em !important;
@@ -773,7 +779,30 @@ Classification
   box-shadow: 0em 0em 0em 0.18em rgba(127, 127, 127, 0.3);
   border-radius: 0.4em;
   font-size: 1.2em; }
+  #association-rule-box hr {
+    margin-bottom: 0.2em;
+    margin-top: 0em; }
+  #association-rule-box .arm-table-last-column {
+    text-align: center; }
+  #association-rule-box .arm-table-middle-column {
+    padding-left: 1em; }
 
+#association-rule-table th {
+  background-color: #CCCCCC; }
+#association-rule-table td {
+  background-color: #F5F5F0; }
+
+#association-rule-legend {
+  display: none;
+  table-layout: fixed;
+  text-align: center;
+  background-color: #F5F5F0; }
+  #association-rule-legend .arm-legend-pin {
+    margin-right: 0.5em; }
+  #association-rule-legend .arm-legend-header {
+    background-color: #CCCCCC; }
+
+/* Association rule end */
 /*
 =============================================================================
 Main Styles

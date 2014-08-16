@@ -169,20 +169,89 @@
 		var associationRuleDiv = document.createElement('div');
 		associationRuleDiv.id = "association-rule-box";
 		var append = "<table id=\"association-rule-table\">";
-		append += "<tr style=\"background-color:#CCCCCC\"><th><label><b>Rule</b></label></th><th><label><b>Expression</b></label></th><th><label><b>Confidence</b></label></th></tr>"
-		append += "<tr style=\"background-color:#EEEEEE\"><td width=\"14%\"><button id=\"association-rule-1\"><i><b>Rule 1</b></i></button></td><td width=\"76%\"><label><i><b>IF</b></i> high average injection hour with low standard deviation<br> low average injection steam with low standard deviation<br><i><b>THEN</b></i> good sor average with low sor standard deviation</label></td><td width=\"10%\"><label>0.9<br>(18/20)</label></td></tr>";
-		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-2\"><i><b>Rule 2</b></i></button></td><td><label><i><b>IF</b></i> low average injection hour with high standard deviation<br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td><label>0.86<br>(18/21)</label></td></tr>";
-		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-3\"><i><b>Rule 3</b></i></button></td><td><label><i><b>IF</b></i> low average injection steam with low standard deviation <br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td><label>0.85<br>(47/55)</label></td></tr>";
-		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-4\"><i><b>Rule 4</b></i></button></td><td><label><i><b>IF</b></i> medium average injection hour with medium standard deviation<br> high average injection steam with medium standard deviation<br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td><label>0.83<br>(19/23)</label></td></tr>";
-		append += "<tr style=\"background-color:#EEEEEE\"><td><button id=\"association-rule-5\"><i><b>Rule 5</b></i></button></td><td><label><i><b>IF</b></i> low average and low standard deviation injection steam<br><i><b>THEN</b></i> good sor average with low sor standard deviation</label></td><td><label>0.8<br>(24/30)</label></td></tr>";
+
+		append += "<tr><th><label><b>Rule</b></label></th><th><label><b>Expression</b></label></th><th class=\"arm-table-last-column\"><label><b>Confidence</b></label></th></tr>";
+
+		append += "<tr><td width=\"3.5em\"><button id=\"association-rule-1\" class=\"association-rule-button\"><i><b>Rule 1</b></i></button></td><td class=\"arm-table-middle-column\"><label><i><b>IF</b></i> high average injection hour with low standard deviation<br> low average injection steam with low standard deviation<br><i><b>THEN</b></i> good sor average with low sor standard deviation</label></td><td class=\"arm-table-last-column\"><label>0.9<br>(18/20)</label></td></tr>";
+
+		append += "<tr><td><button id=\"association-rule-2\" class=\"association-rule-button\"><i><b>Rule 2</b></i></button></td><td class=\"arm-table-middle-column\"><label><i><b>IF</b></i> low average injection hour with high standard deviation<br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td class=\"arm-table-last-column\"><label>0.86<br>(18/21)</label></td></tr>";
+
+		append += "<tr><td><button id=\"association-rule-3\" class=\"association-rule-button\"><i><b>Rule 3</b></i></button></td><td class=\"arm-table-middle-column\"><label><i><b>IF</b></i> low average injection steam with low standard deviation <br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td class=\"arm-table-last-column\"><label>0.85<br>(47/55)</label></td></tr>";
+
+		append += "<tr><td><button id=\"association-rule-4\" class=\"association-rule-button\"><i><b>Rule 4</b></i></button></td><td class=\"arm-table-middle-column\"><label><i><b>IF</b></i> medium average injection hour with medium standard deviation<br> high average injection steam with medium standard deviation<br><i><b>THEN</b></i> low average oil production with low standard deviation</label></td><td class=\"arm-table-last-column\"><label>0.83<br>(19/23)</label></td></tr>";
+
+		append += "<tr><td><button id=\"association-rule-5\" class=\"association-rule-button\"><i><b>Rule 5</b></i></button></td><td class=\"arm-table-middle-column\"><label><i><b>IF</b></i> low average and low standard deviation injection steam<br><i><b>THEN</b></i> good sor average with low sor standard deviation</label></td><td class=\"arm-table-last-column\"><label>0.8<br>(24/30)</label></td></tr>";
+
 		append += "</table>";
+
+		append += "<table id=\"association-rule-legend\">";
+
+		append += "<tr><td class=\"arm-legend-header\" colspan=\"3\"><label id=\"association-rule-legend-header\"><b>Rule X</b></label></td></tr>";
+
+		var pinBothRules = '<input type=\"image\" src=\"./resources/blue-pin-smaller.png\" id=\"arm-legend-pin-1\" class=\"arm-legend-pin\">';
+		var pinOneRule = '<input type=\"image\" src=\"./resources/light-blue-pin-smaller.png\" id=\"arm-legend-pin-2\" class=\"arm-legend-pin\">';
+		var pinNoRule = '<input type=\"image\" src=\"./resources/black-pin-smaller.png\" id=\"arm-legend-pin-3\" class=\"arm-legend-pin\">';
+
+		var labelBothRules = '<label class = \"arm-legend\"><b><i>IF & THEN</i></b></label>';
+		var labelOneRule = '<label class = \"arm-legend\"><b><i>IF</i></b></label>';
+		var labelNoRule = '<label class = \"arm-legend\"><b><i>NONE</i></b></label>';
+
+		append += "<tr> <td>" + pinBothRules + labelBothRules + "</td> <td>" + pinOneRule + labelOneRule + "</td> <td>" + pinNoRule + labelNoRule + "</td> </tr>";
+
+		append += "</table>";
+
 		associationRuleDiv.innerHTML = append;
 		map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(associationRuleDiv);
 
-		$("#association-rule-1").on("click",function() {
-			//console.log("rule1wells");
-			//self.highlightWells("03/02-08-095-06W4/0",true);
-			//console.log("rule1");
+		var wells1 = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110];
+		var wells2 = [111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273];
+		var wells3 = [274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300];
+
+		$(".association-rule-button").on("click", function(e) {
+			if(e != undefined && e != null) {
+				if(e.currentTarget != null && e.currentTarget.id != null) {
+					var targetId = e.currentTarget.id;
+					targetId = targetId.charAt(targetId.length - 1);
+
+					// Changing the header of the legends table
+					$("#association-rule-legend-header")[0].innerHTML = "<b>Rule " + targetId + "</b>";
+
+					// Making the table appear
+					$("#association-rule-legend")[0].style.display = "inline-table";
+
+					// Changing the pins on the map
+					var categories = [];
+					categories.push({ category: 1, indexes: wells1 });
+					categories.push({ category: 2, indexes: wells2 });
+					categories.push({ category: 3, indexes: wells3 });
+
+					var overwriteColors = ["blue", "light-blue", "black"];
+					self.createClassifiedMarkers(categories, overwriteColors);
+				}
+			}
+		});
+
+		$(".arm-legend-pin").on("click", function(event) {
+			// Getting the index of the pin clicked
+			var legendIndex = event["currentTarget"]["id"].charAt(event["currentTarget"]["id"].length - 1);
+			legendIndex = Number(legendIndex);
+
+			var wellsToEmphasize = [];
+			switch(legendIndex) {
+				case 1:
+					wellsToEmphasize = wells1;
+					break;
+				case 2:
+					wellsToEmphasize = wells2;
+					break;
+				case 3:
+					wellsToEmphasize = wells3;
+					break;
+				default:
+					break;
+			}
+
+			self.emphasizeMarkers(wellsToEmphasize, 2000);
 		});
 	};
 
@@ -621,7 +690,7 @@
 		}
 	}
 
-	MapCanvasController.prototype.createClassifiedMarkers = function(categories) {
+	MapCanvasController.prototype.createClassifiedMarkers = function(categories, overwriteColors) {
 		usedClassification = true;
 
 		for(var i = 0; i < currentWells.length; i++){
@@ -630,6 +699,11 @@
 				for(var k = 0; k <categories[j]["indexes"].length; k++){
 					if (i === categories[j]["indexes"][k]){
 						var auxColor = categories[j]["category"] === "Invalid" ? "black" : pinColors[j];
+
+						// In case we are dealing with association rule mining
+						if(overwriteColors != undefined && overwriteColors != null && overwriteColors.length > 0) {
+							auxColor = overwriteColors[j];
+						}
 
 						// Add new entry to wellColors in case a search/filter/selection is executed.
 						wellColors[i] = { well: currentWells[i], color: auxColor, category: categories[j]["category"] };
