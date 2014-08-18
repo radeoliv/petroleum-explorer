@@ -277,12 +277,12 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 		var otherQueryAttrString = otherQueryAttr.join();
 
 		var separator = wellQueryAttrString.length > 0 && statisticsQueryAttrString.length > 0 ? "," : "";
-		console.log(statisticsQueryAttrString);
+		//console.log(statisticsQueryAttrString);
 
 		var query = "SELECT w_uwi," + wellQueryAttrString + separator + statisticsQueryAttrString + " FROM wells LEFT JOIN statistics ON (wells.w_id = statistics.st_injector_w_id OR wells.w_id = statistics.st_producer_w_id) WHERE w_uwi in (" + uwis + ") order by w_uwi" ;
 		//var query = "SELECT w_uwi," + wellQueryAttrString + " FROM wells WHERE w_uwi in (" + uwis + ") order by w_uwi";
 
-		console.log(query);
+		//console.log(query);
 
 		client.query(query, function(err, result) {
 			//call `done()` to release the client back to the pool
@@ -302,8 +302,7 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 				}
 
 				for(var j=0; j<statisticsQueryAttr.length; j++) {
-					// TODO: What value to put when the wells don't have the data?!
-					var aux = rows[i][statisticsQueryAttr[j]] === null ? -9999 : rows[i][statisticsQueryAttr[j]];
+					var aux = rows[i][statisticsQueryAttr[j]] === null ? getRandomArbitrary(-9999, -999) : rows[i][statisticsQueryAttr[j]];
 					temp.push(aux);
 				}
 
@@ -321,13 +320,17 @@ app.get('/applyKmeansToWells/:params', function(req, res) {
 			// Execute the k-means clustering
 			var clusters = clusterfck.kmeans(formattedRows, clusterNumber);
 
-			console.log(clusters);
+			// Safety net for the clustering result
+			while(checkClusters(clusters, clusterNumber) === false) {
+				clusters = clusterfck.kmeans(formattedRows, clusterNumber);
+			}
 
 			// Setting the index to the result array
 			var resultValues = [];
 
 			for(var i=0; i<clusters.length; i++) {
 				var tempCluster = [];
+
 				for(var j=0; j<clusters[i].length; j++) {
 					tempCluster.push({ index: clusters[i][j].index, value: clusters[i][j] })
 				}
@@ -347,6 +350,27 @@ function sortAlphabetically(a, b) {
 	} else {
 		return 1;
 	}
+}
+
+function getRandomArbitrary(min, max) {
+	return Math.random() * (max - min) + min;
+}
+
+function checkClusters(clusters, clusterNumber) {
+	var valid = true;
+
+	if(clusters === undefined || clusters === null || clusters.length === 0 || clusters.length != clusterNumber) {
+		valid = false;
+	} else {
+		for(var i=0; i<clusters.length; i++) {
+			if(clusters[i] === undefined || clusters[i] === null || clusters[i].length === 0) {
+				valid = false;
+				break;
+			}
+		}
+	}
+
+	return valid;
 }
 
 http.createServer(app).listen(app.get('port'), function(){
