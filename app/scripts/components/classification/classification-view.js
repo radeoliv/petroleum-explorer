@@ -139,6 +139,10 @@
 				createCategoricalLegendEvent();
 				clearOtherFields();
 				break;
+			case 3:
+				clearAllOptions();
+				self.classificationController.addAssociationRules();
+				break;
 			default:
 				console.log("No option selected!");
 				clearAllOptions();
@@ -294,9 +298,7 @@
 	}
 
 	$('#association-rule-button').on("click",function() {
-
-		clearAllOptions();
-		self.classificationController.addAssociationRules();
+		classifyWells();
 	});
 
 	/*

@@ -278,7 +278,7 @@
 		// Getting all the indexes of the category clicked
 		var markersIndexes = categories[legendIndex]["indexes"];
 		// Point out markers in the map
-		self.MapController.emphasizeMarkers(markersIndexes, 2000);
+		self.MapController.emphasizeMarkers(markersIndexes);
 	};
 
 	ClassificationController.prototype.getClassificationLegend = function(classificationList) {

@@ -251,7 +251,7 @@
 						break;
 				}
 
-				self.emphasizeMarkers(wellsToEmphasize, 4000);
+				self.emphasizeMarkers(wellsToEmphasize);
 			}
 		});
 	};
@@ -875,59 +875,59 @@
 		}
 	}
 
-	MapCanvasController.prototype.emphasizeMarkers = function(indexes, duration) {
+	var lastIndexes = [];
+	MapCanvasController.prototype.emphasizeMarkers = function(indexes) {
 		if(indexes != undefined && indexes != null && indexes.length > 0) {
 			// lastLayerCheckboxes -> 0 - top, 1 - underground, 2 - deviation
 
-			var zIndex = google.maps.Marker.MAX_ZINDEX - 2;
-			// First, lower the opacity of all markers not present in the indexes list
-			var tempIndex = 0;
+			// Make everything back to normal
+			var zIndex = google.maps.Marker.MAX_ZINDEX - 1;
+
 			for(var i=0; i<markers.length; i++) {
-				if(i != indexes[tempIndex]) {
-					// Surface
-					if(lastLayerCheckboxes[0] === true) {
-						markersTop[i].setOpacity(0.07);
-						markersTop[i].setZIndex(zIndex);
-					}
-					// Underground
-					if(lastLayerCheckboxes[1] === true) {
-						markers[i].setOpacity(0.07);
-						markers[i].setZIndex(zIndex);
-					}
-					// Deviations
-					if(lastLayerCheckboxes[2] === true) {
-						deviations[i].setOptions({ strokeOpacity: 0.07 });
-					}
-				} else {
-					tempIndex++;
+				// Surface
+				if(lastLayerCheckboxes[0] === true) {
+					markersTop[i].setOpacity(1);
+					markersTop[i].setZIndex(zIndex);
+				}
+				// Underground
+				if(lastLayerCheckboxes[1] === true) {
+					markers[i].setOpacity(1);
+					markers[i].setZIndex(zIndex);
+				}
+				// Deviations
+				if(lastLayerCheckboxes[2] === true) {
+					deviations[i].setOptions({ strokeOpacity: 1 });
 				}
 			}
 
-			// Then, after the duration, make everything back to normal
-			zIndex = google.maps.Marker.MAX_ZINDEX - 1;
-			tempIndex = 0;
-			setTimeout(function() {
+			// If the indexes array is different than the lastIndexes, we need to lower the opacity of elements in indexes
+			if(lastIndexes.toString() != indexes.toString()) {
+				lastIndexes = indexes;
+
+				zIndex = google.maps.Marker.MAX_ZINDEX - 2;
+				// First, lower the opacity of all markers not present in the indexes list
+				var tempIndex = 0;
 				for(var i=0; i<markers.length; i++) {
 					if(i != indexes[tempIndex]) {
 						// Surface
 						if(lastLayerCheckboxes[0] === true) {
-							markersTop[i].setOpacity(1);
+							markersTop[i].setOpacity(0.07);
 							markersTop[i].setZIndex(zIndex);
 						}
 						// Underground
 						if(lastLayerCheckboxes[1] === true) {
-							markers[i].setOpacity(1);
+							markers[i].setOpacity(0.07);
 							markers[i].setZIndex(zIndex);
 						}
 						// Deviations
 						if(lastLayerCheckboxes[2] === true) {
-							deviations[i].setOptions({ strokeOpacity: 1 });
+							deviations[i].setOptions({ strokeOpacity: 0.07 });
 						}
 					} else {
 						tempIndex++;
 					}
 				}
-			}, duration);
+			}
 		}
 	};
 
