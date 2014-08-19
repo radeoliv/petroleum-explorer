@@ -876,6 +876,7 @@
 	}
 
 	var lastIndexes = [];
+	var control = true;
 	MapCanvasController.prototype.emphasizeMarkers = function(indexes) {
 		if(indexes != undefined && indexes != null && indexes.length > 0) {
 			// lastLayerCheckboxes -> 0 - top, 1 - underground, 2 - deviation
@@ -901,8 +902,9 @@
 			}
 
 			// If the indexes array is different than the lastIndexes, we need to lower the opacity of elements in indexes
-			if(lastIndexes.toString() != indexes.toString()) {
+			if(lastIndexes.toString() != indexes.toString() || control) {
 				lastIndexes = indexes;
+				control = false;
 
 				zIndex = google.maps.Marker.MAX_ZINDEX - 2;
 				// First, lower the opacity of all markers not present in the indexes list
@@ -927,6 +929,8 @@
 						tempIndex++;
 					}
 				}
+			} else {
+				control = true;
 			}
 		}
 	};

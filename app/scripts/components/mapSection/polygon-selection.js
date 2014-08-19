@@ -144,6 +144,7 @@
 			self.SearchController.setResultSetByIdsInverse(currentWells, temp);
 			self.MapCanvasController.plotResults(self.SearchController.getResultSet());
 			$("body").trigger("ResultsUpdated");
+			$("body").trigger("WellsUpdated");
 		}
 	});
 
@@ -155,6 +156,7 @@
 
 		self.MapCanvasController.plotResults(self.SearchController.getResultSet());
 		$("body").trigger("ResultsUpdated");
+		$("body").trigger("WellsUpdated");
 
 		$polygonResetMarkersButton[0].disabled = true;
 	});
