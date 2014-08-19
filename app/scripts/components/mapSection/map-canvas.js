@@ -498,7 +498,7 @@
 		var temp;
 		$.ajax({
 			//url: './wells.json',
-			url: 'http://localhost:3000/getAllWells',
+			url: '/getAllWells',
 			dataType:'json',
 			async: false,
 			success: function(data){

@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -18,8 +17,10 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+//app.set('views', path.join(__dirname, 'views'));
+app.set('views', '../app');
+app.engine('html', require('ejs').renderFile);
+//app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -29,10 +30,19 @@ app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/bower_components', express.static(__dirname + '/../app/bower_components'));
+app.use('/styles', express.static(__dirname + '/../app/styles'));
+app.use('/resources', express.static(__dirname + '/../app/resources'));
+app.use('/scripts', express.static(__dirname + '/../app/scripts'));
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+app.get('/', function(req, res) {
+	res.render('index.html');
+});
 
 app.get('/getAllWells', function(req, res) {
 	res.header("Access-Control-Allow-Origin", "*");

@@ -29,7 +29,7 @@
 		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
 		var statusInfo = [];
 		$.ajax({
-			url: 'http://localhost:3000/getStatusInfoFromWell/' + encodedUWI,
+			url: '/getStatusInfoFromWell/' + encodedUWI,
 			dataType:'json',
 			async: false,
 			success: function(data){
@@ -51,7 +51,7 @@
 		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
 		var wellInfo = [];
 		$.ajax({
-			url: 'http://localhost:3000/getInfoFromWell/' + encodedUWI,
+			url: '/getInfoFromWell/' + encodedUWI,
 			dataType:'json',
 			async: false,
 			success: function(data) {
@@ -66,7 +66,7 @@
 		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
 		var injectionInfo = [];
 		$.ajax({
-			url: 'http://localhost:3000/getInjectionInfoFromWell/' + encodedUWI,
+			url: '/getInjectionInfoFromWell/' + encodedUWI,
 			dataType:'json',
 			async: false,
 			success: function(data){
@@ -81,7 +81,7 @@
 		var encodedUWI = encodeURIComponent(uwi.toUpperCase().trim());
 		var productionInfo = [];
 		$.ajax({
-			url: 'http://localhost:3000/getProductionInfoFromWell/' + encodedUWI,
+			url: '/getProductionInfoFromWell/' + encodedUWI,
 			dataType:'json',
 			async: false,
 			success: function(data){
@@ -97,7 +97,7 @@
 		var pairs = [];
 
 		$.ajax({
-			url: 'http://localhost:3000/getPairOfWell/' + encodedUWI,
+			url: '/getPairOfWell/' + encodedUWI,
 			dataType:'json',
 			async: false,
 			success: function(data){
@@ -112,7 +112,7 @@
 		var statusCategory = [];
 
 		$.ajax({
-			url: 'http://localhost:3000/getAllDistinctStatuses/',
+			url: '/getAllDistinctStatuses/',
 			dataType:'json',
 			async: false,
 			success: function(statuses){

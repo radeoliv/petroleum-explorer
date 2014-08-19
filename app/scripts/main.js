@@ -12,7 +12,7 @@
 function getAllWellsWithAverageStatistics() {
 	var result = [];
 	$.ajax({
-		url: 'http://localhost:3000/getAllWellsWithAverageStatistics/',
+		url: '/getAllWellsWithAverageStatistics',
 		dataType:'json',
 		async: false,
 		success: function(data) {

@@ -234,7 +234,7 @@
 
 		var result = [];
 		$.ajax({
-			url: 'http://localhost:3000/applyKmeansToWells/' + encodedParams,
+			url: '/applyKmeansToWells/' + encodedParams,
 			dataType:'json',
 			async: false,
 			success: function(data) {
