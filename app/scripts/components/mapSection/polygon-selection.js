@@ -24,6 +24,8 @@
 
 	var PolygonSelection;
 	var self;
+
+	// The "constructor" of PolygonSelection. When this object is created, this code is executed.
 	PolygonSelection = function (MapCanvasController, SearchController){
 		this.MapCanvasController = MapCanvasController;
 		this.SearchController = SearchController;
@@ -32,6 +34,7 @@
 		createRadioButtonsChangeEventListeners();
 	};
 
+	// Auxiliar function to disable/enable all the fields related to polygon selection
 	function setDisableButtons(isDisabled) {
 		var isClassified = self.MapCanvasController.getUsedClassification();
 
@@ -42,12 +45,14 @@
 		$polygonRemoveMarkersButton[0].disabled = isDisabled;
 	}
 
-	function setDisableCheckbox(isDisabled) {
+	// Disables/enables the radio buttons
+	function setDisableRadioButtons(isDisabled) {
 		for(var i=0; i<$polygonRadioButtons.length; i++) {
 			$polygonRadioButtons[i].disabled = isDisabled;
 		}
 	}
 
+	// Controlling the on/off button to activate and deactivate the polygon selection
 	$myOnOffSwitch.on("change", function() {
 		var isChecked = $myOnOffSwitch[0].checked;
 		if(isChecked === false) {
@@ -55,15 +60,17 @@
 			$(".info-msg").remove();
 			setDisableButtons(true);
 		}
-		setDisableCheckbox(!isChecked);
+		setDisableRadioButtons(!isChecked);
 	});
 
+	// Creates event for all the polygons buttons to update information when changed
 	function createRadioButtonsChangeEventListeners() {
 		for(var i=0; i<$polygonRadioButtons.length; i++) {
 			$polygonRadioButtons[i].onclick = function() { $("body").trigger("polygonChangedPosition"); };
 		}
 	}
 
+	// Gets the ids of wells that are inside the polygon
 	function getMarkersIdInsidePolygon() {
 		var selectionCriterion = "";
 		if($polygonRadioButtons[0].checked) {
@@ -75,6 +82,7 @@
 		return self.MapCanvasController.getMarkersIdInsidePolygon(selectionCriterion);
 	}
 
+	// Highlights the wells that are inside the polygon
 	$polygonHighlightMarkersButton.on("click", function() {
 		// markersId contains the ids of the markers as well as their indices
 		var markersId = getMarkersIdInsidePolygon();
@@ -98,6 +106,7 @@
 		}
 	});
 
+	// Clears the highlight state of wells that are inside the polygon
 	$polygonClearHighlightedMarkersButton.on("click", function() {
 		// markersId contains the ids of the markers as well as their indices
 		var markersId = getMarkersIdInsidePolygon();
@@ -107,6 +116,7 @@
 		}
 	});
 
+	// Selects the wells that are inside the polygon (removes the ones that are outside the polygon)
 	$polygonSelectMarkersButton.on("click", function() {
 		saveLastResultSet();
 
@@ -126,6 +136,7 @@
 		}
 	});
 
+	// Removes the wells that are inside the polygon (same idea as selecting the ones that are outside the polygon)
 	$polygonRemoveMarkersButton.on("click", function() {
 		saveLastResultSet();
 
@@ -148,6 +159,7 @@
 		}
 	});
 
+	// Resets the markers on the map
 	$polygonResetMarkersButton.on("click", function() {
 		// Which one is the best? To always reset the result set or to make it the same as it was before?
 		// Inconsistency can happen in both cases..
@@ -161,6 +173,7 @@
 		$polygonResetMarkersButton[0].disabled = true;
 	});
 
+	// Event to update controls and information when the polygon is moved
 	$("body").on("polygonChangedPosition", (function () {
 		var markers = getMarkersIdInsidePolygon();
 		appendInfo(markers.length);
@@ -172,6 +185,7 @@
 		}
 	}));
 
+	// Appends information about the number of intersected wells
 	function appendInfo(currentMarkers) {
 		$(".info-msg").remove();
 		var message = currentMarkers + (currentMarkers === 1 ? " well intersected" : " wells intersected");
@@ -179,12 +193,14 @@
 		$('<label class = "info-msg"><b>' + message + '</b></br></label>').appendTo(divToAppend);
 	}
 
+	// Saves the last result set used when selected/removed wells by using the polygon selection
 	function saveLastResultSet() {
 		if(lastResultSet === undefined || lastResultSet === null) {
 			lastResultSet = self.SearchController.getResultSet();
 		}
 	}
 
+	// When the search is executed, the options must be updated accordingly
 	$("body").on("resultSetChanged", function() {
 		$polygonResetMarkersButton[0].disabled = !self.SearchController.isResultNotSetBySearch();
 

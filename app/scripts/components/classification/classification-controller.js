@@ -16,6 +16,7 @@
 	var ClassificationController;
 	var self;
 
+	// The "constructor" of ClassificationController. When this object is created, this code is executed.
 	ClassificationController = function (MapController, allWellsWithStatistics){
 		this.MapController = MapController;
 		self = this;
@@ -24,6 +25,7 @@
 		wellsWithStatistics = allWellsWithStatistics;
 	};
 
+	// Classify the wells by category
 	ClassificationController.prototype.classifyWellsByCategory = function(selectedValue, legendName){
 		categories = [];
 		var wells = self.MapController.getCurrentWells();
@@ -47,6 +49,12 @@
 		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName, headers);
 	};
 
+	/*
+	 * Classify the wells by numerical values (intervals)
+	 * It can be done by using different methods:
+	 *   - Equal (all the classes are divided in equal intervals)
+	 *   - Quantile (each class contains the same number of wells)
+	 */
 	ClassificationController.prototype.classifyWellsByNumericalValues = function(selectedField, classNumber, legendName, method) {
 		var currentWellsWithStatistics = [];
 		var wells = self.MapController.getCurrentWells();
@@ -69,6 +77,7 @@
 		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), legendName, headers);
 	};
 
+	// Gets the entire name of the method applied in the numerical classification
 	function getNumericalClassificationMethod(method) {
 		var result = "";
 		if(method != undefined && method != null && method.length > 0) {
@@ -81,11 +90,13 @@
 		return result;
 	}
 
+	// Classify the wells by defining equal intervals
 	function classifyEqualInterval(selectedField, classNumber, wells) {
 		var result = [];
 		var numericalValues = [];
 		var hasNullValues = false;
 
+		// Stores all the values of the selected field
 		for(var i = 0; i < wells.length; i++) {
 			if(wells[i][selectedField] != null ) {
 				numericalValues.push(wells[i][selectedField]);
@@ -99,6 +110,7 @@
 		var max = Math.max.apply(Math, numericalValues);
 		var equalInterval = (max - min)/classNumber;
 
+		// Create all the categories without adding the indexes
 		for (var i = 0; i < classNumber; i++) {
 			var intervalMin = min + i*equalInterval;
 			var intervalMax = min + (i+1)*equalInterval;
@@ -111,6 +123,7 @@
 				});
 		}
 
+		// Adds the wells that do not contain values for the specified field
 		if(hasNullValues === true) {
 			result.push(
 				{
@@ -121,6 +134,7 @@
 				});
 		}
 
+		// Finds the right category for each well and adds its index to the indexes list
 		for (var i = 0; i < wells.length; i++) {
 			for (var j=0; j < result.length; j++) {
 				if(wells[i][selectedField] != null && result[j]["category"] != "Invalid") {
@@ -138,11 +152,13 @@
 		return result;
 	}
 
+	// Classify the wells by grouping the same number of wells for each class
 	function classifyQuantile(selectedField, classNumber, wells) {
 		var result = [];
 		var validWells = [];
 		var invalidWells = [];
 
+		// Separating the wells with and without valid values
 		for(var i=0; i<wells.length; i++) {
 			if(wells[i][selectedField] != null) {
 				validWells.push({ well: wells[i], index: i });
@@ -155,12 +171,15 @@
 		var intervalSize = Math.ceil(totalWells / classNumber);
 		var tempCategories = [];
 
+		// Storing the selected field values and well index for all the valid wells
 		var values = [];
 		for(var i = 0; i<totalWells; i++) {
 			values.push({ value: validWells[i]["well"][selectedField], index: validWells[i]["index"] });
 		}
+		// Sorting the wells based on the selected field values
 		values.sort(function(a, b) { return a.value - b.value; });
 
+		// Creating the right number of categories
 		for(var i=0; i<classNumber; i++) {
 			result.push(
 				{
@@ -216,22 +235,27 @@
 		return result;
 	}
 
+	// Applies k-means to the selected attributes
 	ClassificationController.prototype.clusterKMeans = function(attributesValues, clusterNumber) {
 		var wells = self.MapController.getCurrentWells();
 
+		// Creating a string with all the UWIs separated by commas
 		var uwis = '';
 		for(var i=0; i<wells.length; i++) {
 			uwis += (i === wells.length - 1) ? (wells[i]["w_uwi"]) : (wells[i]["w_uwi"]) + ",";
 		}
 
+		// Creating a list with all the attributes values
 		var attributes = [];
 		for(var i=0; i<attributesValues.length; i++) {
 			attributes.push(attributesValues[i].value);
 		}
 		attributes = attributes.join();
 
+		// Encoding both parameters separated by '&' (to replace some invalid characters that cannot be used in URLs)
 		var encodedParams = encodeURIComponent(attributes + "&" + clusterNumber + "&" + uwis);
 
+		// Send parameters to the server for the application of k-means and waits until the server sends an answer
 		var result = [];
 		$.ajax({
 			url: '/applyKmeansToWells/' + encodedParams,
@@ -242,11 +266,10 @@
 			}
 		});
 
-		//console.log(result);
-
 		// Clearing the previous categories
 		categories = [];
 
+		// Creating all the different categories (clusters)
 		for(var i=0; i<result.length; i++) {
 			categories.push( {
 				intervalMinimum: -1,
@@ -265,6 +288,7 @@
 		}
 
 		self.MapController.createClassifiedMarkers(categories);
+
 		var headers = ["K-means Clustering"];
 		var tempName = [];
 		for(var i=0; i<attributesValues.length; i++) {
@@ -274,6 +298,7 @@
 		self.MapController.addClassificationLegend(self.getClassificationLegend(categories), null, headers);
 	};
 
+	// Lower the opacity of the wells which do not match the clicked category
 	ClassificationController.prototype.emphasizeMarkersOfCategory = function(legendIndex) {
 		// Getting all the indexes of the category clicked
 		var markersIndexes = categories[legendIndex]["indexes"];
@@ -281,6 +306,7 @@
 		self.MapController.emphasizeMarkers(markersIndexes);
 	};
 
+	// Gets the classification legends values
 	ClassificationController.prototype.getClassificationLegend = function(classificationList) {
 		var legendColors = self.MapController.getPinColors();
 		var legends = [];
@@ -297,15 +323,14 @@
 		return legends;
 	};
 
+	// Reset the pins on the map
 	ClassificationController.prototype.resetPins = function() {
 		self.MapController.resetPins();
 	};
 
-	ClassificationController.prototype.getMap = function() {
-		var map = self.MapController.getMap();
-		return map;
-	};
-
+	/*
+	 * Adds hardcoded rules of ARM
+	 */
 	ClassificationController.prototype.addAssociationRules = function(){
 		var rule1 = {
 			ifthen: [47,49,67,69,73,75,144,145,154,155,156,157,158,159,160,161,164,165,166,167,168,169,170,171,172,173,174,175,252,253,254,255,258,259,262,263],
@@ -354,6 +379,7 @@
 		self.MapController.addAssociationRules(rules);
 	};
 
+	// Removes the ARM rules
 	ClassificationController.prototype.removeAssociationRules = function() {
 		self.MapController.removeAssociationRules();
 	};
