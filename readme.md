@@ -1,4 +1,4 @@
 # Petroleum Explorer
 
-This is the main repository for the petroleum data visualization tool.
-Developed by Rodrigo Silva. Designed for Dr. Xin Wang. University of Calgary.
+Petroleum Explorer is a system for processing and visualizing oil and gas data.
+Developed by Bingjie Wei and Rodrigo Silva - Supervised by Dr. Xin Wang - University of Calgary.
