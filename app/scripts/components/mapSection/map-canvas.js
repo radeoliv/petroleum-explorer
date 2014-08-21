@@ -497,7 +497,6 @@
 		// Get JSON file with all information about wells
 		var temp;
 		$.ajax({
-			//url: './wells.json',
 			url: '/getAllWells',
 			dataType:'json',
 			async: false,

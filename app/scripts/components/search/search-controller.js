@@ -155,7 +155,6 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				meridianQuery = fieldValues[5],
 				eventQuery = fieldValues[6];
 
-			//TODO: parse JSON file (wells.json)
 			// check if any values are empty
 			// for each search input with a valid entry, check contents of corresponding JSON data in this.dataset using && for each
 			// return objects that match
