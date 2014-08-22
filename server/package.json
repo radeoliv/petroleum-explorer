@@ -11,6 +11,7 @@
     "stylus": "*",
 	"sequelize": "*",
 	"pg": "*",
-	"method-override": "*"
+	"method-override": "*",
+	"ejs": "*"
   }
 }
