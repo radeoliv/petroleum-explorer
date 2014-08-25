@@ -217,7 +217,6 @@
 					// Making the table appear
 					$("#association-rule-legend")[0].style.display = "inline-table";
 
-					console.log(targetId);
 					// Changing the pins on the map
 					var categories = [];
 					categories.push({ category: 1, indexes: rules[targetId - 1]["ifthen"] });

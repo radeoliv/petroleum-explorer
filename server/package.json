@@ -12,6 +12,7 @@
 	"sequelize": "*",
 	"pg": "*",
 	"method-override": "*",
-	"ejs": "*"
+	"ejs": "*",
+	"clusterfck": "*"
   }
 }
