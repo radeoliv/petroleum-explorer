@@ -152,6 +152,10 @@
 						//simple text, no special options
 					},
 					{
+						data: "WellProject"
+						//simple text, no special options
+					},
+					{
 						data: "WellStatus"
 						//simple text, no special options
 					},
@@ -207,6 +211,7 @@
 					"UWI",
 					"Well Name",
 					"Well Operator",
+					"Well Project",
 					"Well Status",
 					"Well Province",
 					"Well Class",
@@ -235,6 +240,7 @@
 						UWI: searchResults[i]["w_uwi"],
 						WellName: searchResults[i]["w_name"],
 						WellOperator: searchResults[i]["w_operator"],
+						WellProject:searchResults[i]["w_project"],
 						WellStatus: searchResults[i]["w_current_status"],
 						WellProvince: searchResults[i]["w_province"],
 						WellClass: searchResults[i]["w_class"],
@@ -619,6 +625,7 @@
 						case "w_uwi":
 						case "w_name":
 						case "w_operator":
+						case "w_project":
 						case "w_current_status":
 						case "w_province":
 						case "w_class":
