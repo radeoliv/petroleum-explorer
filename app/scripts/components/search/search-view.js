@@ -353,7 +353,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 			&& $searchInputForm.find("input[name='meridian']").val() === ""
 			&& $searchInputForm.find("input[name='event']").val() === ""
 			&& $searchInputForm.find("input[name='company']").val() === ""
-			&& $searchInputForm.find("select[name='status']").val() === 'none';
+			&& $searchInputForm.find("select[name='status']").val() === 'none'
+			&& $searchInputForm.find("select[name='project']").val() === 'none';
 
 		return result;
 	}
@@ -368,7 +369,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		$searchInputForm.find("input[name='meridian']").val(''),
 		$searchInputForm.find("input[name='event']").val(''),
 		$searchInputForm.find("input[name='company']").val(''),
-		$searchInputForm.find("select[name='status']").val('none');
+		$searchInputForm.find("select[name='status']").val('none'),
+		$searchInputForm.find("select[name='project']").val('none');
 	};
 
 	/*
