@@ -333,9 +333,54 @@ var requiredErrorMsg = "<b>TWP</b>, <b>RNG</b> or <b>MER</b> must be completely 
 				}
 			}
 
+
 			setResultNotSetBySearch(false);
 			return this.resultSet;
 		};
+
+		/**
+		 * find the wells matching the search criteria (project)
+		 * @param query the search query we will use to search through UWID
+		 * @returns {string}
+		 */
+		SearchController.prototype.findResultsProject = function(projectQuery) {
+			// check if any values are empty
+			// for each search input with a valid entry, check contents of corresponding JSON data in this.dataset using && for each
+			// return objects that match
+			if(this.dataSet === null){
+				return this.NULL_ERROR_MESSAGE;
+			}
+
+			this.resultSet = [];
+
+			if(projectQuery === null){
+				return this.NULL_QUERY_ERROR_MESSAGE;
+			}
+			else if(typeof(projectQuery) === "undefined"){
+				return this.UNDEFINED_ERROR_MESSAGE;
+			}
+			else if(this.isEmptyQuery(projectQuery)){
+				return this.EMPTY_SEARCH_QUERY_ERROR_MESSAGE;
+			}
+
+			for(var i=0; i<this.dataSet.length;i++) {
+				/*
+				 * Search by project name
+				 */
+				if(!this.isEmptyQuery(projectQuery)) {
+					// TODO: Change the JSON attribute when the new json file is created
+					var cMatch = this.dataSet[i]['w_project'].toUpperCase().search(projectQuery.toUpperCase());
+
+					if(cMatch >= 0)
+						this.resultSet.push(this.dataSet[i]);
+				}
+			}
+
+
+			setResultNotSetBySearch(false);
+			return this.resultSet;
+		};
+
 
 		/**
 		 * return all wells present in the system

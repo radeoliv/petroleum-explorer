@@ -19,6 +19,7 @@ SearchView = function (searchController, mapCanvasController){//, tableControlle
 
 var optionAccordion;	//global var for handling accordion option for search select
 var optionStatus;	//global var for handling accordion option for search select
+var optionProject;	//global var for handling accordion option for search select
 var isEventListenerActive = true;
 var lastResultSet;
 var wasTheSameResultSet = false;
@@ -59,6 +60,18 @@ var lastCompanyQuery = noQuery;
 	});
 }).call(this);
 
+(function () {
+	$(function () {
+		var active;
+		active = function () {
+			return $("#project").on("change", function () {
+				optionProject = $("#project").val();
+			});
+		};
+		active();
+	});
+}).call(this);
+
 /**
  * listen to key down events
  * send query to the searchController
@@ -77,7 +90,8 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		meridianSearchInput = $searchInputForm.find("input[name='meridian']"),
 		eventSearchInput = $searchInputForm.find("input[name='event']"),
 		companySearchInput = $searchInputForm.find("input[name='company']"),
-		statusSearchInput = $searchInputForm.find("select[name='status']");
+		statusSearchInput = $searchInputForm.find("select[name='status']"),
+		projectSearchInput = $searchInputForm.find("select[name='project']");
 
 	var self = this;
 
@@ -223,6 +237,44 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 		}
 	});
 
+	projectSearchInput.change( function (e) {
+		if(isEventListenerActive) {
+			removeAllErrorAndAlertMessages();
+			var projectQuery = projectSearchInput[0].value;
+
+			var results = null;
+			switch(optionAccordion) {
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+					break;
+				case 4:
+					var tempOptionProject = optionProject;
+
+					// Clears all fields
+					isEventListenerActive = false;
+					self.clearFields();
+					projectSearchInput[0].value = projectQuery;
+
+					if(tempOptionProject != "none") {
+						results = self.searchController.findResultsProject(projectQuery);
+					} else {
+						// If the selection is none, there is nothing to be searched.
+						results = null;
+					}
+					break;
+				default:
+					console.log("Accordion error!");
+					break;
+			}
+
+			isEventListenerActive = true;
+			displayResults(results);
+		}
+	});
+
+
 	function displayResults(results) {
 		// Cleaning the results area
 		if($('#results-table') != undefined) {
@@ -236,13 +288,13 @@ SearchView.prototype.listenKeyboard = function ($searchInputSelector, $searchInp
 				var data = [];
 
 				for (var i=0;i<results.length;i++) {
-					data.push([results[i]["w_uwi"], results[i]["w_operator"], results[i]["w_current_status"]]);
+					data.push([results[i]["w_uwi"], results[i]["w_operator"], results[i]["w_current_status"],results[i]["w_project"]]);
 				}
 
 				$('#results-table').handsontable({
 					data: data,
-					colHeaders: ["UWI", "Company", "Status"],
-					colWidths: [150, 500, 100],
+					colHeaders: ["UWI", "Company", "Status","Project"],
+					colWidths: [150, 500, 100,100],
 					overflow: scroll,
 					readOnly: true,
 					columnSorting: true,
